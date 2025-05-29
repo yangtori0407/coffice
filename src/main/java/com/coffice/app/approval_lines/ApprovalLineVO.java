@@ -17,7 +17,7 @@ public class ApprovalLineVO {
 	private String user_id;
 	private Long step_order;
 	private String status;
-	private Date handle_time;
+	private Date handling_time;
 	private Long sign_id;
 	private String reject_reason;
 	
