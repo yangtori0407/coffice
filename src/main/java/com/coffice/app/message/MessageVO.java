@@ -12,9 +12,9 @@ public class MessageVO {
 	private String messageContents;
 	private String receiver;
 	private String sender;
-	private Integer checkStatus;
-	private Integer deleteSend;
-	private Integer deleteReceiver;
+	private boolean checkStatus;
+	private boolean deleteSend;
+	private boolean deleteReceiver;
 	
 	private List<MessageFilesVO> files;
 }
