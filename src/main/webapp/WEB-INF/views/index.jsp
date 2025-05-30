@@ -6,7 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <title>COFFICE</title>
-<link href="/images/3.png" rel="shortcut icon" type="image/x-icon">
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -21,24 +20,7 @@
 
 					<!-- contents 내용 -->
 
-					<div class="row">
 
-                        <div class="col-3">col1</div>
-                        <div class="col-6">
-                            <div class="row">col2-row1</div>
-                            <div class="row">col2-row2</div>
-                        </div>
-                        <div class="col-3">
-                            <div class="row">col3-row1</div>
-                            <div class="row">col3-row2</div>
-                        </div>
-
-                    
-                    </div>
-
-                        
-
-                </div>
 				</div>
 			</div>
 			<!-- end Content -->
