@@ -20,7 +20,7 @@
 
 					<!-- contents 내용 -->
 
-					<img src="/images/large_coffice.png">
+
 				</div>
 			</div>
 			<!-- end Content -->
