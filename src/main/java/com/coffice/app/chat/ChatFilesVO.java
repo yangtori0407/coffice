@@ -11,6 +11,5 @@ import lombok.ToString;
 @ToString
 public class ChatFilesVO extends FileVO{
 	
-	private Long fileNum;
 	private Long chatNum;
 }

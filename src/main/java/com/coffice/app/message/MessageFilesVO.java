@@ -10,7 +10,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class MessageFilesVO extends FileVO{
-	
-	private Long fileNum;
+
 	private Long messageNum;
 }
