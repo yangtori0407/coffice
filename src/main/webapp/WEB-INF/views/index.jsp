@@ -19,7 +19,20 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
+					<div class="row" style="height: 1000px;">
 
+						<div class="col-3">col1</div>
+						<div class="col-6">
+							<div class="row" style="height: 300px;">col2-row1</div>
+							<div class="row" style="height: 700px;">col2-row2</div>
+						</div>
+						<div class="col-3">
+							<div class="row" style="height: 500px;">col3-row1</div>
+							<div class="row" style="height: 500px;">col3-row2</div>
+						</div>
+
+
+					</div>
 
 				</div>
 			</div>
