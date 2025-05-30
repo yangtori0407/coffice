@@ -21,7 +21,7 @@
 
 					<!-- contents 내용 -->
 
-					<div class="container-fluid">
+					<div class="row">
 
                         <div class="col-3">col1</div>
                         <div class="col-6">
