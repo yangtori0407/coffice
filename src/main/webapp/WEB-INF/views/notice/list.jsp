@@ -47,7 +47,7 @@
 												</label>
 											</div>
 										</div> -->
-										<div class="col-12 mb-4">
+										<div class="col-11 mb-4">
 											<form method="get">
 												<div class="d-flex align-items-center gap-3">
 													<select class="custom-select mr-sm-2 col-2"
@@ -62,6 +62,9 @@
 													<button type="submit" class="btn btn-info ml-1">검색</button>
 												</div>
 											</form>
+										</div>
+										<div class="col-1">
+											<a href="./add" class="btn btn-danger ml-4">추가하기</a>
 										</div>
 									</div>
 									<div class="row">

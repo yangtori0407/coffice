@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.coffice.app.page.Pager;
@@ -36,5 +37,16 @@ public class NoticeController {
 		model.addAttribute("detail", noticeVO);
 		
 		return "notice/detail";
+	}
+	
+	@GetMapping("add")
+	public String add() throws Exception{
+		return "notice/add";
+	}
+	
+	@PostMapping("add")
+	public String add(NoticeVO noticeVO) throws Exception{
+		noticeService.add(noticeVO);
+		return "notice/add";
 	}
 }

@@ -22,4 +22,9 @@ public class NoticeService {
 	public NoticeVO getDetail(NoticeVO noticeVO) throws Exception{
 		return noticeDAO.getDetail(noticeVO);
 	}
+
+	public void add(NoticeVO noticeVO) throws Exception{
+		
+		
+	}
 }

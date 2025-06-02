@@ -23,22 +23,26 @@
 
 					<!-- contents 내용 -->
 					<div>
-						
+
 						<div class="card mb-4 py-3 border-left-danger">
-                                <div class="card-body">
-                                    ${detail.noticeTitle }
-                                </div>
-                            </div>
-						
-						<div class="card shadow mb-4" style="height: 600px;">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">작성일: ${detail.noticeDate }</h6>
-                                    <h6 class="m-0 font-weight-bold text-primary">조회수: ${detail.noticeHit }</h6>
-                                </div>
-                                <div class="card-body">
-                                    ${detail.noticeContents }
-                                </div>
-                            </div>
+							<div class="card-body">${detail.noticeTitle }</div>
+						</div>
+
+						<div class="card shadow mb-3" style="height: 600px;">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">작성일:
+									${detail.noticeDate }</h6>
+								<h6 class="m-0 font-weight-bold text-primary">조회수:
+									${detail.noticeHit }</h6>
+							</div>
+							<div class="card-body">${detail.noticeContents }</div>
+						</div>
+						<div class="card mb-3 py-1 border-bottom-secondary">
+							<div class="card-body">첨부파일</div>
+						</div>
+						<div class="mb-2">
+							<a class="btn btn-danger">삭제하기</a> <a class="btn btn-primary">수정하기</a>
+						</div>
 					</div>
 				</div>
 				<!-- end Content -->

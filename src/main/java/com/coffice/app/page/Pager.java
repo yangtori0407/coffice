@@ -6,7 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Pager {
-
+	
+	//nowPage=지금페이지&search=검색어&kind=종류 형태로 사용하시면 됩니다~!
+	
 	// 가져올 개수
 	private Long page;
 	// 한 페이지에 출력할 페이지 번호의 개수
