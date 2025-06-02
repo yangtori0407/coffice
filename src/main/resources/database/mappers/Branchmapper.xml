@@ -7,5 +7,10 @@
   	<select id="getList" resultType="BranchVO">
   		SELECT * FROM BRANCH
   	</select>
+  	
+  	<insert id="add" parameterType="BranchVO">
+  		INSERT INTO BRANCH
+  		VALUES(null, #{branchName},#{branchAddress},#{branchPostcode},0,null)
+  	</insert>
   
   </mapper>

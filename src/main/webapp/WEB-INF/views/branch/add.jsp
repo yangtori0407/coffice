@@ -16,29 +16,20 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-
-					<div id="map" style="width:500px;height:300px;min-height: 50vh; margin: 0 auto"></div>
-
-					<table class="table table-striped" style="margin:20px auto;width: 600px;">
-						<thead>
-							<tr>
-								<th>지점번호</th>
-								<th>지점이름</th>
-								<th>운영상태</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${list}" var="vo">
-								<tr>
-									<td>${vo.branchId}</td>
-									<td>${vo.branchName}</td>
-									<td style="color:${vo.branchStatus?'green':'red'};">
-										${vo.branchStatus?"운영중":"운영안함"}
-									</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+					<form action="./add" method="post">
+						<div class="col-md-9">
+							<input type="text" name="branchName" placeholder="지점이름">						
+						</div>
+						<div class="col-md-9">
+							<input type="text" name="branchPostcode" id="branchPostcode" placeholder="지점우편번호" readonly>
+							<input type="button" onclick="daumPostcode()" value="우편번호찾기">
+						</div>
+						<div class="col-md-9">
+							<input type="text" name="branchAddress" id="branchAddress" placeholder="지점주소" readonly>					
+						</div>
+						
+						<button type="submit" class="btn btn-primary">지점등록</button>
+					</form>
 				</div>
 			</div>
 			<!-- end Content -->
@@ -49,16 +40,6 @@
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
-<script>
-	let addressList = [
-		<c:forEach items="${list}" var="vo" varStatus="s">
-			{
-				name:"${vo.branchName}",
-				address:"${vo.branchAddress}",
-				status:"${vo.branchStatus?1:0}"
-			}<c:if test="${!s.last}">,</c:if>		
-		</c:forEach>
-		];
-</script>
-<script src="/js/branch/map.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/js/branch/add.js"></script>
 </html>

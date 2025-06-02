@@ -8,4 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface BranchDAO {
 
 	public List<BranchVO> getList() throws Exception;
+	public int add(BranchVO branchVO) throws Exception;
 }

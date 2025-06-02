@@ -14,4 +14,8 @@ public class BranchService {
 	public List<BranchVO> getList() throws Exception {
 		return branchDAO.getList();
 	}
+	
+	public int add(BranchVO branchVO) throws Exception {
+		return branchDAO.add(branchVO);
+	}
 }
