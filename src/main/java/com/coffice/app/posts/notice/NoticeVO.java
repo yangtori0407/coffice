@@ -16,7 +16,7 @@ public class NoticeVO {
 	private String noticeTitle;
 	private String noticeContents;
 	private Long noticeHit;
-	private Date date;
+	private Date noticeDate;
 	
 	private List<NoticeFilesVO> files;
 }
