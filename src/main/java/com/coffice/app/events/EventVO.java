@@ -1,6 +1,7 @@
 package com.coffice.app.events;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import lombok.Data;
 
