@@ -1,4 +1,4 @@
-package com.coffice.app.forms;
+package com.coffice.app.documents.forms;
 
 import lombok.Getter;
 import lombok.Setter;

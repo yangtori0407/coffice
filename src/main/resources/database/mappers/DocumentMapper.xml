@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!-- windows -> preferences -> XML(Wild Web Developer) 
+  	   -> Download exter... check 후 저장 
+   -->
+  
+  
+  
+  <mapper namespace="com.coffice.app.documents.DocumentDAO">
+  
+  	<select id="getUsers" resultType="UserVO">
+  		SELECT * FROM USERS
+	  </select>
+	  
+	  <select id="getForms" resultType="FormVO">
+	  		SELECT * FROM FORMS
+	  </select>
+  
+  	<sql id="search">
+  		WHERE
+  			<choose>
+  				<when test="kind == 'k1'">
+  					TITLE
+  				</when>
+  				
+  				<when test="kind=='k2'">
+  					CONTENT
+  				</when>
+  				<otherwise>
+  					USER_ID
+  				</otherwise>
+  			</choose>
+  			LIKE CONCAT('%', #{search} , '%')
+  	</sql>
+  
+  	<select id="getTotalCount" resultType="Long" parameterType="Pager">
+  		SELECT COUNT(DOCUMENT_ID) FROM DOCUMENTS
+  		<include refid="search"></include>
+  	</select>
+  
+  	<select id="getList" resultType="DocumentVO" parameterType="Pager">
+  		SELECT * FROM DOCUMENTS
+  		
+  		<include refid="search"></include>
+  		
+  		ORDER BY DOCUMENT_ID DESC
+  		LIMIT #{startNum} , #{perPage}
+  		
+  	</select>
+  	
+  	<select id="getDetail" parameterType="DocumentVO" resultMap="detailResult">
+  		SELECT * 
+  		FROM DOCUMENTS N
+  			 LEFT OUTER JOIN
+  			 ATTACHMENTS NF
+  			 USING (DOCUMENT_ID)
+  		WHERE DOCUMENT_ID=#{document_id}
+  	</select>
+  	
+  	<resultMap type="DocumentVO" id="detailResult">
+  		<id column="DOCUMENT_ID" property="document_id"/>
+  		<result column="FORM_ID" property="form_id"/>
+  		<result column="TITLE" property="title"/>
+  		<result column="CONTENT" property="content"/>
+  		<result column="USER_ID" property="user_id"/>
+  		<result column="TIME" property="time"/>
+  		<result column="CURRENT_STEP" property="current_step"/>	
+  		<result column="STATUS" property="status"/>
+  		
+  		<collection property="attachmentVOs" javaType="java.util.List" ofType="AttachmentVO">
+  			<id column="FILE_NUM" property="fileNum"/>
+  			<result column="ORIGIN_NAME" property="originName"/>
+  			<result column="SAVE_NAME" property="saveName"/>
+  		</collection>
+  		
+  		<collection property="approvalLineVOs" javaType="java.util.List" ofType="ApprovalLineVO">
+  			<id column="A_LINE_ID" property="a_line_id"/>
+  			<result column="USER_ID" property="user_id"/>
+  			<result column="SIGN_ID" property="sign_id"/>
+  			<result column="STEP_ORDER" property="step_order"/>
+  			<result column="STATUS" property="status"/>
+  			<result column="HANDLING_TIME" property="handling_time"/>
+  			<result column="REJECT_REASON" property="reject_reason"/>
+  		</collection>
+  		
+  		<collection property="referenceLineVOs" javaType="java.util.List" ofType="ReferenceLineVO">
+  			<id column="R_LINE_ID" property="r_line_id"/>
+  			<result column="USER_ID" property="user_id"/>  			
+  		</collection>
+  		
+  		
+  		
+  	</resultMap>
+  	
+  	<insert id="add" parameterType="DocumentVO" useGeneratedKeys="true" keyProperty="document_id">  		
+  		INSERT INTO DOCUMENTS 
+  		(FORM_ID, TITLE, CONTENT, USER_ID, TIME, CURRENT_STEP, STATUS)
+  		VALUES
+  		(#{form_id}, #{title}, #{content}, #{user_id}, now(), #{current_step}, #{status})
+  	</insert>
+  	
+  	
+  	
+  	<insert id="addFile" parameterType="AttachmentVO">
+  		INSERT INTO ATTACHMENTS
+  		(DOCUMENT_ID, ORIGIN_NAME, SAVE_NAME)
+  		VALUES
+  		(#{document_id}, #{originName}, #{saveName})
+  	</insert>
+  	
+  	<select id="getFileDetail" parameterType="AttachmentVO" resultType="AttachmentVO">
+  		SELECT * FROM ATTACHMENTS WHERE FILE_NUM=#{fileNum}
+  	</select>
+  	
+  	
+  	
+  	
+  	
+  	
+  </mapper>

@@ -1,4 +1,4 @@
-package com.coffice.app.approval_lines;
+package com.coffice.app.documents.lines;
 
 import java.sql.Date;
 

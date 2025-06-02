@@ -1,4 +1,4 @@
-package com.coffice.app.reference_lines;
+package com.coffice.app.documents.lines;
 
 import lombok.Getter;
 import lombok.Setter;

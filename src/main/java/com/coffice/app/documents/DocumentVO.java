@@ -1,6 +1,11 @@
 package com.coffice.app.documents;
 
 import java.sql.Date;
+import java.util.List;
+
+import com.coffice.app.documents.attachments.AttachmentVO;
+import com.coffice.app.documents.lines.ApprovalLineVO;
+import com.coffice.app.documents.lines.ReferenceLineVO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,5 +27,8 @@ public class DocumentVO {
 	private Long current_step;
 	private String status;
 	
+	private List<AttachmentVO> attachmentVOs;
+	private List<ApprovalLineVO> approvalLineVOs;
+	private List<ReferenceLineVO> referenceLineVOs;
 
 }
