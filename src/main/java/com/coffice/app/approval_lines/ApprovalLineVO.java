@@ -21,5 +21,6 @@ public class ApprovalLineVO {
 	private Long sign_id;
 	private String reject_reason;
 	
+	
 
 }
