@@ -34,6 +34,10 @@
         center: 'title',
         right: 'prev,next'
     },
+    dayCellContent: function (arg) {
+      const { date } = arg;
+      return date.getDate();
+    },
       initialDate: Date.now(),
       navLinks: false, // can click day/week names to navigate views
       editable: false,
