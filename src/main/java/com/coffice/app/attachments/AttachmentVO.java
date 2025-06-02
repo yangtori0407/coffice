@@ -1,5 +1,7 @@
 package com.coffice.app.attachments;
 
+import com.coffice.app.files.FileVO;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -7,12 +9,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AttachmentVO {
+public class AttachmentVO extends FileVO{
 	
-	
-	private Long attachment_id;
 	private Long document_id;
-	private String origin_name;
-	private String save_name;
 
 }
