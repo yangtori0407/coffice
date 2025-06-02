@@ -1,5 +1,8 @@
 package com.coffice.app.branch;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +19,8 @@ public class BranchController {
 	
 	@Value("${kakao.map.appkey}")
 	private String appkey;
+	@Autowired
+	private BranchService branchService;
 	
 	@ModelAttribute("appkey")
 	public String getAppkey() {
@@ -24,7 +29,10 @@ public class BranchController {
 	}
 
 	@GetMapping("map")
-	public String map() throws Exception {
+	public String map(Model model) throws Exception {
+		List<BranchVO> list = branchService.getList();
+		model.addAttribute("list", list);
+		
 		return "branch/map";
 	}
 }

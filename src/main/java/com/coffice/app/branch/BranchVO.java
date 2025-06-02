@@ -9,6 +9,6 @@ public class BranchVO {
 	private String branchName;
 	private String branchAddress;
 	private String branchPostcode;
-	private boolean status;
+	private boolean branchStatus;
 	private String userId;
 }
