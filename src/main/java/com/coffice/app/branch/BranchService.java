@@ -18,4 +18,16 @@ public class BranchService {
 	public int add(BranchVO branchVO) throws Exception {
 		return branchDAO.add(branchVO);
 	}
+	
+	public List<BranchVO> notAddBranchList() throws Exception {
+		return branchDAO.notAddBranchList();
+	}
+	
+	public List<BranchMasterVO> notAddBranchMasterList() throws Exception {
+		return branchDAO.notAddBranchMasterList();
+	}
+	
+	public int branchUpdate(BranchVO branchVO) throws Exception {
+		return branchDAO.branchUpdate(branchVO);
+	}
 }

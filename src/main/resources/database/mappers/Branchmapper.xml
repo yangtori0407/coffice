@@ -8,9 +8,47 @@
   		SELECT * FROM BRANCH
   	</select>
   	
+  	<select id="notAddBranchList" resultType="BranchVO">
+  		SELECT * FROM BRANCH WHERE USER_ID IS NULL
+  	</select>
+  	
+  	<select id="notAddBranchMasterList" resultMap="getBranchMaster">
+  		SELECT * 
+  		FROM USERS 
+			JOIN BRANCHMASTER
+			USING(USER_ID)
+  		WHERE ADD_TYPE=0
+  	</select>
+  	
   	<insert id="add" parameterType="BranchVO">
   		INSERT INTO BRANCH
   		VALUES(null, #{branchName},#{branchAddress},#{branchPostcode},0,null)
   	</insert>
+  	
+  	<update id="branchUpdate" parameterType="BranchVO">
+  		UPDATE BRANCH SET USER_ID=#{userId} WHERE BRANCH_ID=#{branchId}
+  	</update>
   
+  <resultMap type="BranchMasterVO" id="getBranchMaster">
+	  	<result column="CONTACT_NUMBER" property="contactNumber"/>
+	  	<result column="CONTACT_DATE" property="contactDate"/>
+	  	<result column="ADD_TYPE" property="addType"/>
+  	
+	  	<association property="userId" javaType="UserVO">
+			<id column="USER_ID" property="userId"/>
+			<result column="PASSWORD" property="password"/>
+			<result column="NAME" property="name"/>
+			<result column="POSITION" property="position"/>
+			<result column="HIRE_DATE" property="hireDate"/>
+			<result column="HIRE_TYPE" property="hireType"/>
+			<result column="BIRTH_DATE" property="birthDate"/>
+			<result column="PHONE" property="phone"/>
+			<result column="EMAIL" property="email"/>
+			<result column="STATUS" property="status"/>
+			<result column="RESIGN_DATE" property="resignDate"/>
+			<result column="SAVE_NAME" property="saveName"/>
+			<result column="ORIGIN_NAME" property="originName"/>
+			<result column="DEPT_ID" property="deptId"/>
+	  	</association>
+	</resultMap>
   </mapper>

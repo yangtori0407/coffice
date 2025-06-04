@@ -42,3 +42,37 @@
                 })
 			
 	   });
+
+       const addBranchBtn = document.getElementById("addBranchBtn");
+       addBranchBtn.addEventListener("click",()=>{
+        const userId = document.getElementById("selectUser").value;
+        const branchId = document.getElementById("selectBranch").value;
+
+        console.log(userId)
+        console.log(branchId)
+
+        const params = new URLSearchParams();
+        params.append("userId", userId);
+        params.append("branchId", branchId);
+
+        fetch('/branch/updateUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        })
+        .then(r=>{
+            console.log(r)
+            if(r.ok){
+                alert("추가되었습니다.")
+                window.location.reload();
+            } else {
+                alert("다시추가부탁드립니다.")
+            }
+        })
+        .catch(e=> {
+            console.log(e)
+            alert("오류");
+        });
+    });

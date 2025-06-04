@@ -34,6 +34,12 @@ public class BranchController {
 		List<BranchVO> list = branchService.getList();
 		model.addAttribute("list", list);
 		
+		List<BranchVO> notAddBranchList = branchService.notAddBranchList();
+		model.addAttribute("notAddBranchList", notAddBranchList);
+		
+		List<BranchMasterVO> notAddBranchMasterList = branchService.notAddBranchMasterList();
+		model.addAttribute("notAddBranchMasterList", notAddBranchMasterList);
+		
 		return "branch/map";
 	}
 	
@@ -45,9 +51,21 @@ public class BranchController {
 	public String add(BranchVO branchVO) throws Exception {
 		int result = branchService.add(branchVO);
 		
+		
 		if(result > 0) {
 			return "redirect:/";
 		}
 		return "branch/add";
+	}
+	@PostMapping("updateUser")
+	public String updateUser(BranchVO branchVO) throws Exception {
+		log.info("b:{}",branchVO);
+		BranchVO branchVO2 = new BranchVO();
+		branchVO2.setBranchId(branchVO.getBranchId());
+		branchVO2.setUserId(branchVO.getUserId());
+		
+		branchService.branchUpdate(branchVO2);
+		
+		return "redirect:./map";
 	}
 }
