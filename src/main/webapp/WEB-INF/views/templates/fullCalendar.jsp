@@ -17,13 +17,13 @@
     },
     nowIndicator: true,
     headerToolbar: {
-        left:'prevYear,prev,next,nextYear today yearGrid',
+        left:'prevYear,prev,next,nextYear today editButton',
         center: 'title',
-        right: 'addButton dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        right: 'addButton dayGridMonth,listWeek'
     },
       initialDate: Date.now(),
-      navLinks: true, // can click day/week names to navigate views
-      editable: true,
+      navLinks: false, // can click day/week names to navigate views
+      editable: false,
       dayMaxEvents: true, // allow "more" link when too many events
       fixedWeekCount: false,
       dayCellContent: function (arg) {
@@ -48,36 +48,47 @@
       }
     });
 
-    let url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"
-    let key = 'J0mHq1R1fL8PBzcOJXPlaICPhvWctJpIQoAUJNzx1fUeMzFU9bjNRoAuwfN%2FC1w79pvPN5onz8835x6feTa2yA%3D%3D'
-    let now = new Date()
+    // let url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"
+    // let key = `${apiKey}`
+    // let year = new Date().getFullYear()
     
-    let params = new URLSearchParams({
-        serviceKey: key,
-        numOfRows: 100,
-        _type: 'json',
-        solYear: now.getFullYear
-    });
+    // let params = new URLSearchParams({
+    //     serviceKey: key,
+    //     numOfRows: 100,
+    //     _type: 'json',
+    //     solYear: year
+    // });
 
-    fetch("https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?serviceKey=J0mHq1R1fL8PBzcOJXPlaICPhvWctJpIQoAUJNzx1fUeMzFU9bjNRoAuwfN%2FC1w79pvPN5onz8835x6feTa2yA%3D%3D&solYear=2025&numOfRows=100&_type=json")
-    .then(r=>r.json())
-    .then(r=>{
-        console.log(r.response.body.items.item)
-        let list = r.response.body.items.item
+    // fetch(url+"?"+params)
+    // .then(r=>r.json())
+    // .then(r=>{
+
+    //     let list = r.response.body.items.item
+    //     for(a of list) {
+
+    //         var event = {
+    //             title: a.dateName,
+    //             start: a.locdate.toString(),
+    //             allDay: true,
+    //             color: '#378006'
+    //         }
+    //         calendar.addEvent(event);
+    //     }
+    // })
+
+    let list = JSON.parse(localStorage.getItem("list"))
+        console.log(list)
+
         for(a of list) {
-            let day = new Date()
-            day = day.toISOString(a.locdate).substring(0,10)
-            console.log(day)
+
             var event = {
                 title: a.dateName,
-                start: a.locdate,
+                start: a.locdate.toString(),
                 allDay: true,
                 color: '#378006'
             }
             calendar.addEvent(event);
-            calendar.render();
         }
-    })
 
     // var event = {
     //   title: 'addTest',
@@ -87,5 +98,5 @@
     // }
     // calendar.addEvent(event);
 
-    // calendar.render();
+    calendar.render();
     </script>

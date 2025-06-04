@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
     <script src='/fullcalendar/dist/index.global.js'></script>
-    <script>
+    <script type="text/javascript">
 
     // 일정부분
     var scheduleEl = document.getElementById("schedule")
@@ -44,6 +44,46 @@
       dayMaxEvents: true, // allow "more" link when too many events
       fixedWeekCount: false,
     });
+
+    if(localStorage.list != "") {
+        let url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"
+        let key = `${apiKey}`
+        let year = new Date().getFullYear()-1
+        console.log(year)
+        
+        for(let a = 0; a < 3; a++) {
+            let params = new URLSearchParams({
+                serviceKey: key,
+                numOfRows: 100,
+                _type: 'json',
+                solYear: year+a
+            });
+            console.log(params)
+        
+            fetch(url+"?"+params)
+            .then(r=>r.json())
+            .then(r=>{
+        
+                let list = r.response.body.items.item
+                localStorage.setItem("list", JSON.stringify(list));
+                list = JSON.parse(localStorage.getItem("list"))
+                console.log(list)
+        
+                for(a of list) {
+        
+                    var event = {
+                        title: a.dateName,
+                        start: a.locdate.toString(),
+                        allDay: true,
+                        color: '#378006'
+                    }
+                    calendar.addEvent(event);
+                    schedule.addEvent(event);
+                }
+            })
+        }
+    }
+
 
     calendar.render();
     </script>
