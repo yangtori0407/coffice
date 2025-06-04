@@ -24,9 +24,16 @@ public class DocumentService {
 	
 	
 	//
+	public FormVO formDetail(FormVO formVO) throws Exception {
+		
+		return documentDAO.formDetail(formVO);
+	}
+	
+	
+	//
 	public List<UserVO> getUsers() throws Exception {
 				
-		List<UserVO> list = documentDAO.getUsers(); 
+		List<UserVO> list = documentDAO.getUsers();
 		
 		return list;
 	}
@@ -78,7 +85,7 @@ public class DocumentService {
 				
 				// 파일명 입력
 				AttachmentVO vo = new AttachmentVO();
-				vo.setDocument_id(documentVO.getDocument_id());
+				vo.setDocumentId(documentVO.getDocumentId());
 				vo.setOriginName(f.getOriginalFilename());
 				vo.setSaveName(fileName);
 				

@@ -10,7 +10,7 @@ import lombok.ToString;
 public class FormVO {
 	
 	
-	private Long form_id;
+	private Long formId;
 	private String name;
 	private String grade1;
 	private String grade2;

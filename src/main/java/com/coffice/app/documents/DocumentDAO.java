@@ -13,6 +13,8 @@ import com.coffice.app.users.UserVO;
 @Mapper
 public interface DocumentDAO {
 	
+	public FormVO formDetail(FormVO formVO) throws Exception;
+	
 	public List<UserVO> getUsers() throws Exception;
 	
 	public List<FormVO> getForms() throws Exception;

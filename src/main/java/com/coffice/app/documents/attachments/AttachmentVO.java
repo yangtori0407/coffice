@@ -11,6 +11,6 @@ import lombok.ToString;
 @ToString
 public class AttachmentVO extends FileVO {
 	
-	private Long document_id;
+	private Long documentId;
 
 }

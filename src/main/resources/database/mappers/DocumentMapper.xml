@@ -11,12 +11,20 @@
   
   <mapper namespace="com.coffice.app.documents.DocumentDAO">
   
+  
+  	<select id="formDetail" parameterType="FormVO" resultType="FormVO">
+  		
+		SELECT * FROM FORMS WHERE FORM_ID=#{formId}
+		    
+		 
+  	</select>
+  
   	<select id="getUsers" resultType="UserVO">
   		SELECT * FROM USERS
 	  </select>
 	  
 	  <select id="getForms" resultType="FormVO">
-	  		SELECT * FROM FORMS
+	  	SELECT * FROM FORMS
 	  </select>
   
   	<sql id="search">
@@ -57,17 +65,17 @@
   			 LEFT OUTER JOIN
   			 ATTACHMENTS NF
   			 USING (DOCUMENT_ID)
-  		WHERE DOCUMENT_ID=#{document_id}
+  		WHERE DOCUMENT_ID=#{documentId}
   	</select>
   	
   	<resultMap type="DocumentVO" id="detailResult">
-  		<id column="DOCUMENT_ID" property="document_id"/>
-  		<result column="FORM_ID" property="form_id"/>
+  		<id column="DOCUMENT_ID" property="documentId"/>
+  		<result column="FORM_ID" property="formId"/>
   		<result column="TITLE" property="title"/>
   		<result column="CONTENT" property="content"/>
-  		<result column="USER_ID" property="user_id"/>
+  		<result column="USER_ID" property="userId"/>
   		<result column="TIME" property="time"/>
-  		<result column="CURRENT_STEP" property="current_step"/>	
+  		<result column="CURRENT_STEP" property="currentStep"/>	
   		<result column="STATUS" property="status"/>
   		
   		<collection property="attachmentVOs" javaType="java.util.List" ofType="AttachmentVO">
@@ -77,29 +85,29 @@
   		</collection>
   		
   		<collection property="approvalLineVOs" javaType="java.util.List" ofType="ApprovalLineVO">
-  			<id column="A_LINE_ID" property="a_line_id"/>
-  			<result column="USER_ID" property="user_id"/>
-  			<result column="SIGN_ID" property="sign_id"/>
-  			<result column="STEP_ORDER" property="step_order"/>
+  			<id column="A_LINE_ID" property="aLineId"/>
+  			<result column="USER_ID" property="userId"/>
+  			<result column="SIGN_ID" property="signId"/>
+  			<result column="STEP_ORDER" property="stepOrder"/>
   			<result column="STATUS" property="status"/>
-  			<result column="HANDLING_TIME" property="handling_time"/>
-  			<result column="REJECT_REASON" property="reject_reason"/>
+  			<result column="HANDLING_TIME" property="handlingTime"/>
+  			<result column="REJECT_REASON" property="rejectReason"/>
   		</collection>
   		
   		<collection property="referenceLineVOs" javaType="java.util.List" ofType="ReferenceLineVO">
-  			<id column="R_LINE_ID" property="r_line_id"/>
-  			<result column="USER_ID" property="user_id"/>  			
+  			<id column="R_LINE_ID" property="rLineId"/>
+  			<result column="USER_ID" property="userId"/>  			
   		</collection>
   		
   		
   		
   	</resultMap>
   	
-  	<insert id="add" parameterType="DocumentVO" useGeneratedKeys="true" keyProperty="document_id">  		
+  	<insert id="add" parameterType="DocumentVO" useGeneratedKeys="true" keyProperty="documentId">
   		INSERT INTO DOCUMENTS 
   		(FORM_ID, TITLE, CONTENT, USER_ID, TIME, CURRENT_STEP, STATUS)
   		VALUES
-  		(#{form_id}, #{title}, #{content}, #{user_id}, now(), #{current_step}, #{status})
+  		(#{formId}, #{title}, #{content}, #{userId}, now(), #{currentStep}, #{status})
   	</insert>
   	
   	
@@ -108,7 +116,7 @@
   		INSERT INTO ATTACHMENTS
   		(DOCUMENT_ID, ORIGIN_NAME, SAVE_NAME)
   		VALUES
-  		(#{document_id}, #{originName}, #{saveName})
+  		(#{documentId}, #{originName}, #{saveName})
   	</insert>
   	
   	<select id="getFileDetail" parameterType="AttachmentVO" resultType="AttachmentVO">

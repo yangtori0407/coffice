@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.documents.attachments.AttachmentVO;
@@ -24,6 +25,16 @@ public class DocumentController {
 	
 	@Autowired
 	private DocumentService documentService;
+	
+	//
+	@PostMapping("form")
+	@ResponseBody
+	public FormVO formDetail(FormVO formVO) throws Exception {
+		
+		FormVO resultVO = documentService.formDetail(formVO);
+		
+		return resultVO;
+	}
 	
 	
 	//
@@ -64,8 +75,12 @@ public class DocumentController {
 		// 폼 리스트 조회
 		List<FormVO> forms = documentService.getForms();
 		
-		model.addAttribute(users);
-		model.addAttribute(forms);		
+		for(FormVO form : forms) {
+			System.out.println("id : " + form.getFormId());
+		}
+		
+		model.addAttribute("users", users);
+		model.addAttribute("forms", forms);
 		
 		return "document/addSetting";
 	}
@@ -75,7 +90,7 @@ public class DocumentController {
 	@PostMapping("add")
 	public String add(DocumentVO documentVO, MultipartFile[] attaches, UserVO userVO) throws Exception {
 		
-		documentVO.setUser_id(userVO.getUserId());
+		documentVO.setUserId(userVO.getUserId());
 		
 		int result = documentService.add(documentVO, attaches);
 		

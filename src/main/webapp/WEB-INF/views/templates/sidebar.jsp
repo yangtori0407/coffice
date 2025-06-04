@@ -34,7 +34,7 @@
 			</a>
 			<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
-					<a class="collapse-item" href="">기안 작성</a>
+					<a class="collapse-item" href="/document/add">기안 작성</a>
 					<a class="collapse-item" href="">기안 문서함</a>
 					<a class="collapse-item" href="">결재 대기 문서함</a>
 					<a class="collapse-item" href="">참조 문서함</a>
