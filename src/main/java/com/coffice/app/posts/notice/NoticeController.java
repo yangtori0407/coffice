@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.page.Pager;
 
@@ -48,5 +50,13 @@ public class NoticeController {
 	public String add(NoticeVO noticeVO) throws Exception{
 		noticeService.add(noticeVO);
 		return "notice/add";
+	}
+	
+	@PostMapping("quillUpload")
+	public String quillUpload(@RequestParam("uploadFile") MultipartFile multipartFile, Model model) throws Exception{
+		String route = noticeService.quillUpload(multipartFile);
+		model.addAttribute("result", route);
+		
+		return "commons/ajaxResult";
 	}
 }

@@ -3,12 +3,21 @@ package com.coffice.app.posts.notice;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.coffice.app.files.FileManager;
 import com.coffice.app.page.Pager;
 
 @Service
 public class NoticeService {
+	
+	@Autowired
+	private FileManager fileManager;
+	
+	@Value("${app.files.base}")
+	private String path;
 	
 	@Autowired
 	private NoticeDAO noticeDAO;
@@ -26,5 +35,22 @@ public class NoticeService {
 	public void add(NoticeVO noticeVO) throws Exception{
 		
 		
+	}
+	
+	public String quillUpload(MultipartFile multipartFile) throws Exception{
+		String fileName = "";
+		
+		if(!multipartFile.isEmpty()) {
+			fileName = fileManager.fileSave(path.concat("notice"), multipartFile);
+			
+			NoticeFilesVO filesVO = new NoticeFilesVO();
+			filesVO.setSaveName(fileName);
+			filesVO.setOriginName(multipartFile.getOriginalFilename());
+			
+			noticeDAO.quillUpload(filesVO);
+		
+		}
+				
+		return  "notice\\" + fileName;
 	}
 }

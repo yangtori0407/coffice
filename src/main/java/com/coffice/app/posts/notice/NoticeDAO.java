@@ -13,4 +13,5 @@ public interface NoticeDAO {
 	public List<NoticeVO> getList(Pager pager) throws Exception;
 	public Long getTotalCount(Pager pager) throws Exception;
 	public NoticeVO getDetail(NoticeVO noticeVO) throws Exception;
+	public int quillUpload(NoticeFilesVO noticeFilesVO) throws Exception;
 }

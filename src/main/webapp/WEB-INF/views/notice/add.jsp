@@ -30,12 +30,15 @@
 					<!-- contents 내용 -->
 					<form method="post">
 						<label>제목</label> <input type="text"
-							class="card mb-4 py-3 border-left-danger" style="width: 100%;">
+							class="card mb-4 py-3 border-left-danger" name="noticeTitle" style="width: 100%;">
 
 						<label>내용</label>
-						<div class="card">
-							<div id="editor"></div>
+						<div class="card" style="margin-bottom: 20px;">
+							<div id="editor" style="height: 550px;"></div>
+							<input type="hidden" id="quill_html" name="noticeContents">
 						</div>
+						<input type="file">
+						<button class="btn btn-primary mb-3" type="submit">글 작성하기</button>
 					</form>
 				</div>
 			</div>
@@ -47,7 +50,7 @@
 	<!-- End Wrapper -->
 	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 	<script>
-		var quill = new Quill('#editor', {
+		let quill = new Quill('#editor', {
 			modules : {
 				toolbar : [ [ 'bold', 'italic', 'underline', 'strike' ], // 굵게, 기울임, 밑줄, 취소선
 				[ 'blockquote', 'code-block' ], // 인용 블록, 코드 블록
@@ -103,6 +106,39 @@
 			placeholder : '내용을 입력하세요...', // placeholder 텍스트
 			theme : 'snow'
 		});
+		
+		quill.on("text-change", function() {
+			document.getElementById("quill_html").value = quill.root.innerHTML;
+		})
+
+		quill.getModule('toolbar').addHandler("image", function(){
+			selectLocalImage();
+		})
+
+		function selectLocalImage(){
+			const fileInput = document.createElement("input");
+			fileInput.setAttribute("type", "file");
+
+			fileInput.click();
+			
+			fileInput.addEventListener("change", function(){
+				const formData = new FormData();
+				const file = fileInput.files[0];
+				formData.append("uploadFile", file); //스프링에서 @RequestParam("uploadFile") 로 받아야한다.
+				fetch("/notice/quillUpload", {
+					method: "POST",
+					body: formData
+				}).then(r => r.text())
+				.then(r => {
+					console.log(r);
+					const range = quill.getSelection();
+					quill.insertEmbed(range.index, 'image', "/files/" + r);
+					
+				})
+
+			})
+			
+		}
 	</script>
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 

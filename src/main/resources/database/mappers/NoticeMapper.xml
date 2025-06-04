@@ -40,4 +40,8 @@
   		SELECT * FROM NOTICE
   		WHERE NOTICE_NUM = #{noticeNum}
   	</select>
+  	
+  	<insert id="quillUpload">
+  		INSERT INTO NOTICE_FILES VALUES(NULL, null, #{originName}, #{saveName})
+  	</insert>
   </mapper>

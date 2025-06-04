@@ -47,24 +47,25 @@
 												</label>
 											</div>
 										</div> -->
-										<div class="col-11 mb-4">
-											<form method="get">
-												<div class="d-flex align-items-center gap-3">
-													<select class="custom-select mr-sm-2 col-2"
-														id="inlineFormCustomSelect" name="kind">
+										<div class="col-12 mb-4">
+											<div
+												class="d-flex justify-content-between align-items-center">
+												<!-- 검색 폼 -->
+												<form method="get"
+													class="form-inline d-flex align-items-center">
+													<select class="custom-select mr-2" name="kind">
 														<option value="k1">제목</option>
 														<option value="k2">본문</option>
 														<option value="k3">제목+본문</option>
-													</select> <input id="search" type="search"
-														class="form-control form-control-sm"
-														placeholder="검색어를 입력하세요" aria-controls="dataTable"
-														style="max-width: 200px;" name="search">
-													<button type="submit" class="btn btn-info ml-1">검색</button>
-												</div>
-											</form>
-										</div>
-										<div class="col-1">
-											<a href="./add" class="btn btn-danger ml-4">추가하기</a>
+													</select> <input type="search" name="search"
+														class="form-control form-control-sm mr-2"
+														placeholder="검색어를 입력하세요" style="max-width: 200px;">
+													<button type="submit" class="btn btn-info ">검색</button>
+												</form>
+
+												<!-- 추가 버튼 -->
+												<a href="./add" class="btn btn-danger">추가하기</a>
+											</div>
 										</div>
 									</div>
 									<div class="row">
@@ -112,8 +113,7 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-sm-12 col-md-5">
-										</div>
+										<div class="col-sm-12 col-md-5"></div>
 										<div class="col-sm-12 col-md-7">
 											<div class="dataTables_paginate paging_simple_numbers"
 												id="dataTable_paginate">
@@ -125,7 +125,8 @@
 														class="page-link">Previous</a></li>
 													<c:forEach begin="${pager.start }" end="${pager.end }"
 														var="i">
-														<li class="paginate_button page-item ${pager.nowPage == i ? 'active' : '' }"><a
+														<li
+															class="paginate_button page-item ${pager.nowPage == i ? 'active' : '' }"><a
 															href="./list?nowPage=${i }&search=${pager.search}&kind=${pager.kind}"
 															aria-controls="dataTable" data-dt-idx="1" tabindex="0"
 															class="page-link">${i}</a></li>
@@ -133,7 +134,8 @@
 
 
 													<li class="paginate_button page-item next"
-														id="dataTable_next"><a href="./list?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
+														id="dataTable_next"><a
+														href="./list?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="7" tabindex="0"
 														class="page-link">Next</a></li>
 												</ul>
