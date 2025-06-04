@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.coffice.app.files.FileVO;
 import com.coffice.app.page.Pager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,9 @@ public class NoticeController {
 	
 	@GetMapping("detail")
 	public String getDetail(NoticeVO noticeVO, Model model) throws Exception{
+		log.info("detail noticeVO : {}", noticeVO);
 		noticeVO = noticeService.getDetail(noticeVO);
+		log.info("detail noticeVO : {}", noticeVO);
 		model.addAttribute("detail", noticeVO);
 		
 		return "notice/detail";
@@ -47,15 +50,34 @@ public class NoticeController {
 	}
 	
 	@PostMapping("add")
-	public String add(NoticeVO noticeVO) throws Exception{
-		noticeService.add(noticeVO);
-		return "notice/add";
+	public String add(NoticeVO noticeVO, @RequestParam("attaches")MultipartFile[] attaches) throws Exception{
+		noticeService.add(noticeVO, attaches);
+		return "redirect:/notice/list";
 	}
 	
 	@PostMapping("quillUpload")
 	public String quillUpload(@RequestParam("uploadFile") MultipartFile multipartFile, Model model) throws Exception{
 		String route = noticeService.quillUpload(multipartFile);
 		model.addAttribute("result", route);
+		
+		return "commons/ajaxResult";
+	}
+	
+	@GetMapping("fileDown")
+	public String fileDown(NoticeFilesVO filesVO,Model model) throws Exception{
+		FileVO fileVO = (FileVO)noticeService.fileDown(filesVO);
+		
+		model.addAttribute("fileVO", fileVO);
+		model.addAttribute("kind", "notice");
+		
+		return "fileDownView";
+	}
+	
+	@PostMapping("delete")
+	public String delete(NoticeVO noticeVO, Model model) throws Exception{
+		int result = noticeService.delete(noticeVO);
+		
+		model.addAttribute("result", result);
 		
 		return "commons/ajaxResult";
 	}

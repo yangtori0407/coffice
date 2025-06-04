@@ -10,7 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.coffice.app.files.FileManager;
 import com.coffice.app.page.Pager;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class NoticeService {
 	
 	@Autowired
@@ -32,9 +35,23 @@ public class NoticeService {
 		return noticeDAO.getDetail(noticeVO);
 	}
 
-	public void add(NoticeVO noticeVO) throws Exception{
+	public void add(NoticeVO noticeVO, MultipartFile[] attaches) throws Exception{
+		int result = noticeDAO.add(noticeVO);
 		
-		
+		for(MultipartFile f : attaches) {
+			if(f.isEmpty()) {
+				continue;
+			}
+			
+			String fileName = fileManager.fileSave(path.concat("notice"), f);
+			NoticeFilesVO filesVO = new NoticeFilesVO();
+			filesVO.setNoticeNum(noticeVO.getNoticeNum());
+			filesVO.setSaveName(fileName);
+			filesVO.setOriginName(f.getOriginalFilename());
+			
+			noticeDAO.addFiles(filesVO);
+			
+		}
 	}
 	
 	public String quillUpload(MultipartFile multipartFile) throws Exception{
@@ -52,5 +69,14 @@ public class NoticeService {
 		}
 				
 		return  "notice\\" + fileName;
+	}
+	
+	public NoticeFilesVO fileDown(NoticeFilesVO filesVO) throws Exception{
+		return noticeDAO.fileDetail(filesVO);
+	}
+
+	public int delete(NoticeVO noticeVO) throws Exception{
+		return noticeDAO.delete(noticeVO);
+		
 	}
 }

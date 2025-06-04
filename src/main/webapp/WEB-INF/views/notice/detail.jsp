@@ -28,7 +28,7 @@
 							<div class="card-body">${detail.noticeTitle }</div>
 						</div>
 
-						<div class="card shadow mb-3" style="height: 600px;">
+						<div class="card shadow mb-3" style="min-height: 600px;">
 							<div class="card-header py-3">
 								<h6 class="m-0 font-weight-bold text-primary">작성일:
 									${detail.noticeDate }</h6>
@@ -37,11 +37,17 @@
 							</div>
 							<div class="card-body">${detail.noticeContents }</div>
 						</div>
-						<div class="card mb-3 py-1 border-bottom-secondary">
-							<div class="card-body">첨부파일</div>
+						<label>첨부파일</label>
+						<div class="card mb-3 py-1 border-bottom-secondary d-flex">
+							<div class="card-body">
+							<c:forEach items="${detail.files }" var="l">
+								<a href="./fileDown?fileNum=${l.fileNum }" class="mr-1">${l.originName }</a>
+							</c:forEach>
+							</div>
 						</div>
 						<div class="mb-2">
-							<a class="btn btn-danger">삭제하기</a> <a class="btn btn-primary">수정하기</a>
+							<button class="btn btn-danger" id="delBtn" type="button" data-notice-num="${detail.noticeNum }">삭제하기</button> 
+							<a class="btn btn-primary">수정하기</a>
 						</div>
 					</div>
 				</div>
@@ -51,6 +57,7 @@
 			<!-- End Content Wrapper -->
 		</div>
 		<!-- End Wrapper -->
+		<script src="/js/coffice/noticeDetail.js"></script>
 		<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
 </html>

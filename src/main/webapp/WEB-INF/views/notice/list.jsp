@@ -101,7 +101,7 @@
 												<tbody>
 													<c:forEach items="${list }" var="l">
 														<tr>
-															<td>${l.noticeNum }</td>
+															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeNum }</a></td>
 															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
 															<td>관리자</td>
 															<td>${l.noticeHit }</td>

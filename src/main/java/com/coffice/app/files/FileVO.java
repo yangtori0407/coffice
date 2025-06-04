@@ -6,6 +6,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class FileVO {
+	private String fileNum;
 	private String originName;
 	private String saveName;
 }
