@@ -7,7 +7,10 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${appkey}&libraries=services"></script>
+<link href="/css/branch/map.css" rel="stylesheet">
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -17,8 +20,28 @@
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
 
-					<div id="map" style="width:500px;height:400px;min-height: 50vh; margin: 0 auto"></div>
-
+					<div id="map" style="width:500px;height:400px;min-height: 50vh; margin: 0 auto">
+					<div class="custom_zoomcontrol radius_border">
+						<span id="reloadMap">
+							<ion-icon name="refresh-outline"></ion-icon>
+						</span>
+					</div>
+					</div>
+					<form method="get">
+					<div class="input-group" style="margin:20px auto;width: 600px;">
+							 <select name="kind" class="form-control col-3" id="exampleFormControlSelect1">
+								<option value="k1">지점번호</option>
+								<option value="k2">지점이름</option>
+								<option value="k3">운영상태</option>
+								<option value="k4">주소</option>
+							  </select>
+											 
+								<input type="text" name="search" id="keyword" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+								<div class="input-group-append">
+							<button class="btn btn-secondary" id="mapSubmit" type="submit" id="button-addon2">찾기</button>
+						</div>
+					</div>
+					</form>
 					<table class="table table-striped" style="margin:20px auto;width: 600px;">
 						<thead>
 							<tr>
