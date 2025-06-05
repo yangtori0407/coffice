@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.coffice.app.home.Pager;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -30,9 +32,14 @@ public class BranchController {
 	}
 
 	@GetMapping("map")
-	public String map(Model model) throws Exception {
-		List<BranchVO> list = branchService.getList();
+	public String map(Model model, Pager pager) throws Exception {
+		List<BranchVO> list = branchService.getList(pager);
 		model.addAttribute("list", list);
+		model.addAttribute("pager", pager);
+		
+		log.info("list:{}",list);
+		log.info("kind:{}",pager.getKind());
+		log.info("search:{}",pager.getSearch());
 		
 		List<BranchVO> notAddBranchList = branchService.notAddBranchList();
 		model.addAttribute("notAddBranchList", notAddBranchList);

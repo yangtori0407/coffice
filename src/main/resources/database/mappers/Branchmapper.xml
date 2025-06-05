@@ -4,8 +4,25 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
   <mapper namespace="com.coffice.app.branch.BranchDAO">
-  	<select id="getList" resultType="BranchVO">
+  	<sql id="search">
+  		WHERE
+  		<choose>
+  			<when test="kind == 'k1'">
+  				BRANCH_NAME
+  			</when>
+  			<when test="kind == 'k2'">
+  				BRANCH_STATUS
+  			</when>
+  			<otherwise>
+  				BRANCH_ADDRESS
+  			</otherwise>
+  		</choose>
+  		LIKE CONCAT('%',#{search},'%')
+  	</sql>
+  
+  	<select id="getList" resultType="BranchVO" parameterType="Pager">
   		SELECT * FROM BRANCH
+  		<include refid="search"></include>
   	</select>
   	
   	<select id="notAddBranchList" resultType="BranchVO">

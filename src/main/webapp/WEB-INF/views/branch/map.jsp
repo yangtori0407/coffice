@@ -27,13 +27,13 @@
 						</span>
 					</div>
 					</div>
+					<div class="card-body">
 					<form method="get">
 					<div class="input-group" style="margin:20px auto;width: 600px;">
 							 <select name="kind" class="form-control col-3" id="exampleFormControlSelect1">
-								<option value="k1">지점번호</option>
-								<option value="k2">지점이름</option>
-								<option value="k3">운영상태</option>
-								<option value="k4">주소</option>
+								<option value="k1">지점이름</option>
+								<option value="k2">운영상태</option>
+								<option value="k3">주소</option>
 							  </select>
 											 
 								<input type="text" name="search" id="keyword" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -62,6 +62,8 @@
 							</c:forEach>
 						</tbody>
 					</table>
+					</div>
+					
 					<div style="width: 600px; margin: 0 auto; text-align: right;">
 					     <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addBranch">
 					       점주지정등록
@@ -114,9 +116,10 @@
 	let addressList = [
 		<c:forEach items="${list}" var="vo" varStatus="s">
 			{
+				id: "${vo.branchId}",
 				name:"${vo.branchName}",
 				address:"${vo.branchAddress}",
-				status:"${vo.branchStatus?1:0}"
+				status:"${vo.branchStatus?"운영중":"운영안함"}"
 			}<c:if test="${!s.last}">,</c:if>		
 		</c:forEach>
 		];

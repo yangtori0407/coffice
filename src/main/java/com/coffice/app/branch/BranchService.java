@@ -5,14 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coffice.app.home.Pager;
+
 @Service
 public class BranchService {
 
 	@Autowired
 	private BranchDAO branchDAO;
 	
-	public List<BranchVO> getList() throws Exception {
-		return branchDAO.getList();
+	public List<BranchVO> getList(Pager pager) throws Exception {
+		return branchDAO.getList(pager);
 	}
 	
 	public int add(BranchVO branchVO) throws Exception {

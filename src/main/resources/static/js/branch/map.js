@@ -9,45 +9,44 @@
         imageOption = {offset: new kakao.maps.Point(27,69)};
 	let markerImage = new kakao.maps.MarkerImage(imageSrc,imageSize,imageOption)
 	let geocoder = new kakao.maps.services.Geocoder();	
-    let mapSubmit = document.getElementById("mapSubmit");
     let reloadMap = document.getElementById("reloadMap");
         
     listSearch(addressList, null);
-        
-    mapSubmit.addEventListener("click",(e)=>{
-        e.preventDefault();
-           searchPlaces();
-    })
 
     reloadMap.addEventListener("click",()=>{
         map.setCenter(options.center);
         map.setLevel(options.level);
     })
        
-    function searchPlaces() {
+    document.querySelector("form").addEventListener("submit", function(e) {
         let keyword = document.getElementById("keyword").value;
             
             if(!keyword.replace(/^\s+|\s+$/g, '')){
                 alert("입력해주세요.")
+                e.preventDefault(); 
                 return false;
             }
         
         let filteredList = addressList.filter(item =>
-            item.name.includes(keyword) || item.address.includes(keyword)   
+            item.name.includes(keyword) || item.address.includes(keyword)  || item.id.includes(keyword) || item.status.includes(keyword)
         );
 
             if (filteredList.length === 0) {
                 alert("검색 결과가 존재하지 않습니다.");
+                e.preventDefault(); 
                 return;
             }  
             let bounds = new kakao.maps.LatLngBounds(); 
             listSearch(filteredList,bounds);
-    }
+    })
 
     function listSearch(list, bounds) {
+        let total = 0;     // 처리할 지점 수
+    let done = 0;  
         list.forEach((i)=>{
             geocoder.addressSearch(i.address,(result,status)=>{
-                if(i.status==1){
+                if(i.status==="운영중"){
+                    total++;
                     if(status===kakao.maps.services.Status.OK){
                         let coords = new kakao.maps.LatLng(result[0].y,result[0].x);
                         
@@ -66,8 +65,14 @@
                             infowindow.open(map,marker);
                         })
                         bounds.extend(coords);
-                        map.setBounds(bounds);
+                       
                     }
+                    done++;
+                     if (done === total) {
+                        if (!bounds.isEmpty()) {
+                            map.setBounds(bounds);
+                    }
+                }
                 }
             })
 	    })
