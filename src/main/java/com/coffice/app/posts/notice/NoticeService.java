@@ -42,7 +42,6 @@ public class NoticeService {
 
 	public void add(NoticeVO noticeVO, MultipartFile[] attaches) throws Exception {
 		int result = noticeDAO.add(noticeVO);
-		List<String> quillFile = htmlParse(noticeVO.getNoticeContents());
 		
 		for (MultipartFile f : attaches) {
 			if (f.isEmpty()) {
