@@ -10,6 +10,7 @@
 	let markerImage = new kakao.maps.MarkerImage(imageSrc,imageSize,imageOption)
 	let geocoder = new kakao.maps.services.Geocoder();
     let reloadMap = document.getElementById("reloadMap");
+    let detailLink = document.querySelectorAll(".detail-link")
 
     listSearch(addressList, null);
 
@@ -37,8 +38,29 @@
                         })
                         
                         kakao.maps.event.addListener(marker,'click',()=>{
-                            infowindow.open(map,marker);
-                        })
+                                
+                                    fetch(`./detail?branchId=${i.id}`)
+                                    .then(r=>r.json())
+                                    .then(r=>{
+                                        
+                                        let detailBranchName = document.getElementById("detailBranchName");
+                                        let detailUserName = document.getElementById("detailUserName");
+                                        let detailStatus = document.getElementById("detailStatus");
+                                        
+                                        detailBranchName.innerText = r.branchName
+                                        detailStatus.innerText = (r.branchStatus? "운영중": "운영안함")
+
+                                        if(r.userVO == null) {
+                                            detailUserName.innerText = "없음"
+                                        }else {
+                                            detailUserName.innerText = r.userVO.name
+                                        }
+                                        let myModal = new bootstrap.Modal(document.getElementById("detailBranch"))
+                                        myModal.show();
+                                        
+                                    })
+
+                            })
                         bounds.extend(coords);
                         map.setBounds(bounds);
                     }
@@ -81,30 +103,28 @@
         });
     });
 
-    let detailLink = document.getElementsByClassName("detail-link")
-    console.log(detailLink.length);
-
+    //지점지도확대
     for(let i =0; i<detailLink.length;i++){
-        detailLink[i].addEventListener("click",(e)=>{
-            console.log(e)
+        detailLink[i].addEventListener("click",(e)=>{       
             const branchId = detailLink[i].getAttribute("data-branch");
-            console.log(branchId)
 
             fetch(`./detail?branchId=${branchId}`)
             .then(r=>r.json())
-            .then(r=>{
-                console.log(r)
-                let detailBranchName = document.getElementById("detailBranchName");
-                let detailUserName = document.getElementById("detailUserName");
-                let detailStatus = document.getElementById("detailStatus");
-                
-                detailBranchName.innerText = r.branchName
-                detailStatus.innerText = (r.branchStatus? "운영중": "운영안함")
+            .then(r=>{ 
+                let addressList2= [
+                    {
+                        id: r.branchId,
+				        name:r.branchName,
+				        address:r.branchAddress,
+				        status:(r.branchStatus? "운영중": "운영안함")
+                    }
+                ]
 
-                if(r.userVO == null) {
-                    detailUserName.innerText = "없음"
-                }else {
-                    detailUserName.innerText = r.userVO.name
+                let bounds = new kakao.maps.LatLngBounds()
+                if(addressList2[0].status==="운영안함"){
+                    alert("지도에 없음")
+                }else{
+                    listSearch(addressList2,bounds)
                 }
             })
         })
