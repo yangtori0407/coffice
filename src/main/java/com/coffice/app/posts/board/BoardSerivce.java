@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.files.FileManager;
 import com.coffice.app.page.Pager;
-import com.coffice.app.posts.QuillFileVO;
 
 @Service
 public class BoardSerivce {
@@ -40,13 +39,13 @@ public class BoardSerivce {
 		if(!file.isEmpty()) {
 			fileName = fileManager.fileSave(path.concat("quill"), file);
 			
-			QuillFileVO quillFileVO = new QuillFileVO();
-			quillFileVO.setSaveName(fileName);
-			quillFileVO.setOriginName(file.getOriginalFilename());
-			
-			boardDAO.quillUpload(quillFileVO);
+//			QuillFileVO quillFileVO = new QuillFileVO();
+//			quillFileVO.setSaveName(fileName);
+//			quillFileVO.setOriginName(file.getOriginalFilename());
+//			
+//			boardDAO.quillUpload(quillFileVO);
 		}
 		
-		return "\\quill\\" + fileName;
+		return "quill\\" + fileName;
 	}
 }

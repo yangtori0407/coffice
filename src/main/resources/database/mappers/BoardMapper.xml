@@ -41,7 +41,5 @@
   		WHERE BOARD_NUM = #{boardNum}
   	</select>
   	
-  	<insert id="quillUpload" parameterType="QuillFileVO">
-  		INSERT INTO QUILL_FILE VALUES(NULL, #{originName}, #{saveName}, 0)
-  	</insert>
+
   </mapper>
