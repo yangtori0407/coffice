@@ -59,8 +59,19 @@
 
 		<!-- Nav Item - Pages Collapse Menu -->
 		<!-- Nav Item - Tables -->
-		<li class="nav-item"><a class="nav-link" href="#"> <ion-icon name="calendar-outline"></ion-icon>
-				<span>일정</span></a></li>
+		<li class="nav-item">
+			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCalendar" aria-expanded="true" aria-controls="collapseCalendar">
+			<ion-icon name="calendar-outline"></ion-icon>
+				<span>일정</span>
+			</a>
+			<div id="collapseCalendar" class="collapse" aria-labelledby="headingCalendar"
+				data-parent="#accordionSidebar">
+				<div class="bg-white py-2 collapse-inner rounded">
+					<a class="collapse-item" href="/events/schedule">일정 관리</a> 
+					<a class="collapse-item" href="/events/vacation">휴가 관리</a>
+				</div>
+			</div>
+		</li>
 
 		<!-- Nav Item - Charts -->
 		<li class="nav-item"><a class="nav-link" href="charts.html"> <ion-icon name="chatbubbles-outline"></ion-icon>

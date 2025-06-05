@@ -20,6 +20,7 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
+					 <h1 class="h3 mb-2 text-gray-800" id="kind">${kind} </h1>
 					<div id="calendar"></div>
 
 				</div>
@@ -30,7 +31,8 @@
 		<!-- End Content Wrapper -->
 	</div>
 	<!-- End Wrapper -->
-	<c:import url="/WEB-INF/views/templates/fullCalendar.jsp"></c:import>
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
+	<script src='/fullcalendar/dist/index.global.js'></script>
+	<script type="text/javascript" src="/js/calendar/fullCalendar.js"></script>
 </body>
 </html>

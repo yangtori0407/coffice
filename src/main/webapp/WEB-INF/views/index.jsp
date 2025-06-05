@@ -203,7 +203,9 @@
 		<!-- End Content Wrapper -->
 	</div>
 	<!-- End Wrapper -->
-	<c:import url="/WEB-INF/views/templates/homeCalendar.jsp"></c:import>
+	<input type="hidden" value="${apiKey}" id="apiKey">
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
+	<script src='/fullcalendar/dist/index.global.js'></script>
+	<script src="/js/calendar/homeCalendar.js"></script>
 </body>
 </html>
