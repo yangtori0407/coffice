@@ -16,7 +16,8 @@
 	.items {
 		width: 50%;
 		border: solid 1px black;
-		margin: 5px 5px;		
+		margin: 5px 5px;
+		display: flex;	
 	}
 
 	.items:hover {
@@ -35,9 +36,7 @@
 		display: flex;		
 	}
 	
-	.references {
-		display: flex;		
-	}
+	
 	
 </style>
 
@@ -67,10 +66,10 @@
 						</div>
 						
 						
-						<div class="col-6 mb-3">
+						<div class="col-6 mb-3" id="id_employees_wrapper">
 							<div style="height: 200px; border: solid black 1px;">사원 목록 창
 								<c:forEach var="i" items="${users}">
-									<div class="items employees" id="${i.userId}" data-profile="${i.saveName}">${i.name}</div>
+									<div class="items employees" id="${i.userId}" profile="${i.saveName}">${i.name}</div>
 								</c:forEach>
 							</div>
 						</div>
@@ -90,11 +89,11 @@
 											
 					
 						<div class="col-6 mb-3">
-							<div style="height: 50px; border: solid black 1px;">완료</div>
+							<div style="height: 50px; border: solid black 1px;">돌아가기</div>
 						</div>
 						
 						<div class="col-6 mb-3">
-							<div style="height: 50px; border: solid black 1px;">돌아가기</div>
+							<div id="id_done_button" style="height: 50px; border: solid black 1px;">완료하기</div>
 						</div>
 						
 					</div>
@@ -111,7 +110,7 @@
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 		
-	<script src="/js/document/addSetting.js"></script>
+	<script src="/js/document/makeSetting.js"></script>
 	
 </body>
 </html>

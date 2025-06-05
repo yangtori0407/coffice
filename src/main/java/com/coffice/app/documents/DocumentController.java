@@ -66,8 +66,8 @@ public class DocumentController {
 	
 	
 	//
-	@GetMapping("add")
-	public String add(Model model) throws Exception {
+	@GetMapping("make")
+	public String make(Model model) throws Exception {
 		
 		// 유저 리스트 조회
 		List<UserVO> users = documentService.getUsers();
@@ -82,7 +82,15 @@ public class DocumentController {
 		model.addAttribute("users", users);
 		model.addAttribute("forms", forms);
 		
-		return "document/addSetting";
+		return "document/makeSetting";
+	}
+	
+	
+	//
+	@PostMapping("make")
+	public String make(Model model, FormVO formVO, UserVO[] approvers, UserVO[] referrers) throws Exception {
+		
+		return "document/form1";
 	}
 	
 	
