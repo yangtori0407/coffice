@@ -8,6 +8,13 @@
 <title>Insert title here</title>
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${appkey}&libraries=services"></script>
+<style>
+	.input-box {
+		width: 100%;
+		height: 50px;
+		margin: 20px 0;
+	}
+</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -16,20 +23,20 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-					<form action="./add" method="post">
-						<div class="col-md-9">
-							<input type="text" name="branchName" placeholder="지점이름">						
-						</div>
-						<div class="col-md-9">
-							<input type="text" name="branchPostcode" id="branchPostcode" placeholder="지점우편번호" readonly>
-							<input type="button" onclick="daumPostcode()" value="우편번호찾기">
-						</div>
-						<div class="col-md-9">
-							<input type="text" name="branchAddress" id="branchAddress" placeholder="지점주소" readonly>					
-						</div>
-						
-						<button type="submit" class="btn btn-primary">지점등록</button>
-					</form>
+					<div style="width:400px; height:600px; margin: 0 auto; background-color: red;">
+						<form action="./add" method="post">
+							<div class="input-box">
+								<input type="text" name="branchName" placeholder="지점이름">						
+							</div>
+							<div class="input-box">
+								<input type="text" name="branchPostcode" id="branchPostcode" placeholder="지점우편번호" readonly>
+								<input type="button" onclick="daumPostcode()" value="우편번호찾기">
+								<input type="text" name="branchAddress" id="branchAddress" placeholder="지점주소" readonly>					
+							</div>
+							
+							<button type="submit" class="btn btn-primary">지점등록</button>
+						</form>
+					</div>
 				</div>
 			</div>
 			<!-- end Content -->

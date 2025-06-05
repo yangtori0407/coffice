@@ -32,13 +32,7 @@
                             image: markerImage
                         })
                         
-                        let infowindow = new kakao.maps.InfoWindow({
-                            content:'<div style="width:150px;text-align:center;padding:6px 0;">'+i.name+'</div>',
-                            removable: true
-                        })
-                        
                         kakao.maps.event.addListener(marker,'click',()=>{
-                                
                                     fetch(`./detail?branchId=${i.id}`)
                                     .then(r=>r.json())
                                     .then(r=>{

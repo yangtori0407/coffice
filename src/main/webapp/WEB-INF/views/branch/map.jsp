@@ -54,7 +54,7 @@
 							<c:forEach items="${list}" var="vo">
 								<tr>
 									<td>${vo.branchId}</td>
-									<td><a href="#" class="detail-link" data-branch="${vo.branchId}">${vo.branchName}</a></td>
+									<td class="detail-link" data-branch="${vo.branchId}" style="cursor:pointer">${vo.branchName}</td>
 									<td style="color:${vo.branchStatus?'green':'red'};">
 										${vo.branchStatus?"운영중":"운영안함"}
 									</td>
