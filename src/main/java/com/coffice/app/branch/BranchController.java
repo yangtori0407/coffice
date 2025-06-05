@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.home.Pager;
 
@@ -74,5 +75,12 @@ public class BranchController {
 		branchService.branchUpdate(branchVO2);
 		
 		return "redirect:./map";
+	}
+	
+	@GetMapping("detail")
+	@ResponseBody
+	public BranchVO detail(BranchVO branchVO) throws Exception {
+		return branchService.getDetail(branchVO);
+		
 	}
 }

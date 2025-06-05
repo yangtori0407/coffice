@@ -38,7 +38,7 @@
 											 
 								<input type="text" name="search" id="keyword" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
 								<div class="input-group-append">
-							<button class="btn btn-secondary" id="mapSubmit" type="submit" id="button-addon2">찾기</button>
+							<button class="btn btn-secondary" type="submit" id="button-addon2">찾기</button>
 						</div>
 					</div>
 					</form>
@@ -54,7 +54,7 @@
 							<c:forEach items="${list}" var="vo">
 								<tr>
 									<td>${vo.branchId}</td>
-									<td>${vo.branchName}</td>
+									<td><a href="#" class="detail-link" data-toggle="modal" data-target="#detailBranch" data-branch="${vo.branchId}">${vo.branchName}</a></td>
 									<td style="color:${vo.branchStatus?'green':'red'};">
 										${vo.branchStatus?"운영중":"운영안함"}
 									</td>
@@ -81,7 +81,7 @@
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title">Modal title</h5>
+		        <h5 class="modal-title">지점점주등록</h5>
 		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
 		                <span aria-hidden="true">×</span>
 		            </button>
@@ -103,6 +103,29 @@
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
 			        <button class="btn btn-primary" id="addBranchBtn">add</button>
+			      </div>
+			  </div>
+		    </div>
+		  </div>
+		</div>
+		
+		
+		<!-- 지점 detail modal -->
+		<div class="modal" id="detailBranch" tabindex="-1">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title">지점정보</h5>
+		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">×</span>
+		            </button>
+		      </div>
+		      <div class="modal-body" aria-label="Default select example" style="margin:0 auto;">
+			     <div>지점이름:<span id="detailBranchName"></span></div>
+			     <div>점주:<span id="detailUserName"></span></div>
+			     <div>운영상태:<span id="detailStatus"></span></div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
 			      </div>
 			  </div>
 		    </div>

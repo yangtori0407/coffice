@@ -14,4 +14,5 @@ public interface BranchDAO {
 	public List<BranchVO> notAddBranchList() throws Exception;
 	public List<BranchMasterVO> notAddBranchMasterList() throws Exception;
 	public int branchUpdate(BranchVO branchVO) throws Exception;
+	public BranchVO getDetail(BranchVO branchVO) throws Exception;
 }

@@ -32,4 +32,8 @@ public class BranchService {
 	public int branchUpdate(BranchVO branchVO) throws Exception {
 		return branchDAO.branchUpdate(branchVO);
 	}
+	
+	public BranchVO getDetail(BranchVO branchVO) throws Exception {
+		return branchDAO.getDetail(branchVO);
+	}
 }

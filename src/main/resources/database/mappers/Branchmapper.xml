@@ -45,6 +45,14 @@
   	<update id="branchUpdate" parameterType="BranchVO">
   		UPDATE BRANCH SET USER_ID=#{userId} WHERE BRANCH_ID=#{branchId}
   	</update>
+  	
+  	<select id="getDetail" resultMap="getBranch" parameterType="BranchVO">
+  		SELECT * 
+		  FROM BRANCH 
+			LEFT OUTER JOIN USERS
+			USING(USER_ID)
+		  WHERE BRANCH_ID =#{branchId}
+  	</select>
   
   <resultMap type="BranchMasterVO" id="getBranchMaster">
 	  	<result column="CONTACT_NUMBER" property="contactNumber"/>
@@ -67,5 +75,30 @@
 			<result column="ORIGIN_NAME" property="originName"/>
 			<result column="DEPT_ID" property="deptId"/>
 	  	</association>
+	</resultMap>
+	
+	<resultMap type="BranchVO" id="getBranch">
+		<id column="BRANCH_ID" property="branchId"/>
+		<result column="BRANCH_NAME" property="branchName"/>
+		<result column="BRANCH_ADDRESS" property="branchAddress"/>
+		<result column="BRANCH_POSTCODE" property="branchPostcode"/>
+		<result column="BRANCH_STATUS" property="branchStatus"/>
+		<result column="USER_ID" property="userId"/>
+	
+		<association property="userVO" javaType="UserVO">
+			<result column="PASSWORD" property="password"/>
+			<result column="NAME" property="name"/>
+			<result column="POSITION" property="position"/>
+			<result column="HIRE_DATE" property="hireDate"/>
+			<result column="HIRE_TYPE" property="hireType"/>
+			<result column="BIRTH_DATE" property="birthDate"/>
+			<result column="PHONE" property="phone"/>
+			<result column="EMAIL" property="email"/>
+			<result column="STATUS" property="status"/>
+			<result column="RESIGN_DATE" property="resignDate"/>
+			<result column="SAVE_NAME" property="saveName"/>
+			<result column="ORIGIN_NAME" property="originName"/>
+			<result column="DEPT_ID" property="deptId"/>
+		</association>
 	</resultMap>
   </mapper>

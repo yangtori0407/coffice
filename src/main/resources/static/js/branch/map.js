@@ -8,45 +8,20 @@
         imageSize = new kakao.maps.Size(35,40),
         imageOption = {offset: new kakao.maps.Point(27,69)};
 	let markerImage = new kakao.maps.MarkerImage(imageSrc,imageSize,imageOption)
-	let geocoder = new kakao.maps.services.Geocoder();	
+	let geocoder = new kakao.maps.services.Geocoder();
     let reloadMap = document.getElementById("reloadMap");
-        
+
     listSearch(addressList, null);
 
     reloadMap.addEventListener("click",()=>{
         map.setCenter(options.center);
         map.setLevel(options.level);
     })
-       
-    document.querySelector("form").addEventListener("submit", function(e) {
-        let keyword = document.getElementById("keyword").value;
-            
-            if(!keyword.replace(/^\s+|\s+$/g, '')){
-                alert("입력해주세요.")
-                e.preventDefault(); 
-                return false;
-            }
-        
-        let filteredList = addressList.filter(item =>
-            item.name.includes(keyword) || item.address.includes(keyword)  || item.id.includes(keyword) || item.status.includes(keyword)
-        );
-
-            if (filteredList.length === 0) {
-                alert("검색 결과가 존재하지 않습니다.");
-                e.preventDefault(); 
-                return;
-            }  
-            let bounds = new kakao.maps.LatLngBounds(); 
-            listSearch(filteredList,bounds);
-    })
 
     function listSearch(list, bounds) {
-        let total = 0;     // 처리할 지점 수
-    let done = 0;  
         list.forEach((i)=>{
             geocoder.addressSearch(i.address,(result,status)=>{
                 if(i.status==="운영중"){
-                    total++;
                     if(status===kakao.maps.services.Status.OK){
                         let coords = new kakao.maps.LatLng(result[0].y,result[0].x);
                         
@@ -65,14 +40,8 @@
                             infowindow.open(map,marker);
                         })
                         bounds.extend(coords);
-                       
+                        map.setBounds(bounds);
                     }
-                    done++;
-                     if (done === total) {
-                        if (!bounds.isEmpty()) {
-                            map.setBounds(bounds);
-                    }
-                }
                 }
             })
 	    })
@@ -111,3 +80,33 @@
             alert("오류");
         });
     });
+
+    let detailLink = document.getElementsByClassName("detail-link")
+    console.log(detailLink.length);
+
+    for(let i =0; i<detailLink.length;i++){
+        detailLink[i].addEventListener("click",(e)=>{
+            console.log(e)
+            const branchId = detailLink[i].getAttribute("data-branch");
+            console.log(branchId)
+
+            fetch(`./detail?branchId=${branchId}`)
+            .then(r=>r.json())
+            .then(r=>{
+                console.log(r)
+                let detailBranchName = document.getElementById("detailBranchName");
+                let detailUserName = document.getElementById("detailUserName");
+                let detailStatus = document.getElementById("detailStatus");
+                
+                detailBranchName.innerText = r.branchName
+                detailStatus.innerText = (r.branchStatus? "운영중": "운영안함")
+
+                if(r.userVO == null) {
+                    detailUserName.innerText = "없음"
+                }else {
+                    detailUserName.innerText = r.userVO.name
+                }
+            })
+        })
+    }
+    
