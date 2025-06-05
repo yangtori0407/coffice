@@ -47,7 +47,7 @@
 						</div>
 						<div class="mb-2">
 							<button class="btn btn-danger" id="delBtn" type="button" data-notice-num="${detail.noticeNum }">삭제하기</button> 
-							<a class="btn btn-primary">수정하기</a>
+							<a href="./update?noticeNum=${detail.noticeNum }" class="btn btn-primary">수정하기</a>
 						</div>
 					</div>
 				</div>

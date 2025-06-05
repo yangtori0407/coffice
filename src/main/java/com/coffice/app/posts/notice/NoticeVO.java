@@ -18,6 +18,7 @@ public class NoticeVO {
 	private Long noticeHit;
 	private Date noticeDate;
 	private Integer deleteStatus;
+	private Date updateDate;
 	
 	private List<NoticeFilesVO> files;
 }

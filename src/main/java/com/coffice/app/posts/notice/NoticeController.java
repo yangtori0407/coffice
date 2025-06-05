@@ -81,4 +81,25 @@ public class NoticeController {
 		
 		return "commons/ajaxResult";
 	}
+	
+	@GetMapping("update")
+	public String update(NoticeVO noticeVO, Model model) throws Exception{
+		noticeVO = noticeService.getDetail(noticeVO);
+		log.info("size : {}",noticeVO.getFiles().size());
+		model.addAttribute("update", noticeVO);
+		
+		return "notice/update";
+	}
+	
+	@PostMapping("update")
+	public String update(NoticeVO noticeVO, @RequestParam(value = "attaches", required = false) MultipartFile[] attaches,int[] deleteFile, Model model) throws Exception{
+		
+//		log.info("noticeVO : {}", noticeVO);
+//		log.info("attaches : {}", attaches);
+//		log.info("deleteFile : {}", deleteFile);
+		
+		int result = noticeService.update(noticeVO, attaches, deleteFile);
+		model.addAttribute("result", result);
+		return "commons/ajaxResult";
+	}
 }

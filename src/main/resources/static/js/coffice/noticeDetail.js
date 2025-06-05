@@ -1,4 +1,5 @@
 const delBtn = document.getElementById("delBtn");
+const upBtn = document.getElementById("upBtn");
 
 delBtn.addEventListener("click", ()=>{
     console.log("click")
@@ -18,5 +19,15 @@ delBtn.addEventListener("click", ()=>{
         }
 
         
+    })
+})
+
+upBtn.addEventListener("click", () => {
+    const noticeNum = upBtn.getAttribute("data-notice-num");
+    let param = new URLSearchParams();
+    param.append("noticeNum", noticeNum);
+    fetch("./update", {
+        method: "POST",
+        body: param
     })
 })

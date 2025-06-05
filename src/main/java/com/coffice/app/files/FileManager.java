@@ -1,6 +1,7 @@
 package com.coffice.app.files;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -26,4 +27,11 @@ public class FileManager {
 		
 		return fileName;
 	}
+	
+//	public void quillFileDelete(String path, List<String> files) throws Exception{
+//		for(String f : files) {
+//			File file = new File(path, f);
+//			
+//		}
+//	}
 }
