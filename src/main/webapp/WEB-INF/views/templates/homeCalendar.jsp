@@ -45,43 +45,51 @@
       fixedWeekCount: false,
     });
 
-    if(localStorage.list != "") {
+    
+    if(new Date().getTime() > localStorage.getItem("calExpTime")) {
+        localStorage.clear()
+    }
+    
+    if(localStorage.length < 3) {
         let url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"
         let key = `${apiKey}`
         let year = new Date().getFullYear()-1
-        console.log(year)
         
-        for(let a = 0; a < 3; a++) {
+        let t = new Date().getTime()+(7*24*60*60*1000)
+        localStorage.setItem("calExpTime", t.toString())
+        
+        for(let i = 0; i < 3; i++) {
             let params = new URLSearchParams({
                 serviceKey: key,
                 numOfRows: 100,
                 _type: 'json',
-                solYear: year+a
+                solYear: year+i
             });
-            console.log(params)
-        
+            
             fetch(url+"?"+params)
             .then(r=>r.json())
             .then(r=>{
-        
                 let list = r.response.body.items.item
-                localStorage.setItem("list", JSON.stringify(list));
-                list = JSON.parse(localStorage.getItem("list"))
-                console.log(list)
-        
-                for(a of list) {
-        
-                    var event = {
-                        title: a.dateName,
-                        start: a.locdate.toString(),
-                        allDay: true,
-                        color: '#378006'
-                    }
-                    calendar.addEvent(event);
-                    schedule.addEvent(event);
-                }
+                localStorage.setItem("list"+i, JSON.stringify(list));
+                list = JSON.parse(localStorage.getItem("list"+i))
+
             })
         }
+    }
+
+    for(let i = 0; i < 3; i++) {
+      let list = JSON.parse(localStorage.getItem("list"+i))
+  
+          for(a of list) {
+              var event = {
+                  title: a.dateName,
+                  start: a.locdate.toString(),
+                  allDay: true,
+                  color: '#378006'
+              }
+              schedule.addEvent(event);
+              calendar.addEvent(event);
+          }
     }
 
 

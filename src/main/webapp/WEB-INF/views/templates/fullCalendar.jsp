@@ -76,19 +76,21 @@
     //     }
     // })
 
-    let list = JSON.parse(localStorage.getItem("list"))
-        console.log(list)
-
-        for(a of list) {
-
-            var event = {
-                title: a.dateName,
-                start: a.locdate.toString(),
-                allDay: true,
-                color: '#378006'
-            }
-            calendar.addEvent(event);
-        }
+    for(let i = 0; i < 3; i++) {
+      let list = JSON.parse(localStorage.getItem("list"+i))
+          console.log(list)
+  
+          for(a of list) {
+  
+              var event = {
+                  title: a.dateName,
+                  start: a.locdate.toString(),
+                  allDay: true,
+                  color: '#378006'
+              }
+              calendar.addEvent(event);
+          }
+    }
 
     // var event = {
     //   title: 'addTest',
