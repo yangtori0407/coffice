@@ -7,7 +7,7 @@
 				<img style="width: 30px;" src="/images/coffice.png">
 			</div>
 				
-			<div>
+			<div class="sidebar-brand-text">
 				<img style="width: 120px;" src="/images/large_coffice.png">
 			</div>	
 		
@@ -51,7 +51,7 @@
 			<div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
 				data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
-					<a class="collapse-item" href="utilities-color.html">공지사항</a> 
+					<a class="collapse-item" href="/notice/list">공지사항</a> 
 					<a class="collapse-item" href="utilities-other.html">익명게시판</a>
 				</div>
 			</div>
