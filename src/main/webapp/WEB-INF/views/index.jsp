@@ -6,11 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>COFFICE</title>
+<link href="/images/3.png" rel="shortcut icon" type="image/x-icon">
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
 <script type="module"
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -161,37 +164,31 @@
 						<div class="col-3">
 							<!-- 일정부분 -->
 							<div class="row" style="height: 500px;">
-								<!-- Custom Text Color Utilities -->
-	                            <div class="card shadow mb-4">
-	                                <div class="card-header py-3">
-	                                    <h6 class="m-0 font-weight-bold text-primary">일정부분</h6>
-	                                </div>
-	                                <div class="card-body">
-	                                    <p class="text-gray-100 p-3 bg-dark m-0">.text-gray-100.text-gray-100.text-gray-100</p>
-	                                    <p class="text-gray-200 p-3 bg-dark m-0">.text-gray-200</p>
-	                                    <p class="text-gray-300 p-3 bg-dark m-0">.text-gray-300</p>
-	                                    <p class="text-gray-400 p-3 bg-dark m-0">.text-gray-400</p>
-	                                    <p class="text-gray-500 p-3 m-0">.text-gray-500</p>
-	                                    <p class="text-gray-600 p-3 m-0">.text-gray-600</p>
-	                                </div>
-	                            </div>
+								<div class="col" style="min-width: 300px;">
+									<!-- Custom Text Color Utilities -->
+									<div class="card shadow mb-4">
+										<div class="card-header py-3">
+											<h6 class="m-0 font-weight-bold text-primary">일정부분</h6>
+										</div>
+										<div class="card-body" style="min-height: 400px;">
+											<div id="schedule"></div>
+										</div>
+									</div>
+								</div>
 							</div>
 							<!-- 달력부분 -->
-							<div class="row" style="height: 500px;">
+							<div class="row" style="min-height: 500px;">
 								<!-- Custom Text Color Utilities -->
-	                            <div class="card shadow mb-4">
-	                                <div class="card-header py-3">
-	                                    <h6 class="m-0 font-weight-bold text-primary">달력부분</h6>
-	                                </div>
-	                                <div class="card-body">
-	                                    <p class="text-gray-100 p-3 bg-dark m-0">.text-gray-100.text-gray-100.text-gray-100</p>
-	                                    <p class="text-gray-200 p-3 bg-dark m-0">.text-gray-200</p>
-	                                    <p class="text-gray-300 p-3 bg-dark m-0">.text-gray-300</p>
-	                                    <p class="text-gray-400 p-3 bg-dark m-0">.text-gray-400</p>
-	                                    <p class="text-gray-500 p-3 m-0">.text-gray-500</p>
-	                                    <p class="text-gray-600 p-3 m-0">.text-gray-600</p>
-	                                </div>
-                            </div>
+								 <div class="col" style="min-width: 300px;">
+									 <div class="card shadow mb-4">
+										 <div class="card-header py-3">
+											 <h6 class="m-0 font-weight-bold text-primary">달력부분</h6>
+										 </div>
+										 <div class="card-body">
+											 <div id="calendar"></div>
+										 </div>
+									 </div>
+								 </div>
 							</div>
 						</div>
 
@@ -206,6 +203,9 @@
 		<!-- End Content Wrapper -->
 	</div>
 	<!-- End Wrapper -->
+	<input type="hidden" value="${apiKey}" id="apiKey">
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
+	<script src='/fullcalendar/dist/index.global.js'></script>
+	<script src="/js/calendar/homeCalendar.js"></script>
 </body>
 </html>
