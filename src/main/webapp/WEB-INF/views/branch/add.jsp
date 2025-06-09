@@ -7,7 +7,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${appkey}&libraries=services"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <style>
 	.input-box {
 		width: 100%;
@@ -23,7 +24,7 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-					<div style="width:400px; height:600px; margin: 0 auto; background-color: red;">
+					<div style="width:400px; height:600px; margin: 0 auto;">
 						<form action="./add" method="post">
 							<div class="input-box">
 								<input type="text" name="branchName" placeholder="지점이름">						

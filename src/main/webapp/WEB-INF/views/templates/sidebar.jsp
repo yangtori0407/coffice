@@ -72,6 +72,20 @@
 				</div>
 			</div>
 		</li>
+		
+		<li class="nav-item">
+			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBranch" aria-expanded="true" aria-controls="collapseCalendar">
+			<ion-icon name="map-outline"></ion-icon>
+				<span>지점</span>
+			</a>
+			<div id="collapseBranch" class="collapse" aria-labelledby="headingCalendar"
+				data-parent="#accordionSidebar">
+				<div class="bg-white py-2 collapse-inner rounded">
+					<a class="collapse-item" href="/branch/map">지점지도</a>
+					<a class="collapse-item" href="/branch/add">지점추가</a>
+				</div>
+			</div>
+		</li>
 
 		<!-- Nav Item - Charts -->
 		<li class="nav-item"><a class="nav-link" href="charts.html"> <ion-icon name="chatbubbles-outline"></ion-icon>
