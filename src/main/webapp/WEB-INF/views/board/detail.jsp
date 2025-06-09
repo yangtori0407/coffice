@@ -24,10 +24,16 @@
 					<!-- contents 내용 -->
 					<div>
 
-						<div class="card mb-4 py-3 border-left-danger">
+						<div class="card mb-4 py-3 border-left-info">
 							<div class="card-body">${detail.boardTitle }</div>
 						</div>
 
+						<div class="mb-2">
+							<button class="btn btn-danger" id="delBtn" type="button"
+								data-board-num="${detail.boardNum }">삭제하기</button>
+							<a href="./update?boardNum=${detail.boardNum }"
+								class="btn btn-primary">수정하기</a>
+						</div>
 						<div class="card shadow mb-3" style="min-height: 600px;">
 							<div class="card-header py-3">
 								<h6 class="m-0 font-weight-bold text-primary">작성일:
@@ -38,12 +44,6 @@
 							<div class="card-body">${detail.boardContents }</div>
 						</div>
 
-						<div class="mb-2">
-							<button class="btn btn-danger" id="delBtn" type="button"
-								data-board-num="${detail.boardNum }">삭제하기</button>
-							<a href="./update?noticeNum=${detail.boardNum }"
-								class="btn btn-primary">수정하기</a>
-						</div>
 					</div>
 				</div>
 				<!-- end Content -->
@@ -59,7 +59,7 @@
 		    console.log("click")
 		    const boardNum = delBtn.getAttribute("data-board-num");
 		    let param = new URLSearchParams();
-		    param.append("boardNum", board);
+		    param.append("boardNum", boardNum);
 
 		    fetch("./delete", {
 		        method: "POST",
@@ -70,6 +70,9 @@
 		        if(r*1 == 1){
 		            alert("삭제가 완료되었습니다.");
 		            location.href = "/board/list";
+		        }else{
+		        	alert("삭제를 실패하였습니다.");
+		        	location.href = "/board/list";
 		        }
 
 		        

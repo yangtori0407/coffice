@@ -28,16 +28,16 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					<form method="post" enctype="multipart/form-data">
+					<form method="post">
 						<label>제목</label> <input type="text"
-							class="card mb-4 py-3 border-left-danger" name="noticeTitle"
+							class="card mb-4 py-3 border-left-info" name="boardTitle"
 							style="width: 100%;"> <label>내용</label>
 						<div class="card" style="margin-bottom: 20px;">
 							<div id="editor" style="height: 550px;"></div>
-							<input type="hidden" id="quill_html" name="noticeContents">
+							<input type="hidden" id="quill_html" name="boardContents">
 						</div>
 						<div>
-							<button class="btn btn-primary mb-3" type="submit">글
+							<button id="submitBtn" class="btn btn-primary mb-3" type="submit">글
 								작성하기</button>
 						</div>
 					</form>
@@ -140,6 +140,23 @@
 				})
 
 			}
+			
+			let isSubmitting = false;
+			
+			document.getElementById("submitBtn").addEventListener("click", () =>{
+				isSubmitting = true;
+			})
+			
+			window.addEventListener('beforeunload', (event) => {  
+				// 표준에 따라 기본 동작 방지  
+				if(!isSubmitting){
+					event.preventDefault();  // Chrome에서는 returnValue 설정이 필요함  
+					event.returnValue = '';
+				}
+			});
+			
+			
+				
 			</script>
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 

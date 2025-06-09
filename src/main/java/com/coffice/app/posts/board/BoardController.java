@@ -52,4 +52,38 @@ public class BoardController {
 	public String add() throws Exception{
 		return "board/add";
 	}
+	
+	@PostMapping("add")
+	public String add(BoardVO boardVO, Model model) throws Exception{
+		int result = boardService.add(boardVO);
+		
+		return "redirect:./list";
+	}
+	
+	@PostMapping("delete")
+	public String delete(BoardVO boardVO, Model model) throws Exception{
+		int result = boardService.delete(boardVO);
+		model.addAttribute("result", result);
+		
+		return "commons/ajaxResult";
+	}
+	
+	@GetMapping("update")
+	public String updateView(BoardVO boardVO, Model model) throws Exception{
+		BoardVO boarVO = boardService.getDetail(boardVO);
+		
+		model.addAttribute("update", boarVO);
+		
+		return "board/update";
+	}
+	
+	@PostMapping("update")
+	public String update(BoardVO boardVO, Model model) throws Exception{
+		int result = boardService.update(boardVO);
+		if(result != 1) {
+			model.addAttribute("result", "글 수정을 실패하였습니다.");
+			model.addAttribute("path", "./list");
+		}
+		return "redirect:./detail?boardNum=" + boardVO.getBoardNum();
+	}
 }

@@ -152,6 +152,7 @@ attacheArea.addEventListener("click", (e) => {
 })
 
 //수정된 내용 전송
+//기존 파일 중 삭제되는 애들도 보내야하기 때문에 fetch로 보낸다
 const title = document.getElementById("noticeTitle");
 const contents = document.getElementById("quill_html").value;
 

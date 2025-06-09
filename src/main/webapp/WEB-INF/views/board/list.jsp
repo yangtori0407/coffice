@@ -12,6 +12,11 @@
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+	<style>
+		.boardA{
+			color: rgb(87, 178, 230);
+		}
+	</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -89,8 +94,8 @@
 												<tbody>
 													<c:forEach items="${list }" var="l">
 														<tr>
-															<td><a href="./detail?boardNum=${l.boardNum }">${l.boardNum }</a></td>
-															<td><a href="./detail?boardNum=${l.boardNum }">${l.boardTitle }</a></td>
+															<td><a class="boardA" href="./detail?boardNum=${l.boardNum }">${l.boardNum }</a></td>
+															<td><a class="boardA" href="./detail?boardNum=${l.boardNum }">${l.boardTitle }</a></td>
 															<td>0</td>
 															<td>${l.boardHit }</td>
 															<td>${l.boardDate }</td>

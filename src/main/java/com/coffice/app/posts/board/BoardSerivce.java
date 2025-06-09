@@ -44,8 +44,23 @@ public class BoardSerivce {
 //			quillFileVO.setOriginName(file.getOriginalFilename());
 //			
 //			boardDAO.quillUpload(quillFileVO);
+			//나중에 넣었다가 지운 애들을 삭제 할지 말지 결정하기
 		}
 		
 		return "quill\\" + fileName;
+	}
+
+	public int add(BoardVO boardVO) throws Exception{
+		int result = boardDAO.add(boardVO);
+		return 0;
+	}
+
+	public int delete(BoardVO boardVO) throws Exception{
+		return boardDAO.delete(boardVO);
+	}
+
+	public int update(BoardVO boardVO) throws Exception{
+		// TODO Auto-generated method stub
+		return boardDAO.update(boardVO);
 	}
 }
