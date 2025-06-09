@@ -1,4 +1,4 @@
-package com.coffice.app.ingedients;
+package com.coffice.app.ingredients;
 
 import lombok.Data;
 
