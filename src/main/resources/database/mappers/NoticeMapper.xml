@@ -13,9 +13,9 @@
   		INSERT INTO NOTICE_FILES VALUES(NULL, #{noticeNum}, #{originName}, #{saveName}, 0)
   	</insert>
   	
-  	<insert id="quillUpload">
+  	<!-- <insert id="quillUpload">
   		INSERT INTO NOTICE_FILES VALUES(NULL, null, #{originName}, #{saveName}, 0)
-  	</insert>
+  	</insert> -->
   	
   	<select id="fileDetail" parameterType="NoticeFilesVO" resultType="NoticeFilesVO">
   		SELECT * FROM NOTICE_FILES WHERE FILE_NUM = #{fileNum}
