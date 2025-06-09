@@ -25,6 +25,14 @@ public class IngredientsController {
 		
 		List<IngredientsVO> list = ingredientsService.getList(pager);
 		model.addAttribute("list", list);
+		model.addAttribute("pager", pager);
 		return "ingredients/list";
+	}
+	
+	@GetMapping("detail")
+	public String getDetail(IngredientsVO ingredientsVO, Model model) throws Exception {
+		ingredientsVO = ingredientsService.getDetail(ingredientsVO);
+		model.addAttribute("vo", ingredientsVO);
+		return "ingredients/detail";
 	}
 }

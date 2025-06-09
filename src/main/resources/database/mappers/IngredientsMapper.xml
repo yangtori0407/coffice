@@ -14,7 +14,7 @@
   				INGREDIENTS_STOCK
   			</when>
   			<otherwise>
-  				INGREDIENTS_PRICE
+  				INGREDIENTS_DATE
   			</otherwise>
   		</choose>
   		LIKE CONCAT('%',#{search},'%')
@@ -23,5 +23,17 @@
   	<select id="getList" resultType="IngredientsVO" parameterType="Pager">
   		SELECT * FROM INGEDIENTS
   		<include refid="search"></include>
+  		ORDER BY INGREDIENTS_ID DESC
+  		LIMIT #{startNum}, #{page}
+  	</select>
+  	
+  	 <select id="getTotalCount" resultType="Long" parameterType="Pager">
+  		SELECT COUNT(*) FROM INGEDIENTS
+  		<include refid="search"></include>
+  	</select>
+  	
+  	<select id="getDetail" resultType="IngredientsVO" parameterType="IngredientsVO">
+  		SELECT * FROM INGEDIENTS
+  		WHERE INGREDIENTS_ID = #{ingredientsID}
   	</select>
   </mapper>

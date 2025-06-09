@@ -14,6 +14,12 @@ public class IngredientsService {
 	private IngredientsDAO ingredeintsDAO;
 	
 	public List<IngredientsVO> getList(Pager pager) throws Exception {
+		pager.make();
+		pager.makeNum(ingredeintsDAO.getTotalCount(pager));
 		return ingredeintsDAO.getList(pager);
+	}
+	
+	public IngredientsVO getDetail(IngredientsVO ingredientsVO) throws Exception {
+		return ingredeintsDAO.getDetail(ingredientsVO);
 	}
 }
