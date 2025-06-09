@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.coffice.app.home.Pager;
+import com.coffice.app.page.Pager;
+
 
 @Mapper
 public interface BranchDAO {
