@@ -83,7 +83,7 @@
 							<div id="id_approvalLine" style="height: 200px; border: solid black 1px;">지정 결재자 목록</div>
 						</div>
 						
-						<div class="col-6 mb-3">
+						<div class="col-6 mb-3" id="id_referenceLine_wrapper">
 							<div id="id_referenceLine" style="height: 200px; border: solid black 1px;"></div>
 						</div>
 											

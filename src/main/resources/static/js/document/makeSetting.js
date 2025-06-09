@@ -4,6 +4,7 @@ const approvalLine = document.getElementById("id_approvalLine");
 const referenceLine = document.getElementById("id_referenceLine");
 
 const approvalLine_wrapper = document.getElementById("id_approvalLine_wrapper");
+const referenceLine_wrapper = document.getElementById("id_referenceLine_wrapper");
 const employees_wrapper = document.getElementById("id_employees_wrapper");
 
 const forms = document.getElementsByClassName("forms");
@@ -185,19 +186,29 @@ for (const employee of employees){
 }
 
 
-// ✅ 초기화 버튼 생성 및 기능
+// 초기화 버튼 생성 및 기능
 const resetButton = document.createElement("button");
 resetButton.textContent = "결재자 초기화";
 resetButton.style.marginTop = "10px";
 
 resetButton.addEventListener("click", function () {
-    const approverNames = document.getElementsByClassName("approver_name");
-    for (const nameDiv of approverNames) {
-        nameDiv.textContent = "이름";
-    }
+	approvalLine.innerHTML = "";
+	
 });
 
 approvalLine_wrapper.appendChild(resetButton);
+
+// 초기화 버튼 생성 및 기능2
+const resetButton2 = document.createElement("button");
+resetButton2.textContent = "참조자 초기화";
+resetButton2.style.marginTop = "10px";
+
+resetButton2.addEventListener("click", function () {
+	referenceLine.innerHTML = "";
+	
+});
+
+referenceLine_wrapper.appendChild(resetButton2);
 
 
 // 사원 넣을 곳 >> 토글 플래그

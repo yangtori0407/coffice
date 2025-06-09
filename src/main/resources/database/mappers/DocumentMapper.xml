@@ -107,10 +107,22 @@
   		INSERT INTO DOCUMENTS 
   		(FORM_ID, TITLE, CONTENT, USER_ID, TIME, CURRENT_STEP, STATUS)
   		VALUES
-  		(#{formId}, #{title}, #{content}, #{userId}, now(), #{currentStep}, #{status})
+  		(#{formId}, #{title}, #{content}, #{userId}, #{time}, #{currentStep}, #{status})
   	</insert>
   	
+  	<insert id="addApprovalLine" parameterType="ApprovalLineVO">
+  		INSERT INTO APPROVAL_LINES
+  		(DOCUMENT_ID, USER_ID, STEP_ORDER, STATUS, HANDLING_TIME, SIGN_ID, REJECT_REASON)
+  		VALUES
+  		(#{documentId}, #{userId}, #{stepOrder}, #{status}, #{handlingTime}, #{signId}, #{rejectReason})
+  	</insert>
   	
+  	<insert id="addReferenceLine" parameterType="ReferenceLineVO">
+  		INSERT INTO REFERENCE_LINES
+  		(DOCUMENT_ID, USER_ID)
+  		VALUES
+  		(#{documentId}, #{userId})
+  	</insert>
   	
   	<insert id="addFile" parameterType="AttachmentVO">
   		INSERT INTO ATTACHMENTS

@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.coffice.app.documents.attachments.AttachmentVO;
 import com.coffice.app.documents.forms.FormVO;
-import com.coffice.app.pagers.Pager;
+import com.coffice.app.documents.lines.ApprovalLineVO;
+import com.coffice.app.documents.lines.ReferenceLineVO;
+import com.coffice.app.page.Pager;
 import com.coffice.app.users.UserVO;
 
 
@@ -26,6 +28,10 @@ public interface DocumentDAO {
 	public DocumentVO getDetail(DocumentVO documentVO)throws Exception;
 	
 	public int add(DocumentVO documentVO) throws Exception;
+	
+	public int addApprovalLine(ApprovalLineVO approvalLineVO) throws Exception;
+	
+	public int addReferenceLine(ReferenceLineVO referenceLineVO) throws Exception;
 	
 	public int addFile(AttachmentVO attachmentVO) throws Exception;
 	

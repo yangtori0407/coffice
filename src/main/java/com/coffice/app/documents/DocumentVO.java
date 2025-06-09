@@ -1,6 +1,6 @@
 package com.coffice.app.documents;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.coffice.app.documents.attachments.AttachmentVO;
@@ -23,7 +23,7 @@ public class DocumentVO {
 	private String title;
 	private String content;
 	private String userId;
-	private Date time;
+	private Timestamp time;
 	private Long currentStep;
 	private String status;
 	
