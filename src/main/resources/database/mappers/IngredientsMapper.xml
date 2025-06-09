@@ -36,4 +36,9 @@
   		SELECT * FROM INGEDIENTS
   		WHERE INGREDIENTS_ID = #{ingredientsID}
   	</select>
+  	
+  	<insert id="add" parameterType="IngredientsVO">
+  		INSERT INTO INGEDIENTS
+		VALUES (null, #{ingredientsName}, 0, #{ingredientsPrice}, now(), null);
+  	</insert>
   </mapper>

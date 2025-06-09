@@ -21,19 +21,25 @@
 
 					<!-- contents 내용 -->
 					<div class="card-body">
-					<form method="get">
-						<div class="input-group" style="margin:20px auto;width: 600px;">
-								 <select name="kind" class="form-control col-3" id="exampleFormControlSelect1">
-									<option value="k1">이름</option>
-									<option value="k2">재고</option>
-									<option value="k3">등록날짜</option>
-								  </select>			 
-									<input type="text" name="search" id="keyword" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
-									<div class="input-group-append">
-								<button class="btn btn-secondary" type="submit" id="button-addon2">찾기</button>
+					<div class="row" style="margin: 0 auto; width: 600px">
+						<div class="col-12 mb-4">
+							<div class="d-flex justify-content-between align-items-center">
+								<form method="get" class="form-inline d-flex align-items-center">
+										 <select name="kind" class="custom-select mr-2">
+											<option value="k1">이름</option>
+											<option value="k2">재고</option>
+											<option value="k3">등록날짜</option>
+										  </select>			 
+											<input type="text" name="search" id="keyword" class="form-control form-control-sm mr-2" placeholder="검색어를 입력하세요" style="max-width: 200px;">
+											<div class="input-group-append">
+										<button class="btn btn-secondary" type="submit" id="button-addon2">찾기</button>
+									</div>
+								</form>
+								
+								<a href="./add" class="btn btn-primary">추가하기</a>
 							</div>
 						</div>
-					</form>
+					</div>
 					<table class="table table-striped" style="margin:20px auto;width: 600px;">
 						<thead>
 							<tr>
@@ -47,7 +53,7 @@
 							<c:forEach items="${list}" var="vo">
 								<tr>
 									<td>${vo.ingredientsID}</td>
-									<td>${vo.ingredientsName}</td>
+									<td><a href="./detail?ingredientsID=${vo.ingredientsID}">${vo.ingredientsName}</a></td>
 									<td>${vo.ingredientsStock}</td>
 									<td>${vo.ingredientsDate}</td>
 								</tr>
