@@ -62,8 +62,8 @@
 					</table>
 					</div>
 					<div class="row">
-						<div class="col-sm-12 col-md-5"></div>
-							<div class="col-sm-12 col-md-7">
+					<div class="col-sm-12 col-md-4"></div>
+							<div class="col-sm-12 col-md-4">
 								<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
 									<ul class="pagination">
 										<li class="paginate_button page-item previous disabled" id="dataTable_previous">
@@ -86,6 +86,9 @@
 									</ul>
 								</div>
 							</div>
+								<div class="col-sm-12 col-md-4">
+									<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#addReceive">입/출고</a>
+								</div>
 						</div>
 					</div>
 				</div>
@@ -94,6 +97,37 @@
 		</div>
 		<!-- End Content Wrapper -->
 	</div>
+		<div class="modal" id="addReceive" tabindex="-1">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title">입/출고</h5>
+		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">×</span>
+		            </button>
+		      </div>
+		      <div class="modal-body" aria-label="Default select example">
+			        <select class="form-select" id="selectUser">
+			            <option selected>입/출고</option>
+			            <option>입고</option>
+						<option>출고</option>
+			        </select>
+					
+			        <select class="form-select" id="selectBranch">
+				       <option selected>상품을 선택해주세요</option>
+				       <c:forEach items="${list}" var="vo">
+				       		<option>${vo.ingredientsName}</option>
+				       </c:forEach>
+			        </select>
+			        <input type="text"><a class="plus" href="javascript:change_qty2('p')">+</a><a class="minus" href="javascript:change_qty2('p')">-</a>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+			        <button class="btn btn-primary" id="addReceiveBtn">등록</button>
+			      </div>
+			  </div>
+		    </div>
+		  </div>
+		</div>
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
