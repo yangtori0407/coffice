@@ -37,6 +37,11 @@
   		WHERE INGREDIENTS_ID = #{ingredientsID}
   	</select>
   	
+  	<select id="nameCheck" resultType="IngredientsVO" parameterType="IngredientsVO">
+	    SELECT * FROM INGEDIENTS
+	    WHERE INGREDIENTS_NAME = #{ingredientsName}
+	</select>
+  	
   	<insert id="add" parameterType="IngredientsVO">
   		INSERT INTO INGEDIENTS
 		VALUES (null, #{ingredientsName}, 0, #{ingredientsPrice}, now(), null);

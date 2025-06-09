@@ -16,6 +16,10 @@
 		height: 50px;
 		margin: 20px 0;
 	}
+	.error {
+			color: red;
+			font-size: 0.9em;
+		}
 </style>
 </head>
 <body id="page-top">
@@ -29,10 +33,9 @@
 						<form:form modelAttribute="ingredientsVO" action="./add" method="post">
 							<div class="input-box">
 								<form:input type="text" path="ingredientsName" placeholder="이름"/>						
+                                 <form:errors path="ingredientsName" cssClass="error"/>
 							</div>
-							 <div>
-                                 <form:errors path="ingredientsName"></form:errors>
-                            </div>
+
 							<div class="input-box">
 								<form:input type="text" path="ingredientsPrice" placeholder="가격"/>					
 							</div>

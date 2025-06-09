@@ -29,15 +29,13 @@ public class IngredientsService {
 	}
 	
 	public boolean nameErrorCheck(IngredientsVO ingredientsVO, BindingResult bindingResult) throws Exception {
-		boolean check = false;
-		check = bindingResult.hasErrors();
 		
-		IngredientsVO checkVO = ingredeintsDAO.getDetail(ingredientsVO);
+		IngredientsVO checkVO = ingredeintsDAO.nameCheck(ingredientsVO);
 		if(checkVO != null) {
-			check = true;
-			bindingResult.rejectValue("ingredientsID", "ingredientsVO.ingredientsID.equal");
+			bindingResult.rejectValue("ingredientsName", "ingredientsVO.ingredientsID.equal");
+			return true;
 		}
 		
-		return check;
+		return false;
 	}
 }
