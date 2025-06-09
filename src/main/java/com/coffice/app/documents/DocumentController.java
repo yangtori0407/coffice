@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +16,8 @@ import com.coffice.app.documents.attachments.AttachmentVO;
 import com.coffice.app.documents.forms.FormVO;
 import com.coffice.app.pagers.Pager;
 import com.coffice.app.users.UserVO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,7 +68,7 @@ public class DocumentController {
 	}
 	
 	
-	//
+	// 양식 설정 요청 (GET)
 	@GetMapping("make")
 	public String make(Model model) throws Exception {
 		
@@ -86,11 +89,61 @@ public class DocumentController {
 	}
 	
 	
-	//
+	// 양식 설정 요청 (POST)
 	@PostMapping("make")
-	public String make(Model model, FormVO formVO, UserVO[] approvers, UserVO[] referrers) throws Exception {
+	public String make(Model model, FormVO formVO, @RequestParam String approvers, @RequestParam String referrers) throws Exception {
 		
-		return "document/form1";
+		// 파라미터 값들을 받아와서
+		ObjectMapper mapper = new ObjectMapper();
+	    List<UserVO> approverList = mapper.readValue(approvers, new TypeReference<List<UserVO>>() {});
+	    List<UserVO> referrerList = mapper.readValue(referrers, new TypeReference<List<UserVO>>() {});		
+		
+		System.out.println("formId : " + formVO.getFormId());
+		
+		System.out.println("approversLength : " + approverList.size());
+		if(approverList.size() != 0) {
+			System.out.println(approverList.get(0).getUserId());			
+		}
+		
+		System.out.println("referrersLength : " + referrerList.size());
+		if(referrerList.size() != 0) {
+			System.out.println(referrerList.get(0).getUserId());			
+		}		
+		
+		model.addAttribute("formVO", formVO);
+		model.addAttribute("approvers", approverList);
+		model.addAttribute("referrers", referrerList);
+		
+		
+		// formVO 안의 formId에 따라 return 다르게 주기
+		if(formVO.getFormId() == 10) {
+			
+			return "document/form10";
+			
+		} else if (formVO.getFormId() == 11) {
+			
+			return "document/form11";
+			
+		} else if (formVO.getFormId() == 12) {
+			
+			return "document/form12";
+			
+		} else if (formVO.getFormId() == 13) {
+			
+			return "document/form13";
+			
+		} else {
+			System.out.println("없는 양식입니다");
+			return "index";
+		}
+		
+		
+		
+		
+			
+			
+		
+		
 	}
 	
 	

@@ -150,6 +150,11 @@ for (const employee of employees){
 	         reference.style.border = "1px solid black";
 	         reference.style.marginTop = "5px";
 	
+             const referencePosition = document.createElement("div");
+	         referencePosition.className = "referencePositions";
+	         referencePosition.style.border = "1px solid black";
+	         referencePosition.textContent = employee.dataset.position;
+
 	         const referenceName = document.createElement("div");
 	         referenceName.className = "referenceNames";
 	         referenceName.style.border = "1px solid black";
@@ -160,6 +165,7 @@ for (const employee of employees){
 	         referenceId.style.border = "1px solid black";		
 	         referenceId.textContent = employee.id;
 			
+             reference.appendChild(referencePosition);
 			 reference.appendChild(referenceName);
 			 reference.appendChild(referenceId);
 			
@@ -230,12 +236,77 @@ referenceButton.addEventListener("click", function () {
 employees_wrapper.appendChild(referenceButton);
 
 
-//
+// 양식 설정 완료하기 버튼
 const done_button = document.getElementById("id_done_button");
 
 done_button.addEventListener("click", function(){
 
-	const formData = new FormData();
+    // 양식 변수에 데이터들을 담음
+    const selectedForm = document.querySelector(".forms.selected");
+	if (!selectedForm) {
+	    alert("양식을 선택해 주세요.");
+	    return;
+	}
+
+    // 결재선 변수에 데이터들을 담음
+	const approvers = [];
+	const approverWrappers = document.getElementsByClassName("approver-wrapper");
+
+	for (const wrapper of approverWrappers) {
+	    const nameDiv = wrapper.querySelector(".approver_name");
+	    const idDiv = wrapper.querySelector(".approver_id");
+	    const positionDiv = wrapper.querySelector(".grade-title");
+
+	    if (nameDiv && idDiv && positionDiv) {
+	        approvers.push({
+	            userId: idDiv.textContent.trim(),
+	            name: nameDiv.textContent.trim(),
+	            position: positionDiv.textContent.trim()
+	        });
+	    }
+	}
+
+    // 참조선 변수에 데이터들을 담음
+    const referrers = [];
+	const referrerWrappers = document.getElementsByClassName("referrer-wrapper");
+
+	for (const wrapper of referrerWrappers) {
+	    const nameDiv = wrapper.querySelector(".referenceNames");
+	    const idDiv = wrapper.querySelector(".referenceIds");
+
+	    if (nameDiv && idDiv) {
+	        referrers.push({
+	            userId: idDiv.textContent.trim(),
+	            name: nameDiv.textContent.trim(),
+	            position: "" // 참조자는 직급 정보 없을 경우 빈값 처리
+	        });
+	    }
+	}
+
+    // form 채우기
+    document.getElementById("formId").value = selectedForm.id;
+    document.getElementById("approvers").value = JSON.stringify(approvers);
+    document.getElementById("referrers").value = JSON.stringify(referrers);
+
+    // form 전송
+    document.getElementById("makeForm").submit();
+
+
+
+    /* formData 안쓰고 form 태그 사용
+
+    // formData 객체 생성
+    const formData = new FormData();
+
+    // formId
+    formData.append("formId", selectedForm.id);
+
+    // approvers (userId, name, position)
+    formData.append("approvers", JSON.stringify(approvers));
+
+    // referrers (userId, name, position)
+    formData.append("referrers", JSON.stringify(referrers));
+    
 
 	fetch("/document/make", {
         method: "POST",
@@ -243,17 +314,18 @@ done_button.addEventListener("click", function(){
     })
     .then(response => {
         if (!response.ok) throw new Error("서버 응답 오류");
-        return response.json(); // 또는 text(), depending on what the controller returns
+        return response.text();
     })
     .then(result => {
         console.log("등록 성공:", result);
         alert("문서가 성공적으로 등록되었습니다.");
-        // location.href = "/document/list"; // 완료 후 페이지 이동 등
+        // location.href = "/document/list"; // 완료 후 페이지 이동 등 예시
     })
     .catch(error => {
         console.error("에러 발생:", error);
         alert("문서 등록 중 오류가 발생했습니다.");
     });
+    */
 
 })
 

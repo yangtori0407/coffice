@@ -69,7 +69,7 @@
 						<div class="col-6 mb-3" id="id_employees_wrapper">
 							<div style="height: 200px; border: solid black 1px;">사원 목록 창
 								<c:forEach var="i" items="${users}">
-									<div class="items employees" id="${i.userId}" profile="${i.saveName}">${i.name}</div>
+									<div class="items employees" id="${i.userId}" data-position="${i.position}">${i.name}</div>
 								</c:forEach>
 							</div>
 						</div>
@@ -94,6 +94,13 @@
 						
 						<div class="col-6 mb-3">
 							<div id="id_done_button" style="height: 50px; border: solid black 1px;">완료하기</div>
+							
+							<!-- 세팅 완료 시 넘길 데이터 Form -->
+							<form id="makeForm" action="/document/make" method="post">
+							  <input type="hidden" name="formId" id="formId">
+							  <input type="hidden" name="approvers" id="approvers">
+							  <input type="hidden" name="referrers" id="referrers">
+							</form>
 						</div>
 						
 					</div>

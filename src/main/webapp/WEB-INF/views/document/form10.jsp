@@ -20,8 +20,24 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					here is form1.jsp
+					here is form10.jsp
+					<br>
 
+					<div>양식 번호</div>
+					<div>${formVO.formId}</div>
+					<br>
+
+					<div>결재선</div>
+					<c:forEach var="i" items="${approvers}">
+						<div>${i.userId} ${i.name} ${i.position}</div>
+					</c:forEach>
+					<br>
+
+					<div>참조선</div>
+					<c:forEach var="i" items="${referrers}">
+						<div>${i.userId} ${i.name} ${i.position}</div>
+					</c:forEach>
+					<br>
 
 				</div>
 			</div>
