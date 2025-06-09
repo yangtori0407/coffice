@@ -2,22 +2,30 @@ const kind = document.getElementById("kind")
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
-themeSystem: 'bootstrap4',
-locale: 'ko',
-customButtons: {
-    addButton: {
-    text: '+',
-    click: function() {
-        console.log('add')
-    }
-    }
-},
-nowIndicator: true,
-headerToolbar: {
-    left:'prevYear,prev,next,nextYear today editButton',
-    center: 'title',
-    right: 'addButton dayGridMonth,listWeek'
-},
+    themeSystem: 'bootstrap4',
+    locale: 'ko',
+    customButtons: {
+        addButton: {
+            text: '+',
+            click: function() {
+                $("#exampleModal").modal("show")
+            }
+        }
+    },
+    nowIndicator: true,
+    headerToolbar: {
+        left:'prevYear,prev,next,nextYear today editButton',
+        center: 'title',
+        right: 'addButton dayGridMonth,근태,listWeek'
+    },
+    // views: {
+    //     근태: {
+    //         type: 'timeGrid',
+    //         duration: { days: 7},
+    //         slotMinTime: '07:00:00',
+    //         slotMaxTime: '22:00:00'
+    //     }
+    // },
     initialDate: Date.now(),
     navLinks: false, // can click day/week names to navigate views
     editable: false,
@@ -68,7 +76,6 @@ if(kind.innerText.trim() == '일정 관리') {
                 color: '#378006'
             }
             calendar.addEvent(event);
-            calendar.render()
 }
 
 if(kind.innerText.trim() == '휴가 관리') {
