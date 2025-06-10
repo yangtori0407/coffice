@@ -76,6 +76,7 @@
 		(SELECT * FROM COMMENT WHERE BOARD_NUM = #{boardNum} AND IS_REPLY = 0) C
 		ON A.BOARD_NUM = C.BOARD_NUM
 		WHERE A.BOARD_NUM = #{boardNum}
+		ORDER BY C.COMMENT_DATE DESC
 	</select>
 
 	<resultMap type="BoardVO" id="getBoardDetail">
@@ -113,8 +114,8 @@
 
 	<select id="replyList" parameterType="CommentVO"
 		resultType="CommentVO">
-		SELECT * FROM COMMENT WHERE COMMENT_P = #{commentNum} AND IS_REPLY = 1 ORDER
-		BY COMMENT_DATE DESC
+		SELECT * FROM COMMENT WHERE COMMENT_P = #{commentNum} AND IS_REPLY = 1 AND DELETE_STATUS = 0 
+		ORDER BY COMMENT_DATE DESC
 	</select>
 
 	<update id="delete" parameterType="BoardVO">
@@ -131,5 +132,9 @@
 	<update id="commentDelete">
 		UPDATE COMMENT SET DELETE_STATUS = 1 WHERE
 		COMMENT_NUM = #{commentNum}
+	</update>
+	
+	<update id="commentUpdate">
+		UPDATE COMMENT SET COMMENT_CONTENTS = #{commentContents} WHERE COMMENT_NUM = #{commentNum}
 	</update>
 </mapper>

@@ -84,4 +84,10 @@ public class BoardSerivce {
 		return boardDAO.commentDelete(commentVO);
 		
 	}
+
+	public CommentVO commentUpdate(CommentVO commentVO) throws Exception{
+		boardDAO.commentUpdate(commentVO);
+		return boardDAO.detailComment(commentVO);
+		
+	}
 }

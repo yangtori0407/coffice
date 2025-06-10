@@ -100,7 +100,12 @@ function createComment(commentContents, date, commentNum) {
 
 	// 답글 버튼
 	const replyBtn = document.createElement("button");
-	replyBtn.classList.add("btn", "btn-info", "mr-3", "reply");
+	replyBtn.classList.add("btn", "btn-primary", "mr-4", "reply");
+	replyBtn.setAttribute("type", "button");
+	replyBtn.setAttribute("data-toggle", "collapse");
+	replyBtn.setAttribute("data-target", `#collapse${commentNum}`);
+	replyBtn.setAttribute("aria-expanded", "false");
+	replyBtn.setAttribute("aria-controls", "collapseExample");
 	replyBtn.setAttribute("data-comment-num", commentNum);
 	replyBtn.innerText = "답글";
 
@@ -133,6 +138,10 @@ function createComment(commentContents, date, commentNum) {
 	deleteItem.setAttribute("data-com-num", commentNum);
 	deleteItem.innerText = "삭제";
 
+	const collapseDiv = document.createElement("div");
+	collapseDiv.classList.add("collapse");
+	collapseDiv.id = `collapse${commentNum}`;
+
 	menu.appendChild(editItem);
 	menu.appendChild(deleteItem);
 	dropdown.appendChild(dropdownBtn);
@@ -147,7 +156,12 @@ function createComment(commentContents, date, commentNum) {
 	card.appendChild(row);
 
 	// DOM에 삽입
+	comArea.prepend(collapseDiv);
 	comArea.prepend(card);
+
+	const addReply = document.getElementById(`collapse${commentNum}`)	
+	createCommentInputBlock(addReply, commentNum);
+				
 }
 
 function formatDate(r) {
@@ -211,7 +225,7 @@ comArea.addEventListener("click", (e) => {
 })
 
 //답글의 입력창 영역 생성
-function createCommentInputBlock(replyArea, num, flag) {
+function createCommentInputBlock(replyArea, num) {
 	// 바깥 div.card-body
 	const cardBody = document.createElement("div");
 	cardBody.classList.add("card-body", "card", "mb-2", "ml-auto");
@@ -307,11 +321,11 @@ function createReplyDiv(r, addReply, commentNum) {
 		const menu = document.createElement("div");
 		menu.classList.add("dropdown-menu", "dropdown-menu-right");
 
-		const editItem = document.createElement("button");
-		editItem.classList.add("dropdown-item", "replyUpBtn");
-		editItem.setAttribute("type", "button");
-		editItem.setAttribute("data-com-num", o.commentNum);
-		editItem.innerText = "수정";
+		// const editItem = document.createElement("button");
+		// editItem.classList.add("dropdown-item", "replyUpBtn");
+		// editItem.setAttribute("type", "button");
+		// editItem.setAttribute("data-com-num", o.commentNum);
+		// editItem.innerText = "수정";
 
 		const deleteItem = document.createElement("button");
 		deleteItem.classList.add("dropdown-item", "replyDelBtn");
@@ -381,11 +395,11 @@ function createReplyClick(comment, area) {
 	const menu = document.createElement("div");
 	menu.classList.add("dropdown-menu", "dropdown-menu-right");
 
-	const editItem = document.createElement("button");
-	editItem.classList.add("dropdown-item", "replyUpBtn");
-	editItem.setAttribute("type", "button");
-	editItem.setAttribute("data-com-num", comment.commentNum);
-	editItem.innerText = "수정";
+	// const editItem = document.createElement("button");
+	// editItem.classList.add("dropdown-item", "replyUpBtn");
+	// editItem.setAttribute("type", "button");
+	// editItem.setAttribute("data-com-num", comment.commentNum);
+	// editItem.innerText = "수정";
 
 	const deleteItem = document.createElement("button");
 	deleteItem.classList.add("dropdown-item", "replyDelBtn");
@@ -410,6 +424,7 @@ function createReplyClick(comment, area) {
 
 ///============================댓글 답글 삭제 / 수정=====================================================
 
+//댓글 답글 삭제
 comArea.addEventListener("click", (e) => {
 	if (e.target.classList.contains("commentDelBtn")) {
 		const commentNum = e.target.getAttribute("data-com-num");
@@ -419,14 +434,158 @@ comArea.addEventListener("click", (e) => {
 			method: "POST",
 			body: p
 		})
-		.then(r => r.text())
-		.then(r => {
-			if(r * 1 == 1){
-				
-				const p = e.target.parentElement.parentElement.parentElement.previousElementSibling
-				console.log(p);
-				p.innerText = "삭제된 댓글입니다."
-			}
+			.then(r => r.text())
+			.then(r => {
+				if (r * 1 == 1) {
+
+					const p = e.target.parentElement.parentElement.parentElement.previousElementSibling
+					console.log(p);
+					p.innerText = "삭제된 댓글입니다."
+				}
+			})
+	}
+	if (e.target.classList.contains("replyDelBtn")) {
+		const commentNum = e.target.getAttribute("data-com-num");
+		let p = new URLSearchParams();
+		p.append("commentNum", commentNum);
+		fetch("./commentDelete", {
+			method: "POST",
+			body: p
 		})
+			.then(r => r.text())
+			.then(r => {
+				if (r * 1 == 1) {
+					const p = e.target.parentElement.parentElement.parentElement.parentElement.parentElement
+					p.remove();
+				}
+			})
 	}
 })
+
+comArea.addEventListener("click", (e) => {
+	if (e.target.classList.contains("commentUpBtn")) {
+		const btnWrapper = e.target.parentElement.parentElement.parentElement; // 버튼이 들어갈 col-2
+		const contentWrapper = btnWrapper.previousElementSibling; // 내용이 들어있는 col-10
+
+		const originalText = contentWrapper.querySelector("div:last-child").innerText;
+		contentWrapper.innerHTML = ""; // 기존 텍스트 제거
+
+		// input 생성
+		const input = document.createElement("input");
+		input.type = "text";
+		input.classList.add("form-control", "border-0");
+		input.style.boxShadow = "none";
+		input.style.outline = "none";
+		input.value = originalText;
+
+		contentWrapper.appendChild(input);
+
+		// 버튼 영역 초기화
+		btnWrapper.innerHTML = "";
+
+		// 저장 버튼 생성
+		const saveBtn = document.createElement("button");
+		saveBtn.classList.add("btn", "btn-primary", "saveCommentBtn", "mr-4");
+		saveBtn.setAttribute("data-com-num", e.target.getAttribute("data-com-num"));
+		saveBtn.innerText = "저장";
+
+		btnWrapper.appendChild(saveBtn);
+	}
+});
+
+comArea.addEventListener("click", (e) => {
+	if (e.target.classList.contains("saveCommentBtn")) {
+		const inputEl = e.target.parentElement.previousElementSibling.firstChild;
+		const newContents = inputEl.value;
+		const commentNum = e.target.getAttribute("data-com-num");
+
+		const param = new URLSearchParams();
+		param.append("commentContents", newContents);
+		param.append("commentNum", commentNum);
+
+		fetch("./commentUpdate", {
+			method: "POST",
+			body: param
+		})
+			.then(r => r.json())
+			.then(updatedComment => {
+				console.log(updatedComment);
+				// 기존 card 내의 요소 참조
+				const card = e.target.closest(".card");
+				const leftCol = card.querySelector(".col-10");
+				const rightCol = card.querySelector(".col-2");
+
+				// 왼쪽 영역 초기화 후 재구성
+				leftCol.innerHTML = "";
+
+				const dateDiv = document.createElement("div");
+				dateDiv.style.fontSize = "13px";
+				dateDiv.style.marginBottom = "10px";
+				dateDiv.innerText = formatDate(updatedComment.commentDate);
+
+				const contentDiv = document.createElement("div");
+				contentDiv.innerText = updatedComment.commentContents;
+
+				leftCol.appendChild(dateDiv);
+				leftCol.appendChild(contentDiv);
+
+				// 오른쪽 영역도 원래대로 버튼 2개 넣기
+				rightCol.innerHTML = "";
+
+				// 답글 버튼
+				const replyWrapper = document.createElement("div");
+				replyWrapper.classList.add("d-flex", "flex-column", "mr-4");
+
+				const replyBtn = document.createElement("button");
+				replyBtn.classList.add("btn", "btn-primary", "reply");
+				replyBtn.setAttribute("data-comment-num", updatedComment.commentNum);
+				replyBtn.type = "button";
+				replyBtn.setAttribute("data-toggle", "collapse");
+				replyBtn.setAttribute("data-target", `#collapse${updatedComment.commentNum}`);
+				replyBtn.setAttribute("aria-expanded", "false");
+				replyBtn.setAttribute("aria-controls", "collapseExample");
+				replyBtn.innerText = "답글";
+
+				replyWrapper.appendChild(replyBtn);
+
+				// 드롭다운
+				const dropdown = document.createElement("div");
+				dropdown.classList.add("dropdown");
+
+				const dropdownBtn = document.createElement("button");
+				dropdownBtn.classList.add("btn", "dropdown-toggle", "p-0", "border-0", "bg-transparent");
+				dropdownBtn.type = "button";
+				dropdownBtn.setAttribute("data-toggle", "dropdown");
+				dropdownBtn.setAttribute("aria-expanded", "false");
+
+				const icon = document.createElement("ion-icon");
+				icon.setAttribute("name", "ellipsis-vertical-outline");
+				dropdownBtn.appendChild(icon);
+
+				const menu = document.createElement("div");
+				menu.classList.add("dropdown-menu", "dropdown-menu-right");
+
+				const editBtn = document.createElement("button");
+				editBtn.classList.add("dropdown-item", "commentUpBtn");
+				editBtn.setAttribute("data-com-num", updatedComment.commentNum);
+				editBtn.type = "button";
+				editBtn.innerText = "수정";
+
+				const deleteBtn = document.createElement("button");
+				deleteBtn.classList.add("dropdown-item", "commentDelBtn");
+				deleteBtn.setAttribute("data-com-num", updatedComment.commentNum);
+				deleteBtn.type = "button";
+				deleteBtn.innerText = "삭제";
+
+				menu.appendChild(editBtn);
+				menu.appendChild(deleteBtn);
+				dropdown.appendChild(dropdownBtn);
+				dropdown.appendChild(menu);
+
+				rightCol.appendChild(replyWrapper);
+				rightCol.appendChild(dropdown);
+			});
+	}
+});
+
+

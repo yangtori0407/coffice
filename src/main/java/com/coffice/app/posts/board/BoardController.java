@@ -120,4 +120,12 @@ public class BoardController {
 		model.addAttribute("result", result);
 		return "commons/ajaxResult";
 	}
+	
+	@PostMapping("commentUpdate")
+	@ResponseBody
+	public CommentVO commentUpdate(CommentVO commentVO) throws Exception{
+		commentVO = boardService.commentUpdate(commentVO);
+		
+		return commentVO;
+	}
 }

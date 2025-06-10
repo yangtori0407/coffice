@@ -18,7 +18,12 @@
 .dropdown-toggle::after {
 	display: none !important;
 }
+input{
+	box-shadow: none; 
+	outline: none;
+}
 </style>
+
 </head>
 
 <body id="page-top">
