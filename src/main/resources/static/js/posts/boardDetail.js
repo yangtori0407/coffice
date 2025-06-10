@@ -333,7 +333,6 @@ function createReplyDiv(r, addReply, commentNum) {
 		deleteItem.setAttribute("data-com-num", o.commentNum);
 		deleteItem.innerText = "삭제";
 
-		menu.appendChild(editItem);
 		menu.appendChild(deleteItem);
 		dropdown.appendChild(dropdownBtn);
 		dropdown.appendChild(menu);
@@ -407,7 +406,6 @@ function createReplyClick(comment, area) {
 	deleteItem.setAttribute("data-com-num", comment.commentNum);
 	deleteItem.innerText = "삭제";
 
-	menu.appendChild(editItem);
 	menu.appendChild(deleteItem);
 	dropdown.appendChild(dropdownBtn);
 	dropdown.appendChild(menu);
