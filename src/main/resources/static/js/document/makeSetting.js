@@ -211,6 +211,9 @@ resetButton2.addEventListener("click", function () {
 referenceLine_wrapper.appendChild(resetButton2);
 
 
+
+
+
 // 사원 넣을 곳 >> 토글 플래그
 let flag = 1;
 

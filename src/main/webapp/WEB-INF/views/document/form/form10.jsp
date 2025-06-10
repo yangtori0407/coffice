@@ -40,8 +40,8 @@
 					<br>		
 					
 					<form id="writeForm" action="/document/write" method="post">
-					  <input type="text" name="formId" id="formId" value="${formVO.formId}"> <br><br>
-					  <input type="text" name="userId" id="userId" value="${userVO.userId}"> <br><br>
+					  <input type="text" name="formId" id="formId" value="${formVO.formId}" > <br><br>
+					  <input type="text" name="userId" id="userId" value="${userVO.userId}" > <br><br>
 					  <input type="text" name="name" id="name" value="${userVO.name}"> <br><br>
 					  <input type="text" name="deptId" id="deptId" value="${userVO.deptId}"> <br><br>
 					  <input type="text" name="position" id="position" value="${userVO.position}"> <br><br>

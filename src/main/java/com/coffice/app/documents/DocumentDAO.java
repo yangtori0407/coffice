@@ -1,6 +1,7 @@
 package com.coffice.app.documents;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,9 +24,24 @@ public interface DocumentDAO {
 	
 	public Long getTotalCount(Pager pager)throws Exception;
 	
-	public List<DocumentVO> getList(Pager pager)throws Exception;
+	
+	public List<DocumentVO> getListLine(Map<String, Object> map)throws Exception;
+	
+	public List<DocumentVO> getListReference(Map<String, Object> map)throws Exception;
+	
+	public List<DocumentVO> getListWaiting(Map<String, Object> map)throws Exception;
+	
+	public List<DocumentVO> getListTemporary(Map<String, Object> map)throws Exception;
+	
 	
 	public DocumentVO getDetail(DocumentVO documentVO)throws Exception;
+	
+	public List<AttachmentVO> getChildrenFiles(DocumentVO documentVO)throws Exception;
+	
+	public List<ApprovalLineVO> getChildrenApprovers(DocumentVO documentVO)throws Exception;
+	
+	public List<ReferenceLineVO> getChildrenReferrers(DocumentVO documentVO)throws Exception;
+	
 	
 	public int add(DocumentVO documentVO) throws Exception;
 	

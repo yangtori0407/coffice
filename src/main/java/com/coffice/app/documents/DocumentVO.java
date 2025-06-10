@@ -30,5 +30,12 @@ public class DocumentVO {
 	private List<AttachmentVO> attachmentVOs;
 	private List<ApprovalLineVO> approvalLineVOs;
 	private List<ReferenceLineVO> referenceLineVOs;
+	
+	
+	// 화면 출력용 조인 컬럼
+	private String userName;
+	private String userPosition;
+	private String formName;
+	private Long stepCount;
 
 }

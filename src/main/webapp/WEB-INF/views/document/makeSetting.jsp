@@ -75,7 +75,12 @@
 						</div>
 						
 						<div class="col-6 mb-3">
-							<div style="height: 200px; border: solid black 1px;">조직도 보기</div>
+							<div style="height: 200px; border: solid black 1px;">${sessionScope.userVO.name}님 접속 중</div>
+							<a href="./tempLogin1"><button>박사원 접속</button></a>
+							<a href="./tempLogin2"><button>김사원 접속</button></a>
+							<a href="./tempLogin3"><button>이과장 접속</button></a>
+							<a href="./tempLogin4"><button>최부장 접속</button></a>
+							<a href="./tempLogout"><button>로그아웃</button></a>
 						</div>
 					
 										

@@ -49,25 +49,124 @@
   		<include refid="search"></include>
   	</select>
   
-  	<select id="getList" resultType="DocumentVO" parameterType="Pager">
-  		SELECT * FROM DOCUMENTS
-  		
-  		<include refid="search"></include>
-  		
-  		ORDER BY DOCUMENT_ID DESC
-  		LIMIT #{startNum} , #{perPage}
-  		
+  	<sql id="selectDocuments">  		 
+		    D.*,                          -- 문서 전체 컬럼
+		    U.NAME AS USER_NAME,          -- 작성자 이름
+		    U.POSITION AS USER_POSITION,  -- 작성자 직급
+		    F.NAME AS FORM_NAME,		  -- 양식 이름
+		    (                             
+		        IF(F.GRADE1 IS NOT NULL, 1, 0) +
+		        IF(F.GRADE2 IS NOT NULL, 1, 0) +
+		        IF(F.GRADE3 IS NOT NULL, 1, 0) +
+		        IF(F.GRADE4 IS NOT NULL, 1, 0)
+		    ) AS STEP_COUNT				  -- 결재 단계 수
+  	</sql>
+  
+  	<select id="getListLine" resultType="DocumentVO" parameterType="map">
+  		SELECT
+  		<include refid="selectDocuments" />
+  		FROM DOCUMENTS D
+		
+		JOIN USERS U 
+		  ON D.USER_ID = U.USER_ID
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE D.STATUS != '임시'
+		  AND D.USER_ID = #{userId}
   	</select>
   	
-  	<select id="getDetail" parameterType="DocumentVO" resultMap="detailResult">
-  		SELECT * 
-  		FROM DOCUMENTS N
-  			 LEFT OUTER JOIN
-  			 ATTACHMENTS NF
-  			 USING (DOCUMENT_ID)
-  		WHERE DOCUMENT_ID=#{documentId}
+  	<select id="getListWaiting" resultType="DocumentVO" parameterType="map">
+  		SELECT
+  		<include refid="selectDocuments" />
+  		FROM DOCUMENTS D
+	    
+	    JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID
+	    JOIN USERS U 
+		  ON D.USER_ID = U.USER_ID
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+	    
+	    WHERE A.USER_ID = #{userId}
+	      AND A.STEP_ORDER = D.CURRENT_STEP
+	      AND D.STATUS ='진행중'
   	</select>
   	
+  	<select id="getListReference" resultType="DocumentVO" parameterType="map">
+  		SELECT
+  		<include refid="selectDocuments" />
+  		FROM DOCUMENTS D
+		
+		JOIN REFERENCE_LINES R 
+		  ON D.DOCUMENT_ID = R.DOCUMENT_ID
+		JOIN USERS U 
+		  ON D.USER_ID = U.USER_ID
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE R.USER_ID = #{userId}
+		  AND D.STATUS != '임시'
+  	</select>
+  	  	
+  	<select id="getListTemporary" resultType="DocumentVO" parameterType="map">
+	    SELECT
+	    <include refid="selectDocuments" />
+	    FROM DOCUMENTS D
+		
+		JOIN USERS U 
+		  ON D.USER_ID = U.USER_ID
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE D.STATUS = '임시'
+		  AND D.USER_ID = #{userId}
+	</select>
+  	
+  	<select id="getDetail" parameterType="DocumentVO" resultType="DocumentVO">
+  		SELECT
+  		<include refid="selectDocuments" />
+  		FROM DOCUMENTS D
+		
+		JOIN USERS U 
+		  ON D.USER_ID = U.USER_ID
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE D.DOCUMENT_ID = #{documentId}
+  	</select>
+  	
+  	<select id="getChildrenFiles" parameterType="DocumentVO" resultType="AttachmentVO">
+  		SELECT * FROM ATTACHMENTS
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</select>
+  	
+  	<select id="getChildrenApprovers" parameterType="DocumentVO" resultType="ApprovalLineVO">
+  		SELECT A.*,
+  		U.NAME AS USER_NAME,          -- 결재자 이름
+		U.POSITION AS USER_POSITION   -- 결재자 직급 
+  		FROM APPROVAL_LINES A
+  		
+  		JOIN USERS U 
+		  ON A.USER_ID = U.USER_ID
+  		
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</select>
+  	
+  	<select id="getChildrenReferrers" parameterType="DocumentVO" resultType="ReferenceLineVO">
+  		SELECT R.*,
+  		U.NAME AS USER_NAME,          -- 참조자 이름
+		U.POSITION AS USER_POSITION   -- 참조자 직급
+  		FROM REFERENCE_LINES R
+  		
+  		JOIN USERS U 
+		  ON R.USER_ID = U.USER_ID
+  		
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</select>
+  	
+  	
+  	<!-- 테이블이 4개나 되어서 조인 안쓰고 직관적으로 VO별로 select 해버렸음 
   	<resultMap type="DocumentVO" id="detailResult">
   		<id column="DOCUMENT_ID" property="documentId"/>
   		<result column="FORM_ID" property="formId"/>
@@ -99,9 +198,7 @@
   			<result column="USER_ID" property="userId"/>  			
   		</collection>
   		
-  		
-  		
-  	</resultMap>
+  	</resultMap> -->
   	
   	<insert id="add" parameterType="DocumentVO" useGeneratedKeys="true" keyProperty="documentId">
   		INSERT INTO DOCUMENTS 

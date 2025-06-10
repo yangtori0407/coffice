@@ -24,6 +24,7 @@ import com.coffice.app.users.UserVO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +36,74 @@ public class DocumentController {
 	@Autowired
 	private DocumentService documentService;
 
+	
+	//
+	@GetMapping("tempLogin1")
+	public String tempLogin1(HttpSession session) {
+		// 테스트용 임시 유저
+		UserVO userVO = new UserVO();
+		userVO.setUserId("사원아디");
+		userVO.setName("박사원");
+		userVO.setDeptId(10);
+		userVO.setPosition("사원");
+		session.setAttribute("userVO", userVO);
+		
+		return "redirect:./make";
+	}	
+	
+	//
+	@GetMapping("tempLogin2")
+	public String tempLogin2(HttpSession session) {
+		// 테스트용 임시 유저
+		UserVO userVO = new UserVO();
+		userVO.setUserId("사원아디2");
+		userVO.setName("김사원");
+		userVO.setDeptId(10);
+		userVO.setPosition("사원");
+		session.setAttribute("userVO", userVO);
+		
+		return "redirect:./make";
+	}
+	
+	//
+	@GetMapping("tempLogin3")
+	public String tempLogin3(HttpSession session) {
+		// 테스트용 임시 유저
+		UserVO userVO = new UserVO();
+		userVO.setUserId("과장아디");
+		userVO.setName("이과장");
+		userVO.setDeptId(10);
+		userVO.setPosition("과장");
+		session.setAttribute("userVO", userVO);
+		
+		return "redirect:./make";
+	}
+	
+	//
+	@GetMapping("tempLogin4")
+	public String tempLogin4(HttpSession session) {
+		// 테스트용 임시 유저
+		UserVO userVO = new UserVO();
+		userVO.setUserId("부장아디");
+		userVO.setName("최부장");
+		userVO.setDeptId(10);
+		userVO.setPosition("부장");
+		session.setAttribute("userVO", userVO);
+		
+		return "redirect:./make";
+	}
+	
+	
+	//
+	@GetMapping("tempLogout")
+	public String tempLogout(HttpSession session) {
+				
+		session.invalidate();
+		
+		return "redirect:./make";
+	}
+	
+	
 	//
 	@PostMapping("form")
 	@ResponseBody
@@ -45,17 +114,19 @@ public class DocumentController {
 		return resultVO;
 	}
 
+	
 	//
-	@GetMapping("list")
-	public String getList(Pager pager, Model model) throws Exception {
-
-		List<DocumentVO> list = documentService.getList(pager);
-		model.addAttribute(list);
-		model.addAttribute(pager);
+	@GetMapping("list/*")
+	public String getList(Pager pager, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		
+		List<DocumentVO> list = documentService.getList(pager, request, session);
+		model.addAttribute("list", list);	System.out.println("list size : " + list.size());
+		model.addAttribute("pager", pager);
 
 		return "document/list";
 	}
 
+	
 	//
 	@GetMapping("detail") // 임시저장 문서로 넘어갈 때는 수정 가능하도록 조건을 나누어야한다.
 	public String getDetail(DocumentVO documentVO, Model model) throws Exception {
@@ -63,14 +134,15 @@ public class DocumentController {
 		DocumentVO vo = documentService.getDetail(documentVO);
 
 		if (vo == null) {
-
+			System.out.println("document detail vo가 null입니다");
 		}
 
-		model.addAttribute(vo);
+		model.addAttribute("vo", vo);
 
 		return "document/detail";
 	}
 
+	
 	// 양식 설정 요청 (GET)
 	@GetMapping("make")
 	public String make(Model model) throws Exception {
@@ -91,6 +163,7 @@ public class DocumentController {
 		return "document/makeSetting";
 	}
 
+	
 	// 양식 설정 요청 (POST)
 	@PostMapping("make")
 	public String make(HttpSession session, Model model, FormVO formVO, @RequestParam String approvers,
@@ -119,33 +192,25 @@ public class DocumentController {
 		model.addAttribute("approvers", approverList);
 		model.addAttribute("referrers", referrerList);
 
-		// 테스트용 임시 유저
-		UserVO userVO = new UserVO();
-		userVO.setUserId("사원아디");
-		userVO.setName("쓴이 이름1");
-		userVO.setDeptId(1);
-		userVO.setPosition("쓴이 직급1");
-		session.setAttribute("userVO", userVO);
-
 		session.setAttribute("sessionApprovers", approverList);
 		session.setAttribute("sessionReferrers", referrerList);
 
 		// formVO 안의 formId에 따라 return 다르게 주기
 		if (formVO.getFormId() == 10) {
 
-			return "document/form10";
+			return "document/form/form10";
 
 		} else if (formVO.getFormId() == 11) {
 
-			return "document/form11";
+			return "document/form/form11";
 
 		} else if (formVO.getFormId() == 12) {
 
-			return "document/form12";
+			return "document/form/form12";
 
 		} else if (formVO.getFormId() == 13) {
 
-			return "document/form13";
+			return "document/form/form13";
 
 		} else {
 			System.out.println("없는 양식입니다");
@@ -154,6 +219,7 @@ public class DocumentController {
 
 	}
 
+	
 	//
 	@PostMapping("write")
 	public String add(HttpSession session, DocumentVO documentVO, MultipartFile[] attaches) throws Exception {
@@ -165,17 +231,17 @@ public class DocumentController {
 
 		documentVO.setTime(Timestamp.valueOf(LocalDateTime.now()));
 		documentVO.setCurrentStep(1L);
-		documentVO.setStatus("결재 중");
+		documentVO.setStatus("진행중");
 
 		
 		//
 		List<ApprovalLineVO> aList = new ArrayList<>();
-		Long step = 0L;
+		Long step = 1L;
 
 		for (UserVO vo : approverList) {
 			ApprovalLineVO aLineVO = new ApprovalLineVO();
 			aLineVO.setUserId(vo.getUserId());
-			aLineVO.setStepOrder(step++);	System.out.println("step : " + step);		
+			aLineVO.setStepOrder(step++);	System.out.println("step : " + step);
 			aLineVO.setStatus("결재대기");
 			aList.add(aLineVO);
 		}
@@ -194,7 +260,7 @@ public class DocumentController {
 		// 서비스 메서드 실행
 		int result = documentService.add(documentVO, aList, rList, attaches);
 
-		return "redirect:./list -> 기안문서함";
+		return "redirect:./list/online";
 	}
 
 	
@@ -207,5 +273,10 @@ public class DocumentController {
 
 		return "fileDownView";
 	}
+	
+	
+	
+	
+	
 
 }
