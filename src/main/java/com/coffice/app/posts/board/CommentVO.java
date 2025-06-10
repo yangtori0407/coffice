@@ -18,14 +18,18 @@ public class CommentVO {
 	private String userId;
 	private Timestamp commentDate;
 	private String commentContents;
-	private Long commentRef;
-	private Long commentStep;
-	private Long commentDepth;
+	private Long commentP;
+	
+	private Integer isReply;
 	
 	
 	public String getFormatted() {
-		LocalDateTime localDateTime = commentDate.toLocalDateTime();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");
-		return localDateTime.format(formatter);
+		if(getCommentDate() != null) {
+			
+			LocalDateTime localDateTime = this.getCommentDate().toLocalDateTime();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");
+			return localDateTime.format(formatter);
+		}
+		return "";
 	}
 }

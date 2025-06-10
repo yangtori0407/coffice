@@ -68,4 +68,15 @@ public class BoardSerivce {
 		boardDAO.addComment(commentVO);
 		return boardDAO.detailComment(commentVO);
 	}
+
+	public CommentVO reply(CommentVO commentVO) throws Exception{
+		int result = boardDAO.addReply(commentVO);
+		
+		return boardDAO.replyDetail(commentVO);
+	}
+
+	public List<CommentVO> replyList(CommentVO commentVO) throws Exception{
+		// TODO Auto-generated method stub
+		return boardDAO.replyList(commentVO);
+	}
 }

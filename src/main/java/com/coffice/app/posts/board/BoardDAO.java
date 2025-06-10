@@ -23,6 +23,16 @@ public interface BoardDAO {
 
 	public int addComment(CommentVO commentVO) throws Exception;
 
-	public CommentVO detailComment(CommentVO commentVO);
+	public CommentVO detailComment(CommentVO commentVO) throws Exception;
+
+	public int refInit(CommentVO commentVO) throws Exception;
+
+	public int updateStep(CommentVO parent) throws Exception;
+	
+	public int addReply(CommentVO commentVO) throws Exception;
+
+	public List<CommentVO> replyList(CommentVO commentVO) throws Exception;
+
+	public CommentVO replyDetail(CommentVO commentVO) throws Exception;
 
 }

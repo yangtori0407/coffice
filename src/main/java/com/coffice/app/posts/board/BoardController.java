@@ -91,7 +91,22 @@ public class BoardController {
 	@PostMapping("addComment")
 	@ResponseBody
 	public CommentVO addComment(CommentVO commentVO) throws Exception{
-		log.info("{}", commentVO);
+		//log.info("{}", commentVO);
 		return boardService.addComment(commentVO);
+	}
+	
+	@PostMapping("reply")
+	@ResponseBody
+	public CommentVO reply(CommentVO commentVO, Model model) throws Exception{
+		log.info("reply : {}", commentVO);
+		commentVO = boardService.reply(commentVO);
+		return commentVO;
+	}
+	
+	@GetMapping("replyList")
+	@ResponseBody
+	public List<CommentVO> replyList(CommentVO commentVO) throws Exception{
+		log.info("commentVO num : {}", commentVO);
+		return boardService.replyList(commentVO);
 	}
 }

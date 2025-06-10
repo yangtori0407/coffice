@@ -9,7 +9,11 @@
   	</insert>
   	
   	<insert id="addComment" parameterType="CommentVO" useGeneratedKeys="true" keyProperty="commentNum">
-  		INSERT INTO COMMENT VALUES(NULL, #{boardNum}, #{userId}, #{commentContents}, 0, 0, 0, 0, now());
+  		INSERT INTO COMMENT VALUES(NULL, #{boardNum}, #{userId}, #{commentContents}, 0, 0, now(), 0);
+  	</insert>
+  	
+  	<insert id="addReply" parameterType="CommentVO" useGeneratedKeys="true" keyProperty="commentNum">
+  		INSERT INTO COMMENT VALUES(NULL, #{boardNum}, #{userId}, #{commentContents}, #{commentP}, 0, now(), 1);
   	</insert>
   	
   	<select id="getList" parameterType="Pager" resultType="BoardVO">
@@ -44,7 +48,7 @@
   		SELECT * 
   		FROM BOARD A
   		LEFT OUTER JOIN 
-  		(SELECT * FROM COMMENT WHERE BOARD_NUM = #{boardNum} AND DELETE_STATUS = 0) C
+  		(SELECT * FROM COMMENT WHERE BOARD_NUM = #{boardNum} AND DELETE_STATUS = 0 AND IS_REPLY = 0) C
   		ON A.BOARD_NUM = C.BOARD_NUM
   		WHERE A.BOARD_NUM = #{boardNum}
   	</select>
@@ -58,20 +62,27 @@
   		<result column="BOARD_HIT" property="boardHit"/>
   		<result column="UPDATE_DATE" property="updateDate"/>
   		
-  		<collection property="comments" javaType="java.util.List" ofType="CommentVO">
+  		<collection property="comments" javaType="java.util.List" ofType="CommentVO" notNullColumn="COMMENT_NUM">
   			<id column="COMMENT_NUM" property="commentNum"/>
   			<result column="BOARD_NUM" property="boardNum"/>
   			<result column="USER_ID" property="userId"/>
   			<result column="COMMENT_CONTENTS" property="commentContents"/>
-  			<result column="COMMENT_REF" property="commentRef"/>
-  			<result column="COMMENT_STEP" property="commentStep"/>
-  			<result column="COMMENT_DEPTH" property="commentDepth"/>
+  			<result column="COMMENT_P" property="commentP"/>
   			<result column="COMMENT_DATE" property="commentDate"/>
+  			<result column="IS_REPLY" property="isReply"/>
   		</collection>
   	</resultMap>
   	
   	<select id="detailComment" parameterType="CommentVO" resultType="CommentVO">
   		SELECT * FROM COMMENT WHERE COMMENT_NUM = #{commentNum}
+  	</select>
+  	
+  	<select id="replyDetail" parameterType="CommentVO" resultType="CommentVO">
+  		SELECT * FROM COMMENT WHERE COMMENT_NUM = #{commentNum}
+  	</select>
+  	
+  	<select id="replyList" parameterType="CommentVO" resultType="CommentVO">
+  		SELECT * FROM COMMENT WHERE COMMENT_P = #{commentNum} AND IS_REPLY = 1 ORDER BY COMMENT_DATE DESC
   	</select>
   	
 	<update id="delete" parameterType="BoardVO">
@@ -80,5 +91,13 @@
 	
 	<update id="update" parameterType="BoardVO">
 		UPDATE BOARD SET BOARD_TITLE = #{boardTitle}, BOARD_CONTENTS = #{boardContents} WHERE BOARD_NUM = #{boardNum}
+	</update>
+	
+	<update id="refInit" parameterType="CommentVO">
+		UPDATE COMMENT SET COMMENT_REF = #{commentNum} WHERE COMMENT_NUM = #{commentNum}
+	</update>
+	
+	<update id="updateStep" parameterType="CommentVO">
+		UPDATE COMMENT SET COMMENT_STEP = COMMENT_STEP + 1 WHERE COMMENT_REF = #{commentRef} AND COMMENT_STEP > #{commentStep}
 	</update>
   </mapper>

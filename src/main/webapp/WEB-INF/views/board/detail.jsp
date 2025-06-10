@@ -73,15 +73,27 @@
 							<div id="comArea">
 								<c:forEach items="${detail.comments }" var="com"
 									varStatus="status">
+
+
 									<div class="card mb-2 py-1 border-left-warning">
 										<div class="row w-100 m-0">
 											<div class="col-10 card-body">
-												<div style="font-size: 13px; margin-bottom: 10px;">${com.formatted}</div>
+												<div style="font-size: 13px; margin-bottom: 10px;">
+													${com.formatted}</div>
 												<div>${com.commentContents}</div>
 											</div>
 											<div
 												class="col-2 d-flex align-items-start justify-content-end mt-1">
-												<button class="btn btn-info mr-3 reply">답글</button>
+												<div class="d-flex flex-column mr-4">
+													<button class="btn btn-primary reply"
+														data-comment-num="${com.commentNum}"
+														type="button"
+														data-toggle="collapse"
+														data-target="#collapse${com.commentNum }"
+														aria-expanded="false" aria-controls="collapseExample">
+														답글</button>
+													
+												</div>
 												<div class="dropdown">
 													<button
 														class="btn dropdown-toggle p-0 border-0 bg-transparent"
@@ -97,8 +109,10 @@
 										</div>
 									</div>
 
-		
-									
+
+									<div class="collapse" id="collapse${com.commentNum }"></div>
+
+
 
 								</c:forEach>
 
