@@ -63,4 +63,9 @@ public class BoardSerivce {
 		// TODO Auto-generated method stub
 		return boardDAO.update(boardVO);
 	}
+
+	public CommentVO addComment(CommentVO commentVO) throws Exception{
+		boardDAO.addComment(commentVO);
+		return boardDAO.detailComment(commentVO);
+	}
 }

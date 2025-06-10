@@ -28,7 +28,7 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					<form method="post">
+					<form action="./addComment" method="post">
 						<label>제목</label> <input type="text"
 							class="card mb-4 py-3 border-left-info" name="boardTitle"
 							style="width: 100%;"> <label>내용</label>

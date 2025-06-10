@@ -8,6 +8,10 @@
   		INSERT INTO BOARD VALUES(NULL, #{boardTitle}, #{userId}, 0, #{boardContents}, now(), 0, null)
   	</insert>
   	
+  	<insert id="addComment" parameterType="CommentVO" useGeneratedKeys="true" keyProperty="commentNum">
+  		INSERT INTO COMMENT VALUES(NULL, #{boardNum}, #{userId}, #{commentContents}, 0, 0, 0, 0, now());
+  	</insert>
+  	
   	<select id="getList" parameterType="Pager" resultType="BoardVO">
   		SELECT * FROM BOARD
   		<include refid="search"></include>
@@ -36,9 +40,38 @@
   		AND DELETE_STATUS = 0
   	</sql>
   	
-  	<select id="getDetail" parameterType="BoardVO" resultType="BoardVO">
-  		SELECT * FROM BOARD 
-  		WHERE BOARD_NUM = #{boardNum}
+  	<select id="getDetail" parameterType="BoardVO" resultMap="getBoardDetail">
+  		SELECT * 
+  		FROM BOARD A
+  		LEFT OUTER JOIN 
+  		(SELECT * FROM COMMENT WHERE BOARD_NUM = #{boardNum} AND DELETE_STATUS = 0) C
+  		ON A.BOARD_NUM = C.BOARD_NUM
+  		WHERE A.BOARD_NUM = #{boardNum}
+  	</select>
+  	
+  	<resultMap type="BoardVO" id="getBoardDetail">
+  		<id column="Board_NUM" property="boardNum"/>
+  		<result column="BOARD_TITLE" property="boardTitle"/>
+  		<result column="USER_ID" property="userId"/>
+  		<result column="BOARD_CONTENTS" property="boardContents"/>
+  		<result column="BOARD_DATE" property="boardDate"/>
+  		<result column="BOARD_HIT" property="boardHit"/>
+  		<result column="UPDATE_DATE" property="updateDate"/>
+  		
+  		<collection property="comments" javaType="java.util.List" ofType="CommentVO">
+  			<id column="COMMENT_NUM" property="commentNum"/>
+  			<result column="BOARD_NUM" property="boardNum"/>
+  			<result column="USER_ID" property="userId"/>
+  			<result column="COMMENT_CONTENTS" property="commentContents"/>
+  			<result column="COMMENT_REF" property="commentRef"/>
+  			<result column="COMMENT_STEP" property="commentStep"/>
+  			<result column="COMMENT_DEPTH" property="commentDepth"/>
+  			<result column="COMMENT_DATE" property="commentDate"/>
+  		</collection>
+  	</resultMap>
+  	
+  	<select id="detailComment" parameterType="CommentVO" resultType="CommentVO">
+  		SELECT * FROM COMMENT WHERE COMMENT_NUM = #{commentNum}
   	</select>
   	
 	<update id="delete" parameterType="BoardVO">

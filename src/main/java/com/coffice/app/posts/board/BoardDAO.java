@@ -21,4 +21,8 @@ public interface BoardDAO {
 
 	public int update(BoardVO boardVO) throws Exception;
 
+	public int addComment(CommentVO commentVO) throws Exception;
+
+	public CommentVO detailComment(CommentVO commentVO);
+
 }
