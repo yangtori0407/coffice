@@ -69,4 +69,18 @@ public class IngredientsController {
 		ingredientsService.add(ingredientsVO);
 		return "redirect:./list";
 	}
+	
+	@PostMapping("addHistory")
+	public String addHistory(History history) throws Exception {
+		log.info("I:{}",history);
+		History history2 = new History();
+		history2.setReceive(history.isReceive());
+		history2.setNumber(history.getNumber());
+		history2.setUserId("A12");
+		history2.setIngredientsID(history.getIngredientsID());
+		
+		ingredientsService.addHistory(history2);
+		
+		return "redirect:./list";
+	}
 }

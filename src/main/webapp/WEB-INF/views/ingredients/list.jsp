@@ -107,19 +107,26 @@
 		            </button>
 		      </div>
 		      <div class="modal-body" aria-label="Default select example">
-			        <select class="form-select" id="selectUser">
-			            <option selected>입/출고</option>
-			            <option>입고</option>
-						<option>출고</option>
-			        </select>
+			        <div class="form-check">
+					  <input class="form-check-input" type="radio" name="receive" id="input" value="true">
+					  <label class="form-check-label" for="radioDefault1">
+					    입고
+					  </label>
+					</div>
+					<div class="form-check">
+					  <input class="form-check-input" type="radio" name="receive" id="output" value="false">
+					  <label class="form-check-label" for="radioDefault2">
+					    출고
+					  </label>
+					</div>
 					
-			        <select class="form-select" id="selectBranch">
+			        <select class="form-select" id="selectIngredients">
 				       <option selected>상품을 선택해주세요</option>
 				       <c:forEach items="${list}" var="vo">
-				       		<option>${vo.ingredientsName}</option>
+				       		<option value="${vo.ingredientsID}">${vo.ingredientsName}</option>
 				       </c:forEach>
 			        </select>
-			        <input type="text"><a class="plus" href="javascript:change_qty2('p')">+</a><a class="minus" href="javascript:change_qty2('p')">-</a>
+			        <input type="text" name="number" id="number"><a class="plus" href="javascript:change_qty2('p')">+</a><a class="minus" href="javascript:change_qty2('p')">-</a>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
 			        <button class="btn btn-primary" id="addReceiveBtn">등록</button>
@@ -131,4 +138,5 @@
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
+<script src="/js/ingredients/history.js"></script>
 </html>

@@ -38,4 +38,8 @@ public class IngredientsService {
 		
 		return false;
 	}
+	
+	public int addHistory(History history) throws Exception {
+		return ingredeintsDAO.addHistory(history);
+	}
 }

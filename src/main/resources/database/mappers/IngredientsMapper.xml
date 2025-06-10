@@ -46,4 +46,9 @@
   		INSERT INTO INGEDIENTS
 		VALUES (null, #{ingredientsName}, 0, #{ingredientsPrice}, now(), null);
   	</insert>
+  	
+  	<insert id="addHistory" parameterType="History">
+  		INSERT INTO HISTORY
+		VALUES (null, #{receive}, #{number}, #{userId}, #{ingredientsID})
+  	</insert>
   </mapper>

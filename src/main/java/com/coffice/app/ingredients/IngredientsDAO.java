@@ -14,4 +14,5 @@ public interface IngredientsDAO {
 	public Long getTotalCount(Pager pager) throws Exception;
 	public int add(IngredientsVO ingredientsVO) throws Exception;
 	public IngredientsVO nameCheck(IngredientsVO ingredientsVO) throws Exception;
+	public int addHistory(History history) throws Exception;
 }
