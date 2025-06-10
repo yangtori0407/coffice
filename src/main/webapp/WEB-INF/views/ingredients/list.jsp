@@ -126,7 +126,9 @@
 				       		<option value="${vo.ingredientsID}">${vo.ingredientsName}</option>
 				       </c:forEach>
 			        </select>
-			        <input type="text" name="number" id="number"><a class="plus" href="javascript:change_qty2('p')">+</a><a class="minus" href="javascript:change_qty2('p')">-</a>
+			        <input type="text" name="number" id="number">
+			        <input type='button' onclick='count("plus")' value='+'/>
+					<input type='button' onclick='count("minus")' value='-'/>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
 			        <button class="btn btn-primary" id="addReceiveBtn">등록</button>
