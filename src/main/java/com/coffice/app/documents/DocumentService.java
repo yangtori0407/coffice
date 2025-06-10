@@ -2,6 +2,7 @@ package com.coffice.app.documents;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.coffice.app.documents.attachments.AttachmentVO;
 import com.coffice.app.documents.forms.FormVO;
 import com.coffice.app.files.FileManager;
-import com.coffice.app.pagers.Pager;
+import com.coffice.app.page.Pager;
 import com.coffice.app.users.UserVO;
 
 @Service

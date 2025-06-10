@@ -2,11 +2,12 @@ package com.coffice.app.documents;
 
 import java.util.List;
 
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.coffice.app.documents.attachments.AttachmentVO;
 import com.coffice.app.documents.forms.FormVO;
-import com.coffice.app.pagers.Pager;
+import com.coffice.app.page.Pager;
 import com.coffice.app.users.UserVO;
 
 
