@@ -40,8 +40,13 @@ public class IngredientsController {
 	
 	@GetMapping("detail")
 	public String getDetail(IngredientsVO ingredientsVO, Model model) throws Exception {
-		ingredientsVO = ingredientsService.getDetail(ingredientsVO);
-		model.addAttribute("vo", ingredientsVO);
+		IngredientsVO ingredientsVO2 = ingredientsService.getDetail(ingredientsVO);
+		model.addAttribute("vo", ingredientsVO2);
+		
+		List<IngredientsVO> list = ingredientsService.getHistory(ingredientsVO);
+			
+
+		model.addAttribute("list", list);
 		return "ingredients/detail";
 	}
 	

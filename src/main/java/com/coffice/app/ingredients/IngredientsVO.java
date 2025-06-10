@@ -1,6 +1,7 @@
 package com.coffice.app.ingredients;
 
 import java.sql.Date;
+import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -15,5 +16,5 @@ public class IngredientsVO {
 	private Integer ingredientsStock;
 	private Integer ingredientsPrice;
 	private Date ingredientsDate;
-	private Integer historyId;
+	private List<History> history;
 }

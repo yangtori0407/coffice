@@ -37,6 +37,15 @@
   		WHERE INGREDIENTS_ID = #{ingredientsID}
   	</select>
   	
+  	<select id="getHistory" resultMap="getIngredients" parameterType="IngredientsVO">
+  		SELECT * FROM INGEDIENTS
+  		JOIN HISTORY
+		USING (INGREDIENTS_ID)
+		JOIN USERS
+		USING (USER_ID)
+  		WHERE INGREDIENTS_ID = #{ingredientsID}
+  	</select>
+  	
   	<select id="nameCheck" resultType="IngredientsVO" parameterType="IngredientsVO">
 	    SELECT * FROM INGEDIENTS
 	    WHERE INGREDIENTS_NAME = #{ingredientsName}
@@ -51,4 +60,35 @@
   		INSERT INTO HISTORY
 		VALUES (null, #{receive}, #{number}, #{userId}, #{ingredientsID})
   	</insert>
+  	
+  	<resultMap type="IngredientsVO" id="getIngredients">
+  		<id column="INGREDIENTS_ID" property="ingredientsID"/>
+  		<result column="INGREDIENTS_NAME" property="ingredientsName"/>
+  		<result column="INGREDIENTS_STOCK" property="ingredientsStock"/>
+  		<result column="INGREDIENTS_PRICE" property="ingredientsPrice"/>
+  		<result column="INGREDIENTS_DATE" property="ingredientsDate"/>
+  		
+  		<collection property="history" javaType="List" ofType="History">
+  			<id column="HISTORY_ID" property="historyId"/>
+  			<result column="RECEIVE" property="receive"/>
+  			<result column="NUMBER" property="number"/>
+  			<result column="USER_ID" property="userId"/>
+  			
+  		<association property="userVO" javaType="UserVO">
+			<result column="PASSWORD" property="password"/>
+			<result column="NAME" property="name"/>
+			<result column="POSITION" property="position"/>
+			<result column="HIRE_DATE" property="hireDate"/>
+			<result column="HIRE_TYPE" property="hireType"/>
+			<result column="BIRTH_DATE" property="birthDate"/>
+			<result column="PHONE" property="phone"/>
+			<result column="EMAIL" property="email"/>
+			<result column="STATUS" property="status"/>
+			<result column="RESIGN_DATE" property="resignDate"/>
+			<result column="SAVE_NAME" property="saveName"/>
+			<result column="ORIGIN_NAME" property="originName"/>
+			<result column="DEPT_ID" property="deptId"/>
+	  	</association>
+  		</collection>
+  	</resultMap>
   </mapper>
