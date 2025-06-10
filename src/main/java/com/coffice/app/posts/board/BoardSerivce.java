@@ -79,4 +79,9 @@ public class BoardSerivce {
 		// TODO Auto-generated method stub
 		return boardDAO.replyList(commentVO);
 	}
+
+	public int commentDelete(CommentVO commentVO) throws Exception{
+		return boardDAO.commentDelete(commentVO);
+		
+	}
 }

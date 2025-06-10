@@ -37,7 +37,9 @@ public class BoardController {
 	public String getDetail(Model model, BoardVO boardVO) throws Exception{
 		boardVO = boardService.getDetail(boardVO);
 		model.addAttribute("detail", boardVO);
-		
+		for(CommentVO c : boardVO.getComments()) {
+			log.info("commentVO detail : {}", c);
+		}
 		return "board/detail";
 	}
 	
@@ -99,6 +101,7 @@ public class BoardController {
 	@ResponseBody
 	public CommentVO reply(CommentVO commentVO, Model model) throws Exception{
 		log.info("reply : {}", commentVO);
+		//작성자 넣기
 		commentVO = boardService.reply(commentVO);
 		return commentVO;
 	}
@@ -106,7 +109,15 @@ public class BoardController {
 	@GetMapping("replyList")
 	@ResponseBody
 	public List<CommentVO> replyList(CommentVO commentVO) throws Exception{
-		log.info("commentVO num : {}", commentVO);
+		//log.info("commentVO num : {}", commentVO);
 		return boardService.replyList(commentVO);
+	}
+	
+	@PostMapping("commentDelete")
+	public String commentDelete(CommentVO commentVO, Model model) throws Exception{
+		log.info("del : {}", commentVO);
+		int result = boardService.commentDelete(commentVO);
+		model.addAttribute("result", result);
+		return "commons/ajaxResult";
 	}
 }

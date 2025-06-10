@@ -35,4 +35,6 @@ public interface BoardDAO {
 
 	public CommentVO replyDetail(CommentVO commentVO) throws Exception;
 
+	public int commentDelete(CommentVO commentVO) throws Exception;
+
 }

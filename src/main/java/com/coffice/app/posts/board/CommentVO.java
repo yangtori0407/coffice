@@ -19,6 +19,7 @@ public class CommentVO {
 	private Timestamp commentDate;
 	private String commentContents;
 	private Long commentP;
+	private Integer deleteStatus;
 	
 	private Integer isReply;
 	
