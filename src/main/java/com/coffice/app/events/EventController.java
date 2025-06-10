@@ -11,13 +11,13 @@ public class EventController {
 	
 	@GetMapping("schedule")
 	public String getSchedule(Model model) {
-		model.addAttribute("kind", "일정 관리");
+		model.addAttribute("kind", "일정");
 		return "events/schedule";
 	}
 	
 	@GetMapping("vacation")
 	public String getVacation(Model model) {
-		model.addAttribute("kind", "휴가 관리");
+		model.addAttribute("kind", "휴가");
 		return "events/schedule";
 	}
 
