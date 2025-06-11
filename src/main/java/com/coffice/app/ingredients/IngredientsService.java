@@ -46,7 +46,7 @@ public class IngredientsService {
 	
 	public List<IngredientsVO> getHistory(IngredientsVO ingredientsVO,Pager pager) throws Exception {
 		pager.make();
-		pager.makeNum(ingredeintsDAO.getHistoryTotalCount(ingredientsVO));
+		pager.makeNum(ingredeintsDAO.getHistoryTotalCount(ingredientsVO,pager));
 		
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("ingredientsVO", ingredientsVO);

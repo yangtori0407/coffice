@@ -61,12 +61,18 @@
 		USING (USER_ID)
   		WHERE INGREDIENTS_ID = #{ingredientsVO.ingredientsID}
   		<include refid="search2"></include>
+  		ORDER BY HISTORY.HISTORY_ID DESC
   		LIMIT #{pager.startNum}, #{pager.page}
   	</select>
   	
-  	<select id="getHistoryTotalCount" resultType="Long" parameterType="IngredientsVO">
-  		SELECT count(HISTORY_ID) FROM HISTORY
-  			WHERE INGREDIENTS_ID = #{ingredientsID}
+  	<select id="getHistoryTotalCount" resultType="Long" parameterType="map">
+  		SELECT count(HISTORY.HISTORY_ID) FROM INGEDIENTS
+  		JOIN HISTORY
+		USING (INGREDIENTS_ID)
+		JOIN USERS
+		USING (USER_ID)
+  		WHERE INGREDIENTS_ID = #{ingredientsVO.ingredientsID}
+  		<include refid="search2"></include>
   	</select>
   	
   	<select id="nameCheck" resultType="IngredientsVO" parameterType="IngredientsVO">

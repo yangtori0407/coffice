@@ -17,5 +17,5 @@ public interface IngredientsDAO {
 	public int addHistory(History history) throws Exception;
 	public List<IngredientsVO> getHistory(IngredientsVO ingredientsVO, Pager pager) throws Exception;
 	public int plusStock(History history) throws Exception;
-	public Long getHistoryTotalCount(IngredientsVO ingredientsVO) throws Exception;
+	public Long getHistoryTotalCount(IngredientsVO ingredientsVO, Pager pager) throws Exception;
 }
