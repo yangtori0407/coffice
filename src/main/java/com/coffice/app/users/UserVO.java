@@ -57,7 +57,11 @@ public class UserVO implements UserDetails{
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.userId;
+	}
+	@Override
+	public String getPassword() {
+		return this.password;
 	}
 	@Override
 	public boolean isAccountNonExpired() {

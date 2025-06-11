@@ -33,8 +33,11 @@ public class SecurityConfig {
 				formlogin
 				.loginPage("/user/login")
 				.loginProcessingUrl("/user/login")
-				.defaultSuccessUrl("/", true)
+				.usernameParameter("userId")
+				.passwordParameter("password")
+				.defaultSuccessUrl("/")
 				.failureUrl("/user/login?error=true")
+				.permitAll()
 				;
 			})
 			;

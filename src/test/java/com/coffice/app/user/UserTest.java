@@ -21,8 +21,8 @@ class UserTest {
 	@Test
 	void test() throws Exception {
 		UserVO userVO = new UserVO();
-		userVO.setUserId("user");
-		String pw = "12345678";
+		userVO.setUserId("HR941010");
+		String pw = "19941010";
 		
 		boolean result = passwordEncoder.matches(pw, userVO.getPassword());
 		assertTrue(result);

@@ -31,13 +31,17 @@ public class UserService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		UserVO userVO = new UserVO();
 		userVO.setUserId(userId);
+		System.out.println("로그인 요청 아이디 : "+ userId);
 		try {
 			userVO = userDAO.detail(userVO);
+			if (userVO == null) {
+	            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId);
+	        }
 			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			userVO = null;
+			throw new UsernameNotFoundException("DB 조회 중 오류 발생: " + e.getMessage());
 		}
 		return userVO;
 	}
