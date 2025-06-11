@@ -15,14 +15,6 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class HomeController {
 	
-	@Value("${calendar.api.key}")
-	private String apiKey;
-
-	@ModelAttribute("apiKey")
-	public String getKey() {
-		return this.apiKey;
-	}
-	
 	@GetMapping("/")
 	public String home(@AuthenticationPrincipal UserVO userVO, Model model) {
 		
