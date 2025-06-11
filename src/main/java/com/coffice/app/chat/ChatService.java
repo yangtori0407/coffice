@@ -21,8 +21,9 @@ public class ChatService {
 	@Autowired
 	private ChatDAO chatDAO;
 
-	public List<ChatRoomVO> getList() throws Exception {
-		return chatDAO.getList();
+	public List<ChatRoomVO> getList(UserVO userVO) throws Exception {
+		userVO.setUserId("test1"); //로그인 되면 이거 지우기!!!!!!!!
+		return chatDAO.getList(userVO);
 	}
 
 	public Map<String, Object> addChat(ChatAddVO chatAddVO, UserVO userVO) throws Exception {

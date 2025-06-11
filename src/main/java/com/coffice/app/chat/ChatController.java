@@ -34,8 +34,9 @@ public class ChatController {
 	}
 	
 	@GetMapping("main")
-	public void chatList(Model model) throws Exception{
-		List<ChatRoomVO> list = chatService.getList();
+	public void chatList(Model model, Authentication authentication) throws Exception{
+		UserVO userVO = new UserVO(); //(UserVO)authentication.getPrincipal();
+		List<ChatRoomVO> list = chatService.getList(userVO);
 		model.addAttribute("list", list);
 		
 	}
@@ -55,5 +56,6 @@ public class ChatController {
 		
 		return result;
 	}
+	
 
 }
