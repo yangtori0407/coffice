@@ -21,6 +21,8 @@ public class ApprovalLineVO {
 	private Long signId;
 	private String rejectReason;
 	
-	
+	// 화면 출력용 조인 컬럼
+	private String userName;
+	private String userPosition;
 
 }

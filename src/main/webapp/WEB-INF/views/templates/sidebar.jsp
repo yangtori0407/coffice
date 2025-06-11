@@ -2,7 +2,7 @@
 	<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 		<!-- Sidebar - Brand -->
-		<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+		<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
 			<div>
 				<img style="width: 30px;" src="/images/coffice.png">
 			</div>
@@ -35,10 +35,10 @@
 			<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
 					<a class="collapse-item" href="/document/make">기안 작성</a>
-					<a class="collapse-item" href="">기안 문서함</a>
-					<a class="collapse-item" href="">결재 대기 문서함</a>
-					<a class="collapse-item" href="">참조 문서함</a>
-					<a class="collapse-item" href="">임시 저장 문서함</a>
+					<a class="collapse-item" href="/document/list/online">기안 문서함</a>
+					<a class="collapse-item" href="/document/list/onwaiting">결재 대기 문서함</a>
+					<a class="collapse-item" href="/document/list/onreference">참조 문서함</a>
+					<a class="collapse-item" href="/document/list/ontemporary">임시 저장 문서함</a>
 				</div>
 			</div>
 		</li>

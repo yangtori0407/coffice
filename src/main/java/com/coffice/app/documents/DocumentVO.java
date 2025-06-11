@@ -1,6 +1,6 @@
 package com.coffice.app.documents;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.coffice.app.documents.attachments.AttachmentVO;
@@ -23,12 +23,19 @@ public class DocumentVO {
 	private String title;
 	private String content;
 	private String userId;
-	private Date time;
+	private Timestamp time;
 	private Long currentStep;
 	private String status;
 	
 	private List<AttachmentVO> attachmentVOs;
 	private List<ApprovalLineVO> approvalLineVOs;
 	private List<ReferenceLineVO> referenceLineVOs;
+	
+	
+	// 화면 출력용 조인 컬럼
+	private String userName;
+	private String userPosition;
+	private String formName;
+	private Long stepCount;
 
 }
