@@ -20,6 +20,22 @@
   		LIKE CONCAT('%',#{search},'%')
   	</sql>
   	
+  	<sql id="search2">
+  		AND
+  		<choose>
+  			<when test="pager.kind == 'k1'">
+  				RECEIVE
+  			</when>
+  			<when test="pager.kind == 'k2'">
+  				NAME
+  			</when>
+  			<otherwise>
+  				REGISTRATION_DATE
+  			</otherwise>
+  		</choose>
+  		LIKE CONCAT('%',#{pager.search},'%')
+  	</sql>
+  	
   	<select id="getList" resultType="IngredientsVO" parameterType="Pager">
   		SELECT * FROM INGEDIENTS
   		<include refid="search"></include>
@@ -37,13 +53,26 @@
   		WHERE INGREDIENTS_ID = #{ingredientsID}
   	</select>
   	
-  	<select id="getHistory" resultMap="getIngredients" parameterType="IngredientsVO">
+  	<select id="getHistory" resultMap="getIngredients" parameterType="map">
   		SELECT * FROM INGEDIENTS
   		JOIN HISTORY
 		USING (INGREDIENTS_ID)
 		JOIN USERS
 		USING (USER_ID)
-  		WHERE INGREDIENTS_ID = #{ingredientsID}
+  		WHERE INGREDIENTS_ID = #{ingredientsVO.ingredientsID}
+  		<include refid="search2"></include>
+  		ORDER BY HISTORY.HISTORY_ID DESC
+  		LIMIT #{pager.startNum}, #{pager.page}
+  	</select>
+  	
+  	<select id="getHistoryTotalCount" resultType="Long" parameterType="map">
+  		SELECT count(HISTORY.HISTORY_ID) FROM INGEDIENTS
+  		JOIN HISTORY
+		USING (INGREDIENTS_ID)
+		JOIN USERS
+		USING (USER_ID)
+  		WHERE INGREDIENTS_ID = #{ingredientsVO.ingredientsID}
+  		<include refid="search2"></include>
   	</select>
   	
   	<select id="nameCheck" resultType="IngredientsVO" parameterType="IngredientsVO">
@@ -56,10 +85,17 @@
 		VALUES (null, #{ingredientsName}, 0, #{ingredientsPrice}, now(), null);
   	</insert>
   	
-  	<insert id="addHistory" parameterType="History">
+  	<insert id="addHistory" parameterType="History" useGeneratedKeys="true" keyProperty="historyId">
   		INSERT INTO HISTORY
-		VALUES (null, #{receive}, #{number}, #{userId}, #{ingredientsID})
+		VALUES (null, #{receive}, #{number}, #{userId}, #{ingredientsID}, DATE_ADD(now(), INTERVAL 9 HOUR))
   	</insert>
+  	
+  	<update id="plusStock" parameterType="History">
+  		UPDATE INGEDIENTS 
+  		SET INGREDIENTS_STOCK= 
+  			IF((SELECT RECEIVE FROM HISTORY WHERE HISTORY_ID=#{historyId}) = 1, INGREDIENTS_STOCK +#{number},INGREDIENTS_STOCK-#{number}) 
+  		WHERE INGREDIENTS_ID=#{ingredientsID}
+  	</update>
   	
   	<resultMap type="IngredientsVO" id="getIngredients">
   		<id column="INGREDIENTS_ID" property="ingredientsID"/>
@@ -73,6 +109,7 @@
   			<result column="RECEIVE" property="receive"/>
   			<result column="NUMBER" property="number"/>
   			<result column="USER_ID" property="userId"/>
+  			<result column="REGISTRATION_DATE" property="registrationDate"/>
   			
   		<association property="userVO" javaType="UserVO">
 			<result column="PASSWORD" property="password"/>
