@@ -19,6 +19,7 @@
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
 					<!-- contents 내용 -->
+
 					<h3>${vo.ingredientsName}</h3>
 					<h3>${vo.ingredientsStock}</h3>
 					<h3>${vo.ingredientsPrice}</h3>
@@ -42,6 +43,8 @@
 							</c:forEach>
 						</tbody>
 						</table>
+
+					
 				</div>
 			</div>
 			<!-- end Content -->
