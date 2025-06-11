@@ -44,8 +44,6 @@ public class IngredientsController {
 		model.addAttribute("vo", ingredientsVO2);
 		
 		List<IngredientsVO> list = ingredientsService.getHistory(ingredientsVO);
-			
-
 		model.addAttribute("list", list);
 		return "ingredients/detail";
 	}

@@ -1,5 +1,8 @@
 package com.coffice.app.ingredients;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import com.coffice.app.users.UserVO;
 
 import lombok.Data;
@@ -13,4 +16,5 @@ public class History {
 	private String userId;
 	private Integer ingredientsID;
 	private UserVO userVO;
+	private Timestamp registrationDate;
 }

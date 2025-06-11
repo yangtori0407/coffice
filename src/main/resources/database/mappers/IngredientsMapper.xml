@@ -58,7 +58,7 @@
   	
   	<insert id="addHistory" parameterType="History">
   		INSERT INTO HISTORY
-		VALUES (null, #{receive}, #{number}, #{userId}, #{ingredientsID})
+		VALUES (null, #{receive}, #{number}, #{userId}, #{ingredientsID}, DATE_ADD(now(), INTERVAL 9 HOUR))
   	</insert>
   	
   	<resultMap type="IngredientsVO" id="getIngredients">
@@ -73,6 +73,7 @@
   			<result column="RECEIVE" property="receive"/>
   			<result column="NUMBER" property="number"/>
   			<result column="USER_ID" property="userId"/>
+  			<result column="REGISTRATION_DATE" property="registrationDate"/>
   			
   		<association property="userVO" javaType="UserVO">
 			<result column="PASSWORD" property="password"/>

@@ -28,6 +28,7 @@
 								<th>상태</th>
 								<th>수량</th>
 								<th>등록</th>
+								<th>날짜</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -36,7 +37,8 @@
 							<tr>
 								<td>${item.receive?"입고":"출고"}</td>
 								<td>${item.number}</td>
-								<td>${item.userVO.name}</td>			
+								<td>${item.userVO.name}</td>
+								<td>${item.registrationDate}</td>			
 							</tr>
 							</c:forEach>
 							</c:forEach>
