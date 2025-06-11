@@ -230,7 +230,7 @@ public class DocumentController {
 
 		// documentVO에 데이터들 넣기
 
-		documentVO.setTime(Timestamp.valueOf(LocalDateTime.now()));
+		documentVO.setWriterTime(Timestamp.valueOf(LocalDateTime.now()));
 		documentVO.setCurrentStep(1L);
 		documentVO.setStatus("진행중");
 
