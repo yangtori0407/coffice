@@ -227,39 +227,10 @@ public class DocumentController {
 
 		List<UserVO> approverList = (List<UserVO>) session.getAttribute("sessionApprovers");
 		List<UserVO> referrerList = (List<UserVO>) session.getAttribute("sessionReferrers");
-
-		// documentVO에 데이터들 넣기
-
-		documentVO.setWriterTime(Timestamp.valueOf(LocalDateTime.now()));
-		documentVO.setCurrentStep(1L);
-		documentVO.setStatus("진행중");
-
-		
-		//
-		List<ApprovalLineVO> aList = new ArrayList<>();
-		Long step = 1L;
-
-		for (UserVO vo : approverList) {
-			ApprovalLineVO aLineVO = new ApprovalLineVO();
-			aLineVO.setUserId(vo.getUserId());
-			aLineVO.setStepOrder(step++);	System.out.println("step : " + step);
-			aLineVO.setStatus("결재대기");
-			aList.add(aLineVO);
-		}
-		
-
-		//
-		List<ReferenceLineVO> rList = new ArrayList<>();
-
-		for (UserVO vo : referrerList) {
-			ReferenceLineVO rLineVO = new ReferenceLineVO();
-			rLineVO.setUserId(vo.getUserId());
-			rList.add(rLineVO);
-		}
-		
 		
 		// 서비스 메서드 실행
-		int result = documentService.add(documentVO, aList, rList, attaches);
+		int result = documentService.add(documentVO, approverList, referrerList, attaches);
+		
 
 		return "redirect:./list/online";
 	}

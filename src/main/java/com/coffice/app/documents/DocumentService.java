@@ -1,5 +1,8 @@
 package com.coffice.app.documents;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,32 +133,71 @@ public class DocumentService {
 	
 	
 	//
-	public int add(DocumentVO documentVO, List<ApprovalLineVO> approvalLineVOs, List<ReferenceLineVO> referenceLineVOs,
+	public int add(DocumentVO documentVO, List<UserVO> approverList, List<UserVO> referrerList,
 			MultipartFile [] multipartFiles) throws Exception {
 		
+		// documentVO에 데이터들 넣기
+		documentVO.setWriterTime(Timestamp.valueOf(LocalDateTime.now()));
+		documentVO.setCurrentStep(1L);
+		documentVO.setStatus("진행중");
+		
+		// formId, writerId만 있는 상태 >>> formName, stepCount, writerName, writerPosition, writerDept 넣어야함
+		// formName, stepCount는 작성 시 값을 고정할 필요가 없으므로 넣지 않겠다
+		documentVO.setWriterName(null);
+		documentVO.setWriterPosition(null);
+		documentVO.setWriterDept(null);
+		
+		// 결재선 데이터 넣기
+		List<ApprovalLineVO> aList = new ArrayList<>();
+		Long step = 1L;
+
+		for (UserVO vo : approverList) {
+			ApprovalLineVO aLineVO = new ApprovalLineVO();
+			aLineVO.setUserId(vo.getUserId());
+			aLineVO.setUserName(vo.getName());
+			aLineVO.setUserPosition(vo.getPosition());
+			aLineVO.setStepOrder(step++);	System.out.println("step : " + step);
+			aLineVO.setStatus("결재대기");
+			aList.add(aLineVO);
+		}		
+
+		// 참조선 데이터 넣기
+		List<ReferenceLineVO> rList = new ArrayList<>();
+
+		for (UserVO vo : referrerList) {
+			ReferenceLineVO rLineVO = new ReferenceLineVO();
+			rLineVO.setUserId(vo.getUserId());
+			rLineVO.setUserName(vo.getName());
+			rLineVO.setUserPosition(vo.getPosition());
+			rList.add(rLineVO);
+		}
+		
+		
 		// 문서 DB추가
-		int result = documentDAO.add(documentVO); 
+		int result = documentDAO.add(documentVO);
 		// insert 실행하면서 생긴 documentId (PK)
 		// Mapper에서 Mybatis의 useGeneratedKeys="true" keyProperty="documentId"를 써서 가져옴
 		
+		
 		// 결재선 DB추가
-		if (approvalLineVOs != null) {
-			for(ApprovalLineVO vo : approvalLineVOs) {
+		if (aList != null) {
+			for(ApprovalLineVO vo : aList) {
 				
 				vo.setDocumentId(documentVO.getDocumentId());
-				// documentId, userId, stepOrder, status 있는 상태
+				// documentId, userId, userName, userPosition, stepOrder, status 있는 상태
 				
 				result = documentDAO.addApprovalLine(vo);
 				
 			}
 		}
 		
+		
 		// 참조선 DB추가
-		if (referenceLineVOs != null) {
-			for(ReferenceLineVO vo : referenceLineVOs) {
+		if (rList != null) {
+			for(ReferenceLineVO vo : rList) {
 				
 				vo.setDocumentId(documentVO.getDocumentId());
-				// documentId, userId 있는 상태
+				// documentId, userId, userName, userPosition있는 상태
 				
 				result = documentDAO.addReferenceLine(vo);
 				

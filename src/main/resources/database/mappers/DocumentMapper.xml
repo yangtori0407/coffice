@@ -49,31 +49,23 @@
   		<include refid="search"></include>
   	</select>
   
+  
   	<sql id="selectDocuments">  		 
-		    D.*,                          -- 문서 전체 컬럼
-		    U.NAME AS USER_NAME,          -- 작성자 이름
-		    U.POSITION AS USER_POSITION,  -- 작성자 직급
+		    D.*,
 		    F.NAME AS FORM_NAME,		  -- 양식 이름
-		    (                             
-		        IF(F.GRADE1 IS NOT NULL, 1, 0) +
-		        IF(F.GRADE2 IS NOT NULL, 1, 0) +
-		        IF(F.GRADE3 IS NOT NULL, 1, 0) +
-		        IF(F.GRADE4 IS NOT NULL, 1, 0)
-		    ) AS STEP_COUNT				  -- 결재 단계 수
+		    F.STEP_COUNT AS STEP_COUNT	  -- 결재 단계 수
   	</sql>
   
   	<select id="getListLine" resultType="DocumentVO" parameterType="map">
   		SELECT
   		<include refid="selectDocuments" />
-  		FROM DOCUMENTS D
+  		FROM DOCUMENTS D		
 		
-		JOIN USERS U 
-		  ON D.USER_ID = U.USER_ID
 		JOIN FORMS F 
 		  ON D.FORM_ID = F.FORM_ID
 		  
 		WHERE D.STATUS != '임시'
-		  AND D.USER_ID = #{userId}
+		  AND D.WRITER_ID = #{userId}
   	</select>
   	
   	<select id="getListWaiting" resultType="DocumentVO" parameterType="map">
@@ -82,9 +74,7 @@
   		FROM DOCUMENTS D
 	    
 	    JOIN APPROVAL_LINES A
-	      ON D.DOCUMENT_ID = A.DOCUMENT_ID
-	    JOIN USERS U 
-		  ON D.USER_ID = U.USER_ID
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
 		JOIN FORMS F 
 		  ON D.FORM_ID = F.FORM_ID
 	    
@@ -99,9 +89,7 @@
   		FROM DOCUMENTS D
 		
 		JOIN REFERENCE_LINES R 
-		  ON D.DOCUMENT_ID = R.DOCUMENT_ID
-		JOIN USERS U 
-		  ON D.USER_ID = U.USER_ID
+		  ON D.DOCUMENT_ID = R.DOCUMENT_ID		
 		JOIN FORMS F 
 		  ON D.FORM_ID = F.FORM_ID
 		  
@@ -113,9 +101,7 @@
 	    SELECT
 	    <include refid="selectDocuments" />
 	    FROM DOCUMENTS D
-		
-		JOIN USERS U 
-		  ON D.USER_ID = U.USER_ID
+				
 		JOIN FORMS F 
 		  ON D.FORM_ID = F.FORM_ID
 		  
@@ -128,8 +114,6 @@
   		<include refid="selectDocuments" />
   		FROM DOCUMENTS D
 		
-		JOIN USERS U 
-		  ON D.USER_ID = U.USER_ID
 		JOIN FORMS F 
 		  ON D.FORM_ID = F.FORM_ID
 		  
@@ -142,26 +126,18 @@
   	</select>
   	
   	<select id="getChildrenApprovers" parameterType="DocumentVO" resultType="ApprovalLineVO">
-  		SELECT A.*,
-  		U.NAME AS USER_NAME,          -- 결재자 이름
-		U.POSITION AS USER_POSITION   -- 결재자 직급 
+  		SELECT A.*
+  		 
   		FROM APPROVAL_LINES A
-  		
-  		JOIN USERS U 
-		  ON A.USER_ID = U.USER_ID
   		
   		WHERE DOCUMENT_ID = #{documentId}
   	</select>
   	
   	<select id="getChildrenReferrers" parameterType="DocumentVO" resultType="ReferenceLineVO">
-  		SELECT R.*,
-  		U.NAME AS USER_NAME,          -- 참조자 이름
-		U.POSITION AS USER_POSITION   -- 참조자 직급
+  		SELECT R.*
+  		
   		FROM REFERENCE_LINES R
-  		
-  		JOIN USERS U 
-		  ON R.USER_ID = U.USER_ID
-  		
+  		  		
   		WHERE DOCUMENT_ID = #{documentId}
   	</select>
   	
@@ -202,23 +178,27 @@
   	
   	<insert id="add" parameterType="DocumentVO" useGeneratedKeys="true" keyProperty="documentId">
   		INSERT INTO DOCUMENTS 
-  		(FORM_ID, TITLE, CONTENT, USER_ID, TIME, CURRENT_STEP, STATUS)
+  		(TITLE, CONTENT, CURRENT_STEP, STATUS, FORM_ID, 
+  		WRITER_ID, WRITER_NAME, WRITER_POSITION, WRITER_DEPT, WRITER_TIME, 
+  		MODIFIER_ID, MODIFIER_NAME, MODIFIER_POSITION, MODIFIER_DEPT, MODIFIER_TIME)
   		VALUES
-  		(#{formId}, #{title}, #{content}, #{userId}, #{time}, #{currentStep}, #{status})
+  		(#{title}, #{content}, #{currentStep}, #{status}, #{formId}, 
+  		#{writerId}, #{writerName}, #{writerPosition}, #{writerDept}, #{writerTime}, 
+  		#{modifierId}, #{modifierName}, #{modifierPosition}, #{modifierDept}, #{modifierTime})
   	</insert>
   	
   	<insert id="addApprovalLine" parameterType="ApprovalLineVO">
   		INSERT INTO APPROVAL_LINES
-  		(DOCUMENT_ID, USER_ID, STEP_ORDER, STATUS, HANDLING_TIME, SIGN_ID, REJECT_REASON)
+  		(DOCUMENT_ID, USER_ID, USER_NAME, USER_POSITION, STEP_ORDER, STATUS, HANDLING_TIME, SIGN_ID, REJECT_REASON)
   		VALUES
-  		(#{documentId}, #{userId}, #{stepOrder}, #{status}, #{handlingTime}, #{signId}, #{rejectReason})
+  		(#{documentId}, #{userId}, #{userName}, #{userPosition}, #{stepOrder}, #{status}, #{handlingTime}, #{signId}, #{rejectReason})
   	</insert>
   	
   	<insert id="addReferenceLine" parameterType="ReferenceLineVO">
   		INSERT INTO REFERENCE_LINES
-  		(DOCUMENT_ID, USER_ID)
+  		(DOCUMENT_ID, USER_ID, USER_NAME, USER_POSITION)
   		VALUES
-  		(#{documentId}, #{userId})
+  		(#{documentId}, #{userId}, #{userName}, #{userPosition})
   	</insert>
   	
   	<insert id="addFile" parameterType="AttachmentVO">

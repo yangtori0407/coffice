@@ -46,7 +46,7 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					document Detail 페이지
+					document List 페이지
 					<table >
 						<thead>						
 							<tr role="row">
@@ -65,10 +65,10 @@
 									<td>${i.documentId }</td>
 									<td>${i.formId}/${i.formName }</td>
 									<td><a href="../detail?documentId=${i.documentId}">${i.title}</a></td>
-									<td>${i.userId }/${i.userName }/${i.userPosition }</td>
-									<td>${i.time }</td>
+									<td>${i.writerId }/${i.writerName }/${i.writerPosition }</td>
+									<td>${i.writerTime }</td>
 									<td>${i.currentStep }/${i.stepCount }</td>
-									<td>${i.status }</td>									
+									<td>${i.status }</td>
 								</tr>
 							</c:forEach>
 						</tbody>
