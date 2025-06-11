@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.page.Pager;
@@ -36,7 +37,9 @@ public class BoardController {
 	public String getDetail(Model model, BoardVO boardVO) throws Exception{
 		boardVO = boardService.getDetail(boardVO);
 		model.addAttribute("detail", boardVO);
-		
+		for(CommentVO c : boardVO.getComments()) {
+			log.info("commentVO detail : {}", c);
+		}
 		return "board/detail";
 	}
 	
@@ -85,5 +88,44 @@ public class BoardController {
 			model.addAttribute("path", "./list");
 		}
 		return "redirect:./detail?boardNum=" + boardVO.getBoardNum();
+	}
+	
+	@PostMapping("addComment")
+	@ResponseBody
+	public CommentVO addComment(CommentVO commentVO) throws Exception{
+		//log.info("{}", commentVO);
+		return boardService.addComment(commentVO);
+	}
+	
+	@PostMapping("reply")
+	@ResponseBody
+	public CommentVO reply(CommentVO commentVO, Model model) throws Exception{
+		log.info("reply : {}", commentVO);
+		//작성자 넣기
+		commentVO = boardService.reply(commentVO);
+		return commentVO;
+	}
+	
+	@GetMapping("replyList")
+	@ResponseBody
+	public List<CommentVO> replyList(CommentVO commentVO) throws Exception{
+		//log.info("commentVO num : {}", commentVO);
+		return boardService.replyList(commentVO);
+	}
+	
+	@PostMapping("commentDelete")
+	public String commentDelete(CommentVO commentVO, Model model) throws Exception{
+		log.info("del : {}", commentVO);
+		int result = boardService.commentDelete(commentVO);
+		model.addAttribute("result", result);
+		return "commons/ajaxResult";
+	}
+	
+	@PostMapping("commentUpdate")
+	@ResponseBody
+	public CommentVO commentUpdate(CommentVO commentVO) throws Exception{
+		commentVO = boardService.commentUpdate(commentVO);
+		
+		return commentVO;
 	}
 }

@@ -53,7 +53,7 @@
 			</div>
 			<!-- End Wrapper -->
 			<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-			<script src="/js/coffice/noticeAdd.js"></script>
+			<script src="/js/posts/noticeAdd.js"></script>
 			<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 
 

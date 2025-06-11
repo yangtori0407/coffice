@@ -63,4 +63,31 @@ public class BoardSerivce {
 		// TODO Auto-generated method stub
 		return boardDAO.update(boardVO);
 	}
+
+	public CommentVO addComment(CommentVO commentVO) throws Exception{
+		boardDAO.addComment(commentVO);
+		return boardDAO.detailComment(commentVO);
+	}
+
+	public CommentVO reply(CommentVO commentVO) throws Exception{
+		int result = boardDAO.addReply(commentVO);
+		
+		return boardDAO.replyDetail(commentVO);
+	}
+
+	public List<CommentVO> replyList(CommentVO commentVO) throws Exception{
+		// TODO Auto-generated method stub
+		return boardDAO.replyList(commentVO);
+	}
+
+	public int commentDelete(CommentVO commentVO) throws Exception{
+		return boardDAO.commentDelete(commentVO);
+		
+	}
+
+	public CommentVO commentUpdate(CommentVO commentVO) throws Exception{
+		boardDAO.commentUpdate(commentVO);
+		return boardDAO.detailComment(commentVO);
+		
+	}
 }

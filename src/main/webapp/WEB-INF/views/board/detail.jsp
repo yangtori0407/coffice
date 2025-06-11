@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
 <title>COFFICE</title>
@@ -12,7 +13,19 @@
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<style>
+.dropdown-toggle::after {
+	display: none !important;
+}
+input{
+	box-shadow: none; 
+	outline: none;
+}
+</style>
+
 </head>
+
 <body id="page-top">
 	<div id="wrapper">
 		<c:import url="/WEB-INF/views/templates/sidebar.jsp"></c:import>
@@ -43,7 +56,101 @@
 							</div>
 							<div class="card-body">${detail.boardContents }</div>
 						</div>
+						<div>
+							<div>
+								<div class="card mb-4">
+									<div class="card-body">
+										<div class="row">
+											<div class="col-11 pr-1">
+												<input type="text" id="contents" name="commentContents"
+													class="form-control border-0" placeholder="댓글을 입력하세요"
+													style="box-shadow: none; outline: none;">
+											</div>
+											<div class="col-1 pl-1">
+												<button id="comBtn" class="btn btn-success w-100"
+													type="button">입력</button>
+											</div>
+										</div>
+									</div>
+								</div>
 
+							</div>
+							<div id="comArea">
+								<c:forEach items="${detail.comments }" var="com"
+									varStatus="status">
+									<c:choose>
+				
+										<c:when test="${com.deleteStatus eq '1'}">
+											<div class="card mb-2 py-1 border-left-warning">
+												<div class="row w-100 m-0">
+													<div class="col-10 card-body">
+														삭제된 댓글입니다.
+													</div>
+													<div
+														class="col-2 d-flex align-items-start justify-content-end mt-1">
+														<div class="d-flex flex-column mr-4">
+															<button class="btn btn-primary reply"
+																data-comment-num="${com.commentNum}" type="button"
+																data-toggle="collapse"
+																data-target="#collapse${com.commentNum }"
+																aria-expanded="false" aria-controls="collapseExample">
+																답글</button>
+
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+											<div class="collapse" id="collapse${com.commentNum }"></div>
+										</c:when>
+										<c:otherwise>
+
+											<div class="card mb-2 py-1 border-left-warning">
+												<div class="row w-100 m-0">
+													<div class="col-10 card-body">
+														<div style="font-size: 13px; margin-bottom: 10px;">
+															${com.formatted}</div>
+														<div>${com.commentContents}</div>
+													</div>
+													<div
+														class="col-2 d-flex align-items-start justify-content-end mt-1">
+														<div class="d-flex flex-column mr-4">
+															<button class="btn btn-primary reply"
+																data-comment-num="${com.commentNum}" type="button"
+																data-toggle="collapse"
+																data-target="#collapse${com.commentNum }"
+																aria-expanded="false" aria-controls="collapseExample">
+																답글</button>
+
+														</div>
+														<div class="dropdown">
+															<button
+																class="btn dropdown-toggle p-0 border-0 bg-transparent"
+																type="button" data-toggle="dropdown"
+																aria-expanded="false">
+																<ion-icon name="ellipsis-vertical-outline"></ion-icon>
+															</button>
+															<div class="dropdown-menu dropdown-menu-right">
+																<button class="dropdown-item commentUpBtn" data-com-num="${com.commentNum }">수정</button>
+																<button class="dropdown-item commentDelBtn" data-com-num="${com.commentNum }">삭제</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+											<div class="collapse" id="collapse${com.commentNum }"></div>
+										</c:otherwise>
+									</c:choose>
+
+
+
+								</c:forEach>
+
+							</div>
+						</div>
 					</div>
 				</div>
 				<!-- end Content -->
@@ -52,33 +159,8 @@
 			<!-- End Content Wrapper -->
 		</div>
 		<!-- End Wrapper -->
-		<script>
-		const delBtn = document.getElementById("delBtn");
-
-		delBtn.addEventListener("click", ()=>{
-		    console.log("click")
-		    const boardNum = delBtn.getAttribute("data-board-num");
-		    let param = new URLSearchParams();
-		    param.append("boardNum", boardNum);
-
-		    fetch("./delete", {
-		        method: "POST",
-		        body: param
-		    })
-		    .then(r => r.text())
-		    .then(r =>{
-		        if(r*1 == 1){
-		            alert("삭제가 완료되었습니다.");
-		            location.href = "/board/list";
-		        }else{
-		        	alert("삭제를 실패하였습니다.");
-		        	location.href = "/board/list";
-		        }
-
-		        
-		    })
-		})
-		</script>
+		<script src="/js/posts/boardDetail.js"></script>
 		<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
+
 </html>
