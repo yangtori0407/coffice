@@ -22,35 +22,18 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					<div class="row">
-						<div class="col-6" >
-							<div class="card shadow mb-4" style="min-height: 80vh;">
+					<div class="row h-100 justify-content-center align-items-center mb-4">
+						<div class="col-6 mt-3">
+							<div class="card shadow" style="min-height: 80vh;">
 								<div class="card-header py-3 d-flex">
 									<h6 class="m-1 font-weight-bold text-primary">채팅 목록</h6>
-									<a href="./addRoom" class="btn btn-danger btn-sm ml-auto">+</a>
+									<a href="./addChat" class="btn btn-danger btn-sm ml-auto">+</a>
 								</div>
-								<div class="card-body">
-									<div class="list-group">
-									<c:forEach items="${list }" var="r">
-										<button type="button"
-											class="list-group-item list-group-item-action">${r.chatRoomName}</button>
-									</c:forEach>
-								
-									</div>
-								</div>
+								<div class="card-body"></div>
 							</div>
+
 						</div>
-						<div class="col-6">
-							<div class="card shadow mb-4 " style="min-height: 80vh;">
-								<div class="card-header py-3">
-									<h6 class="m-0 font-weight-bold text-primary">채팅창</h6>
-								</div>
-								<div class="card-body">The styling for this basic card
-									example is created by using default Bootstrap utility classes.
-									By using utility classes, the style of the card component can
-									be easily modified with no need for any custom CSS!</div>
-							</div>
-						</div>
+
 					</div>
 
 				</div>
@@ -61,7 +44,6 @@
 		<!-- End Content Wrapper -->
 	</div>
 	<!-- End Wrapper -->
-	<script scr="/js/chat/main.js"></script>
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
 </html>

@@ -43,43 +43,21 @@
 											<div class="card-body row" id="people">
 												<div class="col-3">
 													<div
-														class="alert alert-secondary d-flex justify-content-between align-items-center"
+														class="alert alert-secondary d-flex justify-content-between align-items-center user"
 														role="alert" data-user-id="test1">
 														<span>test1</span>
 														<button class="btn btn-sm delPerson" type="button">x</button>
 													</div>
 													<div
-														class="alert alert-secondary d-flex justify-content-between align-items-center"
-														role="alert" data-user-id="test1">
-														<span>test1</span>
+														class="alert alert-secondary d-flex justify-content-between align-items-center user"
+														role="alert" data-user-id="test2">
+														<span>test2</span>
 														<button class="btn btn-sm delPerson" type="button">x</button>
 													</div>
-													<div
-														class="alert alert-secondary d-flex justify-content-between align-items-center"
-														role="alert" data-user-id="test1">
-														<span>test1</span>
-														<button class="btn btn-sm delPerson" type="button">x</button>
-													</div>
-													<div
-														class="alert alert-secondary d-flex justify-content-between align-items-center"
-														role="alert" data-user-id="test1">
-														<span>test1</span>
-														<button class="btn btn-sm delPerson" type="button">x</button>
-													</div>
-													<div
-														class="alert alert-secondary d-flex justify-content-between align-items-center"
-														role="alert" data-user-id="test1">
-														<span>test1</span>
-														<button class="btn btn-sm delPerson" type="button">x</button>
-													</div>
+													
 												</div>
 												<div class="col-3">
-													<div
-														class="alert alert-secondary d-flex justify-content-between align-items-center"
-														role="alert" data-user-id="test1">
-														<span>test1</span>
-														<button class="btn btn-sm delPerson" type="button">x</button>
-													</div>
+													
 												</div>
 
 												<div class="col-3"></div>
@@ -90,7 +68,7 @@
 
 											</div>
 										</div>
-										<button class="btn btn-primary ml-auto mt-4" type="button">채팅방
+										<button class="btn btn-primary ml-auto mt-4" type="button" id="addRoomBtn">채팅방
 											만들기</button>
 									</div>
 
