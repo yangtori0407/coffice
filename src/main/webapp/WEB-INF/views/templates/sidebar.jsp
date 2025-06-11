@@ -101,7 +101,7 @@
 		</li>
 
 		<!-- Nav Item - Charts -->
-		<li class="nav-item"><a class="nav-link" href="charts.html"> <ion-icon name="chatbubbles-outline"></ion-icon>
+		<li class="nav-item"><a class="nav-link" href="/chat/main"> <ion-icon name="chatbubbles-outline"></ion-icon>
 				<span>메신저</span></a></li>
 
 		<!-- Nav Item - Tables -->

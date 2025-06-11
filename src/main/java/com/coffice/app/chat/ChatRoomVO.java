@@ -10,8 +10,9 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ChatRoomVO {
-	private Long chatRoomNum;
-	private Long chatRoomName;
+	private String chatRoomNum;
+	private	String chatRoomName;
 	private Date chatRoomDate;
+	private String chatRoomCreator;
 	
 }
