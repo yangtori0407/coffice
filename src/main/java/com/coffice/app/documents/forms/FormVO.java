@@ -16,5 +16,6 @@ public class FormVO {
 	private String grade2;
 	private String grade3;
 	private String grade4;
+	private Long stepCount;
 
 }
