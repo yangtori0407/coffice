@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.users.UserDAO">
+  
+  	<insert id="register" parameterType="UserVO">
+  		INSERT INTO USERS
+  		(USER_ID, PASSWORD, NAME, POSITION, HIRE_DATE, HIRE_TYPE, BIRTH_DATE, PHONE, EMAIL, STATUS, RESIGN_DATE, SAVE_NAME, ORIGIN_NAME, DEPT_ID)
+  		VALUES
+  		(#{userId},#{password},#{name},#{position},#{hireDate},#{hireType},#{birthDate},#{phone},#{email},#{status},#{resignDate},#{saveName},#{originName},#{deptId})
+  	</insert>
+  	
+  	<select id="detail" parameterType="UserVO" resultMap="detailResult">
+  		  SELECT 
+		    U.*, 
+		    D.DEPT_NAME 
+		  FROM USERS U
+		  JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
+		  WHERE U.USER_ID = #{userId}
+  	</select>
+  	
+  	<resultMap id="detailResult" type="UserVO">
+	    <result column="USER_ID" property="userId"/>
+	    <result column="PASSWORD" property="password"/>
+	    <result column="NAME" property="name"/>
+	    <result column="POSITION" property="position"/>
+	    <result column="HIRE_DATE" property="hireDate"/>
+	    <result column="HIRE_TYPE" property="hireType"/>
+	    <result column="BIRTH_DATE" property="birthDate"/>
+	    <result column="PHONE" property="phone"/>
+	    <result column="EMAIL" property="email"/>
+	    <result column="STATUS" property="status"/>
+	    <result column="RESIGN_DATE" property="resignDate"/>
+	    <result column="SAVE_NAME" property="saveName"/>
+	    <result column="ORIGIN_NAME" property="originName"/>
+	    <result column="DEPT_ID" property="deptId"/>
+	    <result column="DEPT_NAME" property="deptName"/>
+  	</resultMap>
+  	
+  
+  
+  </mapper>

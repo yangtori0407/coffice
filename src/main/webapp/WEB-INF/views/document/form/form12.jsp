@@ -20,13 +20,13 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					here is form10.jsp
+					here is form12.jsp
 					<br>
 
-					<div>양식 번호</div>
+					<div>양식</div>
 					<div>${formVO.formId}</div>
 					<br>
-
+					
 					<div>결재선</div>
 					<c:forEach var="i" items="${approvers}">
 						<div>${i.userId} ${i.name} ${i.position}</div>
@@ -37,7 +37,30 @@
 					<c:forEach var="i" items="${referrers}">
 						<div>${i.userId} ${i.name} ${i.position}</div>
 					</c:forEach>
-					<br>
+					<br>		
+					
+					<form id="writeForm" action="/document/write" method="post">
+					  <input type="text" name="formId" id="formId" value="${formVO.formId}"> <br><br>
+					  <input type="text" name="userId" id="userId" value="${userVO.userId}"> <br><br>
+					  <input type="text" name="name" id="name" value="${userVO.name}"> <br><br>
+					  <input type="text" name="deptId" id="deptId" value="${userVO.deptId}"> <br><br>
+					  <input type="text" name="position" id="position" value="${userVO.position}"> <br><br>
+					
+					  <input type="text" name="title" id="title" placeholder="제목"> <br><br>
+					  <input type="text" name="content" id="content" placeholder="내용"> <br><br>
+					  <input type="file" name="attaches" id="attaches"> <br><br>
+					  <!-- 처음 문서 작성 시 보낼 수 있는 결재선 정보 -->
+					  <!-- 
+					  	문서 번호, 사원 번호, 결재 순번
+					   -->
+					   
+					   <!-- 처음 문서 작성 시 보낼 수 있는 참조선 정보 -->
+					  <!-- 
+					  	문서 번호, 사원 번호
+					   -->
+					   <button type="submit">작성 완료</button>
+					</form>
+
 
 				</div>
 			</div>
