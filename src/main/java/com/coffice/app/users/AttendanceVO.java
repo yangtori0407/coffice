@@ -11,12 +11,12 @@ import lombok.ToString;
 @ToString
 public class AttendanceVO {
 	
-	private Integer attendanceId;
+	private Long attendanceId;
 	private Date attendanceDate;
 	private Date  startTime;
 	private Date endTime;
 	private String status;
-	private Integer durationTime;
+	private Long durationTime;
 	private String userId;
 
 }

@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 public class BoardVO {
 	private Long boardNum;
-	private Long boardTitle;
+	private String boardTitle;
 	private String userId;
 	private Long boardHit;
 	private String boardContents;

@@ -118,7 +118,7 @@
 											<div class="dataTables_paginate paging_simple_numbers"
 												id="dataTable_paginate">
 												<ul class="pagination">
-													<li class="paginate_button page-item previous disabled"
+													<li class="paginate_button page-item previous"
 														id="dataTable_previous"><a
 														href="./list?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="0" tabindex="0"
@@ -133,7 +133,7 @@
 													</c:forEach>
 
 
-													<li class="paginate_button page-item next"
+													<li class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }"
 														id="dataTable_next"><a
 														href="./list?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="7" tabindex="0"
