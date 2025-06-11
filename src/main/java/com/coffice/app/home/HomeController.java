@@ -1,6 +1,7 @@
 package com.coffice.app.home;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +24,11 @@ public class HomeController {
 	}
 	
 	@GetMapping("/")
-	public String home() {
+	public String home(@AuthenticationPrincipal UserVO userVO, Model model) {
 		
+		if(userVO != null) {
+			model.addAttribute("user", userVO);
+		}
 		return "index";
 	}
 }

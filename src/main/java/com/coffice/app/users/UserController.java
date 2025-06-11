@@ -25,16 +25,6 @@ public class UserController {
 		
 	}
 	
-	@PostMapping("login")
-	public String login(UserVO userVO, HttpSession session) throws Exception{
-		
-		userVO = userService.detail(userVO);
-		if(userVO != null) {
-			session.setAttribute("user", userVO);
-		}
-		return "redirect:/";
-	}
-	
 	@GetMapping("register")
 	public void register(@ModelAttribute UserVO userVO) throws Exception {
 		

@@ -41,9 +41,9 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="employee px-3 py-5 text-center">
-										<img src="/images/coffice.png" class="circle-img" alt="Profile Image">
-										<div class="employee-name">이찬영</div>
-    									<div class="employee-info">인사팀 / 대리</div>
+										<img src="/coffice/upload/profile/${user.saveName}" class="circle-img" alt="Profile Image">
+										<div class="employee-name">${user.name}</div>
+    									<div class="employee-info">${user.name}/ ${user.position}</div>
 									</div>
 									<div class="now text-center">날짜 | 시간</div>
 									<div style="text-align: center;">
