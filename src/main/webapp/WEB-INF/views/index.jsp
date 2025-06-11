@@ -13,7 +13,7 @@
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-<link rel="stylesheet" type="text/css" href="/css/index_employee.css">
+<link rel="stylesheet" type="text/css" href="/css/user/index_employee.css">
 
 
 
@@ -41,9 +41,16 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="employee px-3 py-5 text-center">
-										<img src="/coffice/upload/profile/${user.saveName}" class="circle-img" alt="Profile Image">
+										<c:choose>
+										  <c:when test="${not empty user.saveName}">
+										    <img src="/coffice/upload/profile/${user.saveName}" class="circle-img" alt="Profile Image">
+										  </c:when>
+										  <c:otherwise>
+										    <img src="/images/coffice.png" class="circle-img" alt="Default Profile">
+										  </c:otherwise>
+										</c:choose>
 										<div class="employee-name">${user.name}</div>
-    									<div class="employee-info">${user.name}/ ${user.position}</div>
+    									<div class="employee-info">${user.deptName} / ${user.position}</div>
 									</div>
 									<div class="now text-center">날짜 | 시간</div>
 									<div style="text-align: center;">

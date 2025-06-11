@@ -47,6 +47,7 @@ public class UserVO implements UserDetails{
 	private String originName;
 	private Integer deptId;
 	
+	private String deptName;
 	private MultipartFile file;
 	
 	@Override
