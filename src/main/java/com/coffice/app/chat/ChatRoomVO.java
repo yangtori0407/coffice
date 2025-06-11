@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class ChatRoomVO {
 	private Long chatRoomNum;
-	private Long chatRoomName;
+	private	String chatRoomName;
 	private Date chatRoomDate;
 	
 }

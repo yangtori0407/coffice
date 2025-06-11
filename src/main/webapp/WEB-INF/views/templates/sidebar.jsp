@@ -2,7 +2,7 @@
 	<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 		<!-- Sidebar - Brand -->
-		<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+		<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
 			<div>
 				<img style="width: 30px;" src="/images/coffice.png">
 			</div>
@@ -101,7 +101,7 @@
 		</li>
 
 		<!-- Nav Item - Charts -->
-		<li class="nav-item"><a class="nav-link" href="charts.html"> <ion-icon name="chatbubbles-outline"></ion-icon>
+		<li class="nav-item"><a class="nav-link" href="/chat/main"> <ion-icon name="chatbubbles-outline"></ion-icon>
 				<span>메신저</span></a></li>
 
 		<!-- Nav Item - Tables -->
