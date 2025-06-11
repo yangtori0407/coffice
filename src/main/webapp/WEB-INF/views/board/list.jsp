@@ -12,6 +12,11 @@
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+	<style>
+		.boardA{
+			color: rgb(87, 178, 230);
+		}
+	</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -23,7 +28,7 @@
 
 					<!-- contents 내용 -->
 					<!-- Page Heading -->
-					<h1 class="mb-2 text-gray-800">공지사항</h1>
+					<h1 class="mb-2 text-gray-800">익명게시판</h1>
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
@@ -35,18 +40,6 @@
 								<div id="dataTable_wrapper"
 									class="dataTables_wrapper dt-bootstrap4">
 									<div class="row">
-										<!-- <div class="col-sm-12 col-md-6">
-											<div class="dataTables_length" id="dataTable_length">
-												<label>Show <select name="dataTable_length"
-													aria-controls="dataTable"
-													class="custom-select custom-select-sm form-control form-control-sm"><option
-															value="10">10</option>
-														<option value="25">25</option>
-														<option value="50">50</option>
-														<option value="100">100</option></select> entries
-												</label>
-											</div>
-										</div> -->
 										<div class="col-12 mb-4">
 											<div
 												class="d-flex justify-content-between align-items-center">
@@ -64,7 +57,7 @@
 												</form>
 
 												<!-- 추가 버튼 -->
-												<a href="./add" class="btn btn-danger">추가하기</a>
+												<a href="./add" class="btn btn-danger">작성하기</a>
 											</div>
 										</div>
 									</div>
@@ -87,7 +80,7 @@
 														<th class="sorting" tabindex="0" aria-controls="dataTable"
 															rowspan="1" colspan="1"
 															aria-label="Office: activate to sort column ascending"
-															style="width: 116.788px;">글쓴이</th>
+															style="width: 116.788px;">댓글수</th>
 														<th class="sorting" tabindex="0" aria-controls="dataTable"
 															rowspan="1" colspan="1"
 															aria-label="Age: activate to sort column ascending"
@@ -101,11 +94,11 @@
 												<tbody>
 													<c:forEach items="${list }" var="l">
 														<tr>
-															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeNum }</a></td>
-															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
-															<td>관리자</td>
-															<td>${l.noticeHit }</td>
-															<td>${l.noticeDate }</td>
+															<td><a class="boardA" href="./detail?boardNum=${l.boardNum }">${l.boardNum }</a></td>
+															<td><a class="boardA" href="./detail?boardNum=${l.boardNum }">${l.boardTitle }</a></td>
+															<td>0</td>
+															<td>${l.boardHit }</td>
+															<td>${l.boardDate }</td>
 														</tr>
 													</c:forEach>
 												</tbody>
@@ -133,7 +126,7 @@
 													</c:forEach>
 
 
-													<li class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }"
+													<li class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }
 														id="dataTable_next"><a
 														href="./list?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="7" tabindex="0"

@@ -57,7 +57,7 @@
 			<!-- End Content Wrapper -->
 		</div>
 		<!-- End Wrapper -->
-		<script src="/js/coffice/noticeDetail.js"></script>
+		<script src="/js/posts/noticeDetail.js"></script>
 		<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
 </html>

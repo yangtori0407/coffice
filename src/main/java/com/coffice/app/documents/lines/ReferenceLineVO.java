@@ -1,4 +1,4 @@
-package com.coffice.app.reference_lines;
+package com.coffice.app.documents.lines;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,8 +10,8 @@ import lombok.ToString;
 public class ReferenceLineVO {
 	
 	
-	private Long r_line_id;
-	private Long document_id;
-	private String user_id;
+	private Long rLineId;
+	private Long documentId;
+	private String userId;
 
 }

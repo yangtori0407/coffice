@@ -63,17 +63,17 @@ public class NoticeService {
 		String fileName = "";
 
 		if (!multipartFile.isEmpty()) {
-			fileName = fileManager.fileSave(path.concat("notice"), multipartFile);
+			fileName = fileManager.fileSave(path.concat("quill"), multipartFile);
 
-			NoticeFilesVO filesVO = new NoticeFilesVO();
-			filesVO.setSaveName(fileName);
-			filesVO.setOriginName(multipartFile.getOriginalFilename());
-
-			noticeDAO.quillUpload(filesVO);
+//			NoticeFilesVO filesVO = new NoticeFilesVO();
+//			filesVO.setSaveName(fileName);
+//			filesVO.setOriginName(multipartFile.getOriginalFilename());
+//
+//			noticeDAO.quillUpload(filesVO);
 
 		}
 
-		return "notice\\" + fileName;
+		return "quill\\" + fileName;
 	}
 
 	public NoticeFilesVO fileDown(NoticeFilesVO filesVO) throws Exception {
