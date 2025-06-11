@@ -46,4 +46,8 @@ public class IngredientsService {
 	public List<IngredientsVO> getHistory(IngredientsVO ingredientsVO) throws Exception {
 		return ingredeintsDAO.getHistory(ingredientsVO);
 	}
+	
+	public int plusStock(History history) throws Exception {
+		return ingredeintsDAO.plusStock(history);
+	}
 }

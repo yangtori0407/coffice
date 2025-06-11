@@ -16,5 +16,5 @@ public interface IngredientsDAO {
 	public IngredientsVO nameCheck(IngredientsVO ingredientsVO) throws Exception;
 	public int addHistory(History history) throws Exception;
 	public List<IngredientsVO> getHistory(IngredientsVO ingredientsVO) throws Exception;
-	
+	public int plusStock(History history) throws Exception;
 }

@@ -56,10 +56,17 @@
 		VALUES (null, #{ingredientsName}, 0, #{ingredientsPrice}, now(), null);
   	</insert>
   	
-  	<insert id="addHistory" parameterType="History">
+  	<insert id="addHistory" parameterType="History" useGeneratedKeys="true" keyProperty="historyId">
   		INSERT INTO HISTORY
 		VALUES (null, #{receive}, #{number}, #{userId}, #{ingredientsID}, DATE_ADD(now(), INTERVAL 9 HOUR))
   	</insert>
+  	
+  	<update id="plusStock" parameterType="History">
+  		UPDATE INGEDIENTS 
+  		SET INGREDIENTS_STOCK= 
+  			IF((SELECT RECEIVE FROM HISTORY WHERE HISTORY_ID=#{historyId}) = 1, INGREDIENTS_STOCK +#{number},INGREDIENTS_STOCK-#{number}) 
+  		WHERE INGREDIENTS_ID=#{ingredientsID}
+  	</update>
   	
   	<resultMap type="IngredientsVO" id="getIngredients">
   		<id column="INGREDIENTS_ID" property="ingredientsID"/>
