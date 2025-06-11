@@ -1,5 +1,6 @@
 package com.coffice.app.ingredients;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,14 @@ public class IngredientsService {
 		return ingredeintsDAO.addHistory(history);
 	}
 	
-	public List<IngredientsVO> getHistory(IngredientsVO ingredientsVO) throws Exception {
-		return ingredeintsDAO.getHistory(ingredientsVO);
+	public List<IngredientsVO> getHistory(IngredientsVO ingredientsVO,Pager pager) throws Exception {
+		pager.make();
+		pager.makeNum(ingredeintsDAO.getHistoryTotalCount(ingredientsVO));
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("ingredientsVO", ingredientsVO);
+		map.put("pager", pager);
+		return ingredeintsDAO.getHistory(ingredientsVO, pager);
 	}
 	
 	public int plusStock(History history) throws Exception {
