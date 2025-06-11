@@ -5,7 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>COFFICE</title>
+<link href="/images/3.png" rel="shortcut icon" type="image/x-icon">
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
