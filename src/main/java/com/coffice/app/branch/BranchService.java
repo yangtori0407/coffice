@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.coffice.app.page.Pager;
 
-
-
 @Service
 public class BranchService {
 

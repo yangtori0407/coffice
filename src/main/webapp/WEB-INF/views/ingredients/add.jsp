@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +16,10 @@
 		height: 50px;
 		margin: 20px 0;
 	}
+	.error {
+			color: red;
+			font-size: 0.9em;
+		}
 </style>
 </head>
 <body id="page-top">
@@ -25,18 +30,18 @@
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
 					<div style="width:400px; height:600px; margin: 0 auto;">
-						<form action="./add" method="post">
+						<form:form modelAttribute="ingredientsVO" action="./add" method="post">
 							<div class="input-box">
-								<input type="text" name="branchName" placeholder="지점이름">						
+								<form:input type="text" path="ingredientsName" placeholder="이름"/>						
+                                 <form:errors path="ingredientsName" cssClass="error"/>
 							</div>
+
 							<div class="input-box">
-								<input type="text" name="branchPostcode" id="branchPostcode" placeholder="지점우편번호" readonly>
-								<input type="button" onclick="daumPostcode()" value="우편번호찾기">
-								<input type="text" name="branchAddress" id="branchAddress" placeholder="지점주소" readonly>					
+								<form:input type="text" path="ingredientsPrice" placeholder="가격"/>					
 							</div>
 							
-							<button type="submit" class="btn btn-primary">지점등록</button>
-						</form>
+							<button type="submit" class="btn btn-primary">상품등록</button>
+						</form:form>
 					</div>
 				</div>
 			</div>

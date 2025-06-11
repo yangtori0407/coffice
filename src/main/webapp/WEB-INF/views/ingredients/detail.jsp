@@ -5,17 +5,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>COFFICE</title>
+<link href="/images/3.png" rel="shortcut icon" type="image/x-icon">
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<style>
-	.input-box {
-		width: 100%;
-		height: 50px;
-		margin: 20px 0;
-	}
-</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -24,20 +18,30 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-					<div style="width:400px; height:600px; margin: 0 auto;">
-						<form action="./add" method="post">
-							<div class="input-box">
-								<input type="text" name="branchName" placeholder="지점이름">						
-							</div>
-							<div class="input-box">
-								<input type="text" name="branchPostcode" id="branchPostcode" placeholder="지점우편번호" readonly>
-								<input type="button" onclick="daumPostcode()" value="우편번호찾기">
-								<input type="text" name="branchAddress" id="branchAddress" placeholder="지점주소" readonly>					
-							</div>
-							
-							<button type="submit" class="btn btn-primary">지점등록</button>
-						</form>
-					</div>
+					<!-- contents 내용 -->
+					<h3>${vo.ingredientsName}</h3>
+					<h3>${vo.ingredientsStock}</h3>
+					<h3>${vo.ingredientsPrice}</h3>
+					<table class="table table-striped" style="margin:20px auto;width: 600px;">
+						<thead>
+							<tr>
+								<th>상태</th>
+								<th>수량</th>
+								<th>등록</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${list}" var="h">
+							<c:forEach items="${h.history}" var="item">
+							<tr>
+								<td>${item.receive?"입고":"출고"}</td>
+								<td>${item.number}</td>
+								<td>${item.userVO.name}</td>			
+							</tr>
+							</c:forEach>
+							</c:forEach>
+						</tbody>
+						</table>
 				</div>
 			</div>
 			<!-- end Content -->
@@ -48,6 +52,4 @@
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script src="/js/branch/add.js"></script>
 </html>
