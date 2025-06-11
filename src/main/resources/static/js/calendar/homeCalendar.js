@@ -43,12 +43,13 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 fetch("http://localhost/events/getHolidays")
 .then(r=>r.json())
 .then(r=>{
+    console.log(r)
     for(a of r) {
         let event = {
             title: a.dateName,
             start: a.locdate.toString(),
             allDay: true,
-            color: '#378006'
+            color: '#ee0000'
         }
         schedule.addEvent(event);
         calendar.addEvent(event);
