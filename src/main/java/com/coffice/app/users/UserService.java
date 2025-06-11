@@ -24,14 +24,14 @@ public class UserService implements UserDetailsService{
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private FileManager fileManager;
-	@Value("${app.files.base}")
+	@Value("${app.profiles.base}")
 	private String path;
 
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		UserVO userVO = new UserVO();
 		userVO.setUserId(userId);
-		System.out.println("로그인 요청 아이디 : "+ userId);
+		//System.out.println("로그인 요청 아이디 : "+ userId);
 		try {
 			userVO = userDAO.detail(userVO);
 			if (userVO == null) {

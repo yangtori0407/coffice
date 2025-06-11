@@ -13,9 +13,12 @@
   	</insert>
   	
   	<select id="detail" parameterType="UserVO" resultMap="detailResult">
-  		SELECT USER_ID, PASSWORD, NAME, POSITION, HIRE_DATE, HIRE_TYPE, BIRTH_DATE, PHONE, EMAIL, STATUS, RESIGN_DATE, SAVE_NAME, ORIGIN_NAME, DEPT_ID
-  		FROM USERS
-  		WHERE USER_ID=#{userId}
+  		  SELECT 
+		    U.*, 
+		    D.DEPT_NAME 
+		  FROM USERS U
+		  JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
+		  WHERE U.USER_ID = #{userId}
   	</select>
   	
   	<resultMap id="detailResult" type="UserVO">
@@ -32,10 +35,10 @@
 	    <result column="RESIGN_DATE" property="resignDate"/>
 	    <result column="SAVE_NAME" property="saveName"/>
 	    <result column="ORIGIN_NAME" property="originName"/>
-	    <result column="DEPT_ID" property="userId"/>
-	    
+	    <result column="DEPT_ID" property="deptId"/>
+	    <result column="DEPT_NAME" property="deptName"/>
   	</resultMap>
-  
+  	
   
   
   </mapper>
