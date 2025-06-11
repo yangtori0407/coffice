@@ -9,8 +9,8 @@ import lombok.ToString;
 @ToString
 public class EmployeeRoleVO {
 	
-	private Integer roleNum;
+	private Long roleNum;
 	private String userId;
-	private Integer roleId;
+	private Long roleId;
 
 }

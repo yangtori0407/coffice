@@ -11,6 +11,7 @@
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/index_employee.css">
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -31,16 +32,35 @@
 							<!-- Background Gradient Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">사원정보 부분
-                                    </h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">사원정보 부분</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="px-3 py-5 bg-gradient-primary text-white">.bg-gradient-primary</div>
-                                    <div class="px-3 py-5 bg-gradient-secondary text-white">.bg-gradient-secondary</div>
-                                    <div class="px-3 py-5 bg-gradient-success text-white">.bg-gradient-success</div>
+                                    <div class="employee px-3 py-5 text-center">
+										<img src="/images/coffice.png" class="circle-img" alt="Profile Image">
+										<div class="employee-name">이찬영</div>
+    									<div class="employee-info">인사팀 / 대리</div>
+									</div>
+									<div class="now text-center">날짜 | 시간</div>
+									<div style="text-align: center;">
+                                    	<button type="button" class="btn btn-outline-primary custom-btn">출근</button>
+                                    </div>
+                                    <div class="text-start">
+                                    	<div class="mb-7">근무정보</div>
+                                    	<div class="work-info">
+										  <div class="label">출근</div>
+										  <div class="time">09:00</div>
+										  <div class="label">퇴근</div>
+										  <div class="time">18:00</div>
+										</div>
+                                    </div>
+                                    <!-- <div class="px-3 py-5 bg-gradient-success text-white">
+                                    	<div>휴가(총 15일)</div>
+                                    	<div>사용 - 1일</div>
+                                    	<div>잔여 - 14일</div>
+                                    </div>
                                     <div class="px-3 py-5 bg-gradient-info text-white">.bg-gradient-info</div>
                                     <div class="px-3 py-5 bg-gradient-warning text-white">.bg-gradient-warning</div>
-                                    <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div>
+                                    <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div> -->
                                 </div>
                             </div>
 							

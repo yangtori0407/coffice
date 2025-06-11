@@ -12,8 +12,8 @@ import lombok.ToString;
 @ToString
 public class AnnualLeaveVO {
 	
-	private Integer leaveId;
-	private Integer leaveYear;
+	private Long leaveId;
+	private Long leaveYear;
 	private Double totalLeave;
 	private Double usedLeave;
 	private Date grantDate;
