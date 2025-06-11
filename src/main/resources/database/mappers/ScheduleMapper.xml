@@ -15,8 +15,8 @@
   			values (#{detail}, #{startTime}, #{endTime}, #{repeatStart}, #{repeatEnd}, #{repeatType}, #{scheduleType}, #{editor}, now(), #{userId}, now())
   	</insert>
   	
-  	<select id="getSchedule">
-  			
+  	<select id="getSchedule" resultType="ScheduleVO">
+  			select DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE from SCHEDULE
   	</select>
   	
   </mapper>

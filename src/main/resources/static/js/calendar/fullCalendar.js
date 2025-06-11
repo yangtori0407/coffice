@@ -9,9 +9,9 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     customButtons: {
         addButton: {
             text: '+',
-            click: function() {
-                $("#exampleModal").modal("show")
-            }
+            click:  function() {
+                        $("#exampleModal").modal("show")
+                    }
         },
         근태: {
             text: 'editable',
@@ -28,14 +28,6 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         center: 'title',
         right: 'addButton dayGridMonth,근태,listWeek'
     },
-    // views: {
-    //     근태: {
-    //         type: 'timeGrid',
-    //         duration: { days: 7},
-    //         slotMinTime: '07:00:00',
-    //         slotMaxTime: '22:00:00'
-    //     }
-    // },
     initialDate: Date.now(),
     navLinks: false, // can click day/week names to navigate views
     editable: false,
@@ -46,7 +38,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     return date.getDate();
     },
     dateClick: function(e) {
-    console.log(e)
+        show()
     },
     eventClick: function(e) {
         console.log(e.event)
@@ -72,7 +64,7 @@ for(let i = 0; i < 3; i++) {
             title: a.dateName,
             start: a.locdate.toString(),
             allDay: true,
-            color: '#378006',
+            color: '#ee0000',
             editable: false
         }
         calendar.addEvent(event);
@@ -146,3 +138,7 @@ send.addEventListener("click", ()=>{
 
     $("#exampleModal").modal("hide")
 })
+
+function show() {
+    $("#exampleModal").modal("show")
+}

@@ -21,8 +21,9 @@ public class EventController {
 	private ScheduleService scheduleService;
 	
 	@GetMapping("schedule")
-	public String getSchedule(Model model) {
+	public String getSchedule(Model model) throws Exception {
 		model.addAttribute("kind", "일정");
+		model.addAttribute("schedules", scheduleService.getSchedule());
 		return "events/schedule";
 	}
 	
