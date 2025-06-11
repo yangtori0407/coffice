@@ -14,5 +14,5 @@ public class EventVO {
 	private Date insertTime;
 	private String editor;
 	private Date editTime;
-
+	
 }
