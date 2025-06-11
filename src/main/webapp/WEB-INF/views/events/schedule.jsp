@@ -113,7 +113,7 @@
 									</div>
 									<div class="form-group" id="repeat-condition" style="display: none;">
 										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="radioOptions" id="radio1" value="weekly">
+											<input class="form-check-input" type="radio" name="radioOptions" id="radio1" value="weekly" checked>
 											<label class="form-check-label" for="radio1">Weekly</label>
 										</div>
 										<div class="form-check form-check-inline">

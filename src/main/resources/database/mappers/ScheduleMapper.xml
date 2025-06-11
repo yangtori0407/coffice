@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.events.schedule.ScheduleDAO">
+  
+  	<insert id="addSchedule" parameterType="ScheduleVO">
+  			insert into SCHEDULE (DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE, EDITOR, EDIT_TIME, USER_ID, INSERT_TIME)
+  			values (#{detail}, #{startTime}, #{endTime}, #{scheduleType}, #{editor}, now(), #{userId}, now())
+  	</insert>
+  	
+  	<insert id="addRepeatSchedule">
+  			insert into SCHEDULE_REPEAT (DETAIL, START_TIME, END_TIME, REPEAT_START, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE, EDITOR, EDIT_TIME, USER_ID, INSERT_TIME)
+  			values (#{detail}, #{startTime}, #{endTime}, #{repeatStart}, #{repeatEnd}, #{repeatType}, #{scheduleType}, #{editor}, now(), #{userId}, now())
+  	</insert>
+  	
+  	<select id="getSchedule">
+  			
+  	</select>
+  	
+  </mapper>

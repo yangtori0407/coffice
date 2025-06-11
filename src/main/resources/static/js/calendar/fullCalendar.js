@@ -1,4 +1,5 @@
 const kind = document.getElementById("kind")
+let flag = true;
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -10,6 +11,14 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             text: '+',
             click: function() {
                 $("#exampleModal").modal("show")
+            }
+        },
+        근태: {
+            text: 'editable',
+            click: function() {
+                calendar.setOption('editable', flag)
+
+                flag = !flag
             }
         }
     },
@@ -63,7 +72,8 @@ for(let i = 0; i < 3; i++) {
             title: a.dateName,
             start: a.locdate.toString(),
             allDay: true,
-            color: '#378006'
+            color: '#378006',
+            editable: false
         }
         calendar.addEvent(event);
     }
@@ -74,7 +84,8 @@ if(kind.innerText.trim() == '일정') {
         title: 'test',
         start: '2025-06-09',
         allDay: true,
-        color: '#378006'
+        color: '#378006',
+        source: 'detail'
     }
     calendar.addEvent(event);
 }
@@ -82,8 +93,7 @@ if(kind.innerText.trim() == '일정') {
 if(kind.innerText.trim() == '휴가') {
     let event = {
         title: 'test',
-        start: '2025-06-12T15:30:00',
-        end: '2025-06-15T11:30:00'
+        start: '2025-06-12T15:30:00'
     }
     calendar.addEvent(event);
 }
@@ -105,25 +115,34 @@ check.addEventListener("click", (e)=>{
 const send = document.getElementById("send")
 send.addEventListener("click", ()=>{
     let type = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
-    console.log(type)
     let detail = document.getElementById("details")
-    console.log(detail.value)
     let sDate = document.getElementById("sDate")
     let sTime = document.getElementById("sTime")
-    console.log(sDate.value)
-    console.log(sTime.value)
     let eDate = document.getElementById("eDate")
     let eTime = document.getElementById("eTime")
-    console.log(eDate.value)
-    console.log(eTime.value)
+
+    let params = new FormData()
+    params.append("scheduleType", type)
+    params.append("detail", detail.value)
+    params.append("startTime", sDate.value+" "+sTime.value)
+    params.append("endTime", eDate.value+" "+eTime.value)
+
     if(check.checked){
         let rType = document.querySelector('input[name="radioOptions"]:checked').value;
-        console.log(rType)
         let sRepeat = document.getElementById("sRepeat")
         let eRepeat = document.getElementById("eRepeat")
-        console.log(sRepeat.value)
-        console.log(eRepeat.value)
+        params.append("repeatType", rType)
+        params.append("repeatStart", sRepeat.value)
+        params.append("repeatEnd", eRepeat.value)
     }
+
+    fetch("schedule/add", {
+        method: "post",
+        body: params
+    })
+    .then(r=>{
+        console.log(r)
+    })
 
     $("#exampleModal").modal("hide")
 })
