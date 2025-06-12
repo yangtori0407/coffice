@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class ChatPersonVO {
 	
-	private Long chatRoomNum;
+	private String chatRoomNum;
 	private String userId;
 	private Timestamp joinedAt;
 	private Timestamp lastReadAt;

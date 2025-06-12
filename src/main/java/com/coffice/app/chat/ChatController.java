@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.chat.vo.ChatAddVO;
+import com.coffice.app.chat.vo.ChatContentsVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
 import com.coffice.app.users.UserVO;
 
@@ -33,6 +35,18 @@ public class ChatController {
 	@Autowired
 	public ChatController(SimpMessagingTemplate template) {
 		this.template = template;
+	}
+	
+	@MessageMapping("/sendMessage")
+	public void sendMessage(ChatContentsVO chatContentsVO, Authentication authentication) throws Exception{
+		UserVO userVO = new UserVO();//(UserVO)authentication.getPrincipal();
+		userVO.setUserId("test1"); //로그인 연결시 없애기
+		
+		chatContentsVO = chatService.addContents(chatContentsVO, userVO);
+		
+		log.info("chatContentsVO : {}", chatContentsVO);
+		template.convertAndSend("/sub/chatRoom." + chatContentsVO.getChatRoomNum(), chatContentsVO);
+		log.info("/sub/chatRoom." + chatContentsVO.getChatRoomNum());
 	}
 	
 	@GetMapping("main")
@@ -60,9 +74,18 @@ public class ChatController {
 	}
 	
 	@GetMapping("chatRoom")
-	public void chatRoom(ChatRoomVO chatRoomVO, Model model) throws Exception{
-		String chatName = chatService.getChatName(chatRoomVO);
-		model.addAttribute("chatName", chatName);
+	public void chatRoom(ChatRoomVO chatRoomVO, Model model, Authentication authentication) throws Exception{
+		//String userId = authentication.getName();
+		chatRoomVO = chatService.getChatInfo(chatRoomVO);
+		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO);
+		
+//		for(ChatContentsVO c : contents) {
+//			log.info("챗 내용 : {}", c);
+//		}
+		log.info("chatRoomVO : {}", chatRoomVO);
+		model.addAttribute("chatRoomVO", chatRoomVO);
+		model.addAttribute("userId", "test1");
+		model.addAttribute("contents", contents);
 		
 	}
 
