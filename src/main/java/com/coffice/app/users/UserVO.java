@@ -47,7 +47,6 @@ public class UserVO implements UserDetails{
 	private String originName;
 	private Integer deptId;
 	
-	
 	private String deptName;
 	private MultipartFile file;
 	
@@ -61,10 +60,7 @@ public class UserVO implements UserDetails{
 		// TODO Auto-generated method stub
 		return this.userId;
 	}
-	@Override
-	public String getPassword() {
-		return this.password;
-	}
+	
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub

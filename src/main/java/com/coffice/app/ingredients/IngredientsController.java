@@ -39,14 +39,14 @@ public class IngredientsController {
 	}
 	
 	@GetMapping("detail")
-	public String getDetail(IngredientsVO ingredientsVO, Model model) throws Exception {
+	public String getDetail(IngredientsVO ingredientsVO, Model model, Pager pager) throws Exception {
 		IngredientsVO ingredientsVO2 = ingredientsService.getDetail(ingredientsVO);
 		model.addAttribute("vo", ingredientsVO2);
 		
-		List<IngredientsVO> list = ingredientsService.getHistory(ingredientsVO);
-			
-
+		List<IngredientsVO> list = ingredientsService.getHistory(ingredientsVO, pager);
+		
 		model.addAttribute("list", list);
+		model.addAttribute("pager", pager);
 		return "ingredients/detail";
 	}
 	
@@ -77,14 +77,16 @@ public class IngredientsController {
 	
 	@PostMapping("addHistory")
 	public String addHistory(History history) throws Exception {
-		log.info("I:{}",history);
+		
 		History history2 = new History();
+		history2.setHistoryId(history.getHistoryId());
 		history2.setReceive(history.isReceive());
 		history2.setNumber(history.getNumber());
 		history2.setUserId("A12");
 		history2.setIngredientsID(history.getIngredientsID());
-		
+
 		ingredientsService.addHistory(history2);
+		ingredientsService.plusStock(history2);
 		
 		return "redirect:./list";
 	}
