@@ -43,7 +43,6 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 fetch("http://localhost/events/getHolidays")
 .then(r=>r.json())
 .then(r=>{
-    console.log(r)
     for(a of r) {
         let event = {
             title: a.dateName,

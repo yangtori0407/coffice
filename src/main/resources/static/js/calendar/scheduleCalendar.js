@@ -5,7 +5,6 @@ var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
     themeSystem: 'bootstrap4',
     locale: 'ko',
-    timeZone: 'UTC',
     customButtons: {
         addButton: {
             text: '+',
@@ -13,7 +12,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                         $("#exampleModal").modal("show")
                     }
         },
-        근태: {
+        수정: {
             text: 'editable',
             click: function() {
                 calendar.setOption('editable', flag)
@@ -26,7 +25,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
         left:'prevYear,prev,next,nextYear today',
         center: 'title',
-        right: 'addButton dayGridMonth,근태,listWeek'
+        right: 'addButton 수정 dayGridMonth,listWeek'
     },
     initialDate: Date.now(),
     navLinks: false, // can click day/week names to navigate views
@@ -34,32 +33,64 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     dayMaxEvents: true, // allow "more" link when too many events
     fixedWeekCount: false,
     dayCellContent: function (arg) {
-    const { date } = arg;
-    return date.getDate();
+        const { date } = arg;
+        return date.getDate();
     },
     dateClick: function(e) {
+        sDate.value = e.dateStr
         show()
     },
     eventClick: function(e) {
-        console.log(e.event)
+        
+        fetch(`http://localhost/events/getSchedule?scheduleId=${e.event.id}`)
+        .then(r=>r.json())
+        .then(r=>{
+            let type = document.querySelector(`input[name="detailResultOptions"][value="${r.scheduleType}"]`);
+            type.checked = true;
+            let detailResult = document.getElementById("detailResult")
+            detailResult.innerText = r.detail
+            let rsDate = document.getElementById("rsDate")
+            rsDate.value = e.event.startStr.slice(0, 10)
+            let rsTime = document.getElementById("rsTime")
+            rsTime.value = e.event.startStr.slice(11, 16)
+            let reDate = document.getElementById("reDate")
+            reDate.value = e.event.endStr.slice(0, 10)
+            let reTime = document.getElementById("reTime")
+            reTime.value = e.event.endStr.slice(11, 16)
+            
+            let dis = document.querySelectorAll("input[disabled], textarea[disabled], select[disabled]");
+            let change = document.getElementById("change")
+            change.addEventListener("click", (e)=>{
+                for(a of dis) {
+                    a.disabled = false;
+                }
+            })
+        
+            $("#detailModal").modal("show")
+
+            $('#detailModal').on('hidden.bs.modal', function () {
+                for(a of dis) {
+                    a.disabled = true;
+                }
+            })
+        })
     },
     eventDrop: function(e) {
-    console.log("EventDrop", e.event.start)
+        console.log("EventDrop", e.event.start)
         let t = new Date(e.event.start)
-    console.log(t.getHours())
+        console.log(t.getHours())
     },
     eventResize: function(e) {
-    console.log("EventResize", e.event.start)
-    let t = new Date(e.event.start)
-    console.log(t.getHours())
+        console.log("EventResize", e.event.start)
+        let t = new Date(e.event.start)
+        console.log(t.getHours())
     }
 });
 
-for(let i = 0; i < 3; i++) {
-    let list = JSON.parse(localStorage.getItem("list"+i))
-
-    for(a of list) {
-
+fetch("http://localhost/events/getHolidays")
+.then(r=>r.json())
+.then(r=>{
+    for(a of r) {
         let event = {
             title: a.dateName,
             start: a.locdate.toString(),
@@ -69,26 +100,35 @@ for(let i = 0; i < 3; i++) {
         }
         calendar.addEvent(event);
     }
-}
+})
 
-if(kind.innerText.trim() == '일정') {
-    let event = {
-        title: 'test',
-        start: '2025-06-09',
-        allDay: true,
-        color: '#378006',
-        source: 'detail'
+fetch("http://localhost/events/getSchedules")
+.then(r=>r.json())
+.then(r=>{
+    for(a of r) {
+        if(a.scheduleType == 'group') {
+            let event = {
+                id: a.scheduleId,
+                title: a.detail,
+                start: a.startTime,
+                end: a.endTime,
+                color: '#378006',
+                editable: false
+            }
+            calendar.addEvent(event);
+        }else {
+            let event = {
+                id: a.scheduleId,
+                title: a.detail,
+                start: a.startTime,
+                end: a.endTime,
+                color: '#378006'
+            }
+            calendar.addEvent(event);
+        }
     }
-    calendar.addEvent(event);
-}
+})
 
-if(kind.innerText.trim() == '휴가') {
-    let event = {
-        title: 'test',
-        start: '2025-06-12T15:30:00'
-    }
-    calendar.addEvent(event);
-}
 
 calendar.render();
 
@@ -116,8 +156,8 @@ send.addEventListener("click", ()=>{
     let params = new FormData()
     params.append("scheduleType", type)
     params.append("detail", detail.value)
-    params.append("startTime", sDate.value+" "+sTime.value)
-    params.append("endTime", eDate.value+" "+eTime.value)
+    params.append("startTime", sDate.value+sTime.value)
+    params.append("endTime", eDate.value+eTime.value)
 
     if(check.checked){
         let rType = document.querySelector('input[name="radioOptions"]:checked').value;
@@ -134,6 +174,7 @@ send.addEventListener("click", ()=>{
     })
     .then(r=>{
         console.log(r)
+        location.reload()
     })
 
     $("#exampleModal").modal("hide")

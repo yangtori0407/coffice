@@ -15,6 +15,7 @@ import com.coffice.app.events.holidays.HolidayVO;
 
 import com.coffice.app.events.schedule.ScheduleService;
 import com.coffice.app.events.schedule.ScheduleVO;
+import com.coffice.app.events.vacation.VacationVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,21 +27,34 @@ public class EventController {
 	@Autowired
 	private ScheduleService scheduleService;
 
-  @Autowired
+    @Autowired
 	private HolidayService holidayService;
+
 	
 	@GetMapping("schedule")
-	public String getSchedule(Model model) throws Exception {
+	public String schedule(Model model) throws Exception {
 		model.addAttribute("kind", "일정");
-		model.addAttribute("schedules", scheduleService.getSchedule());
 		return "events/schedule";
+	}
+	
+	@GetMapping("getSchedules")
+	@ResponseBody
+	public List<ScheduleVO> getAll() throws Exception {
+		return scheduleService.getAll();
+	}
+	
+	@GetMapping("getSchedule")
+	@ResponseBody
+	public ScheduleVO getSchedule(ScheduleVO scheduleVO) throws Exception {
+		return scheduleService.getSchedule(scheduleVO);
 	}
 	
 	@GetMapping("vacation")
-	public String getVacation(Model model) {
+	public String vacation(Model model) {
 		model.addAttribute("kind", "휴가");
 		return "events/schedule";
 	}
+	
 	
 	@PostMapping("schedule/add")
 	public String addSchedule(ScheduleVO scheduleVO) throws Exception {
