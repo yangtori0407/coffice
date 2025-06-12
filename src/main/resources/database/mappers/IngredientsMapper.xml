@@ -37,24 +37,24 @@
   	</sql>
   	
   	<select id="getList" resultType="IngredientsVO" parameterType="Pager">
-  		SELECT * FROM INGEDIENTS
+  		SELECT * FROM INGREDIENTS
   		<include refid="search"></include>
   		ORDER BY INGREDIENTS_ID DESC
   		LIMIT #{startNum}, #{page}
   	</select>
   	
   	 <select id="getTotalCount" resultType="Long" parameterType="Pager">
-  		SELECT COUNT(*) FROM INGEDIENTS
+  		SELECT COUNT(*) FROM INGREDIENTS
   		<include refid="search"></include>
   	</select>
   	
   	<select id="getDetail" resultType="IngredientsVO" parameterType="IngredientsVO">
-  		SELECT * FROM INGEDIENTS
+  		SELECT * FROM INGREDIENTS
   		WHERE INGREDIENTS_ID = #{ingredientsID}
   	</select>
   	
   	<select id="getHistory" resultMap="getIngredients" parameterType="map">
-  		SELECT * FROM INGEDIENTS
+  		SELECT * FROM INGREDIENTS
   		JOIN HISTORY
 		USING (INGREDIENTS_ID)
 		JOIN USERS
@@ -66,7 +66,7 @@
   	</select>
   	
   	<select id="getHistoryTotalCount" resultType="Long" parameterType="map">
-  		SELECT count(HISTORY.HISTORY_ID) FROM INGEDIENTS
+  		SELECT count(HISTORY.HISTORY_ID) FROM INGREDIENTS
   		JOIN HISTORY
 		USING (INGREDIENTS_ID)
 		JOIN USERS
@@ -76,25 +76,30 @@
   	</select>
   	
   	<select id="nameCheck" resultType="IngredientsVO" parameterType="IngredientsVO">
-	    SELECT * FROM INGEDIENTS
+	    SELECT * FROM INGREDIENTS
 	    WHERE INGREDIENTS_NAME = #{ingredientsName}
 	</select>
   	
   	<insert id="add" parameterType="IngredientsVO">
-  		INSERT INTO INGEDIENTS
+  		INSERT INTO INGREDIENTS
 		VALUES (null, #{ingredientsName}, 0, #{ingredientsPrice}, now(), null);
   	</insert>
   	
   	<insert id="addHistory" parameterType="History" useGeneratedKeys="true" keyProperty="historyId">
   		INSERT INTO HISTORY
-		VALUES (null, #{receive}, #{number}, #{userId}, #{ingredientsID}, DATE_ADD(now(), INTERVAL 9 HOUR))
+		VALUES (null, #{receive}, #{number}, #{ingredientsID},#{userId}, DATE_ADD(now(), INTERVAL 9 HOUR))
   	</insert>
   	
   	<update id="plusStock" parameterType="History">
-  		UPDATE INGEDIENTS 
+  		UPDATE INGREDIENTS 
   		SET INGREDIENTS_STOCK= 
   			IF((SELECT RECEIVE FROM HISTORY WHERE HISTORY_ID=#{historyId}) = 1, INGREDIENTS_STOCK +#{number},INGREDIENTS_STOCK-#{number}) 
   		WHERE INGREDIENTS_ID=#{ingredientsID}
+  		AND (
+  			(SELECT RECEIVE FROM HISTORY WHERE HISTORY_ID=#{historyId}) = 1
+  			OR
+  			(SELECT RECEIVE FROM HISTORY WHERE HISTORY_ID = #{historyId}) = 0 AND INGREDIENTS_STOCK >= #{number}
+  		)
   	</update>
   	
   	<resultMap type="IngredientsVO" id="getIngredients">
