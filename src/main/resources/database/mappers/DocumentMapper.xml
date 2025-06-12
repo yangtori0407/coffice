@@ -50,7 +50,7 @@
   	</select>
   
   
-  	<sql id="selectDocuments">  		 
+  	<sql id="selectDocument_Form">  		 
 		    D.*,
 		    F.NAME AS FORM_NAME,		  -- 양식 이름
 		    F.STEP_COUNT AS STEP_COUNT	  -- 결재 단계 수
@@ -58,7 +58,7 @@
   
   	<select id="getListLine" resultType="DocumentVO" parameterType="map">
   		SELECT
-  		<include refid="selectDocuments" />
+  		<include refid="selectDocument_Form" />
   		FROM DOCUMENTS D		
 		
 		JOIN FORMS F 
@@ -70,7 +70,7 @@
   	
   	<select id="getListWaiting" resultType="DocumentVO" parameterType="map">
   		SELECT
-  		<include refid="selectDocuments" />
+  		<include refid="selectDocument_Form" />
   		FROM DOCUMENTS D
 	    
 	    JOIN APPROVAL_LINES A
@@ -85,7 +85,7 @@
   	
   	<select id="getListReference" resultType="DocumentVO" parameterType="map">
   		SELECT
-  		<include refid="selectDocuments" />
+  		<include refid="selectDocument_Form" />
   		FROM DOCUMENTS D
 		
 		JOIN REFERENCE_LINES R 
@@ -99,7 +99,7 @@
   	  	
   	<select id="getListTemporary" resultType="DocumentVO" parameterType="map">
 	    SELECT
-	    <include refid="selectDocuments" />
+	    <include refid="selectDocument_Form" />
 	    FROM DOCUMENTS D
 				
 		JOIN FORMS F 
@@ -109,9 +109,23 @@
 		  AND D.USER_ID = #{userId}
 	</select>
   	
+  	<select id="getUserDetail" parameterType="DocumentVO" resultType="UserVO">
+  		SELECT
+  		 
+  		U.*,  		
+  		D.DEPT_NAME AS DEPT_NAME
+  		
+  		FROM USERS U
+  		
+  		JOIN DEPARTMENT D
+  			ON U.DEPT_ID = D.DEPT_ID 
+  		
+  		WHERE USER_ID = #{writerId}
+  	</select>
+  	
   	<select id="getDetail" parameterType="DocumentVO" resultType="DocumentVO">
   		SELECT
-  		<include refid="selectDocuments" />
+  		<include refid="selectDocument_Form" />
   		FROM DOCUMENTS D
 		
 		JOIN FORMS F 
@@ -178,12 +192,19 @@
   	
   	<insert id="add" parameterType="DocumentVO" useGeneratedKeys="true" keyProperty="documentId">
   		INSERT INTO DOCUMENTS 
+  		
   		(TITLE, CONTENT, CURRENT_STEP, STATUS, FORM_ID, 
+  		
   		WRITER_ID, WRITER_NAME, WRITER_POSITION, WRITER_DEPT, WRITER_TIME, 
+  		
   		MODIFIER_ID, MODIFIER_NAME, MODIFIER_POSITION, MODIFIER_DEPT, MODIFIER_TIME)
+  		
   		VALUES
+  		
   		(#{title}, #{content}, #{currentStep}, #{status}, #{formId}, 
+  		
   		#{writerId}, #{writerName}, #{writerPosition}, #{writerDept}, #{writerTime}, 
+  		
   		#{modifierId}, #{modifierName}, #{modifierPosition}, #{modifierDept}, #{modifierTime})
   	</insert>
   	

@@ -33,7 +33,8 @@ public interface DocumentDAO {
 	public List<DocumentVO> getListWaiting(Map<String, Object> map)throws Exception;
 	
 	public List<DocumentVO> getListTemporary(Map<String, Object> map)throws Exception;
-	
+		
+	public UserVO getUserDetail(DocumentVO documentVO)throws Exception;
 	
 	public DocumentVO getDetail(DocumentVO documentVO)throws Exception;
 	

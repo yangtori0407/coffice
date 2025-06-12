@@ -141,11 +141,15 @@ public class DocumentService {
 		documentVO.setCurrentStep(1L);
 		documentVO.setStatus("진행중");
 		
-		// formId, writerId만 있는 상태 >>> formName, stepCount, writerName, writerPosition, writerDept 넣어야함
-		// formName, stepCount는 작성 시 값을 고정할 필요가 없으므로 넣지 않겠다
-		documentVO.setWriterName(null);
-		documentVO.setWriterPosition(null);
-		documentVO.setWriterDept(null);
+		
+		// formId, writerId만 있는 상태 
+		// writerName, writerPosition, writerDept 넣어야함
+		// formName, stepCount는 문서 작성 시점의 폼 관련 값을 고정할 필요가 없으므로 문서 조회할 때 가져오겠다
+		UserVO user = documentDAO.getUserDetail(documentVO);		
+		documentVO.setWriterName(user.getName());
+		documentVO.setWriterPosition(user.getPosition());
+		documentVO.setWriterDept(user.getDeptName());
+		
 		
 		// 결재선 데이터 넣기
 		List<ApprovalLineVO> aList = new ArrayList<>();
@@ -161,6 +165,7 @@ public class DocumentService {
 			aList.add(aLineVO);
 		}		
 
+		
 		// 참조선 데이터 넣기
 		List<ReferenceLineVO> rList = new ArrayList<>();
 
