@@ -92,8 +92,8 @@
 			role="button" aria-expanded="false"> <ion-icon name="person-outline"></ion-icon> <!-- Counter - Messages -->
 		</a></li>
 		<li class="nav-item"><a
-			class="nav-link no-arrow mx-1" href="#" id="messagesDropdown"
-			role="button" aria-expanded="false"> <ion-icon name="log-out-outline"></ion-icon> <!-- Counter - Messages -->
+			class="nav-link no-arrow mx-1" onclick="confirmLogout()" id="messagesDropdown"
+			role="button" aria-expanded="false"> <ion-icon name="log-out-outline"></ion-icon>
 		</a></li>
 		
 
@@ -113,3 +113,8 @@
 	</ul>
 
 </nav>
+<form id="logoutForm" action="/user/logout" method="post" style="display: none;">
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>
+
+<script src="/js/user/logout.js"></script>

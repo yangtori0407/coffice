@@ -28,28 +28,43 @@
 					  <div class="input-wrap">
 					    <input type="text" id="userId" name="userId" placeholder="사원번호">
 					    <div>
-			               <form:errors path="userId"></form:errors>
+			               <form:errors path="userId" cssClass="error-message"/>
                         </div>   
 					  </div>
 					
 					  <div class="input-wrap">
 					    <input type="password" id="password" name="password" placeholder="비밀번호">
+					    <div>
+			               <form:errors path="password" cssClass="error-message"/>
+                        </div>   
 					  </div>
 					  
 					  <div class="input-wrap">
 					    <input type="password" id="passwordCheck" name="passwordCheck" placeholder="비밀번호 확인">
+					    <div>
+			               <form:errors path="passwordCheck" cssClass="error-message"/>
+                        </div>   
 					  </div>
 					
 					  <div class="input-wrap">
 					    <input type="text" id="name" name="name" placeholder="이름">
+					    <div>
+			               <form:errors path="name" cssClass="error-message"/>
+                        </div>   
 					  </div>
 					
 					  <div class="input-wrap">
 					    <input type="text" id="email" name="email" placeholder="이메일">
+					    <div>
+			               <form:errors path="email" cssClass="error-message"/>
+                        </div>   
 					  </div>
 					
 					  <div class="input-wrap">
 					    <input type="text" id="phone" name="phone" placeholder="전화번호">
+					    <div>
+			               <form:errors path="phone" cssClass="error-message"/>
+                        </div>  
 					  </div>
 					
 					  <div class="input-wrap">
@@ -89,6 +104,7 @@
 					  <div class="input-wrap">
 					    <label for="birthDate">생년월일</label>
 					    <input type="date" id="birthDate" name="birthDate">
+					    <form:errors path="birthDate" cssClass="error-message" />
 					  </div>
 					
 					  <div class="input-wrap">
