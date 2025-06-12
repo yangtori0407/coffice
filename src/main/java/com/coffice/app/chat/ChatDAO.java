@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.coffice.app.chat.vo.ChatAddVO;
+import com.coffice.app.chat.vo.ChatRoomVO;
 import com.coffice.app.users.UserVO;
 
 @Mapper
@@ -20,5 +22,7 @@ public interface ChatDAO {
 	List<String> getRoomUsers(String room) throws Exception;
 
 	List<ChatRoomVO> getList(UserVO userVO) throws Exception;
+
+	String getChatName(ChatRoomVO chatRoomVO) throws Exception;
 	
 }

@@ -1,4 +1,4 @@
-package com.coffice.app.chat;
+package com.coffice.app.chat.vo;
 
 import java.sql.Timestamp;
 

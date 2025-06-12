@@ -34,32 +34,11 @@
 									style="max-height: 630px; overflow-y: auto;">
 									<div class="list-group">
 										<c:forEach items="${list }" var="r">
-											<a href="./room?chatRoomNum=${r.chatRoomNum}"
+											<a href="./chatRoom?chatRoomNum=${r.chatRoomNum}"
 												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
 												<span>🌟${r.chatRoomName}</span></a>
 										</c:forEach>
-										<a href="#"
-												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
-												<span>테스트</span></a>
-												<a href="#"
-												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
-												<span>테스트</span></a>
-												<a href="#"
-												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
-												<span>테스트</span></a>
-												<a href="#"
-												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
-												<span>테스트</span></a>
-												<a href="#"
-												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
-												<span>테스트</span></a>
-												<a href="#"
-												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
-												<span>테스트</span></a>
-												<a href="#"
-												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
-												<span>테스트</span></a>
-												
+										
 										 
 									</div>
 								</div>
