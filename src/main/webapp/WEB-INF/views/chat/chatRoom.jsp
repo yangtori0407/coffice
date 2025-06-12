@@ -27,31 +27,51 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					<div class="row h-100 justify-content-center align-items-center">
+					<div class="row h-100 justify-content-center align-items-center"
+						style="height: 80vh;">
 						<div class="col-5 mt-3">
-							<div class="card shadow mb-4" style="min-height: 80vh;">
+							<div class="card shadow mb-4">
 								<div class="card-header py-3">
 									<h6 id="chatInfo" class="m-0 font-weight-bold text-primary"
 										data-chat-num="${chatRoomVO.chatRoomNum }"
-										data-user-id="${userId }">${chatRoomVO.chatRoomName}</h6>
+										data-user-id="test1">${chatRoomVO.chatRoomName}</h6>
+										<!-- 나중에 userid 시큐리티에서 가지고 오기 -->
 								</div>
 								<div class="card-body d-flex flex-column" style="height: 80vh;">
 									<!-- 채팅 메시지 영역 -->
 									<div id="chat-box" class="d-flex flex-column"
 										style="flex: 1; overflow-y: auto; max-height: 70vh; border: 1px solid #ccc; padding: 10px; border-radius: 1%;">
-											<!-- ${contents.sender eq user.userId } 나중에 시큐리티 -->
+
 										<sec:authentication property="principal" var="user" />
 										<c:forEach items="${contents }" var="con">
-										
-										<div class="d-flex justify-content-end mb-2">
-														<div class="mr-2 text-muted small align-self-end">${con.sendDate}</div>
+											<c:choose>
+												<c:when test="${con.sender eq 'test1' }">
+													<div class="d-flex justify-content-end mb-2">
+														<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
 														<div class="card border-left-secondary"
 															style="max-width: 60%;">
 															<div class="card-body p-2">${con.chatContents }</div>
 														</div>
 													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="d-flex flex-column align-items-start mb-2">
 
-				
+														<div class="mb-1 text-primary font-weight-bold small">${con.sender }</div>
+
+
+														<div class="d-flex">
+															<div class="card border-left-warning"
+																style="max-width: 70%;">
+																<div class="card-body p-2">${con.chatContents }</div>
+															</div>
+															<div class="ml-2 text-muted small align-self-end">${con.formatted}</div>
+														</div>
+													</div>
+												</c:otherwise>
+											</c:choose>
+
+
 
 										</c:forEach>
 

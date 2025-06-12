@@ -1,6 +1,8 @@
 package com.coffice.app.chat.vo;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,5 +18,15 @@ public class ChatContentsVO {
 	private String chatContents;
 	private Timestamp sendDate;
 	private String sender;
+	
+	public String getFormatted() {
+		if(getSendDate() != null) {
+			
+			LocalDateTime localDateTime = this.getSendDate().toLocalDateTime();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");
+			return localDateTime.format(formatter);
+		}
+		return "";
+	}
 	
 }

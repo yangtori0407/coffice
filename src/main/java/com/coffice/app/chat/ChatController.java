@@ -46,6 +46,7 @@ public class ChatController {
 		
 		log.info("chatContentsVO : {}", chatContentsVO);
 		template.convertAndSend("/sub/chatRoom." + chatContentsVO.getChatRoomNum(), chatContentsVO);
+		log.info("/sub/chatRoom." + chatContentsVO.getChatRoomNum());
 	}
 	
 	@GetMapping("main")
