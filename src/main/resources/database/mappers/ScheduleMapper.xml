@@ -26,4 +26,9 @@
   			where SCHEDULE_ID = #{scheduleId}
   	</select>
   	
+  	<select id="getRepeatSchedules" resultType="ScheduleVO">
+  			select REPEAT_ID, DETAIL, START_TIME, END_TIME, REPEAT_START, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE
+  			from SCHEDULE_REPEAT
+  	</select>
+  	
   </mapper>

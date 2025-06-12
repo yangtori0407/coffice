@@ -7,7 +7,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     locale: 'ko',
     customButtons: {
         addButton: {
-            text: '+',
+            text: '휴가 신청',
             click:  function() {
                         $("#exampleModal").modal("show")
                     }
