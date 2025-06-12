@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.coffice.app.chat.vo.ChatAddVO;
+import com.coffice.app.chat.vo.ChatContentsVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
 import com.coffice.app.users.UserVO;
 
@@ -72,9 +73,22 @@ public class ChatService {
 		return null;
 	}
 
-	public String getChatName(ChatRoomVO chatRoomVO) throws Exception{
+	public ChatRoomVO getChatInfo(ChatRoomVO chatRoomVO) throws Exception{
 		// TODO Auto-generated method stub
-		return chatDAO.getChatName(chatRoomVO);
+		return chatDAO.getChatInfo(chatRoomVO);
+	}
+
+	public ChatContentsVO addContents(ChatContentsVO chatContentsVO, UserVO userVO) throws Exception{
+		chatContentsVO.setSender(userVO.getUserId());
+		chatDAO.addContents(chatContentsVO);
+		chatContentsVO = chatDAO.getContentsInfo(chatContentsVO);
+		
+		return chatContentsVO;
+	}
+
+	public List<ChatContentsVO> getChatContentsList(ChatRoomVO chatRoomVO) throws Exception{
+		// TODO Auto-generated method stub
+		return chatDAO.getChatContentsList(chatRoomVO);
 	}
 
 }

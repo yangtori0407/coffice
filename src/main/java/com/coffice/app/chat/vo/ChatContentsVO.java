@@ -12,7 +12,7 @@ import lombok.ToString;
 public class ChatContentsVO {
 	
 	private Long chatNum;
-	private Long chatRoomNum;
+	private String chatRoomNum;
 	private String chatContents;
 	private Timestamp sendDate;
 	private String sender;
