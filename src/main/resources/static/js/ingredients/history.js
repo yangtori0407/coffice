@@ -27,12 +27,16 @@ addReceiveBtn.addEventListener("click",()=>{
             },
             body: params
     })
+    .then(r=>r.json())
     .then(r=>{
-        if(r.ok){
+        console.log(r.message)
+        if(r>0){
             alert("처리되었습니다.")
             location.reload();
+        } else if(r.message=="출고불가") {
+            alert("재고가 부족합니다.")
         } else {
-                alert("다시추가부탁드립니다.")
+            alert("다시 부탁드립니다.")
         }
     })
     .catch(e=>{
@@ -46,9 +50,17 @@ function count(type)  {
   let number2 = number.value;
  
   if(type === 'plus') {
-    number2 = parseInt(number2) + 1;
+    if(number2==""){
+        number2 += 1;
+    }else {
+        number2 = parseInt(number2) + 1;
+    }
   }else if(type === 'minus')  {
-    number2 = parseInt(number2) - 1;
+    if(number2<=0){
+        number2 == 0;
+    } else {
+        number2 = parseInt(number2) - 1;
+    }
   }
   
   number.value = number2;

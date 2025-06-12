@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.page.Pager;
 
@@ -76,9 +78,11 @@ public class IngredientsController {
 	}
 	
 	@PostMapping("addHistory")
-	public String addHistory(History history) throws Exception {
-		
+	@ResponseBody
+	@Transactional
+	public int addHistory(History history) throws Exception {
 		History history2 = new History();
+		log.info("h a:{}",history2);
 		history2.setHistoryId(history.getHistoryId());
 		history2.setReceive(history.isReceive());
 		history2.setNumber(history.getNumber());
@@ -86,8 +90,12 @@ public class IngredientsController {
 		history2.setIngredientsID(history.getIngredientsID());
 
 		ingredientsService.addHistory(history2);
-		ingredientsService.plusStock(history2);
+		int result2 = ingredientsService.plusStock(history2);
 		
-		return "redirect:./list";
+		if(result2==0) {
+			throw new RuntimeException("출고불가");
+		}
+		
+		return result2;
 	}
 }
