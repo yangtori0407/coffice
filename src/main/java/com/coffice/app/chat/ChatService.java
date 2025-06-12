@@ -10,6 +10,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coffice.app.chat.vo.ChatAddVO;
+import com.coffice.app.chat.vo.ChatRoomVO;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +70,11 @@ public class ChatService {
 			if(isSame) return room;
 		}
 		return null;
+	}
+
+	public String getChatName(ChatRoomVO chatRoomVO) throws Exception{
+		// TODO Auto-generated method stub
+		return chatDAO.getChatName(chatRoomVO);
 	}
 
 }

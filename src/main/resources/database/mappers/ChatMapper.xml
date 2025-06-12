@@ -25,6 +25,10 @@
   		ORDER BY P.LAST_READ_AT DESC
   	</select>
   	
+  	<select id="getChatName" parameterType="ChatRoomVO" resultType="java.lang.String">
+  		SELECT CHATROOM_NAME FROM CHAT_ROOM WHERE CHATROOM_NUM = #{chatRoomNum}
+  	</select>
+  	
   	<insert id="addChat" parameterType="ChatRoomVO" useGeneratedKeys="true" keyProperty="chatRoomNum">
   		INSERT INTO CHAT_ROOM VALUES(#{chatRoomNum}, #{chatRoomName}, now(), #{chatRoomCreator})
   	</insert>

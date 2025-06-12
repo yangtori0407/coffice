@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.coffice.app.chat.vo.ChatAddVO;
+import com.coffice.app.chat.vo.ChatRoomVO;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,12 +52,18 @@ public class ChatController {
 	@PostMapping("addChat")
 	@ResponseBody
 	public Map<String, Object> addChat(@RequestBody ChatAddVO chatAddVO, Model model, Authentication authentication) throws Exception{
-		//동일한 사람과 톡방을 만들었을 때 어떻게 중복 처리를 해야하지...?
+		
 		UserVO userVO = new UserVO(); //(UserVO)authentication.getPrincipal();
 		Map<String, Object> result = chatService.addChat(chatAddVO, userVO);
 		
 		return result;
 	}
 	
+	@GetMapping("chatRoom")
+	public void chatRoom(ChatRoomVO chatRoomVO, Model model) throws Exception{
+		String chatName = chatService.getChatName(chatRoomVO);
+		model.addAttribute("chatName", chatName);
+		
+	}
 
 }

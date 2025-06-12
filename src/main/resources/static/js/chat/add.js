@@ -40,7 +40,7 @@ addRoomBtn.addEventListener("click", () => {
         if(r.flag == -1){
             let f =confirm("해당 사람들과 동일한 채팅방이 존재합니다.\n채팅방으로 이동하시겠습니까?")
             if(f){
-                location.href = `./room?chatRoomNum=${r.chatRoomNum}`
+                location.href = `./chatRoom?chatRoomNum=${r.chatRoomNum}`
             }else{
                 location.href = "./main"
             }
@@ -49,7 +49,7 @@ addRoomBtn.addEventListener("click", () => {
         }else{
             let flag = confirm("채팅방으로 가시겠습니까?")
             if(flag){
-                location.href = `./room?chatRoomNum=${r.chatRoomNum}`
+                location.href = `./chatRoom?chatRoomNum=${r.chatRoomNum}`
             }else{
                 location.href = "./main"
             }
