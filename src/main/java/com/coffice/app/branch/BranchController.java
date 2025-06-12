@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -82,5 +83,17 @@ public class BranchController {
 	public BranchVO detail(BranchVO branchVO) throws Exception {
 		return branchService.getDetail(branchVO);
 		
+	}
+	
+	@GetMapping("masterAdd")
+	public String masterAdd() throws Exception {
+		return "branch/masterAdd";
+	}
+	
+	@PostMapping("masterAdd")
+	public String masterAdd(BranchMasterVO branchMasterVO) throws Exception {
+		log.info("bm:{}",branchMasterVO);
+		branchService.masterAdd(branchMasterVO);
+		return "redirect:/";
 	}
 }

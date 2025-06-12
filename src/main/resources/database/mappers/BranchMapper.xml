@@ -53,6 +53,11 @@
 			USING(USER_ID)
 		  WHERE BRANCH_ID =#{branchId}
   	</select>
+  	
+  	<insert id="masterAdd" parameterType="BranchMasterVO">
+  		INSERT INTO BRANCHMASTER
+		VALUES (#{userId.userId},#{contactNumber},#{contactDate},0);
+  	</insert>
   
   <resultMap type="BranchMasterVO" id="getBranchMaster">
 	  	<result column="CONTACT_NUMBER" property="contactNumber"/>
