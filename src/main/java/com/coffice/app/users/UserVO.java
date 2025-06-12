@@ -1,8 +1,10 @@
 package com.coffice.app.users;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +14,7 @@ import com.coffice.app.users.UpdateGroup;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -23,23 +26,27 @@ import lombok.ToString;
 @ToString
 public class UserVO implements UserDetails{
 	
-	@NotBlank(message = "사원번호는 필수사항입니다", groups = RegisterGroup.class)
+	@NotBlank(message = "필수사항입니다", groups = RegisterGroup.class)
 	private String userId;
-	@Size(min=8)
-	@NotBlank(groups = RegisterGroup.class)
+	@Size(min=8, message = "비밀번호 8자리 이상 필수사항입니다", groups= UpdateGroup.class)
+	@NotBlank(message = "필수사항입니다",groups = RegisterGroup.class)
 	private String password;
 	//db 저장 x
+	@NotBlank(message = "필수사항입니다",groups = RegisterGroup.class)
 	private String passwordCheck;
-	@NotBlank(groups = {RegisterGroup.class, UpdateGroup.class})
+	@NotBlank(message = "필수사항입니다",groups = {RegisterGroup.class, UpdateGroup.class})
 	private String name;
 	private String position;
 	private Date hireDate;
 	private Integer hireType;
-	@Past(groups =RegisterGroup.class)
-	private Date birthDate;
-	@NotBlank(groups = {RegisterGroup.class, UpdateGroup.class})
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@NotNull(message="생년월일은 필수입니다", groups = RegisterGroup.class)
+	@Past(message = "생년월일은 오늘 이전 날짜여야 합니다", groups =RegisterGroup.class)
+	private LocalDate birthDate;
+	@NotBlank(message = "필수사항입니다",groups = {RegisterGroup.class, UpdateGroup.class})
 	private String phone;
-	@Email(groups = {RegisterGroup.class, UpdateGroup.class})
+	@Email(message = "이메일 형식이 올바르지 않습니다",groups = {RegisterGroup.class, UpdateGroup.class})
+	@NotBlank(message = "필수사항입니다", groups= RegisterGroup.class)
 	private String email;
 	private Integer status;
 	private Date resignDate;

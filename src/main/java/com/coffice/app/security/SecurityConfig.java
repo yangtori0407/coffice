@@ -46,7 +46,7 @@ public class SecurityConfig {
 				.logoutUrl("/user/logout")
 				.logoutSuccessUrl("/user/afterLogout")
 				.invalidateHttpSession(true)
-				.permitAll()
+				//.permitAll()
 				;
 			})
 			;

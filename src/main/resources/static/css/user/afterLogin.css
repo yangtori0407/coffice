@@ -33,14 +33,32 @@ body{
   align-items: center;
 }
 
-.logout-message{
+.logout-message {
+  margin-top: 260px;
+  text-align: center;
+  font-size: 1.3rem;         /* 글자 크기 크게 */
+  font-weight: 600;          /* 글자 두껍게 */
+  color: #444;               /* 부드러운 진회색 */
+  font-family: 'Noto Sans KR', sans-serif; /* 한글 포함 깔끔한 폰트 */
+  letter-spacing: 0.5px;     /* 글자 간격 */
+  animation: fadeIn 1s ease; /* 부드러운 등장 애니메이션 */
+}
+
+.logout-img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 20px;       /* 조금 더 여유 있는 여백 */
+  opacity: 0.9;              /* 살짝 투명도 */
+}
+
+/* .logout-message{
   margin-top: 260px;
   text-align: center;
 }
 
 .logout-img {
-  width: 100px;      /* 원하는 크기로 줄이기 */
-  height: auto;      /* 비율 유지 */
-  margin-bottom: 10px; /* 이미지 아래 여백 */
-}
+  width: 100px;      원하는 크기로 줄이기
+  height: auto;      비율 유지
+  margin-bottom: 10px; 이미지 아래 여백
+} */
 
