@@ -267,8 +267,8 @@ done_button.addEventListener("click", function(){
 	const approverWrappers = document.getElementsByClassName("approver-wrapper");
 
 	for (const wrapper of approverWrappers) {
-	    const nameDiv = wrapper.querySelector(".approver_name");
 	    const idDiv = wrapper.querySelector(".approver_id");
+	    const nameDiv = wrapper.querySelector(".approver_name");
 	    const positionDiv = wrapper.querySelector(".grade-title");
 
 	    if (nameDiv && idDiv && positionDiv) {
@@ -285,14 +285,15 @@ done_button.addEventListener("click", function(){
 	const referrerWrappers = document.getElementsByClassName("referrer-wrapper");
 
 	for (const wrapper of referrerWrappers) {
+		const idDiv = wrapper.querySelector(".referenceIds");
 	    const nameDiv = wrapper.querySelector(".referenceNames");
-	    const idDiv = wrapper.querySelector(".referenceIds");
+		const positionDiv = wrapper.querySelector(".referencePositions");
 
 	    if (nameDiv && idDiv) {
 	        referrers.push({
 	            userId: idDiv.textContent.trim(),
 	            name: nameDiv.textContent.trim(),
-	            position: "" // 참조자는 직급 정보 없을 경우 빈값 처리
+	            position: positionDiv.textContent.trim()
 	        });
 	    }
 	}

@@ -26,7 +26,9 @@ public class DocumentVO {
 	private String status;
 		
 	// 양식 컬럼
-	private FormVO formVO;	
+	private Long formId;
+	private String formName;
+	private Long stepCount;
 	
 	// 작성자 컬럼
 	private String writerId;

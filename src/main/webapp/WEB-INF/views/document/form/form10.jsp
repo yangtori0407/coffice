@@ -41,10 +41,7 @@
 					
 					<form id="writeForm" action="/document/write" method="post">
 					  <input type="text" name="formId" id="formId" value="${formVO.formId}" > <br><br>
-					  <input type="text" name="userId" id="userId" value="${userVO.userId}" > <br><br>
-					  <input type="text" name="name" id="name" value="${userVO.name}"> <br><br>
-					  <input type="text" name="deptId" id="deptId" value="${userVO.deptId}"> <br><br>
-					  <input type="text" name="position" id="position" value="${userVO.position}"> <br><br>
+					  <input type="text" name="writerId" id="writerId" value="${userVO.userId}" > <br><br>
 					
 					  <input type="text" name="title" id="title" placeholder="제목"> <br><br>
 					  <input type="text" name="content" id="content" placeholder="내용"> <br><br>

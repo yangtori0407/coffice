@@ -30,15 +30,27 @@
 					</div>
 					<br>
 					
-					<div class="boxs">
+					<div class="boxs"> 문서 정보 및 작성자 정보
 						<div>${vo.documentId }</div>
-						<div>${vo.formId }</div>
+						<div>${vo.formName }</div>
 						<div>${vo.title }</div>
 						<div>${vo.content }</div>
-						<div>${vo.userId }</div>
-						<div>${vo.time }</div>
+						<div>${vo.writerId }</div>
+						<div>${vo.writerName }</div>
+						<div>${vo.writerPosition }</div>
+						<div>${vo.writerDept }</div>
+						<div>${vo.writerTime }</div>
 						<div>${vo.currentStep }</div>
 						<div>${vo.status }</div>
+					</div>
+					<br>
+					
+					<div class="boxs"> 수정자 정보
+						<div>${vo.modifierId }</div>
+						<div>${vo.modifierName }</div>
+						<div>${vo.modifierPosition }</div>
+						<div>${vo.modifierDept }</div>
+						<div>${vo.modifierTime }</div>
 					</div>
 					<br>
 					
@@ -77,14 +89,6 @@
 					</div>
 					<br>
 					
-					<div class="boxs">
-						<div>${vo.userName }</div>
-						<div>${vo.userPosition }</div>
-						<div>${vo.formName }</div>
-						<div>${vo.stepCount }</div>					
-					</div>
-					
-
 
 				</div>
 			</div>
