@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 public class EventVO {
 	
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-ddHH:mm")
 	private Date startTime;
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-ddHH:mm")
 	private Date endTime;
 	private String userId;
 	private Date insertTime;
