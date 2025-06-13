@@ -25,7 +25,7 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-	<sec:authentication property="principal" var="user" />
+					<sec:authentication property="principal" var="user" />
 					<!-- contents 내용 -->
 					<div class="row h-100 justify-content-center align-items-center"
 						style="height: 80vh;">
@@ -35,39 +35,77 @@
 									<h6 id="chatInfo" class="m-0 font-weight-bold text-primary"
 										data-chat-num="${chatRoomVO.chatRoomNum }"
 										data-user-id="${user.userId }">${chatRoomVO.chatRoomName}</h6>
-										<!-- 나중에 userid 시큐리티에서 가지고 오기 -->
+									<!-- 나중에 userid 시큐리티에서 가지고 오기 -->
 								</div>
 								<div class="card-body d-flex flex-column" style="height: 80vh;">
 									<!-- 채팅 메시지 영역 -->
 									<div id="chat-box" class="d-flex flex-column"
 										style="flex: 1; overflow-y: auto; max-height: 70vh; border: 1px solid #ccc; padding: 10px; border-radius: 1%;">
 
-										
+
 										<c:forEach items="${contents }" var="con">
 											<c:choose>
 												<c:when test="${con.sender eq user.userId }">
-													<div class="d-flex justify-content-end mb-2">
-														<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
-														<div class="card border-left-secondary"
-															style="max-width: 60%;">
-															<div class="card-body p-2">${con.chatContents }</div>
-														</div>
-													</div>
+													<c:choose>
+														<c:when test="${con.fileNum ne null }">
+															<div class="d-flex justify-content-end mb-2">
+																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
+																<div class="card border-left-secondary"
+																	style="max-width: 60%;">
+																	<div class="card-body p-2">
+																		<a href="./fileDown?fileNum=${con.fileNum}">${con.chatContents }</a>
+																	</div>
+																</div>
+															</div>
+														</c:when>
+														<c:otherwise>
+
+															<div class="d-flex justify-content-end mb-2">
+																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
+																<div class="card border-left-secondary"
+																	style="max-width: 60%;">
+																	<div class="card-body p-2">${con.chatContents }</div>
+																</div>
+															</div>
+														</c:otherwise>
+													</c:choose>
 												</c:when>
 												<c:otherwise>
-													<div class="d-flex flex-column align-items-start mb-2">
+													<c:choose>
+														<c:when test="${con.fileNum ne null }">
+															<div class="d-flex flex-column align-items-start mb-2">
 
-														<div class="mb-1 text-primary font-weight-bold small">${con.name }</div>
+																<div class="mb-1 text-primary font-weight-bold small">${con.name }</div>
 
 
-														<div class="d-flex">
-															<div class="card border-left-warning"
-																style="max-width: 70%;">
-																<div class="card-body p-2">${con.chatContents }</div>
+																<div class="d-flex">
+																	<div class="card border-left-warning"
+																		style="max-width: 70%;">
+																		<div class="card-body p-2">
+																			<a href="./fileDown?fileNum=${con.fileNum}">${con.chatContents }</a>
+																		</div>
+																	</div>
+																	<div class="ml-2 text-muted small align-self-end">${con.formatted}</div>
+																</div>
 															</div>
-															<div class="ml-2 text-muted small align-self-end">${con.formatted}</div>
-														</div>
-													</div>
+														</c:when>
+														<c:otherwise>
+
+															<div class="d-flex flex-column align-items-start mb-2">
+
+																<div class="mb-1 text-primary font-weight-bold small">${con.name }</div>
+
+
+																<div class="d-flex">
+																	<div class="card border-left-warning"
+																		style="max-width: 70%;">
+																		<div class="card-body p-2">${con.chatContents }</div>
+																	</div>
+																	<div class="ml-2 text-muted small align-self-end">${con.formatted}</div>
+																</div>
+															</div>
+														</c:otherwise>
+													</c:choose>
 												</c:otherwise>
 											</c:choose>
 

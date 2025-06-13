@@ -6,7 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.coffice.app.chat.vo.ChatAddVO;
 import com.coffice.app.chat.vo.ChatContentsVO;
+import com.coffice.app.chat.vo.ChatFilesVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
+import com.coffice.app.files.FileVO;
+import com.coffice.app.posts.notice.NoticeFilesVO;
 import com.coffice.app.users.UserVO;
 
 @Mapper
@@ -34,5 +37,13 @@ public interface ChatDAO {
 	String checkDuplication(ChatAddVO chatAddVO) throws Exception;
 
 	String getUserInfo(ChatContentsVO chatContentsVO) throws Exception;
+
+	int addFileContents(ChatContentsVO chatContentsVO) throws Exception;
+
+	int addFile(ChatFilesVO chatFilesVO) throws Exception;
+
+	ChatContentsVO getChatContentsInfo(Long chatNum) throws Exception;
+
+	FileVO getFileDetail(NoticeFilesVO filesVO) throws Exception;
 	
 }
