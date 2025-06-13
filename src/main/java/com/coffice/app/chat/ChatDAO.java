@@ -18,7 +18,6 @@ public interface ChatDAO {
 
 	int addUser(ChatAddVO chatAddVO) throws Exception;
 
-	List<String> getCreatorRoomList(UserVO userVO) throws Exception;
 
 	List<String> getRoomUsers(String room) throws Exception;
 
@@ -31,5 +30,9 @@ public interface ChatDAO {
 	ChatContentsVO getContentsInfo(ChatContentsVO chatContentsVO) throws Exception;
 
 	List<ChatContentsVO> getChatContentsList(ChatRoomVO chatRoomVO) throws Exception;
+
+	String checkDuplication(ChatAddVO chatAddVO) throws Exception;
+
+	String getUserInfo(ChatContentsVO chatContentsVO) throws Exception;
 	
 }
