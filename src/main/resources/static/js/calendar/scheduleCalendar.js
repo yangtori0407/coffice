@@ -41,38 +41,35 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         show()
     },
     eventClick: function(e) {
-        
-        fetch(`http://localhost/events/getSchedule?scheduleId=${e.event.id}`)
-        .then(r=>r.json())
-        .then(r=>{
-            let type = document.querySelector(`input[name="detailResultOptions"][value="${r.scheduleType}"]`);
-            type.checked = true;
-            let detailResult = document.getElementById("detailResult")
-            detailResult.innerText = r.detail
-            let rsDate = document.getElementById("rsDate")
-            rsDate.value = e.event.startStr.slice(0, 10)
-            let rsTime = document.getElementById("rsTime")
-            rsTime.value = e.event.startStr.slice(11, 16)
-            let reDate = document.getElementById("reDate")
-            reDate.value = e.event.endStr.slice(0, 10)
-            let reTime = document.getElementById("reTime")
-            reTime.value = e.event.endStr.slice(11, 16)
-            
-            let dis = document.querySelectorAll("input[disabled], textarea[disabled], select[disabled]");
-            let change = document.getElementById("change")
-            change.addEventListener("click", (e)=>{
-                for(a of dis) {
-                    a.disabled = false;
-                }
-            })
-        
-            $("#detailModal").modal("show")
+        console.log(e.event)
 
-            $('#detailModal').on('hidden.bs.modal', function () {
-                for(a of dis) {
-                    a.disabled = true;
-                }
-            })
+        let type = document.querySelector(`input[name="detailResultOptions"][value="${e.event.extendedProps.type}"]`);
+        type.checked = true;
+        let detailResult = document.getElementById("detailResult")
+        detailResult.innerText = e.event.title
+        let rsDate = document.getElementById("rsDate")
+        rsDate.value = e.event.startStr.slice(0, 10)
+        let rsTime = document.getElementById("rsTime")
+        rsTime.value = e.event.startStr.slice(11, 16)
+        let reDate = document.getElementById("reDate")
+        reDate.value = e.event.endStr.slice(0, 10)
+        let reTime = document.getElementById("reTime")
+        reTime.value = e.event.endStr.slice(11, 16)
+        
+        let dis = document.querySelectorAll("input[disabled], textarea[disabled], select[disabled]");
+        let change = document.getElementById("change")
+        change.addEventListener("click", (e)=>{
+            for(a of dis) {
+                a.disabled = false;
+            }
+        })
+    
+        $("#detailModal").modal("show")
+
+        $('#detailModal').on('hidden.bs.modal', function () {
+            for(a of dis) {
+                a.disabled = true;
+            }
         })
     },
     eventDrop: function(e) {
@@ -102,6 +99,30 @@ fetch("http://localhost/events/getHolidays")
     }
 })
 
+fetch("http://localhost/events/getRepeatSchedules")
+.then(r=>r.json())
+.then(r=>{
+    for(a of r) {
+        console.log(a.startTime)
+        let event = {
+            groupId: a.repeatId,
+            title: a.detail,
+            color: '#378006',
+            extendedProps: {
+                type: a.scheduleType
+            },
+            rrule: {
+                freq: a.repeatType,
+                dtstart: a.startTime,
+                until: a.repeatEnd,
+                count: a.repeatCount
+            },
+            duration: calculateDurationObject(a.startTime, a.endTime)
+        }
+        calendar.addEvent(event);
+    }
+})
+
 fetch("http://localhost/events/getSchedules")
 .then(r=>r.json())
 .then(r=>{
@@ -113,7 +134,10 @@ fetch("http://localhost/events/getSchedules")
                 start: a.startTime,
                 end: a.endTime,
                 color: '#378006',
-                editable: false
+                editable: false,
+                extendedProps: {
+                    type: a.scheduleType
+                }
             }
             calendar.addEvent(event);
         }else {
@@ -122,7 +146,10 @@ fetch("http://localhost/events/getSchedules")
                 title: a.detail,
                 start: a.startTime,
                 end: a.endTime,
-                color: '#378006'
+                color: '#378006',
+                extendedProps: {
+                    type: a.scheduleType
+                }
             }
             calendar.addEvent(event);
         }
@@ -161,11 +188,11 @@ send.addEventListener("click", ()=>{
 
     if(check.checked){
         let rType = document.querySelector('input[name="radioOptions"]:checked').value;
-        let sRepeat = document.getElementById("sRepeat")
         let eRepeat = document.getElementById("eRepeat")
+        let rCount = document.getElementById("repeatCount")
         params.append("repeatType", rType)
-        params.append("repeatStart", sRepeat.value)
-        params.append("repeatEnd", eRepeat.value)
+        params.append("repeatEnd", eRepeat.value+" 23:59:59")
+        params.append("repeatCount", rCount.value)
     }
 
     fetch("schedule/add", {
@@ -182,4 +209,22 @@ send.addEventListener("click", ()=>{
 
 function show() {
     $("#exampleModal").modal("show")
+}
+
+function calculateDurationObject(startStr, endStr) {
+  const start = new Date(startStr);
+  const end = new Date(endStr);
+  const ms = end - start;
+  console.log(ms)
+
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const hours = Math.floor((seconds / 3600) % 24);
+  const days = Math.floor(seconds / (3600 * 24));
+
+  const duration = {};
+  if (days > 0) duration.days = days;
+  if (hours > 0) duration.hours = hours;
+  if (minutes > 0) duration.minutes = minutes;
+  return duration;
 }

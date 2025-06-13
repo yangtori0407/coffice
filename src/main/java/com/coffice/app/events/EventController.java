@@ -43,6 +43,12 @@ public class EventController {
 		return scheduleService.getAll();
 	}
 	
+	@GetMapping("getRepeatSchedules")
+	@ResponseBody
+	public List<ScheduleVO> getRepeatSchedules() throws Exception {
+		return scheduleService.getRepeatSchedules();
+	}
+	
 	@GetMapping("getSchedule")
 	@ResponseBody
 	public ScheduleVO getSchedule(ScheduleVO scheduleVO) throws Exception {
@@ -59,7 +65,12 @@ public class EventController {
 	@PostMapping("schedule/add")
 	public String addSchedule(ScheduleVO scheduleVO) throws Exception {
 		scheduleVO.setUserId("addTest");
-		int result = scheduleService.addSchedule(scheduleVO);
+		int result = 0;
+		if(scheduleVO.getRepeatType() == null) {
+			result = scheduleService.addSchedule(scheduleVO);			
+		}else {
+			result = scheduleService.addRepeatSchedule(scheduleVO);
+		}
 		log.info("{}, {}", result, scheduleVO);
 		return "events/schedule";
 	}
