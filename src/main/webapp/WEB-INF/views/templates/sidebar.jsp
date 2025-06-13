@@ -38,6 +38,7 @@
 					<a class="collapse-item" href="/document/list/online">기안 문서함</a>
 					<a class="collapse-item" href="/document/list/onwaiting">결재 대기 문서함</a>
 					<a class="collapse-item" href="/document/list/onreference">참조 문서함</a>
+					<a class="collapse-item" href="/document/list/handled">승인/반려 문서함</a>
 					<a class="collapse-item" href="/document/list/ontemporary">임시 저장 문서함</a>
 				</div>
 			</div>
