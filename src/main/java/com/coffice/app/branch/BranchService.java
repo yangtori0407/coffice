@@ -17,6 +17,10 @@ public class BranchService {
 		return branchDAO.getList(pager);
 	}
 	
+	public List<BranchVO> getDownList() throws Exception {
+		return branchDAO.getDownList();
+	}
+	
 	public int add(BranchVO branchVO) throws Exception {
 		return branchDAO.add(branchVO);
 	}

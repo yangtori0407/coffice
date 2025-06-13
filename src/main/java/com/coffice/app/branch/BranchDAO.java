@@ -11,6 +11,7 @@ import com.coffice.app.page.Pager;
 public interface BranchDAO {
 
 	public List<BranchVO> getList(Pager pager) throws Exception;
+	public List<BranchVO> getDownList() throws Exception;
 	public int add(BranchVO branchVO) throws Exception;
 	public List<BranchVO> notAddBranchList() throws Exception;
 	public List<BranchMasterVO> notAddBranchMasterList() throws Exception;

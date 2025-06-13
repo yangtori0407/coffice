@@ -1,9 +1,16 @@
 package com.coffice.app.branch;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -95,5 +102,51 @@ public class BranchController {
 		log.info("bm:{}",branchMasterVO);
 		branchService.masterAdd(branchMasterVO);
 		return "redirect:/";
+	}
+	
+	@GetMapping("/api/excel/download")
+	public ResponseEntity<byte[]> downloadExcel() throws IOException  {
+		List<BranchVO> list;
+		try {
+			list = branchService.getDownList();
+			Workbook workbook = new XSSFWorkbook();
+			Sheet sheet = workbook.createSheet("지점");
+			
+			// 헤더 행 생성
+			Row headerRow = sheet.createRow(0);
+			headerRow.createCell(0).setCellValue("지점번호");
+			headerRow.createCell(1).setCellValue("지점이름");
+			headerRow.createCell(2).setCellValue("지점주소");
+			
+			// 데이터 행 생성
+			int rowNum = 1;
+			for (BranchVO branch : list) {
+				Row dataRow = sheet.createRow(rowNum++);
+				dataRow.createCell(0).setCellValue(branch.getBranchId());
+				dataRow.createCell(1).setCellValue(branch.getBranchName());
+				dataRow.createCell(2).setCellValue(branch.getBranchAddress());
+			}
+			
+			// 열 너비 자동 조정
+			sheet.autoSizeColumn(0);
+			sheet.autoSizeColumn(1);
+			sheet.autoSizeColumn(2);
+			
+			// 엑셀 파일을 ByteArrayOutputStream에 작성
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			workbook.write(outputStream);
+			workbook.close();
+			
+			// HTTP 응답 헤더 설정
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Disposition", "attachment; filename=branch.xlsx");
+			headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			
+			return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -25,6 +25,10 @@
   		<include refid="search"></include>
   	</select>
   	
+  	<select id="getDownList" resultType="BranchVO">
+  		SELECT * FROM BRANCH
+  	</select>
+  	
   	<select id="notAddBranchList" resultType="BranchVO">
   		SELECT * FROM BRANCH WHERE USER_ID IS NULL
   	</select>

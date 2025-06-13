@@ -20,7 +20,6 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-
 					<div id="map" style="width:500px;height:400px;min-height: 50vh; margin: 0 auto">
 					<div class="custom_zoomcontrol radius_border">
 						<span id="reloadMap">
@@ -64,12 +63,15 @@
 						</tbody>
 					</table>
 					</div>
-					
+					<div>
+					</div>
 					<div style="width: 600px; margin: 0 auto; text-align: right;">
+						<a class="btn btn-success" href="./api/excel/download">지점정보다운</a>
 					     <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addBranch">
 					       점주지정등록
 					      </a>							
 					</div>
+					
 				</div>
 			</div>
 			<!-- end Content -->
