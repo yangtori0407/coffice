@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.users.UserVO;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class BranchService {
 
 	@Autowired
@@ -43,5 +47,13 @@ public class BranchService {
 	
 	public int masterAdd(BranchMasterVO branchMasterVO) throws Exception {
 		return branchDAO.masterAdd(branchMasterVO);
+	}
+	
+	public List<BranchVO> myBranch(BranchVO branchVO) throws Exception {
+		return branchDAO.myBranch(branchVO);
+	}
+	
+	public Long totalSales(BranchVO branchVO) throws Exception {
+		return branchDAO.totalSales(branchVO);
 	}
 }

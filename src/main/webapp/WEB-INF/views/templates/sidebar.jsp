@@ -84,6 +84,7 @@
 					<a class="collapse-item" href="/branch/map">지점지도</a>
 					<a class="collapse-item" href="/branch/add">지점추가</a>
 					<a class="collapse-item" href="/branch/masterAdd">점주등록</a>
+					<a class="collapse-item" href="/branch/myBranch">my지점</a>
 				</div>
 			</div>
 		</li>

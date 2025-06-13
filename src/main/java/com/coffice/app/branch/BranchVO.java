@@ -1,5 +1,8 @@
 package com.coffice.app.branch;
 
+import java.util.List;
+
+import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
 
 import lombok.Data;
@@ -15,4 +18,5 @@ public class BranchVO {
 	private String userId;
 	private UserVO userVO;
 	private BranchMasterVO branchMasterVO;
+	private List<SalesVO> salesVO;
 }

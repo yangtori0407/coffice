@@ -104,6 +104,21 @@ public class BranchController {
 		return "redirect:/";
 	}
 	
+	@GetMapping("myBranch")
+	public String myBranch(BranchVO branchVO, Model model) throws Exception {
+		UserVO userVO = new UserVO();
+		userVO.setUserId("A12");
+		
+		branchVO.setUserVO(userVO);
+		List<BranchVO> list = branchService.myBranch(branchVO);
+		model.addAttribute("list", list);
+		
+		Long totalSale = branchService.totalSales(branchVO);
+		model.addAttribute("total", totalSale);
+		
+		return "branch/myBranch";
+	}
+	
 	@GetMapping("/api/excel/download")
 	public ResponseEntity<byte[]> downloadExcel() throws IOException  {
 		List<BranchVO> list;
