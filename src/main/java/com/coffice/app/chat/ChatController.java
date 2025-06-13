@@ -37,10 +37,11 @@ public class ChatController {
 		this.template = template;
 	}
 	
+	//메세지 보내는 부분
 	@MessageMapping("/sendMessage")
 	public void sendMessage(ChatContentsVO chatContentsVO, Authentication authentication) throws Exception{
-		UserVO userVO = new UserVO();//(UserVO)authentication.getPrincipal();
-		userVO.setUserId("test1"); //로그인 연결시 없애기
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		//userVO.setUserId("test1"); //로그인 연결시 없애기
 		
 		chatContentsVO = chatService.addContents(chatContentsVO, userVO);
 		
@@ -51,8 +52,9 @@ public class ChatController {
 	
 	@GetMapping("main")
 	public void chatList(Model model, Authentication authentication) throws Exception{
-		UserVO userVO = new UserVO(); //(UserVO)authentication.getPrincipal();
+		UserVO userVO = (UserVO)authentication.getPrincipal();
 		List<ChatRoomVO> list = chatService.getList(userVO);
+		log.info("ChatList size : {}", list.size());
 		model.addAttribute("list", list);
 		
 	}
@@ -67,15 +69,16 @@ public class ChatController {
 	@ResponseBody
 	public Map<String, Object> addChat(@RequestBody ChatAddVO chatAddVO, Model model, Authentication authentication) throws Exception{
 		
-		UserVO userVO = new UserVO(); //(UserVO)authentication.getPrincipal();
+		UserVO userVO =  (UserVO)authentication.getPrincipal();
 		Map<String, Object> result = chatService.addChat(chatAddVO, userVO);
 		
 		return result;
+		
 	}
 	
 	@GetMapping("chatRoom")
 	public void chatRoom(ChatRoomVO chatRoomVO, Model model, Authentication authentication) throws Exception{
-		//String userId = authentication.getName();
+		String userId = authentication.getName();
 		chatRoomVO = chatService.getChatInfo(chatRoomVO);
 		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO);
 		
@@ -84,7 +87,7 @@ public class ChatController {
 //		}
 		log.info("chatRoomVO : {}", chatRoomVO);
 		model.addAttribute("chatRoomVO", chatRoomVO);
-		model.addAttribute("userId", "test1");
+		model.addAttribute("userId", userId);
 		model.addAttribute("contents", contents);
 		
 	}

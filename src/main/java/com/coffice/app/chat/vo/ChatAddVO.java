@@ -14,4 +14,5 @@ public class ChatAddVO {
 	private String chatRoomNum;
 	private String name;
 	private List<String> users;
+	private int size;
 }

@@ -72,7 +72,7 @@ function displayReceiveMessage(msg) {
         // sender 이름
         const senderDiv = document.createElement("div");
         senderDiv.className = "mb-1 text-primary font-weight-bold small";
-        senderDiv.textContent = msg.sender;
+        senderDiv.textContent = msg.name;
         wrapper.appendChild(senderDiv);
 
         // 말풍선 + 시간 묶음
