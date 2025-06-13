@@ -103,23 +103,21 @@ fetch("http://localhost/events/getRepeatSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
-        console.log(a)
+        console.log(a.startTime)
         let event = {
-            id: a.repeatId,
+            groupId: a.repeatId,
             title: a.detail,
-            start: a.startTime,
-            end: a.endTime,
             color: '#378006',
-            editable: false,
             extendedProps: {
                 type: a.scheduleType
             },
             rrule: {
                 freq: a.repeatType,
-                byweekday: ['mo','th'],
-                dtstart: a.repeatStart,
-                until: a.repeatEnd
-            }
+                dtstart: a.startTime,
+                until: a.repeatEnd,
+                count: a.repeatCount
+            },
+            duration: calculateDurationObject(a.startTime, a.endTime)
         }
         calendar.addEvent(event);
     }
@@ -190,11 +188,11 @@ send.addEventListener("click", ()=>{
 
     if(check.checked){
         let rType = document.querySelector('input[name="radioOptions"]:checked').value;
-        let sRepeat = document.getElementById("sRepeat")
         let eRepeat = document.getElementById("eRepeat")
+        let rCount = document.getElementById("repeatCount")
         params.append("repeatType", rType)
-        params.append("repeatStart", sRepeat.value)
-        params.append("repeatEnd", eRepeat.value)
+        params.append("repeatEnd", eRepeat.value+" 23:59:59")
+        params.append("repeatCount", rCount.value)
     }
 
     fetch("schedule/add", {
@@ -211,4 +209,22 @@ send.addEventListener("click", ()=>{
 
 function show() {
     $("#exampleModal").modal("show")
+}
+
+function calculateDurationObject(startStr, endStr) {
+  const start = new Date(startStr);
+  const end = new Date(endStr);
+  const ms = end - start;
+  console.log(ms)
+
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const hours = Math.floor((seconds / 3600) % 24);
+  const days = Math.floor(seconds / (3600 * 24));
+
+  const duration = {};
+  if (days > 0) duration.days = days;
+  if (hours > 0) duration.hours = hours;
+  if (minutes > 0) duration.minutes = minutes;
+  return duration;
 }

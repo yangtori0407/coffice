@@ -16,11 +16,9 @@ public class ScheduleVO extends EventVO{
 	private Long repeatId;
 	private String detail;
 	private String scheduleType;
+	private Integer repeatCount;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date repeatStart;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:SS")
 	private Date repeatEnd;
 	private String repeatType;
 
