@@ -222,7 +222,7 @@ const approvalButton = document.createElement("button");
 approvalButton.textContent = "결재선에 넣기";
 approvalButton.style.marginTop = "10px";
 approvalButton.style.marginRight = "10px";
-approvalButton.style.backgroundColor = "rgb(193, 201, 212)";
+approvalButton.style.backgroundColor = "rgb(74, 116, 180)";
 
 approvalButton.addEventListener("click", function () {
     flag = 1;

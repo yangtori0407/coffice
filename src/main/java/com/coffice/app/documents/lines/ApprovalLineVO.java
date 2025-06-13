@@ -1,6 +1,8 @@
 package com.coffice.app.documents.lines;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+
+import com.coffice.app.signs.SignVO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +21,11 @@ public class ApprovalLineVO {
 	private String userPosition;
 	private Long stepOrder;
 	private String status;
-	private Date handlingTime;
+	private Timestamp handlingTime;
 	private Long signId;
 	private String rejectReason;
-		
+	
+	private SignVO signVO;
 	
 
 }
