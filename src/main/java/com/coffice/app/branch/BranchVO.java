@@ -14,4 +14,5 @@ public class BranchVO {
 	private boolean branchStatus;
 	private String userId;
 	private UserVO userVO;
+	private BranchMasterVO branchMasterVO;
 }

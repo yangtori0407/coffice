@@ -109,6 +109,7 @@ public class BranchController {
 		List<BranchVO> list;
 		try {
 			list = branchService.getDownList();
+			log.info("list:{}",list);
 			Workbook workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet("지점");
 			
@@ -117,20 +118,45 @@ public class BranchController {
 			headerRow.createCell(0).setCellValue("지점번호");
 			headerRow.createCell(1).setCellValue("지점이름");
 			headerRow.createCell(2).setCellValue("지점주소");
+			headerRow.createCell(3).setCellValue("우편번호");
+			headerRow.createCell(4).setCellValue("운영상태");
+			headerRow.createCell(5).setCellValue("점주");
+			headerRow.createCell(6).setCellValue("사업자번호");
+			
 			
 			// 데이터 행 생성
 			int rowNum = 1;
 			for (BranchVO branch : list) {
+				
 				Row dataRow = sheet.createRow(rowNum++);
+				
+				
+				
 				dataRow.createCell(0).setCellValue(branch.getBranchId());
 				dataRow.createCell(1).setCellValue(branch.getBranchName());
 				dataRow.createCell(2).setCellValue(branch.getBranchAddress());
+				dataRow.createCell(3).setCellValue(branch.getBranchPostcode());
+				dataRow.createCell(4).setCellValue(branch.isBranchStatus());
+				if(branch.getUserVO()==null) {
+					dataRow.createCell(5).setCellValue("");
+				}else {
+					dataRow.createCell(5).setCellValue(branch.getUserVO().getName());					
+				}
+				if(branch.getBranchMasterVO()==null) {
+					dataRow.createCell(6).setCellValue("");
+				}else {
+					dataRow.createCell(6).setCellValue(branch.getBranchMasterVO().getContactNumber());					
+				}
 			}
 			
 			// 열 너비 자동 조정
 			sheet.autoSizeColumn(0);
 			sheet.autoSizeColumn(1);
 			sheet.autoSizeColumn(2);
+			sheet.autoSizeColumn(3);
+			sheet.autoSizeColumn(4);
+			sheet.autoSizeColumn(5);
+			sheet.autoSizeColumn(6);
 			
 			// 엑셀 파일을 ByteArrayOutputStream에 작성
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
