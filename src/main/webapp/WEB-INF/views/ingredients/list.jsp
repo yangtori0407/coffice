@@ -10,6 +10,10 @@
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<link href="/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -20,8 +24,12 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
+					<div class="card shadow mb-4">
 					<div class="card-body">
-					<div class="row" style="margin: 0 auto; width: 600px">
+					<div>
+					<div id="dataTable_wrapper"
+									class="dataTables_wrapper dt-bootstrap4">
+					<div class="row">
 						<div class="col-12 mb-4">
 							<div class="d-flex justify-content-between align-items-center">
 								<form method="get" class="form-inline d-flex align-items-center">
@@ -30,7 +38,7 @@
 											<option value="k2">재고</option>
 											<option value="k3">등록날짜</option>
 										  </select>			 
-											<input type="text" name="search" id="keyword" class="form-control form-control-sm mr-2" placeholder="검색어를 입력하세요" style="max-width: 200px;">
+											<input type="search" name="search" id="keyword" class="form-control form-control-sm mr-2" placeholder="검색어를 입력하세요" style="max-width: 200px;">
 											<div class="input-group-append">
 										<button class="btn btn-secondary" type="submit" id="button-addon2">찾기</button>
 									</div>
@@ -40,13 +48,30 @@
 							</div>
 						</div>
 					</div>
-					<table class="table table-striped" style="margin:20px auto;width: 600px;">
+					<table class="table table-bordered dataTable" id="dataTable"
+												width="100%" cellspacing="0" role="grid"
+												aria-describedby="dataTable_info" style="width: 100%;">
 						<thead>
 							<tr>
-								<th>No.</th>
-								<th>이름</th>
-								<th>재고</th>
-								<th>등록날짜</th>
+								<th class="" tabindex="0"
+									aria-controls="dataTable" rowspan="1" colspan="1"
+									aria-sort="ascending"
+									aria-label="Name: activate to sort column descending"
+									style="width: 100.788px;">No.</th>
+								<th class="sorting" tabindex="0" aria-controls="dataTable"
+									rowspan="1" colspan="1"
+									aria-label="Position: activate to sort column ascending"
+									style="width: 150px;">
+									이름
+									</th>
+								<th class="sorting" tabindex="0" aria-controls="dataTable"
+									rowspan="1" colspan="1"
+									aria-label="Age: activate to sort column ascending"
+									style="width: 116.788px;">재고</th>
+								<th class="sorting" tabindex="0" aria-controls="dataTable"
+									rowspan="1" colspan="1"
+									aria-label="Age: activate to sort column ascending"
+									style="width: 116.788px;">등록날짜</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -60,38 +85,41 @@
 							</c:forEach>
 						</tbody>
 					</table>
-					</div>
-					<div class="row">
-					<div class="col-sm-12 col-md-4"></div>
-							<div class="col-sm-12 col-md-4">
-								<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
-									<ul class="pagination">
-										<li class="paginate_button page-item previous disabled" id="dataTable_previous">
-											<a href="./list?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
-												Previous
-											</a>
-										</li>
-										<c:forEach begin="${pager.start }" end="${pager.end }" var="i">
-										<li class="paginate_button page-item ${pager.nowPage == i ? 'active' : '' }">
-											<a href="./list?nowPage=${i }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">
-											${i}
-											</a>
-										</li>
-										</c:forEach>
-										<li class="paginate_button page-item next ${pager.endCheck?'disabled':''}" id="dataTable_next">
-											<a href="./list?nowPage=${pager.end+1}&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">
-											Next
-											</a>
-										</li>
-									</ul>
-								</div>
-							</div>
+						<div class="row">
+							<div class="col-sm-12 col-md-4"></div>
 								<div class="col-sm-12 col-md-4">
-									<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#addReceive">입/출고</a>
+									<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+										<ul class="pagination">
+											<li class="paginate_button page-item previous disabled" id="dataTable_previous">
+												<a href="./list?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+													Previous
+												</a>
+											</li>
+											<c:forEach begin="${pager.start }" end="${pager.end }" var="i">
+											<li class="paginate_button page-item ${pager.nowPage == i ? 'active' : '' }">
+												<a href="./list?nowPage=${i }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">
+												${i}
+												</a>
+											</li>
+											</c:forEach>
+											<li class="paginate_button page-item next ${pager.endCheck?'disabled':''}" id="dataTable_next">
+												<a href="./list?nowPage=${pager.end+1}&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">
+												Next
+												</a>
+											</li>
+										</ul>
+									</div>
 								</div>
+									<div class="col-sm-12 col-md-4" style="text-align:right;">
+										<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#addReceive">입/출고</a>
+									</div>
+							</div>
+							</div>
+							</div>
 						</div>
 					</div>
 				</div>
+			</div>
 			<!-- end Content -->
 			<c:import url="/WEB-INF/views/templates/foot.jsp"></c:import>
 		</div>
@@ -140,5 +168,27 @@
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
-<script src="/js/ingredients/history.js"></script>
+	<script src="/js/ingredients/history.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script>
+	
+	  $('#dataTable').DataTable({
+		paging:false,
+		searching:false,
+		info:false,
+	    ordering: true,
+	    /* columnDefs: [
+	    	{targets:0, orderable:false}
+	    ] */
+	  
+	  });
+	
+</script>
 </html>

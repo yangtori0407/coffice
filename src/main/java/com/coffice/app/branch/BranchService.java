@@ -36,4 +36,8 @@ public class BranchService {
 	public BranchVO getDetail(BranchVO branchVO) throws Exception {
 		return branchDAO.getDetail(branchVO);
 	}
+	
+	public int masterAdd(BranchMasterVO branchMasterVO) throws Exception {
+		return branchDAO.masterAdd(branchMasterVO);
+	}
 }

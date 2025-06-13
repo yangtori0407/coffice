@@ -15,8 +15,20 @@ public class ScheduleService {
 		return scheduleDAO.addSchedule(scheduleVO); 
 	}
 	
-	public List<ScheduleVO> getSchedule() throws Exception {
-		return scheduleDAO.getSchedule();
+	public int addRepeatSchedule(ScheduleVO scheduleVO) throws Exception {
+		return scheduleDAO.addRepeatSchedule(scheduleVO);
+	}
+	
+	public List<ScheduleVO> getAll() throws Exception {
+		return scheduleDAO.getAll();
+	}
+	
+	public ScheduleVO getSchedule(ScheduleVO scheduleVO) throws Exception {
+		return scheduleDAO.getSchedule(scheduleVO);
+	}
+	
+	public List<ScheduleVO> getRepeatSchedules() throws Exception {
+		return scheduleDAO.getRepeatSchedules();
 	}
 
 }

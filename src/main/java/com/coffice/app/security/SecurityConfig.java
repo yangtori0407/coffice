@@ -40,6 +40,15 @@ public class SecurityConfig {
 				.permitAll()
 				;
 			})
+			
+			.logout(logout->{
+				logout
+				.logoutUrl("/user/logout")
+				.logoutSuccessUrl("/user/afterLogout")
+				.invalidateHttpSession(true)
+				//.permitAll()
+				;
+			})
 			;
 		return httpSecurity.build();
 					

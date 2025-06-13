@@ -1,4 +1,4 @@
-package com.coffice.app.chat;
+package com.coffice.app.chat.vo;
 
 import java.util.List;
 
@@ -14,4 +14,5 @@ public class ChatAddVO {
 	private String chatRoomNum;
 	private String name;
 	private List<String> users;
+	private int size;
 }

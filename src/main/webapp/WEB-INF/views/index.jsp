@@ -16,7 +16,11 @@
 <link rel="stylesheet" type="text/css" href="/css/user/index_employee.css">
 
 
-
+<c:if test="${not empty msg}">
+  <script>
+    alert("${msg}");
+  </script>
+</c:if>
 </head>
 <body id="page-top">
 	<div id="wrapper">

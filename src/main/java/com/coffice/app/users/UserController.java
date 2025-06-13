@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -31,7 +32,7 @@ public class UserController {
 	}
 	
 	@PostMapping("register")
-	public String register(@Validated(RegisterGroup.class) UserVO userVO, BindingResult bindingResult, @RequestParam("file") MultipartFile file) throws Exception {
+	public String register(@Validated(RegisterGroup.class) UserVO userVO, BindingResult bindingResult, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
 		//System.out.println("등록요청");
 		//System.out.println("password: " + userVO.getPassword());
 	    //System.out.println("passwordCheck: " + userVO.getPasswordCheck());
@@ -43,7 +44,13 @@ public class UserController {
 		
 		userService.register(userVO, file);
 		//System.out.println("등록완료");
+		redirectAttributes.addFlashAttribute("msg", "등록이 완료되었습니다!");
 		return "redirect:/";
+	}
+	
+	@GetMapping("afterLogout")
+	public void afterLogout() throws Exception {
+		
 	}
 
 }

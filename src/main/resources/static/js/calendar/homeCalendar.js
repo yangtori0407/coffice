@@ -48,7 +48,7 @@ fetch("http://localhost/events/getHolidays")
             title: a.dateName,
             start: a.locdate.toString(),
             allDay: true,
-            color: '#378006'
+            color: '#ee0000'
         }
         schedule.addEvent(event);
         calendar.addEvent(event);

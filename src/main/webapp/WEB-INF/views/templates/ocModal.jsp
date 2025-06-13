@@ -19,7 +19,7 @@
       </div>
       <div class="modal-body" style="height: 400px;">
         <div class="row">
-            <div class="col border-end border-grey" style="height: 360px;" id="depBoard"></div>
+            <div class="col border-right border-grey" style="height: 360px;" id="depBoard"></div>
             <div class="col" style="height: 360px;" id="empBoard"></div>
         </div>
       </div>

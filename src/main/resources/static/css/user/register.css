@@ -51,3 +51,9 @@ form {
 .btn:hover {
   background-position: right;
 }
+
+.error-message {
+  color: blue;
+  font-size: 12px;
+  margin-top: 4px;
+}

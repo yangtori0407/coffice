@@ -44,16 +44,16 @@
 												<div class="col-3">
 													<div
 														class="alert alert-secondary d-flex justify-content-between align-items-center user"
-														role="alert" data-user-id="test1">
+														role="alert" data-user-id="HRtest1">
 														<span>test1</span>
 														<button class="btn btn-sm delPerson" type="button">x</button>
 													</div>
-													<div
+													<!-- <div
 														class="alert alert-secondary d-flex justify-content-between align-items-center user"
 														role="alert" data-user-id="test2">
 														<span>test2</span>
 														<button class="btn btn-sm delPerson" type="button">x</button>
-													</div>
+													</div> -->
 													
 												</div>
 												<div class="col-3">
