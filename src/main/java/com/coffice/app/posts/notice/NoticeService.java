@@ -110,6 +110,11 @@ public class NoticeService {
 		}
 		return result;
 	}
+
+	public List<NoticeVO> getMainList() throws Exception{
+		return noticeDAO.getMainList();
+		
+	}
 	
 //	public List<String> htmlParse(String html){
 //		Document doc = Jsoup.parse(html);

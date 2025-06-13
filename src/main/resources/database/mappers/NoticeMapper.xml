@@ -28,6 +28,13 @@
   		LIMIT #{startNum}, #{page}
   	</select>
   	
+  	<select id="getMainList">
+  		SELECT NOTICE_NUM, NOTICE_TITLE, NOTICE_DATE
+  		FROM NOTICE
+  		ORDER BY NOTICE_DATE DESC
+  		LIMIT 8
+  	</select>
+  	
   	<sql id="search">
   		WHERE
   			<choose>
