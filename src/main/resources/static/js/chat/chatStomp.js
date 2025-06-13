@@ -20,6 +20,8 @@ class Message {
     chatContents = "";
     sendDate = "";
     sender = "";
+    flag = false;
+    fileNum = "";
 }
 
 stompClient.connect({}, function (frame) {
@@ -58,8 +60,6 @@ function sendMessage() {
 
     if (!chatInput.value) return;
 
-
-
     stompClient.send("/pub/sendMessage", {}, JSON.stringify(message));
 }
 
@@ -86,7 +86,16 @@ function displayReceiveMessage(msg) {
 
         const cardBody = document.createElement("div");
         cardBody.className = "card-body p-2";
-        cardBody.textContent = msg.chatContents;
+        // ✨ 여기에만 조건 분기 추가 ✨
+        if (msg.fileNum !== undefined && msg.fileNum !== null) {
+            const link = document.createElement("a");
+            link.href = `./fileDown?fileNum=${msg.fileNum}`;
+            link.textContent = msg.chatContents;
+            cardBody.appendChild(link);
+        } else {
+            cardBody.textContent = msg.chatContents;
+        }
+
         card.appendChild(cardBody);
 
         // 시간
@@ -117,7 +126,15 @@ function displayReceiveMessage(msg) {
 
         const cardBody = document.createElement("div");
         cardBody.className = "card-body p-2";
-        cardBody.textContent = msg.chatContents;
+        // ✨ 여기에만 조건 분기 추가 ✨
+        if (msg.fileNum !== undefined && msg.fileNum !== null) {
+            const link = document.createElement("a");
+            link.href = `./fileDown?fileNum=${msg.fileNum}`;
+            link.textContent = msg.chatContents;
+            cardBody.appendChild(link);
+        } else {
+            cardBody.textContent = msg.chatContents;
+        }
 
         card.appendChild(cardBody);
 
@@ -128,6 +145,8 @@ function displayReceiveMessage(msg) {
         return wrapper;
     }
 }
+
+
 
 
 function formatDate(r) {
@@ -144,3 +163,32 @@ function formatDate(r) {
 
     return `${yy}-${mm}-${dd} ${hh}:${min}`
 }
+
+
+//================================파일 업로드===========================
+
+const fileUpload = document.getElementById("file-upload");
+
+fileUpload.addEventListener("change", (e) => {
+    let file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("chatRoomNum", chatNum);
+    fetch("./fileUpload", {
+        method: "POST",
+        body: formData
+    })
+        .then(r => r.json())
+        .then(r => {
+            let m = new Message();
+            m.chatContents = r.chatContentsVO.chatContents;
+            m.chatRoomNum = r.chatContentsVO.chatRoomNum;
+            m.flag = true;
+            m.sendDate = r.chatContentsVO.sendDate;
+            m.fileNum = r.chatFilesVO.fileNum;
+            m.sender = r.chatContentsVO.sender;
+
+            console.log(m);
+            stompClient.send("/pub/sendMessage", {}, JSON.stringify(m))
+        })
+})
