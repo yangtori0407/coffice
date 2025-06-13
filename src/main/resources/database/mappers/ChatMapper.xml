@@ -38,7 +38,9 @@
   	</select>
   	
   	<select id="getChatInfo" parameterType="ChatRoomVO" resultType="ChatRoomVO">
-  		SELECT CHATROOM_NAME, CHATROOM_NUM FROM CHAT_ROOM WHERE CHATROOM_NUM = #{chatRoomNum}
+  		SELECT CHATROOM_NAME, CHATROOM_NUM 
+  		FROM CHAT_ROOM 
+  		WHERE CHATROOM_NUM = #{chatRoomNum}
   	</select>
   	
   	<select id="getContentsInfo" parameterType="ChatContentsVO" resultType="ChatContentsVO">
@@ -48,15 +50,29 @@
   	</select>
   	
   	<select id="getChatContentsList" parameterType="ChatContentsVO" resultType="ChatContentsVO">
-  		SELECT C.CHAT_NUM, C.CHATROOM_NUM, C.CHAT_CONTENTS, C.SEND_DATE, C.SENDER, U.NAME
+  		SELECT C.CHAT_NUM, C.CHATROOM_NUM, C.CHAT_CONTENTS, C.SEND_DATE, C.SENDER, U.NAME, CF.FILE_NUM
   		FROM CHAT_CONTENTS C
   		JOIN USERS U
   		ON C.SENDER = U.USER_ID
+  		LEFT JOIN CHAT_FILES CF
+  		ON C.CHAT_NUM = CF.CHAT_NUM
   		WHERE CHATROOM_NUM = #{chatRoomNum}
   	</select>
   	
   	<select id="getUserInfo" parameterType="ChatContentsVO" resultType="java.lang.String">
   		SELECT NAME FROM USERS WHERE USER_ID = #{sender}
+  	</select>
+  	
+  	<select id="getChatContentsInfo" parameterType="Long" resultType="ChatContentsVO">
+  		SELECT CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER
+  		FROM CHAT_CONTENTS
+  		WHERE CHAT_NUM = #{chatNum}
+  	</select>
+  	
+  	<select id="getFileDetail" parameterType="FileVO" resultType="FileVO">
+  		SELECT FILE_NUM, CHAT_NUM, ORIGIN_NAME, SAVE_NAME
+  		FROM CHAT_FILES
+  		WHERE FILE_NUM = #{fileNum}
   	</select>
   	
   	
@@ -75,6 +91,16 @@
   	<insert id="addContents" parameterType="ChatContentsVO" useGeneratedKeys="true" keyProperty="chatNum">
   		INSERT INTO CHAT_CONTENTS(CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER)
   		VALUES (NULL, #{chatRoomNum}, #{chatContents}, now(), #{sender})
+  	</insert>
+  	
+  	<insert id="addFileContents" parameterType="ChatContentsVO" useGeneratedKeys="true" keyProperty="chatNum">
+  		INSERT INTO CHAT_CONTENTS(CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER)
+  		VALUES (NULL, #{chatRoomNum}, #{chatContents}, now(), #{sender})
+  	</insert>
+  	
+  	<insert id="addFile" parameterType="ChatFilesVO" useGeneratedKeys="true" keyProperty="fileNum">
+  		INSERT INTO CHAT_FILES(FILE_NUM, CHAT_NUM, ORIGIN_NAME, SAVE_NAME)
+  		VALUES(NULL, #{chatNum}, #{originName}, #{saveName})
   	</insert>
   	
   	

@@ -8,11 +8,17 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.chat.vo.ChatAddVO;
 import com.coffice.app.chat.vo.ChatContentsVO;
+import com.coffice.app.chat.vo.ChatFilesVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
+import com.coffice.app.files.FileManager;
+import com.coffice.app.files.FileVO;
+import com.coffice.app.posts.notice.NoticeFilesVO;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +29,12 @@ public class ChatService {
 
 	@Autowired
 	private ChatDAO chatDAO;
+	
+	@Autowired
+	private FileManager fileManager;
+	
+	@Value("${app.files.base}")
+	private String path;
 
 	public List<ChatRoomVO> getList(UserVO userVO) throws Exception {
 		//userVO.setUserId("test1"); //로그인 되면 이거 지우기!!!!!!!!
@@ -47,23 +59,23 @@ public class ChatService {
 		}
 		
 		
-//		ChatRoomVO chatRoomVO = new ChatRoomVO();
-//		String chatNum = UUID.randomUUID().toString();
-//		chatRoomVO.setChatRoomName(chatAddVO.getName());
-//		chatRoomVO.setChatRoomNum(chatNum);
-//		chatRoomVO.setChatRoomCreator(userVO.getUserId());
-//		int r = chatDAO.addChat(chatRoomVO);
-//		chatAddVO.setChatRoomNum(chatNum);
-//		
-//		r = chatDAO.addUser(chatAddVO);
-//		
-//		if(r > 0) {
-//			result.put("flg", 1);
-//			result.put("chatRoomNum", chatNum);
-//			return result;
-//		}
-//		
-//		result.put("flg", 0);
+		ChatRoomVO chatRoomVO = new ChatRoomVO();
+		String chatNum = UUID.randomUUID().toString();
+		chatRoomVO.setChatRoomName(chatAddVO.getName());
+		chatRoomVO.setChatRoomNum(chatNum);
+		chatRoomVO.setChatRoomCreator(userVO.getUserId());
+		int r = chatDAO.addChat(chatRoomVO);
+		chatAddVO.setChatRoomNum(chatNum);
+		
+		r = chatDAO.addUser(chatAddVO);
+		
+		if(r > 0) {
+			result.put("flg", 1);
+			result.put("chatRoomNum", chatNum);
+			return result;
+		}
+		
+		result.put("flg", 0);
 		
 		return result;
 				
@@ -89,6 +101,41 @@ public class ChatService {
 	public List<ChatContentsVO> getChatContentsList(ChatRoomVO chatRoomVO) throws Exception{
 		// TODO Auto-generated method stub
 		return chatDAO.getChatContentsList(chatRoomVO);
+	}
+
+	public Map<String, Object> fileUpload(MultipartFile file, String chatRoomNum, UserVO userVO) throws Exception{
+		ChatContentsVO chatContentsVO = new ChatContentsVO();
+		chatContentsVO.setSender(userVO.getUserId());
+		chatContentsVO.setChatContents(file.getOriginalFilename());
+		chatContentsVO.setChatRoomNum(chatRoomNum);
+		//파일 넣은 메세지 저장하기
+		int result = chatDAO.addFileContents(chatContentsVO);
+		
+		chatContentsVO = chatDAO.getChatContentsInfo(chatContentsVO.getChatNum());
+		
+		//파일 하드디스크 저장 후 DB에 파일 이름 저장
+		ChatFilesVO chatFilesVO = new ChatFilesVO();
+		String fileName = fileManager.fileSave(path.concat("chatFile"), file);
+		chatFilesVO.setSaveName(fileName);
+		chatFilesVO.setChatNum(chatContentsVO.getChatNum());
+		chatFilesVO.setOriginName(file.getOriginalFilename());
+		
+		chatDAO.addFile(chatFilesVO);
+		
+		
+		//반환
+		Map<String, Object> r = new HashMap<>();
+		
+		r.put("chatContentsVO", chatContentsVO);
+		r.put("chatFilesVO", chatFilesVO);
+		
+		return r;
+	
+	}
+
+	public FileVO fileDown(NoticeFilesVO filesVO) throws Exception{
+		
+		return chatDAO.getFileDetail(filesVO);
 	}
 
 }

@@ -19,6 +19,8 @@ public class ChatContentsVO {
 	private Timestamp sendDate;
 	private String sender;
 	private String name;
+	private boolean flag;
+	private String fileNum;
 	
 	public String getFormatted() {
 		if(getSendDate() != null) {
