@@ -1,5 +1,6 @@
 package com.coffice.app.ingredients;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class IngredientsController {
 		List<IngredientsVO> list = ingredientsService.getList(pager);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
+		
+		model.addAttribute("ingredientsVO", new IngredientsVO());
 		return "ingredients/list";
 	}
 	
@@ -52,29 +55,33 @@ public class IngredientsController {
 		return "ingredients/detail";
 	}
 	
-	@GetMapping("add")
-	public String add(Model model) throws Exception {
-		 model.addAttribute("ingredientsVO", new IngredientsVO());
-		return "ingredients/add";
-	}
 	
 	@PostMapping("add")
-	public String add(@Validated @ModelAttribute IngredientsVO ingredientsVO, BindingResult bindingResult) throws Exception {
+	@ResponseBody
+	public HashMap<String, Object> add(@Validated @ModelAttribute IngredientsVO ingredientsVO, BindingResult bindingResult) throws Exception {
 		  log.info("ingredientsName = {}", ingredientsVO.getIngredientsName());
-		    log.info("bindingResult.hasErrors() = {}", bindingResult.hasErrors());
-		
+		  log.info("bindingResult.hasErrors() = {}", bindingResult.hasErrors());
+		    
+		   HashMap<String, Object> map = new HashMap<>();
+		   
 		if(bindingResult.hasErrors()) {
 			log.info("Validation errors found.");
-		    return "ingredients/add";
+			map.put("status", "fail");
+			map.put("message", "이름이 필요합니다.");
+		    return map;
 		}
 		
 		// 이름 중복 검사
 		if (ingredientsService.nameErrorCheck(ingredientsVO, bindingResult)) {
-			return "ingredients/add";
+			map.put("status", "fail");
+			map.put("message", "이미 존재하는 상품입니다.");
+	        return map;
 		}
 	    
 		ingredientsService.add(ingredientsVO);
-		return "redirect:./list";
+		map.put("status", "success");
+		map.put("message", "추가되었습니다.");
+	    return map;
 	}
 	
 	@PostMapping("addHistory")
