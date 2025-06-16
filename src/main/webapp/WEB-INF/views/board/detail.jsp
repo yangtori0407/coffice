@@ -35,10 +35,9 @@ input{
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					<h2 class="mb-2 text-gray-800">익명게시판</h2>
 					<div>
 
-						<div class="card mb-4 py-2 border-left-info">
+						<div class="card mb-4 py-3 border-left-info">
 							<div class="card-body">${detail.boardTitle }</div>
 						</div>
 
