@@ -39,6 +39,19 @@
 	    <result column="DEPT_NAME" property="deptName"/>
   	</resultMap>
   	
-  
+  	
+  	
+  	<!-- 조직도 -->
+  	<select id="getDeps" resultType="DepartmentVO">
+  			SELECT DEPT_ID, DEPT_NAME
+  			FROM DEPARTMENT
+  	</select>
+  	
+  	<select id="getUsers" parameterType="UserVO" resultType="UserVO">
+  			SELECT USER_ID, NAME, POSITION
+  			FROM USERS
+  			WHERE DEPT_ID = #{deptId}
+  			AND STATUS = 1
+  	</select>
   
   </mapper>

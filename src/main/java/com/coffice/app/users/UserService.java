@@ -1,5 +1,7 @@
 package com.coffice.app.users;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -96,5 +98,15 @@ public class UserService implements UserDetailsService{
 	}
 	
 	
+	
+	
+	// 조직도
+	public List<DepartmentVO> getDeps() throws Exception {
+		return userDAO.getDeps();
+	}
+	
+	public List<UserVO> getUsers(UserVO userVO) throws Exception {
+		return userDAO.getUsers(userVO);
+	}
 
 }
