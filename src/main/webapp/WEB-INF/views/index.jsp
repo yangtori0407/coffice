@@ -33,6 +33,10 @@
 
 					<!-- contents 내용 -->
 
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="diagram">
+						Launch demo modal
+					</button>
+
 					<div class="row" style="height: 1000px;">
 
 						<!-- 파트1 -->
@@ -265,6 +269,7 @@
 			<c:import url="/WEB-INF/views/templates/foot.jsp"></c:import>
 		</div>
 		<!-- End Content Wrapper -->
+		 <c:import url="/WEB-INF/views/templates/ocModal.jsp"></c:import>
 	</div>
 	<!-- End Wrapper -->
 	<input type="hidden" value="${apiKey}" id="apiKey">
