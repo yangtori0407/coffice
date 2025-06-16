@@ -9,6 +9,7 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import com.coffice.app.page.Pager;
 import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -33,6 +35,9 @@ public class DocumentService {
 	
 	@Autowired
 	private FileManager fileManager;
+	
+	@Value("${app.files.base}")
+	private String path;
 	
 	
 	//
@@ -284,12 +289,61 @@ public class DocumentService {
 	 */
 	
 	
+	//
+	public int addSign(HttpSession session, MultipartFile[] attaches) throws Exception {
+		
+		UserVO userVO = (UserVO)session.getAttribute("userVO");
+		SignVO signVO = new SignVO();
+		signVO.setUserId(userVO.getUserId());
+		
+		int result = 0;
+		
+		for (MultipartFile attach : attaches) {
+			if(attach.isEmpty()) {
+				continue;
+			}
+			
+			String fileName = this.fileSave(attach);
+			signVO.setSaveName(fileName);
+			signVO.setOriginName(attach.getOriginalFilename());
+			
+			result += documentDAO.addSign(signVO);
+		}
+		
+		return result;
+	}
+	
+	
+	//
+	public String fileSave(MultipartFile attach) throws Exception{
+		
+		String fileName = fileManager.fileSave(path.concat("signs"), attach);
+		
+		
+		return fileName;
+	}
+	
+	
+	
 	// 직인 목록 조회
 	public List<SignVO> getSignList (HttpSession session) throws Exception {
 		
 		UserVO userVO = (UserVO)session.getAttribute("userVO");
 		
-		return documentDAO.getSignList(userVO);
+		List<SignVO> list = documentDAO.getSignList(userVO);
+		
+		if(list != null) {
+			// 가져온 list에서 originName의 확장자를 제거해준다.
+			for(SignVO vo : list) {
+				int index = vo.getOriginName().lastIndexOf(".");
+				String nameOnly = vo.getOriginName().substring(0, index);
+				
+				vo.setOriginName(nameOnly);
+			}
+			
+		}
+				
+		return list;
 	}
 	
 	

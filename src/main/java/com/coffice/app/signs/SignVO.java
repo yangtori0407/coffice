@@ -11,6 +11,6 @@ import lombok.ToString;
 @ToString
 public class SignVO extends FileVO{
 
-	private String user_id;
+	private String userId;
 
 }
