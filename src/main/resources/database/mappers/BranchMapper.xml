@@ -23,7 +23,22 @@
   	<select id="getList" resultType="BranchVO" parameterType="Pager">
   		SELECT * FROM BRANCH
   		<include refid="search"></include>
+  		LIMIT #{startNum}, #{page}
   	</select>
+  	
+  	<select id="getBranchTotalCount" resultType="Long" parameterType="Pager">
+  		SELECT COUNT(*) FROM BRANCH
+  		<include refid="search"></include>
+  	</select>
+  	
+  	<select id="getDownList" resultMap="getDownBranch">
+ 		SELECT * FROM BRANCH
+  		LEFT OUTER JOIN USERS
+  		USING(USER_ID)
+  		LEFT OUTER JOIN BRANCHMASTER
+  		USING(USER_ID)
+  	</select>
+  	
   	
   	<select id="notAddBranchList" resultType="BranchVO">
   		SELECT * FROM BRANCH WHERE USER_ID IS NULL
@@ -58,6 +73,48 @@
   		INSERT INTO BRANCHMASTER
 		VALUES (#{userId.userId},#{contactNumber},#{contactDate},0);
   	</insert>
+  	
+  	<select id="myBranch" parameterType="BranchVO" resultMap="getMyBranch" >
+  	  	SELECT * FROM BRANCH b
+  		LEFT OUTER JOIN USERS u
+  		on b.USER_ID = u.USER_ID
+  		JOIN SALES s
+  		on b.BRANCH_ID = s.BRANCH_ID
+  		JOIN MENU m
+  		on m.MENU_ID = s.MENU_ID
+  		WHERE u.USER_ID = #{userVO.userId}
+  	</select>
+  	
+  	<select id="totalBranchSales" parameterType="BranchVO" resultType="Long">
+  	SELECT SUM(
+  		CASE 
+  			WHEN SALES_TYPE = 1 THEN +SALES_PROFIT
+  			WHEN SALES_TYPE = 0 THEN -SALES_PROFIT
+	  	END
+	  	)
+	  	FROM SALES
+	  	JOIN BRANCH
+	  	USING (BRANCH_ID)
+	  	WHERE USER_ID = #{userVO.userId}
+  	</select>
+  	
+  	<select id="totalSales" resultType="Long">
+  		SELECT SUM(
+  		CASE 
+  			WHEN SALES_TYPE = 1 THEN +SALES_PROFIT
+  			WHEN SALES_TYPE = 0 THEN -SALES_PROFIT
+	  	END
+	  	)
+	  	FROM SALES
+  	</select>
+  	
+  	<select id="notRegisterBranchMaster" resultMap="getBranchMaster">
+  		SELECT * FROM BRANCHMASTER
+		RIGHT OUTER JOIN USERS
+		USING(USER_ID)
+		WHERE DEPT_ID = 6
+		AND ADD_TYPE IS NULL
+  	</select>
   
   <resultMap type="BranchMasterVO" id="getBranchMaster">
 	  	<result column="CONTACT_NUMBER" property="contactNumber"/>
@@ -105,5 +162,75 @@
 			<result column="ORIGIN_NAME" property="originName"/>
 			<result column="DEPT_ID" property="deptId"/>
 		</association>
+	</resultMap>
+	
+	<resultMap type="BranchVO" id="getDownBranch">
+		<id column="BRANCH_ID" property="branchId"/>
+		<result column="BRANCH_NAME" property="branchName"/>
+		<result column="BRANCH_ADDRESS" property="branchAddress"/>
+		<result column="BRANCH_POSTCODE" property="branchPostcode"/>
+		<result column="BRANCH_STATUS" property="branchStatus"/>
+		<result column="USER_ID" property="userId"/>
+	
+		<association property="userVO" javaType="UserVO">
+			<result column="PASSWORD" property="password"/>
+			<result column="NAME" property="name"/>
+			<result column="POSITION" property="position"/>
+			<result column="HIRE_DATE" property="hireDate"/>
+			<result column="HIRE_TYPE" property="hireType"/>
+			<result column="BIRTH_DATE" property="birthDate"/>
+			<result column="PHONE" property="phone"/>
+			<result column="EMAIL" property="email"/>
+			<result column="STATUS" property="status"/>
+			<result column="RESIGN_DATE" property="resignDate"/>
+			<result column="SAVE_NAME" property="saveName"/>
+			<result column="ORIGIN_NAME" property="originName"/>
+			<result column="DEPT_ID" property="deptId"/>
+		</association>
+		
+		<association property="branchMasterVO" javaType="BranchMasterVO">
+			<result column="CONTACT_NUMBER" property="contactNumber"/>
+		  	<result column="CONTACT_DATE" property="contactDate"/>
+		  	<result column="ADD_TYPE" property="addType"/>
+		</association>
+	</resultMap>
+	
+	<resultMap type="BranchVO" id="getMyBranch">
+		<id column="BRANCH_ID" property="branchId"/>
+		<result column="BRANCH_NAME" property="branchName"/>
+		<result column="BRANCH_ADDRESS" property="branchAddress"/>
+		<result column="BRANCH_POSTCODE" property="branchPostcode"/>
+		<result column="BRANCH_STATUS" property="branchStatus"/>
+		<result column="USER_ID" property="userId"/>
+	
+		<association property="userVO" javaType="UserVO">
+			<result column="PASSWORD" property="password"/>
+			<result column="NAME" property="name"/>
+			<result column="POSITION" property="position"/>
+			<result column="HIRE_DATE" property="hireDate"/>
+			<result column="HIRE_TYPE" property="hireType"/>
+			<result column="BIRTH_DATE" property="birthDate"/>
+			<result column="PHONE" property="phone"/>
+			<result column="EMAIL" property="email"/>
+			<result column="STATUS" property="status"/>
+			<result column="RESIGN_DATE" property="resignDate"/>
+			<result column="SAVE_NAME" property="saveName"/>
+			<result column="ORIGIN_NAME" property="originName"/>
+			<result column="DEPT_ID" property="deptId"/>
+		</association>
+		
+		<collection property="salesVO" javaType="List" ofType="SalesVO">
+			<result column="SALES_ID" property="salesId"/>
+		  	<result column="SALES_TYPE" property="salesType"/>
+		  	<result column="SALES_PROFIT" property="salesProfit"/>
+		  	<result column="SALES_DATE" property="salesDate"/>
+		  	<result column="SALES_QUANTITY" property="salesQuantity"/>
+		  	<result column="MENU_ID" property="menuId"/>
+		  	
+		  	<association property="menuVO" javaType="MenuVO">
+		  		<result column="MENU_NAME" property="menuName"/>
+		  		<result column="MENU_PRICE" property="menuPrice"/>
+		  	</association>
+		</collection>
 	</resultMap>
   </mapper>
