@@ -91,6 +91,14 @@
 	  	USING (BRANCH_ID)
 	  	WHERE USER_ID = #{userVO.userId}
   	</select>
+  	
+  	<select id="notRegisterBranchMaster" resultMap="getBranchMaster">
+  		SELECT * FROM BRANCHMASTER
+		RIGHT OUTER JOIN USERS
+		USING(USER_ID)
+		WHERE DEPT_ID = 6
+		AND ADD_TYPE IS NULL
+  	</select>
   
   <resultMap type="BranchMasterVO" id="getBranchMaster">
 	  	<result column="CONTACT_NUMBER" property="contactNumber"/>

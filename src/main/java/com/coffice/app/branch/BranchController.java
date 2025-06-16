@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,11 +75,11 @@ public class BranchController {
 		return "branch/add";
 	}
 	@PostMapping("updateUser")
-	public String updateUser(BranchVO branchVO) throws Exception {
+	public String updateUser(@AuthenticationPrincipal UserVO userVO,BranchVO branchVO) throws Exception {
 		log.info("b:{}",branchVO);
 		BranchVO branchVO2 = new BranchVO();
 		branchVO2.setBranchId(branchVO.getBranchId());
-		branchVO2.setUserId(branchVO.getUserId());
+		branchVO2.setUserId(userVO.getUserId());
 		
 		branchService.branchUpdate(branchVO2);
 		
@@ -93,7 +94,9 @@ public class BranchController {
 	}
 	
 	@GetMapping("masterAdd")
-	public String masterAdd() throws Exception {
+	public String masterAdd(Model model) throws Exception {
+		List<BranchMasterVO> notRegisterBranchMaster = branchService.notRegisterBranchMaster();
+		model.addAttribute("notRegisterBranchMaster", notRegisterBranchMaster);
 		return "branch/masterAdd";
 	}
 	
@@ -105,9 +108,9 @@ public class BranchController {
 	}
 	
 	@GetMapping("myBranch")
-	public String myBranch(BranchVO branchVO, Model model) throws Exception {
-		UserVO userVO = new UserVO();
-		userVO.setUserId("A12");
+	public String myBranch(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Model model) throws Exception {
+		String userId = userVO.getUserId();
+		userVO.setUserId(userId);
 		
 		branchVO.setUserVO(userVO);
 		List<BranchVO> list = branchService.myBranch(branchVO);

@@ -56,4 +56,8 @@ public class BranchService {
 	public Long totalSales(BranchVO branchVO) throws Exception {
 		return branchDAO.totalSales(branchVO);
 	}
+	
+	public List<BranchMasterVO> notRegisterBranchMaster() throws Exception {
+		return branchDAO.notRegisterBranchMaster();
+	}
 }

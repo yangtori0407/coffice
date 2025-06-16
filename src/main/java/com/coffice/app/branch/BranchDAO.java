@@ -21,4 +21,5 @@ public interface BranchDAO {
 	public int masterAdd(BranchMasterVO branchMasterVO) throws Exception;
 	public List<BranchVO> myBranch(BranchVO branchVO) throws Exception;
 	public Long totalSales(BranchVO branchVO) throws Exception;
+	public List<BranchMasterVO> notRegisterBranchMaster() throws Exception;
 }
