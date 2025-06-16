@@ -84,7 +84,7 @@
 			</div>
 
 		</div></li>
-		</li>
+		
 		
 		<li class="nav-item">
 			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBranch" aria-expanded="true" aria-controls="collapseCalendar">
@@ -101,7 +101,7 @@
 				</div>
 
 			</div>
-		</div></li>
+		</li>
 
 	<li class="nav-item"><a class="nav-link collapsed" href="#"
 		data-toggle="collapse" data-target="#collapseIngredients"
