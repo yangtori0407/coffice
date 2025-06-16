@@ -103,7 +103,7 @@ fetch("http://localhost/events/getRepeatSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
-        console.log(a.startTime)
+        
         let event = {
             groupId: a.repeatId,
             title: a.detail,
@@ -215,7 +215,6 @@ function calculateDurationObject(startStr, endStr) {
   const start = new Date(startStr);
   const end = new Date(endStr);
   const ms = end - start;
-  console.log(ms)
 
   const seconds = Math.floor(ms / 1000);
   const minutes = Math.floor((seconds % 3600) / 60);

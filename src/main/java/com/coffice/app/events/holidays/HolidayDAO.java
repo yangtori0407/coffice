@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface HolidayDAO {
 	
-	public int addHoliday(List<HolidayVO> holidayVOs) throws Exception;
+	public int addHoliday(HolidayVO holidayVO) throws Exception;
 	public List<HolidayVO> getHolidays() throws Exception;
 
 }
