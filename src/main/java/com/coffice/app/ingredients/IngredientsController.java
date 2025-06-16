@@ -1,8 +1,10 @@
 package com.coffice.app.ingredients;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.users.UserVO;
 
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
@@ -37,6 +40,8 @@ public class IngredientsController {
 		List<IngredientsVO> list = ingredientsService.getList(pager);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
+		
+		model.addAttribute("ingredientsVO", new IngredientsVO());
 		return "ingredients/list";
 	}
 	
@@ -52,41 +57,45 @@ public class IngredientsController {
 		return "ingredients/detail";
 	}
 	
-	@GetMapping("add")
-	public String add(Model model) throws Exception {
-		 model.addAttribute("ingredientsVO", new IngredientsVO());
-		return "ingredients/add";
-	}
 	
 	@PostMapping("add")
-	public String add(@Validated @ModelAttribute IngredientsVO ingredientsVO, BindingResult bindingResult) throws Exception {
+	@ResponseBody
+	public HashMap<String, Object> add(@Validated @ModelAttribute IngredientsVO ingredientsVO, BindingResult bindingResult) throws Exception {
 		  log.info("ingredientsName = {}", ingredientsVO.getIngredientsName());
-		    log.info("bindingResult.hasErrors() = {}", bindingResult.hasErrors());
-		
+		  log.info("bindingResult.hasErrors() = {}", bindingResult.hasErrors());
+		    
+		   HashMap<String, Object> map = new HashMap<>();
+		   
 		if(bindingResult.hasErrors()) {
 			log.info("Validation errors found.");
-		    return "ingredients/add";
+			map.put("status", "fail");
+			map.put("message", "이름이 필요합니다.");
+		    return map;
 		}
 		
 		// 이름 중복 검사
 		if (ingredientsService.nameErrorCheck(ingredientsVO, bindingResult)) {
-			return "ingredients/add";
+			map.put("status", "fail");
+			map.put("message", "이미 존재하는 상품입니다.");
+	        return map;
 		}
 	    
 		ingredientsService.add(ingredientsVO);
-		return "redirect:./list";
+		map.put("status", "success");
+		map.put("message", "추가되었습니다.");
+	    return map;
 	}
 	
 	@PostMapping("addHistory")
 	@ResponseBody
 	@Transactional
-	public int addHistory(History history) throws Exception {
+	public int addHistory(@AuthenticationPrincipal UserVO userVO, History history) throws Exception {
 		History history2 = new History();
 		log.info("h a:{}",history2);
 		history2.setHistoryId(history.getHistoryId());
 		history2.setReceive(history.isReceive());
 		history2.setNumber(history.getNumber());
-		history2.setUserId("A12");
+		history2.setUserId(userVO.getUserId());
 		history2.setIngredientsID(history.getIngredientsID());
 
 		ingredientsService.addHistory(history2);

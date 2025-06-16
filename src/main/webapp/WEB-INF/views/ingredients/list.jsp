@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,7 +45,9 @@
 									</div>
 								</form>
 								
-								<a href="./add" class="btn btn-primary">추가하기</a>
+								
+								<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addIngredients">추가하기</a>
+								
 							</div>
 						</div>
 					</div>
@@ -165,9 +168,37 @@
 		    </div>
 		  </div>
 		</div>
+		
+		<div class="modal" id="addIngredients" tabindex="-1">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title">상품추가</h5>
+		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">×</span>
+		            </button>
+		      </div>
+		      <div class="modal-body" aria-label="Default select example">
+					<form:form modelAttribute="ingredientsVO" action="./add" method="post">
+						<div class="input-box">
+							<form:input path="ingredientsName" id="ingredientsName" placeholder="이름"/>						
+				            <form:errors path="ingredientsName" cssClass="error"/>
+						</div>
+
+						<div class="input-box">
+							<form:input path="ingredientsPrice" id="ingredientsPrice" placeholder="가격"/>					
+						</div>
+											
+							<button type="button" class="btn btn-primary" id="addIngredientsBtn">상품등록</button>
+					</form:form>
+			  </div>
+		    </div>
+		  </div>
+		</div>
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
+	<script src="/js/ingredients/list.js">></script>
 	<script src="/js/ingredients/history.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
