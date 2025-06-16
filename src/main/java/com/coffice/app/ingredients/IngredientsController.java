@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.users.UserVO;
 
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
@@ -87,13 +89,13 @@ public class IngredientsController {
 	@PostMapping("addHistory")
 	@ResponseBody
 	@Transactional
-	public int addHistory(History history) throws Exception {
+	public int addHistory(@AuthenticationPrincipal UserVO userVO, History history) throws Exception {
 		History history2 = new History();
 		log.info("h a:{}",history2);
 		history2.setHistoryId(history.getHistoryId());
 		history2.setReceive(history.isReceive());
 		history2.setNumber(history.getNumber());
-		history2.setUserId("A12");
+		history2.setUserId(userVO.getUserId());
 		history2.setIngredientsID(history.getIngredientsID());
 
 		ingredientsService.addHistory(history2);
