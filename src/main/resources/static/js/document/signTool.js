@@ -235,10 +235,30 @@ document.getElementById('btn-send-sign').addEventListener('click', function () {
                     `;
                     signList.appendChild(wrapper);
 
-                    
-                    
 
                 });
+				
+				// signWrapper 클릭 시 seleceted 옵션 날아가서 다시 부여
+				const signWrappers = document.getElementsByClassName("signWrapper");
+
+				for (const wrapper of signWrappers) {
+				    
+				    wrapper.addEventListener("click", function(){
+
+				        // 모든 wrapper의 테두리 초기화
+				        for (const other of signWrappers) {
+				        other.style.border = "none";
+				        other.classList.remove("selectedSign");
+				        }
+				        // 클릭된 것만 강조
+				        wrapper.style.border = "5px solid skyblue";
+				        wrapper.classList.add("selectedSign");
+				                        
+				    });
+				    
+				}
+				
+				
             })
             .catch(error => {
                 console.error('업로드 중 오류:', error);
