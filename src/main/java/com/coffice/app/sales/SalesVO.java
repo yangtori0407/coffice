@@ -8,10 +8,11 @@ import lombok.Data;
 public class SalesVO {
 
 	private Integer salesId;
+	private boolean salesType;
 	private Integer salesProfit;
 	private Date salesDate;
 	private Integer salesQuantity;
-	private Integer salesPrice;
 	private Integer branchId;
 	private Integer menuId;
+	private MenuVO menuVO;
 }

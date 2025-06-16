@@ -1,9 +1,17 @@
 package com.coffice.app.branch;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,15 +47,14 @@ public class BranchController {
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
 		
-		log.info("list:{}",list);
-		log.info("kind:{}",pager.getKind());
-		log.info("search:{}",pager.getSearch());
-		
 		List<BranchVO> notAddBranchList = branchService.notAddBranchList();
 		model.addAttribute("notAddBranchList", notAddBranchList);
 		
 		List<BranchMasterVO> notAddBranchMasterList = branchService.notAddBranchMasterList();
 		model.addAttribute("notAddBranchMasterList", notAddBranchMasterList);
+		
+		Long total = branchService.totalSales();
+		model.addAttribute("total", total);
 		
 		return "branch/map";
 	}
@@ -67,11 +74,11 @@ public class BranchController {
 		return "branch/add";
 	}
 	@PostMapping("updateUser")
-	public String updateUser(BranchVO branchVO) throws Exception {
+	public String updateUser(@AuthenticationPrincipal UserVO userVO,BranchVO branchVO) throws Exception {
 		log.info("b:{}",branchVO);
 		BranchVO branchVO2 = new BranchVO();
 		branchVO2.setBranchId(branchVO.getBranchId());
-		branchVO2.setUserId(branchVO.getUserId());
+		branchVO2.setUserId(userVO.getUserId());
 		
 		branchService.branchUpdate(branchVO2);
 		
@@ -86,7 +93,9 @@ public class BranchController {
 	}
 	
 	@GetMapping("masterAdd")
-	public String masterAdd() throws Exception {
+	public String masterAdd(Model model) throws Exception {
+		List<BranchMasterVO> notRegisterBranchMaster = branchService.notRegisterBranchMaster();
+		model.addAttribute("notRegisterBranchMaster", notRegisterBranchMaster);
 		return "branch/masterAdd";
 	}
 	
@@ -95,5 +104,92 @@ public class BranchController {
 		log.info("bm:{}",branchMasterVO);
 		branchService.masterAdd(branchMasterVO);
 		return "redirect:/";
+	}
+	
+	@GetMapping("myBranch")
+	public String myBranch(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Model model) throws Exception {
+		String userId = userVO.getUserId();
+		userVO.setUserId(userId);
+		
+		branchVO.setUserVO(userVO);
+		List<BranchVO> list = branchService.myBranch(branchVO);
+		model.addAttribute("list", list);
+		
+		Long totalSale = branchService.totalBranchSales(branchVO);
+		model.addAttribute("total", totalSale);
+		
+		return "branch/myBranch";
+	}
+	
+	@GetMapping("/api/excel/download")
+	public ResponseEntity<byte[]> downloadExcel() throws IOException  {
+		List<BranchVO> list;
+		try {
+			list = branchService.getDownList();
+			log.info("list:{}",list);
+			Workbook workbook = new XSSFWorkbook();
+			Sheet sheet = workbook.createSheet("지점");
+			
+			// 헤더 행 생성
+			Row headerRow = sheet.createRow(0);
+			headerRow.createCell(0).setCellValue("지점번호");
+			headerRow.createCell(1).setCellValue("지점이름");
+			headerRow.createCell(2).setCellValue("지점주소");
+			headerRow.createCell(3).setCellValue("우편번호");
+			headerRow.createCell(4).setCellValue("운영상태");
+			headerRow.createCell(5).setCellValue("점주");
+			headerRow.createCell(6).setCellValue("사업자번호");
+			
+			
+			// 데이터 행 생성
+			int rowNum = 1;
+			for (BranchVO branch : list) {
+				
+				Row dataRow = sheet.createRow(rowNum++);
+				
+				
+				
+				dataRow.createCell(0).setCellValue(branch.getBranchId());
+				dataRow.createCell(1).setCellValue(branch.getBranchName());
+				dataRow.createCell(2).setCellValue(branch.getBranchAddress());
+				dataRow.createCell(3).setCellValue(branch.getBranchPostcode());
+				dataRow.createCell(4).setCellValue(branch.isBranchStatus());
+				if(branch.getUserVO()==null) {
+					dataRow.createCell(5).setCellValue("");
+				}else {
+					dataRow.createCell(5).setCellValue(branch.getUserVO().getName());					
+				}
+				if(branch.getBranchMasterVO()==null) {
+					dataRow.createCell(6).setCellValue("");
+				}else {
+					dataRow.createCell(6).setCellValue(branch.getBranchMasterVO().getContactNumber());					
+				}
+			}
+			
+			// 열 너비 자동 조정
+			sheet.autoSizeColumn(0);
+			sheet.autoSizeColumn(1);
+			sheet.autoSizeColumn(2);
+			sheet.autoSizeColumn(3);
+			sheet.autoSizeColumn(4);
+			sheet.autoSizeColumn(5);
+			sheet.autoSizeColumn(6);
+			
+			// 엑셀 파일을 ByteArrayOutputStream에 작성
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			workbook.write(outputStream);
+			workbook.close();
+			
+			// HTTP 응답 헤더 설정
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Disposition", "attachment; filename=branch.xlsx");
+			headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			
+			return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

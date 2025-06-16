@@ -82,19 +82,24 @@
 				<a class="collapse-item" href="/events/schedule">일정 관리</a> <a
 					class="collapse-item" href="/events/vacation">휴가 관리</a>
 			</div>
-		</div></li>
 
-	<li class="nav-item"><a class="nav-link collapsed" href="#"
-		data-toggle="collapse" data-target="#collapseBranch"
-		aria-expanded="true" aria-controls="collapseCalendar"> <ion-icon
-				name="map-outline"></ion-icon> <span>지점</span>
-	</a>
-		<div id="collapseBranch" class="collapse"
-			aria-labelledby="headingCalendar" data-parent="#accordionSidebar">
-			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item" href="/branch/map">지점지도</a> <a
-					class="collapse-item" href="/branch/add">지점추가</a> <a
-					class="collapse-item" href="/branch/masterAdd">점주등록</a>
+		</div></li>
+		</li>
+		
+		<li class="nav-item">
+			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBranch" aria-expanded="true" aria-controls="collapseCalendar">
+			<ion-icon name="map-outline"></ion-icon>
+				<span>지점</span>
+			</a>
+			<div id="collapseBranch" class="collapse" aria-labelledby="headingCalendar"
+				data-parent="#accordionSidebar">
+				<div class="bg-white py-2 collapse-inner rounded">
+					<a class="collapse-item" href="/branch/map">지점지도</a>
+					<a class="collapse-item" href="/branch/add">지점추가</a>
+					<a class="collapse-item" href="/branch/masterAdd">점주등록</a>
+					<a class="collapse-item" href="/branch/myBranch">my지점</a>
+				</div>
+
 			</div>
 		</div></li>
 
