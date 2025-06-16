@@ -23,6 +23,12 @@
   	<select id="getList" resultType="BranchVO" parameterType="Pager">
   		SELECT * FROM BRANCH
   		<include refid="search"></include>
+  		LIMIT #{startNum}, #{page}
+  	</select>
+  	
+  	<select id="getBranchTotalCount" resultType="Long" parameterType="Pager">
+  		SELECT COUNT(*) FROM BRANCH
+  		<include refid="search"></include>
   	</select>
   	
   	<select id="getDownList" resultMap="getDownBranch">
@@ -79,7 +85,7 @@
   		WHERE u.USER_ID = #{userVO.userId}
   	</select>
   	
-  	<select id="totalSales" parameterType="BranchVO" resultType="Long">
+  	<select id="totalBranchSales" parameterType="BranchVO" resultType="Long">
   	SELECT SUM(
   		CASE 
   			WHEN SALES_TYPE = 1 THEN +SALES_PROFIT
@@ -90,6 +96,16 @@
 	  	JOIN BRANCH
 	  	USING (BRANCH_ID)
 	  	WHERE USER_ID = #{userVO.userId}
+  	</select>
+  	
+  	<select id="totalSales" resultType="Long">
+  		SELECT SUM(
+  		CASE 
+  			WHEN SALES_TYPE = 1 THEN +SALES_PROFIT
+  			WHEN SALES_TYPE = 0 THEN -SALES_PROFIT
+	  	END
+	  	)
+	  	FROM SALES
   	</select>
   	
   	<select id="notRegisterBranchMaster" resultMap="getBranchMaster">

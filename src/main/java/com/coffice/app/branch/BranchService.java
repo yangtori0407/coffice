@@ -18,6 +18,8 @@ public class BranchService {
 	private BranchDAO branchDAO;
 	
 	public List<BranchVO> getList(Pager pager) throws Exception {
+		pager.make();
+		pager.makeNum(branchDAO.getBranchTotalCount(pager));
 		return branchDAO.getList(pager);
 	}
 	
@@ -53,11 +55,15 @@ public class BranchService {
 		return branchDAO.myBranch(branchVO);
 	}
 	
-	public Long totalSales(BranchVO branchVO) throws Exception {
-		return branchDAO.totalSales(branchVO);
+	public Long totalBranchSales(BranchVO branchVO) throws Exception {
+		return branchDAO.totalBranchSales(branchVO);
 	}
 	
 	public List<BranchMasterVO> notRegisterBranchMaster() throws Exception {
 		return branchDAO.notRegisterBranchMaster();
+	}
+	
+	public Long totalSales() throws Exception {
+		return branchDAO.totalSales();
 	}
 }

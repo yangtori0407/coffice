@@ -12,6 +12,7 @@ import com.coffice.app.users.UserVO;
 public interface BranchDAO {
 
 	public List<BranchVO> getList(Pager pager) throws Exception;
+	public Long getBranchTotalCount(Pager pager) throws Exception;
 	public List<BranchVO> getDownList() throws Exception;
 	public int add(BranchVO branchVO) throws Exception;
 	public List<BranchVO> notAddBranchList() throws Exception;
@@ -20,6 +21,7 @@ public interface BranchDAO {
 	public BranchVO getDetail(BranchVO branchVO) throws Exception;
 	public int masterAdd(BranchMasterVO branchMasterVO) throws Exception;
 	public List<BranchVO> myBranch(BranchVO branchVO) throws Exception;
-	public Long totalSales(BranchVO branchVO) throws Exception;
+	public Long totalBranchSales(BranchVO branchVO) throws Exception;
+	public Long totalSales() throws Exception;
 	public List<BranchMasterVO> notRegisterBranchMaster() throws Exception;
 }

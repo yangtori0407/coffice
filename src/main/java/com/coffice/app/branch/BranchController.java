@@ -47,15 +47,14 @@ public class BranchController {
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
 		
-		log.info("list:{}",list);
-		log.info("kind:{}",pager.getKind());
-		log.info("search:{}",pager.getSearch());
-		
 		List<BranchVO> notAddBranchList = branchService.notAddBranchList();
 		model.addAttribute("notAddBranchList", notAddBranchList);
 		
 		List<BranchMasterVO> notAddBranchMasterList = branchService.notAddBranchMasterList();
 		model.addAttribute("notAddBranchMasterList", notAddBranchMasterList);
+		
+		Long total = branchService.totalSales();
+		model.addAttribute("total", total);
 		
 		return "branch/map";
 	}
@@ -116,7 +115,7 @@ public class BranchController {
 		List<BranchVO> list = branchService.myBranch(branchVO);
 		model.addAttribute("list", list);
 		
-		Long totalSale = branchService.totalSales(branchVO);
+		Long totalSale = branchService.totalBranchSales(branchVO);
 		model.addAttribute("total", totalSale);
 		
 		return "branch/myBranch";
