@@ -33,10 +33,6 @@
 
 					<!-- contents 내용 -->
 
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="diagram">
-						Launch demo modal
-					</button>
-
 					<div class="row" style="height: 1000px;">
 
 						<!-- 파트1 -->
