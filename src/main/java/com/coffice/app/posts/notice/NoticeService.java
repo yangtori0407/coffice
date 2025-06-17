@@ -69,7 +69,9 @@ public class NoticeService {
 
 		}
 		
-		notificationService.sendNotification();
+		noticeVO= noticeDAO.getDetail(noticeVO);
+		
+		notificationService.sendNotice(noticeVO);
 	}
 
 	public String quillUpload(MultipartFile multipartFile) throws Exception {

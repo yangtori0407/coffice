@@ -33,7 +33,7 @@
 						<div class="card shadow mb-3" style="min-height: 600px;">
 							<div class="card-header py-3">
 								<h6 class="m-0 font-weight-bold text-primary">작성일:
-									${detail.noticeDate }</h6>
+									${detail.formatted }</h6>
 								<h6 class="m-0 font-weight-bold text-primary">조회수:
 									${detail.noticeHit }</h6>
 							</div>
