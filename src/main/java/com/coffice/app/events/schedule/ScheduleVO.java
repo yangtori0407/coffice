@@ -21,5 +21,6 @@ public class ScheduleVO extends EventVO{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:SS")
 	private Date repeatEnd;
 	private String repeatType;
+	private Long duration;
 
 }

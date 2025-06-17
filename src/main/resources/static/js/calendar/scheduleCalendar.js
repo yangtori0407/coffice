@@ -41,7 +41,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         show()
     },
     eventClick: function(e) {
-        console.log(e.event)
+        console.log(e)
 
         let type = document.querySelector(`input[name="detailResultOptions"][value="${e.event.extendedProps.type}"]`);
         type.checked = true;
@@ -191,8 +191,12 @@ send.addEventListener("click", ()=>{
         let eRepeat = document.getElementById("eRepeat")
         let rCount = document.getElementById("repeatCount")
         params.append("repeatType", rType)
-        params.append("repeatEnd", eRepeat.value+" 23:59:59")
-        params.append("repeatCount", rCount.value)
+        // params.append("duration", calculateDurationObject(sDate.value+" "+sTime.value+":00", eDate.value+" "+eTime.value+":00"))
+        if(eRepeat.value != "") {
+            params.append("repeatEnd", eRepeat.value+" 23:59:59")
+        }else if(rCount.value != "") {
+            params.append("repeatCount", rCount.value)
+        }
     }
 
     fetch("schedule/add", {
