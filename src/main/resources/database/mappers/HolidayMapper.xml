@@ -5,12 +5,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.coffice.app.events.holidays.HolidayDAO">
 
-	<insert id="addHoliday" parameterType="java.util.List">
+	<insert id="addHoliday" parameterType="HolidayVO">
 			insert into HOLIDAY (DATE_NAME, IS_HOLIDAY, LOCDATE)
-			values
-				<foreach collection="list" item="vo" open="" separator=", " close="">
-					(#{vo.dateName}, #{vo.isHoliday}, #{vo.locdate})
-				</foreach>
+			values (#{dateName}, #{isHoliday}, #{locdate})
 	</insert>
 	
 	<select id="getHolidays" resultType="HolidayVO">
