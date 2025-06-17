@@ -1,5 +1,7 @@
 package com.coffice.app.users;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,7 +36,7 @@ public class UserService implements UserDetailsService{
 		String pw;
 		try {
 			pw = userDAO.checkPassword(userId);
-			System.out.println("✅ 패스워드: " + pw);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -49,7 +51,8 @@ public class UserService implements UserDetailsService{
 	            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId);
 	        }
 			
-			System.out.println("🟢 DB에서 가져온 비밀번호: " + userVO.getPassword());
+			//System.out.println("🟢 DB에서 가져온 비밀번호: " + userVO.getPassword());
+	        
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -86,6 +89,14 @@ public class UserService implements UserDetailsService{
 	}
 	
 	public int register(UserVO userVO, MultipartFile file) throws Exception {
+		if(userVO.getUserId()==null || userVO.getUserId().isBlank()) {
+			String employeeId;
+			do {
+				employeeId = String.format("co%06d", new Random().nextInt(1_000_000));
+			} while (userDAO.existUserId(employeeId));
+			userVO.setUserId(employeeId);
+		}
+		
 		if(!file.isEmpty()) {
 			String fileName = fileManager.fileSave(path , file);
 			userVO.setSaveName(fileName);
@@ -111,10 +122,13 @@ public class UserService implements UserDetailsService{
 		return userDAO.findByEmail(email);
 	}
 	
-	public int updatePassword(UserVO userVO) throws Exception {
-		String encodedPassword = passwordEncoder.encode(userVO.getPassword());
+	public int updatePassword(String userId, String newPassword) throws Exception {
+		String encodedPassword = passwordEncoder.encode(newPassword);
+		
+		UserVO userVO = new UserVO();
+		userVO.setUserId(userId);
 		userVO.setPassword(encodedPassword);
-		userDAO.updatePassword(userVO);
+		
 		return userDAO.updatePassword(userVO);
 	}
 	

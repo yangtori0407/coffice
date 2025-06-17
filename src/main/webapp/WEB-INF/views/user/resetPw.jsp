@@ -17,6 +17,12 @@
 	  </script>
   </c:if>
   
+  <c:if test="${not empty fail}">
+	  <script>
+	    alert("${fail}");
+	  </script>
+  </c:if>
+  
   <c:if test="${param.error eq 'nouser'}">
        <script>alert('해당 이메일로 등록된 사용자가 없습니다.');</script>
   </c:if>

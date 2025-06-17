@@ -64,6 +64,11 @@
   		SELECT PASSWORD FROM USERS WHERE USER_ID= #{userId}
   	</select>
   	
+  	<select id="existUserId" parameterType="String" resultType="boolean">
+		SELECT COUNT(*) > 0 FROM USERS WHERE USER_ID = #{userId}	
+  	</select>
+  	
+  	
   
   
   </mapper>

@@ -11,9 +11,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="/css/user/login.css">
   
-	  <c:if test="${not empty msg}">
+	  <c:if test="${not empty reset}">
 		  <script>
-		    alert("${msg}");
+		    alert("${reset}");
 		  </script>
 	  </c:if>
 </head>
@@ -49,7 +49,7 @@
                  </div>
                  <div class="div">
                     <h5>Password</h5>
-                    <input type="password" class="input" name="password">
+                    <input type="password" class="input" name="password" >
                  </div>
               </div>
               <a href="/user/forgotPw">Forgot Password?</a>

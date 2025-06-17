@@ -17,5 +17,7 @@ public interface UserDAO {
 	public int updatePassword(UserVO userVO) throws Exception;
 	
 	public String checkPassword(String userId) throws Exception;
+	
+	public boolean existUserId(String userId) throws Exception;
 
 }

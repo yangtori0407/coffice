@@ -49,6 +49,9 @@ public class UserController {
 	    
 		if(userService.userErrorCheck(userVO, bindingResult)) {
 			//System.out.println("유효성 검사 실패");
+			 //bindingResult.getAllErrors().forEach(e -> {
+			        //System.out.println("에러 내용: " + e.getDefaultMessage());
+			    //});
 			return "user/register";
 		}
 		
@@ -69,12 +72,24 @@ public class UserController {
 	}
 	
 	@PostMapping("forgotPw")
-	public String forgotPw(@RequestParam("email") String email, HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
+	public String forgotPw(@RequestParam("userId") String userId,
+							@RequestParam("email") String email, 
+							HttpSession session, 
+							RedirectAttributes redirectAttributes) throws Exception {
 		try {
-			//이메일 확인
-			UserVO userVO = userDAO.findByEmail(email);
-			if (userVO == null) {
-				redirectAttributes.addFlashAttribute("error", "존재하지 않는 이메일입니다.");
+			//사원번호, 이메일 확인
+			UserVO userVO = new UserVO();
+			userVO.setUserId(userId);
+			userVO.setEmail(email);
+			
+			UserVO checkUser = userDAO.detail(userVO);
+			if (checkUser == null || !checkUser.getUserId().equals(userId)) {
+				redirectAttributes.addFlashAttribute("error", "존재하지 않는 사원번호입니다.");
+				return "redirect:/user/forgotPw";
+			}
+			
+			if (!checkUser.getEmail().equals(email)) {
+				redirectAttributes.addFlashAttribute("error", "이메일이 일치하지 않습니다.");
 				return "redirect:/user/forgotPw";
 			}
 
@@ -140,22 +155,13 @@ public class UserController {
 			return "redirect:/user/resetPw?userId="+userId;
 		}
 		
-		String encodedPassword = passwordEncoder.encode(password);
-		
-		UserVO userVO = new UserVO();
-		userVO.setUserId(userId);
-		userVO.setPassword(encodedPassword);
-		
-		int result = userService.updatePassword(userVO);
-		
-		UserVO check = userService.detail(userVO); // detail 메서드 맞는지 확인
-	    System.out.println("🔍 저장 직후 비밀번호: " + check.getPassword());
+		int result = userService.updatePassword(userId, password);
 	    
 		if(result>0) {
-			redirectAttributes.addFlashAttribute("msg", "비밀번호가 번경되었습니다");
+			redirectAttributes.addFlashAttribute("reset", "비밀번호가 번경되었습니다");
 			return "redirect:/user/login";
 		}else {
-			redirectAttributes.addFlashAttribute("msg", "비밀번호 변경 실패");
+			redirectAttributes.addFlashAttribute("fail", "비밀번호 변경 실패");
 			return "redirect:/user/resetPw?userId=" + userId;
 		}
 	}
