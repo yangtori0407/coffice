@@ -24,6 +24,9 @@ public class FileConfig implements WebMvcConfigurer{
 			.addResourceHandler("/coffice/upload/profile/**")
 			.addResourceLocations("file:///D:/coffice/upload/profile/")
 			;
+		
+		registry.addResourceHandler("/signs/**").addResourceLocations("file:///" + path + "signs/");
+		
 	}
 	
 }

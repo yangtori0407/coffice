@@ -51,6 +51,8 @@ public interface DocumentDAO {
 	
 	public SignVO getSignDetail(SignVO signVO) throws Exception;
 	
+	public int addSign(SignVO signVO) throws Exception;
+	
 	
 	// 유저 조회 ----------------------------------
 	public UserVO getUserDetail(UserVO userVO)throws Exception;	

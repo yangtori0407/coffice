@@ -76,7 +76,7 @@
 									<div class="stamp-box" data-user-id="" style="border: 1px dashed gray; width: 120px; height: 120px;">								
 										<!-- 조건 : 결재에 사용한 사인이 있다면 사인 이미지를 출력한다-->
 										<c:if test="${not empty i.signVO}"> 
-											<img src="/images/signs/${i.signVO.originName}" style="width:100%; height:100%; object-fit:contain;" />
+											<img src="/signs/${i.signVO.saveName}" style="width:100%; height:100%; object-fit:contain;" />
 										</c:if>	
 									</div>
 									<div class="approver_name" style="border: 1px solid gray; font-weight: bold;">${i.userName }</div>
@@ -184,9 +184,10 @@
 					                		<c:forEach items="${signList}" var="i">
 						                		<div class="signWrapper">
 													<div class="sign-box" style="border: 1px dashed gray; width: 120px; height: 120px;">
-														<img src="/images/signs/${i.saveName}" style="width: 100%; height: 100%;">
+														<img src="/signs/${i.saveName}" style="width: 100%; height: 100%;">
 													</div>
 													<div class="sign-name" style="border: 1px solid gray; font-weight: bold;">${i.originName}</div>
+													
 													<div class="sign-id" data-sign-id="${i.fileNum}"></div>
 						                		</div>
 					                		</c:forEach>				                		
@@ -222,9 +223,9 @@
 				                    </button> -->
 				                </div>
 				                
-				                <div class="modal-body">
-				                	<div class="imageWrapper" style="height:200px;">
-				                	
+				                <div class="modal-body"> <!-- 직인 컨텐츠 -->
+				                	<div class="imageWrapper" id="id_imageWrapper" style="height:200px;">
+				                		
 				                	</div>
 				                </div>
 				                
@@ -246,72 +247,16 @@
 			
 			<!-- end Content -->
 			<c:import url="/WEB-INF/views/templates/foot.jsp"></c:import>
+			
 		</div>
 		<!-- End Content Wrapper -->
+		
 	</div>
+	
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 	
-	<script>		
-
-		//
-		const signWrappers = document.getElementsByClassName("signWrapper");
-
-		for (const wrapper of signWrappers) {
-			
-			wrapper.addEventListener("click", function(){
-
-				// 모든 wrapper의 테두리 초기화
-				for (const other of signWrappers) {
-				other.style.border = "none";
-				other.classList.remove("selectedSign");
-				}
-				// 클릭된 것만 강조
-				wrapper.style.border = "5px solid skyblue";
-				wrapper.classList.add("selectedSign");
-								
-			});
-			
-		}
-
-		//
-		const useSign = document.getElementById("id_useSign");
-
-		useSign.addEventListener("click", function(){
-
-			// 선택된 사인의 id를 가져와서
-			const selectedSign = document.querySelector(".selectedSign");
-
-			if(selectedSign){
-				const selectedSignid = selectedSign.querySelector(".sign-id");
-				const signId = selectedSignid.dataset.signId;
-
-				// form 채우기				
-				document.getElementById("signId").value = signId;
-				// documentId는 html에서 먼저 넣음
-				// userId는 html에서 먼저 넣음
-
-				// form 전송
-				document.getElementById("proceedForm").submit();
-
-				
-			} else {
-				console.log("직인 또는 사인을 먼저 선택해주세요")
-				return;
-			}
-
-		})
-
-		//btn-bring-img
-		//btn-draw-sign
-		//imageWrapper
-				
-		
-
-		
-		
-
-	</script>
+	<script src="/js/document/signTool.js"></script>
 	
 </body>
 </html>

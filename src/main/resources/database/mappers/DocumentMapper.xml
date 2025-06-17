@@ -161,6 +161,12 @@
   		WHERE DOCUMENT_ID = #{documentId} AND USER_ID = #{userId}
   	</update>
   	
+  	<insert id="addSign" parameterType="SignVO">
+  		INSERT INTO SIGNS (USER_ID, ORIGIN_NAME, SAVE_NAME)
+  		VALUES
+  		(#{userId}, #{originName}, #{saveName})
+  	</insert>
+  	
   	<select id="getSignList" parameterType="UserVO" resultType="SignVO">
   		SELECT *
   		

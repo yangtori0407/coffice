@@ -3,6 +3,7 @@ package com.coffice.app.documents;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -234,6 +235,23 @@ public class DocumentController {
 		
 
 		return "redirect:./list/online";
+	}
+	
+	
+	//
+	@PostMapping(value = "addSign", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	// 새 sign을 insert하고 전체 sign 목록을 다시 select해서 가져온다.
+	public List<SignVO> addSign(HttpSession session, MultipartFile[] attaches) throws Exception {
+		
+		// 사인 추가
+		int result = documentService.addSign(session, attaches);
+		
+		
+		// 사인 리스트 조회
+		List<SignVO> resultList = documentService.getSignList(session);
+
+		return resultList;
 	}
 
 	
