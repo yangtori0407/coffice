@@ -12,6 +12,7 @@ public class FormVO {
 	
 	private Long formId;
 	private String name;
+	private String formFrame;
 	private String grade1;
 	private String grade2;
 	private String grade3;

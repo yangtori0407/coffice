@@ -22,51 +22,51 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				
-				<div class="container-fluid">
+			<div class="container-fluid">
 
-  <div class="whole-content row m-0 p-0" style="width: 1200px;">
-  
-  	<div class="left-content" style="width: 150px; border: 1px solid #000;">
-	  
-	</div>
-  
-	  <div class="middle-content" style="width: 800px; box-sizing: border-box;">  
+			  <div class="whole-content row m-0 p-0" style="width: 1200px;">
+			  	
+			  	<div class="left-content" style="width: 150px; border: 1px solid #000;">
+				  
+				</div>
+			  
+				  <div class="middle-content" style="width: 800px; box-sizing: border-box;">  
+				
+				    <!-- 상단 영역 -->
+				    <div class="row m-0 p-0" style="border: 1px solid #000;">	
+				
+				      <!-- 좌측: 번호 + 양식 이름 -->
+				      <div class="top-left col-4 p-0 m-0" style="border-right: 1px solid #000;">
+				        <div class="d-flex align-items-center justify-content-center" style="border-bottom: 1px solid #000; padding: 8px; height: 20%;">문서 번호</div>
+				        <div class="d-flex align-items-center justify-content-center" style="padding: 8px; height: 80%;">양식 이름</div>
+				      </div>
 	
-	    <!-- 상단 영역 -->
-	    <div class="row m-0 p-0" style="border: 1px solid #000;">	
-	
-	      <!-- 좌측: 번호 + 양식 이름 -->
-	      <div class="top-left col-4 p-0 m-0" style="border-right: 1px solid #000;">
-	        <div class="d-flex align-items-center justify-content-center" style="border-bottom: 1px solid #000; padding: 8px; height: 20%;">문서 번호(${vo.documentId})</div>
-	        <div class="d-flex align-items-center justify-content-center" style="padding: 8px; height: 80%;">${vo.formName }</div>
-	      </div>
-	
-	      <!-- 결재자 정보 -->
-	      <div class="top-right col-8 row g-0 p-0 m-0" style="border-left: 1px solid #000;">
-			  <c:forEach items="${vo.approvalLineVOs}" var="i" varStatus="status">
-			    <div class="col-3 p-1">
-			      <div class="approver-wrapper text-center h-100" style="border: 1px solid #000;">
-			        <div class="grade-title" style="border-bottom: 1px solid #000; font-weight: bold;">${i.userPosition}</div>
-			        <div class="stamp-box" style="border-top: 1px solid #000; border-bottom: 1px solid #000; width: 100%; height: 120px; margin: 0 auto;">
-			          <c:if test="${not empty i.signVO}">
-			            <img src="/signs/${i.signVO.saveName}" style="width: 100%; height: 100%; object-fit: contain;" />
-			          </c:if>
-			        </div>
-			        <div class="approver_name" style="border-bottom: 1px solid #000; font-weight: bold;">${i.userName}</div>
-			        <div class="approver_id" style="font-weight: bold;">${i.userId}</div>
-			      </div>
-			    </div>
-			  </c:forEach>
-			
-			  <!-- 빈 칸 채우기 (결재자가 4명 미만일 경우) -->
-			  <c:forEach begin="${fn:length(vo.approvalLineVOs)+1}" end="4">
-			    <div class="col-3 p-1">
-			      <div class="approver-wrapper h-100" style="border: 1px solid #000;"></div>
-			    </div>
-			  </c:forEach>
-		</div>
+				      <!-- 결재자 정보 -->
+				      <div class="top-right col-8 row g-0 p-0 m-0" style="border-left: 1px solid #000;">
+						  <c:forEach items="${vo.approvalLineVOs}" var="i" varStatus="status">
+						    <div class="col-3 p-1">
+						      <div class="approver-wrapper text-center h-100" style="border: 1px solid #000;">
+						        <div class="grade-title" style="border-bottom: 1px solid #000; font-weight: bold;">${i.userPosition}</div>
+						        <div class="stamp-box" style="border-top: 1px solid #000; border-bottom: 1px solid #000; width: 100%; height: 120px; margin: 0 auto;">
+						          <c:if test="${not empty i.signVO}">
+						            <img src="/signs/${i.signVO.saveName}" style="width: 100%; height: 100%; object-fit: contain;" />
+						          </c:if>
+						        </div>
+						        <div class="approver_name" style="border-bottom: 1px solid #000; font-weight: bold;">${i.userName}</div>
+						        <div class="approver_id" style="font-weight: bold;">${i.userId}</div>
+						      </div>
+						    </div>
+						  </c:forEach>
+						
+						  <!-- 빈 칸 채우기 (결재자가 4명 미만일 경우) -->
+						  <c:forEach begin="${fn:length(vo.approvalLineVOs)+1}" end="4">
+						    <div class="col-3 p-1">
+						      <div class="approver-wrapper h-100" style="border: 1px solid #000;"></div>
+						    </div>
+						  </c:forEach>
+					</div>
 	      
-	    </div>
+	    		</div>
 	
 	    <!-- 부서/기안자/직책/작성일 -->
 	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000;">
@@ -100,60 +100,20 @@
 	    </div>
 	
 	    <!-- 본문 내용, 스크립트 째로 content 프로퍼티에 집어 넣을 영역 -->
-	    <div class="m-0 p-0" style="height: 500px; border: 1px solid #000; border-top: none;">
-	    
-	      <div class="col d-flex justify-content-center align-items-center">
+	    <div class="row m-0 p-0" style="height: 400px; border: 1px solid #000; border-top: none;">
+	      
 	      	<!-- ${vo.content }로 불러온다 -->
 	      	
-	      	<table border="1" cellspacing="0" cellpadding="5" style="border-collapse: collapse; width: 100%; text-align: center;">
-			  <thead>
-			    <tr style="background-color: #d9edf7;">
-			      <th colspan="7" style="padding: 10px; font-weight: bold;">지 출 내 역</th>
-			    </tr>
-			    <tr>
-			      <th>연번</th>
-			      <th>구분</th>
-			      <th>적요</th>
-			      <th>단가</th>
-			      <th>수량</th>
-			      <th>금액</th>
-			      <th>비고</th>
-			    </tr>
-			  </thead>
-			  <tbody>
-			  	<c:forEach begin="1" end="5">
-				    <tr style="height: 35px";>
-				      <c:forEach begin="1" end="7">
-				      	<td></td>
-				      </c:forEach>			      
-				    </tr>			  	
-			  	</c:forEach>
-			    
-			    <!-- 합계 -->
-			    <tr>
-			      <td colspan="5" style="text-align: center; font-weight: bold;">합 계</td>
-			      <td style="font-weight: bold;"></td>
-			      <td></td>
-			    </tr>
-			  </tbody>
-			</table>
 	      	
-			
-		  </div>
-	      
-	      <div class="col d-flex justify-content-center align-items-center">
-	      	<div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 130px;">
-	    		<div>상기 금액을 지출하고자 합니다.</div>
-	    		<div>ㅇㅇ년 ㅇㅇ월 ㅇㅇ일</div>
-	    	</div>
-	      </div>
+	      	
 	      	
 	      
 	    </div>
 	
+		
 	
 	    <!-- 첨부파일 -->
-	    	<div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 30px;">
+	    	<div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 30px;">	
 	    		붙임	
 	    	</div>
 	    	
@@ -178,14 +138,52 @@
 	    <!-- 하단 버튼 -->
 	    <div class="row m-0 p-0 mt-3">
 	      <div class="col d-flex justify-content-end">
-	        <button class="btn btn-outline-secondary me-2 mr-3">결재 회수</button>
+	        <button class="btn btn-outline-secondary me-2 mr-3">작성 완료</button>
 	        <button class="btn btn-outline-secondary mr-3">나가기</button>
 	      </div>
 	    </div>
 	
 	  </div>
 	  
+	  
+	  
+	  
 	  <div class="right-content" style="width: 150px; border: 1px solid #000;">
+	  
+	  		<div>양식</div>
+			<div>${formVO.formId}</div>
+			<br>
+			
+			<div>결재선</div>
+			<c:forEach var="i" items="${approvers}">
+				<div>${i.userId} ${i.name} ${i.position}</div>
+			</c:forEach>
+			<br>
+	
+			<div>참조선</div>
+			<c:forEach var="i" items="${referrers}">
+				<div>${i.userId} ${i.name} ${i.position}</div>
+			</c:forEach>
+			<br>		
+			
+			<form id="writeForm" action="/document/write" method="post">
+			  <input type="text" name="formId" id="formId" value="${formVO.formId}" > <br><br>
+			  <input type="text" name="writerId" id="writerId" value="${userVO.userId}" > <br><br>
+			
+			  <input type="text" name="title" id="title" placeholder="제목"> <br><br>
+			  <input type="text" name="content" id="content" placeholder="내용"> <br><br>
+			  <input type="file" name="attaches" id="attaches"> <br><br>
+			  <!-- 처음 문서 작성 시 보낼 수 있는 결재선 정보 -->
+			  <!-- 
+			  	문서 번호, 사원 번호, 사원 이름, 사원 직급 결재 순번	
+			   -->
+			   
+			   <!-- 처음 문서 작성 시 보낼 수 있는 참조선 정보 -->
+			  <!-- 
+			  	문서 번호, 사원 번호, 사원 이름, 사원 직급
+			   -->
+			   <button type="submit">작성 완료</button>
+			</form>
 	  
 	  </div>
 	  
