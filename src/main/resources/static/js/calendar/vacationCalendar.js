@@ -5,28 +5,19 @@ var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
     themeSystem: 'bootstrap4',
     locale: 'ko',
-    timeZone: 'UTC',
     customButtons: {
         addButton: {
-            text: '+',
+            text: '휴가 신청',
             click:  function() {
                         $("#exampleModal").modal("show")
                     }
-        },
-        근태: {
-            text: 'editable',
-            click: function() {
-                calendar.setOption('editable', flag)
-
-                flag = !flag
-            }
         }
     },
     nowIndicator: true,
     headerToolbar: {
         left:'prevYear,prev,next,nextYear today',
         center: 'title',
-        right: 'addButton dayGridMonth,근태,listWeek'
+        right: 'addButton'
     },
     initialDate: Date.now(),
     navLinks: false, // can click day/week names to navigate views
@@ -34,42 +25,27 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     dayMaxEvents: true, // allow "more" link when too many events
     fixedWeekCount: false,
     dayCellContent: function (arg) {
-    const { date } = arg;
-    return date.getDate();
+        const { date } = arg;
+        return date.getDate();
     },
     dateClick: function(e) {
+        sDate.value = e.dateStr
         show()
     },
     eventClick: function(e) {
         console.log(e.event)
     },
     eventDrop: function(e) {
-    console.log("EventDrop", e.event.start)
+        console.log("EventDrop", e.event.start)
         let t = new Date(e.event.start)
-    console.log(t.getHours())
+        console.log(t.getHours())
     },
     eventResize: function(e) {
-    console.log("EventResize", e.event.start)
-    let t = new Date(e.event.start)
-    console.log(t.getHours())
+        console.log("EventResize", e.event.start)
+        let t = new Date(e.event.start)
+        console.log(t.getHours())
     }
 });
-
-for(let i = 0; i < 3; i++) {
-    let list = JSON.parse(localStorage.getItem("list"+i))
-
-    for(a of list) {
-
-        let event = {
-            title: a.dateName,
-            start: a.locdate.toString(),
-            allDay: true,
-            color: '#ee0000',
-            editable: false
-        }
-        calendar.addEvent(event);
-    }
-}
 
 if(kind.innerText.trim() == '일정') {
     let event = {
@@ -89,6 +65,36 @@ if(kind.innerText.trim() == '휴가') {
     }
     calendar.addEvent(event);
 }
+
+fetch("http://localhost/events/getHolidays")
+.then(r=>r.json())
+.then(r=>{
+    for(a of r) {
+        let event = {
+            title: a.dateName,
+            start: a.locdate.toString(),
+            allDay: true,
+            color: '#ee0000',
+            editable: false
+        }
+        calendar.addEvent(event);
+    }
+})
+
+fetch("http://localhost/events/getSchedule")
+.then(r=>r.json())
+.then(r=>{
+    for(a of r) {
+        let event = {
+            title: a.detail,
+            start: a.startTime,
+            end: a.endTime,
+            color: '#378006'
+        }
+        calendar.addEvent(event);
+    }
+})
+
 
 calendar.render();
 

@@ -11,12 +11,26 @@
   	</insert>
   	
   	<insert id="addRepeatSchedule">
-  			insert into SCHEDULE_REPEAT (DETAIL, START_TIME, END_TIME, REPEAT_START, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE, EDITOR, EDIT_TIME, USER_ID, INSERT_TIME)
-  			values (#{detail}, #{startTime}, #{endTime}, #{repeatStart}, #{repeatEnd}, #{repeatType}, #{scheduleType}, #{editor}, now(), #{userId}, now())
+  			insert into SCHEDULE_REPEAT (DETAIL, START_TIME, END_TIME, REPEAT_COUNT, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE, EDITOR, EDIT_TIME, USER_ID, INSERT_TIME)
+  			values (#{detail}, #{startTime}, #{endTime}, #{repeatCount}, #{repeatEnd}, #{repeatType}, #{scheduleType}, #{editor}, now(), #{userId}, now())
   	</insert>
   	
-  	<select id="getSchedule" resultType="ScheduleVO">
-  			select DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE from SCHEDULE
+  	<select id="getAll" resultType="ScheduleVO">
+  			select SCHEDULE_ID, DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE
+  			from SCHEDULE
+  	</select>
+  	
+  	<select id="getSchedule" resultType="ScheduleVO" parameterType="ScheduleVO">
+  			select DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE
+  			from SCHEDULE
+  			where SCHEDULE_ID = #{scheduleId}
+  			and DELETE_STATUS = 0
+  			and REPEAT_ID IS NULL
+  	</select>
+  	
+  	<select id="getRepeatSchedules" resultType="ScheduleVO">
+  			select REPEAT_ID, DETAIL, START_TIME, END_TIME, REPEAT_COUNT, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE
+  			from SCHEDULE_REPEAT
   	</select>
   	
   </mapper>

@@ -2,7 +2,7 @@
 var scheduleEl = document.getElementById("schedule")
 var schedule = new FullCalendar.Calendar(scheduleEl, {
     themeSystem: 'bootstrap4',
-    contentHeight: 300,
+    contentHeight: 200,
     locale: 'ko',
     nowIndicator: true,
     initialView: 'dayGridDay',
@@ -20,7 +20,7 @@ schedule.render();
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
     themeSystem: 'bootstrap4',
-    contentHeight: 300,
+    contentHeight: 400,
     locale: 'ko',
     nowIndicator: true,
     headerToolbar: {
@@ -48,7 +48,7 @@ fetch("http://localhost/events/getHolidays")
             title: a.dateName,
             start: a.locdate.toString(),
             allDay: true,
-            color: '#378006'
+            color: '#ee0000'
         }
         schedule.addEvent(event);
         calendar.addEvent(event);

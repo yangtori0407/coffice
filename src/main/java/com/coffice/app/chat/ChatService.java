@@ -8,10 +8,17 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.chat.vo.ChatAddVO;
+import com.coffice.app.chat.vo.ChatContentsVO;
+import com.coffice.app.chat.vo.ChatFilesVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
+import com.coffice.app.files.FileManager;
+import com.coffice.app.files.FileVO;
+import com.coffice.app.posts.notice.NoticeFilesVO;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,59 +29,113 @@ public class ChatService {
 
 	@Autowired
 	private ChatDAO chatDAO;
+	
+	@Autowired
+	private FileManager fileManager;
+	
+	@Value("${app.files.base}")
+	private String path;
 
 	public List<ChatRoomVO> getList(UserVO userVO) throws Exception {
-		userVO.setUserId("test1"); //로그인 되면 이거 지우기!!!!!!!!
+		//userVO.setUserId("test1"); //로그인 되면 이거 지우기!!!!!!!!
 		return chatDAO.getList(userVO);
 	}
 
 	public Map<String, Object> addChat(ChatAddVO chatAddVO, UserVO userVO) throws Exception {
 		// -1 => 동일한 사용자와 만든 방이 있다.
 		// 인원수 => 방 만들어짐
+		//log.info("중복 확인 : {}", chatAddVO);
+		
 		Map<String, Object> result = new HashMap<>();
 		
-		userVO.setUserId("test1");
-		List<String> list = chatDAO.getCreatorRoomList(userVO);
-		String num = checkRoom(list, chatAddVO.getUsers());
-		if(num != null) {
+		chatAddVO.getUsers().add(userVO.getUserId());
+		chatAddVO.setSize(chatAddVO.getUsers().size());
+		String duplication = chatDAO.checkDuplication(chatAddVO);
+		//log.info("중복 확인 : {}", duplication);
+		if(duplication != null) {
 			result.put("flag", -1);
-			result.put("chatRoomNum", num);
+			result.put("chatRoomNum", duplication);
 			return result;
 		}
+		
 		
 		ChatRoomVO chatRoomVO = new ChatRoomVO();
 		String chatNum = UUID.randomUUID().toString();
 		chatRoomVO.setChatRoomName(chatAddVO.getName());
 		chatRoomVO.setChatRoomNum(chatNum);
 		chatRoomVO.setChatRoomCreator(userVO.getUserId());
-		//chatRoomVO.setChatRoomCreator(userVO.getUserId());  //나중에 로그인 되면 주석 풀기
 		int r = chatDAO.addChat(chatRoomVO);
 		chatAddVO.setChatRoomNum(chatNum);
-
+		
 		r = chatDAO.addUser(chatAddVO);
-		if (r == chatAddVO.getUsers().size()) { 
-			result.put("flag", r);
+		
+		if(r > 0) {
+			result.put("flg", 1);
 			result.put("chatRoomNum", chatNum);
 			return result;
 		}
-		result.put("flag", 0);
-		result.put("chatRoomNum", "");
+		
+		result.put("flg", 0);
 		
 		return result;
+				
 	}
 	
-	private String checkRoom(List<String> roomList, List<String> selectUsers) throws Exception{
-		for(String room : roomList) {
-			List<String> users = chatDAO.getRoomUsers(room);
-			boolean isSame = users.containsAll(selectUsers);
-			if(isSame) return room;
-		}
-		return null;
+	
+
+	public ChatRoomVO getChatInfo(ChatRoomVO chatRoomVO) throws Exception{
+		// TODO Auto-generated method stub
+		return chatDAO.getChatInfo(chatRoomVO);
 	}
 
-	public String getChatName(ChatRoomVO chatRoomVO) throws Exception{
+	public ChatContentsVO addContents(ChatContentsVO chatContentsVO, UserVO userVO) throws Exception{
+		chatContentsVO.setSender(userVO.getUserId());
+		log.info("sender name : {}", chatContentsVO);
+		chatDAO.addContents(chatContentsVO);
+		chatContentsVO = chatDAO.getContentsInfo(chatContentsVO);
+		chatContentsVO.setName(chatDAO.getUserInfo(chatContentsVO));
+		
+		return chatContentsVO;
+	}
+
+	public List<ChatContentsVO> getChatContentsList(ChatRoomVO chatRoomVO) throws Exception{
 		// TODO Auto-generated method stub
-		return chatDAO.getChatName(chatRoomVO);
+		return chatDAO.getChatContentsList(chatRoomVO);
+	}
+
+	public Map<String, Object> fileUpload(MultipartFile file, String chatRoomNum, UserVO userVO) throws Exception{
+		ChatContentsVO chatContentsVO = new ChatContentsVO();
+		chatContentsVO.setSender(userVO.getUserId());
+		chatContentsVO.setChatContents(file.getOriginalFilename());
+		chatContentsVO.setChatRoomNum(chatRoomNum);
+		//파일 넣은 메세지 저장하기
+		int result = chatDAO.addFileContents(chatContentsVO);
+		
+		chatContentsVO = chatDAO.getChatContentsInfo(chatContentsVO.getChatNum());
+		
+		//파일 하드디스크 저장 후 DB에 파일 이름 저장
+		ChatFilesVO chatFilesVO = new ChatFilesVO();
+		String fileName = fileManager.fileSave(path.concat("chatFile"), file);
+		chatFilesVO.setSaveName(fileName);
+		chatFilesVO.setChatNum(chatContentsVO.getChatNum());
+		chatFilesVO.setOriginName(file.getOriginalFilename());
+		
+		chatDAO.addFile(chatFilesVO);
+		
+		
+		//반환
+		Map<String, Object> r = new HashMap<>();
+		
+		r.put("chatContentsVO", chatContentsVO);
+		r.put("chatFilesVO", chatFilesVO);
+		
+		return r;
+	
+	}
+
+	public FileVO fileDown(NoticeFilesVO filesVO) throws Exception{
+		
+		return chatDAO.getFileDetail(filesVO);
 	}
 
 }

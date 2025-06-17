@@ -1,6 +1,10 @@
 package com.coffice.app.users;
 
+
 import java.util.Random;
+
+import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +36,7 @@ public class UserService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		System.out.println("🧪 userId: " + userId);
+		//System.out.println(" userId: " + userId);
 		String pw;
 		try {
 			pw = userDAO.checkPassword(userId);
@@ -51,7 +55,7 @@ public class UserService implements UserDetailsService{
 	            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId);
 	        }
 			
-			//System.out.println("🟢 DB에서 가져온 비밀번호: " + userVO.getPassword());
+			//System.out.println(" DB에서 가져온 비밀번호: " + userVO.getPassword());
 	        
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -133,5 +137,15 @@ public class UserService implements UserDetailsService{
 	}
 	
 	
+	
+	
+	// 조직도
+	public List<DepartmentVO> getDeps() throws Exception {
+		return userDAO.getDeps();
+	}
+	
+	public List<UserVO> getUsers(UserVO userVO) throws Exception {
+		return userDAO.getUsers(userVO);
+	}
 
 }

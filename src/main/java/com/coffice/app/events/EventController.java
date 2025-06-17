@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -15,6 +16,7 @@ import com.coffice.app.events.holidays.HolidayVO;
 
 import com.coffice.app.events.schedule.ScheduleService;
 import com.coffice.app.events.schedule.ScheduleVO;
+import com.coffice.app.events.vacation.VacationVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,26 +28,50 @@ public class EventController {
 	@Autowired
 	private ScheduleService scheduleService;
 
-  @Autowired
+    @Autowired
 	private HolidayService holidayService;
+
 	
 	@GetMapping("schedule")
-	public String getSchedule(Model model) throws Exception {
+	public String schedule(Model model) throws Exception {
 		model.addAttribute("kind", "일정");
-		model.addAttribute("schedules", scheduleService.getSchedule());
 		return "events/schedule";
 	}
 	
+	@GetMapping("getSchedules")
+	@ResponseBody
+	public List<ScheduleVO> getAll() throws Exception {
+		return scheduleService.getAll();
+	}
+	
+	@GetMapping("getRepeatSchedules")
+	@ResponseBody
+	public List<ScheduleVO> getRepeatSchedules() throws Exception {
+		return scheduleService.getRepeatSchedules();
+	}
+	
+	@GetMapping("getSchedule")
+	@ResponseBody
+	public ScheduleVO getSchedule(ScheduleVO scheduleVO) throws Exception {
+		return scheduleService.getSchedule(scheduleVO);
+	}
+	
 	@GetMapping("vacation")
-	public String getVacation(Model model) {
+	public String vacation(Model model) {
 		model.addAttribute("kind", "휴가");
 		return "events/schedule";
 	}
 	
+	
 	@PostMapping("schedule/add")
 	public String addSchedule(ScheduleVO scheduleVO) throws Exception {
 		scheduleVO.setUserId("addTest");
-		int result = scheduleService.addSchedule(scheduleVO);
+		int result = 0;
+		if(scheduleVO.getRepeatType() == null) {
+			result = scheduleService.addSchedule(scheduleVO);			
+		}else {
+			result = scheduleService.addRepeatSchedule(scheduleVO);
+		}
 		log.info("{}, {}", result, scheduleVO);
 		return "events/schedule";
 	}

@@ -8,8 +8,20 @@
   		SELECT CHATROOM_NUM, CHATROOM_NAME, CHATROOM_DATE FROM CHAT_ROOM
   	</select>
   	
-  	<select id="getCreatorRoomList" parameterType="UserVO" resultType="java.lang.String">
-  		SELECT CHATROOM_NUM FROM CHAT_ROOM WHERE CHATROOM_CREATOR = #{userId}
+  	<select id="checkDuplication" parameterType="ChatAddVO" resultType="java.lang.String">
+  		SELECT CP.CHATROOM_NUM
+  		FROM CHAT_PERSON CP
+  		WHERE CP.USER_ID IN
+  		<foreach collection="users" item="u" open="(" separator="," close=")">
+  			#{u}
+  		</foreach>
+  		GROUP BY CP.CHATROOM_NUM
+  		HAVING COUNT(DISTINCT CP.USER_ID) = #{size}
+  		AND COUNT(DISTINCT CP.USER_ID) = (
+  				SELECT COUNT(DISTINCT CP2.USER_ID)
+  				FROM CHAT_PERSON CP2
+  				WHERE CP2.CHATROOM_NUM = CP.CHATROOM_NUM
+  			)
   	</select>
   	
   	<select id="getRoomUsers" parameterType="java.lang.String" resultType="java.lang.String">
@@ -25,19 +37,70 @@
   		ORDER BY P.LAST_READ_AT DESC
   	</select>
   	
-  	<select id="getChatName" parameterType="ChatRoomVO" resultType="java.lang.String">
-  		SELECT CHATROOM_NAME FROM CHAT_ROOM WHERE CHATROOM_NUM = #{chatRoomNum}
+  	<select id="getChatInfo" parameterType="ChatRoomVO" resultType="ChatRoomVO">
+  		SELECT CHATROOM_NAME, CHATROOM_NUM 
+  		FROM CHAT_ROOM 
+  		WHERE CHATROOM_NUM = #{chatRoomNum}
   	</select>
   	
+  	<select id="getContentsInfo" parameterType="ChatContentsVO" resultType="ChatContentsVO">
+  		SELECT CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER
+  		FROM CHAT_CONTENTS
+  		WHERE CHAT_NUM = #{chatNum}
+  	</select>
+  	
+  	<select id="getChatContentsList" parameterType="ChatContentsVO" resultType="ChatContentsVO">
+  		SELECT C.CHAT_NUM, C.CHATROOM_NUM, C.CHAT_CONTENTS, C.SEND_DATE, C.SENDER, U.NAME, CF.FILE_NUM
+  		FROM CHAT_CONTENTS C
+  		JOIN USERS U
+  		ON C.SENDER = U.USER_ID
+  		LEFT JOIN CHAT_FILES CF
+  		ON C.CHAT_NUM = CF.CHAT_NUM
+  		WHERE CHATROOM_NUM = #{chatRoomNum}
+  	</select>
+  	
+  	<select id="getUserInfo" parameterType="ChatContentsVO" resultType="java.lang.String">
+  		SELECT NAME FROM USERS WHERE USER_ID = #{sender}
+  	</select>
+  	
+  	<select id="getChatContentsInfo" parameterType="Long" resultType="ChatContentsVO">
+  		SELECT CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER
+  		FROM CHAT_CONTENTS
+  		WHERE CHAT_NUM = #{chatNum}
+  	</select>
+  	
+  	<select id="getFileDetail" parameterType="FileVO" resultType="FileVO">
+  		SELECT FILE_NUM, CHAT_NUM, ORIGIN_NAME, SAVE_NAME
+  		FROM CHAT_FILES
+  		WHERE FILE_NUM = #{fileNum}
+  	</select>
+  	
+  	
+  	
   	<insert id="addChat" parameterType="ChatRoomVO" useGeneratedKeys="true" keyProperty="chatRoomNum">
-  		INSERT INTO CHAT_ROOM VALUES(#{chatRoomNum}, #{chatRoomName}, now(), #{chatRoomCreator})
+  		INSERT INTO CHAT_ROOM VALUES(#{chatRoomNum}, #{chatRoomName}, NOW(), #{chatRoomCreator})
   	</insert>
   	
   	<insert id="addUser" parameterType="ChatAddVO">
   		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT, LAST_READ_AT) VALUES
   		<foreach collection="users" item="u" separator=",">
-  			(#{chatRoomNum}, #{u}, now(), null)
+  			(#{chatRoomNum}, #{u}, NOW(), null)
   		</foreach>
+  	</insert>
+  	
+  	<insert id="addContents" parameterType="ChatContentsVO" useGeneratedKeys="true" keyProperty="chatNum">
+  		INSERT INTO CHAT_CONTENTS(CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER)
+  		VALUES (NULL, #{chatRoomNum}, #{chatContents}, now(), #{sender})
+  	</insert>
+  	
+  	<insert id="addFileContents" parameterType="ChatContentsVO" useGeneratedKeys="true" keyProperty="chatNum">
+  		INSERT INTO CHAT_CONTENTS(CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER)
+  		VALUES (NULL, #{chatRoomNum}, #{chatContents}, now(), #{sender})
+  	</insert>
+  	
+  	<insert id="addFile" parameterType="ChatFilesVO" useGeneratedKeys="true" keyProperty="fileNum">
+  		INSERT INTO CHAT_FILES(FILE_NUM, CHAT_NUM, ORIGIN_NAME, SAVE_NAME)
+  		VALUES(NULL, #{chatNum}, #{originName}, #{saveName})
   	</insert>
   	
   	

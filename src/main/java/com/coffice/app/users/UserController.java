@@ -1,7 +1,13 @@
 package com.coffice.app.users;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,15 +28,23 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/user/*")
 public class UserController {
+
+    private final WebSecurityCustomizer customizer;
 	
 	@Autowired
 	private UserDAO userDAO;
 	@Autowired
-    private UserService userService;
+  private UserService userService;
+
 	@Autowired
 	private MailService mailService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+    UserController(WebSecurityCustomizer customizer) {
+        this.customizer = customizer;
+    }
+
 	
 	@GetMapping("login")
 	public void login() throws Exception {
@@ -66,6 +81,7 @@ public class UserController {
 		
 	}
 	
+
 	@GetMapping("forgotPw")
 	public void forgotPw() throws Exception {
 		
@@ -164,6 +180,20 @@ public class UserController {
 			redirectAttributes.addFlashAttribute("fail", "비밀번호 변경 실패");
 			return "redirect:/user/resetPw?userId=" + userId;
 		}
+
+	
+	// 조직도
+	@GetMapping("organizationChart")
+	@ResponseBody
+	public List<DepartmentVO> getDeps() throws Exception {
+		return userService.getDeps();
+	}
+	
+	@GetMapping("getUsers")
+	@ResponseBody
+	public List<UserVO> getUsers(UserVO userVO) throws Exception {
+		return userService.getUsers(userVO);
+
 	}
 
 }

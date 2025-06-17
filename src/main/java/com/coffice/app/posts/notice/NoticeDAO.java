@@ -20,4 +20,5 @@ public interface NoticeDAO {
 	public int update(NoticeVO noticeVO) throws Exception;
 	public int updateFile(int[] deleteFile) throws Exception;
 	public int deleteFile(NoticeVO noticeVO) throws Exception;
+	public List<NoticeVO> getMainList() throws Exception;
 }

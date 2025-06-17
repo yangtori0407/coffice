@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,11 +22,11 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-
+					<h2 class="mb-2 text-gray-800">공지사항</h2>
 					<!-- contents 내용 -->
 					<div>
 
-						<div class="card mb-4 py-3 border-left-danger">
+						<div class="card mb-4 py-2 border-left-danger">
 							<div class="card-body">${detail.noticeTitle }</div>
 						</div>
 
@@ -40,15 +42,19 @@
 						<label>첨부파일</label>
 						<div class="card mb-3 py-1 border-bottom-secondary d-flex">
 							<div class="card-body">
-							<c:forEach items="${detail.files }" var="l">
-								<a href="./fileDown?fileNum=${l.fileNum }" class="mr-1">${l.originName }</a>
-							</c:forEach>
+								<c:forEach items="${detail.files }" var="l">
+									<a href="./fileDown?fileNum=${l.fileNum }" class="mr-1">${l.originName }</a>
+								</c:forEach>
 							</div>
 						</div>
-						<div class="mb-2">
-							<button class="btn btn-danger" id="delBtn" type="button" data-notice-num="${detail.noticeNum }">삭제하기</button> 
-							<a href="./update?noticeNum=${detail.noticeNum }" class="btn btn-primary">수정하기</a>
-						</div>
+						<sec:authorize access="hasRole('ADMIN')">
+							<div class="mb-2">
+								<button class="btn btn-danger" id="delBtn" type="button"
+									data-notice-num="${detail.noticeNum }">삭제하기</button>
+								<a href="./update?noticeNum=${detail.noticeNum }"
+									class="btn btn-primary">수정하기</a>
+							</div>
+						</sec:authorize>
 					</div>
 				</div>
 				<!-- end Content -->

@@ -30,6 +30,9 @@ public class FileConfig implements WebMvcConfigurer{
 			.addResourceHandler(profileUrl)
 			.addResourceLocations("file:\\"+ profilePath)
 			;
+		
+		registry.addResourceHandler("/signs/**").addResourceLocations("file:///" + path + "signs/");
+		
 	}
 	
 }

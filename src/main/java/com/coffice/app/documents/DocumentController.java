@@ -1,12 +1,9 @@
 package com.coffice.app.documents;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.coffice.app.documents.attachments.AttachmentVO;
 import com.coffice.app.documents.forms.FormVO;
 import com.coffice.app.documents.lines.ApprovalLineVO;
-import com.coffice.app.documents.lines.ReferenceLineVO;
 import com.coffice.app.page.Pager;
+import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -130,15 +127,20 @@ public class DocumentController {
 	
 	//
 	@GetMapping("detail") // 임시저장 문서로 넘어갈 때는 수정 가능하도록 조건을 나누어야한다.
-	public String getDetail(DocumentVO documentVO, Model model) throws Exception {
+	public String getDetail(DocumentVO documentVO, Model model, HttpSession session) throws Exception {
 
+		//
 		DocumentVO vo = documentService.getDetail(documentVO);
-
+		
 		if (vo == null) {
 			System.out.println("document detail vo가 null입니다");
 		}
-
 		model.addAttribute("vo", vo);
+		
+		// 문서 정보 가져올 때, 접속자의 직인 정보들도 모달에 뿌려놓는다 (모달창 열면 서버 다시 안가고 바로 뜨도록)
+		List<SignVO> signList = documentService.getSignList(session);
+		model.addAttribute("signList", signList);
+		
 
 		return "document/detail";
 	}
@@ -229,10 +231,27 @@ public class DocumentController {
 		List<UserVO> referrerList = (List<UserVO>) session.getAttribute("sessionReferrers");
 		
 		// 서비스 메서드 실행
-		int result = documentService.add(documentVO, approverList, referrerList, attaches);
+		int result = documentService.add(documentVO, approverList, referrerList, attaches, session);
 		
 
 		return "redirect:./list/online";
+	}
+	
+	
+	//
+	@PostMapping(value = "addSign", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	// 새 sign을 insert하고 전체 sign 목록을 다시 select해서 가져온다.
+	public List<SignVO> addSign(HttpSession session, MultipartFile[] attaches) throws Exception {
+		
+		// 사인 추가
+		int result = documentService.addSign(session, attaches);
+		
+		
+		// 사인 리스트 조회
+		List<SignVO> resultList = documentService.getSignList(session);
+
+		return resultList;
 	}
 
 	
@@ -246,6 +265,15 @@ public class DocumentController {
 		return "fileDownView";
 	}
 	
+	
+	//
+	@PostMapping("proceed")
+	public String updateApprovalProceed(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
+		
+		int result = documentService.updateApprovalProceed(approvalLineVO, session);
+		
+		return "redirect:./detail?documentId="+approvalLineVO.getDocumentId();
+	}
 	
 	
 	

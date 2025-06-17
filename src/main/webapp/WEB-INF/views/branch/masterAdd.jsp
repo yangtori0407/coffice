@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,10 +18,24 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-
 					<!-- contents 내용 -->
-
-
+					<div style="width:400px; height:600px; margin: 0 auto;">
+						<form action="./masterAdd" method="post">
+							<select class="form-select" id="selectUser">
+								<option selected>추가할 점주를 선택하세요</option>
+								<c:forEach items="${notRegisterBranchMaster}" var="m">
+								<option value="${m.userId.userId}">${m.userId.name}</option>
+								</c:forEach>						
+							</select>
+							<div class="input-box">
+								<input type="text" name="contactNumber" id="contactNumber" placeholder="사업자등록번호">
+							</div>
+							<div class="input-box">	
+								<input type="date" name="contactDate" id="contactDate" placeholder="사업자등록날짜">					
+							</div>
+							<button type="submit" class="btn btn-primary">점주등록</button>
+						</form>
+					</div>
 				</div>
 			</div>
 			<!-- end Content -->
