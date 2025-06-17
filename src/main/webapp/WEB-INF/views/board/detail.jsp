@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 
@@ -18,8 +20,9 @@
 .dropdown-toggle::after {
 	display: none !important;
 }
-input{
-	box-shadow: none; 
+
+input {
+	box-shadow: none;
 	outline: none;
 }
 </style>
@@ -35,18 +38,21 @@ input{
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
+					<sec:authentication property="principal" var="user" />
+					<h2 class="mb-2 text-gray-800">익명게시판</h2>
 					<div>
 
-						<div class="card mb-4 py-3 border-left-info">
-							<div class="card-body">${detail.boardTitle }</div>
+						<div class="card mb-4 py-2 border-left-info">
+							<div class="card-body" id="board" data-board-num="${detail.boardNum }">${detail.boardTitle }</div>
 						</div>
-
-						<div class="mb-2">
-							<button class="btn btn-danger" id="delBtn" type="button"
-								data-board-num="${detail.boardNum }">삭제하기</button>
-							<a href="./update?boardNum=${detail.boardNum }"
-								class="btn btn-primary">수정하기</a>
-						</div>
+						<c:if test="${detail.userId == user.userId }">
+							<div class="mb-2">
+								<button class="btn btn-danger" id="delBtn" type="button"
+									data-board-num="${detail.boardNum }">삭제하기</button>
+								<a href="./update?boardNum=${detail.boardNum }"
+									class="btn btn-primary">수정하기</a>
+							</div>
+						</c:if>
 						<div class="card shadow mb-3" style="min-height: 600px;">
 							<div class="card-header py-3">
 								<h6 class="m-0 font-weight-bold text-primary">작성일:
@@ -79,13 +85,11 @@ input{
 								<c:forEach items="${detail.comments }" var="com"
 									varStatus="status">
 									<c:choose>
-				
+
 										<c:when test="${com.deleteStatus eq '1'}">
 											<div class="card mb-2 py-1 border-left-warning">
 												<div class="row w-100 m-0">
-													<div class="col-10 card-body">
-														삭제된 댓글입니다.
-													</div>
+													<div class="col-10 card-body">삭제된 댓글입니다.</div>
 													<div
 														class="col-2 d-flex align-items-start justify-content-end mt-1">
 														<div class="d-flex flex-column mr-4">
@@ -124,18 +128,22 @@ input{
 																답글</button>
 
 														</div>
-														<div class="dropdown">
-															<button
-																class="btn dropdown-toggle p-0 border-0 bg-transparent"
-																type="button" data-toggle="dropdown"
-																aria-expanded="false">
-																<ion-icon name="ellipsis-vertical-outline"></ion-icon>
-															</button>
-															<div class="dropdown-menu dropdown-menu-right">
-																<button class="dropdown-item commentUpBtn" data-com-num="${com.commentNum }">수정</button>
-																<button class="dropdown-item commentDelBtn" data-com-num="${com.commentNum }">삭제</button>
+														<c:if test="${com.userId == user.userId }">
+															<div class="dropdown">
+																<button
+																	class="btn dropdown-toggle p-0 border-0 bg-transparent"
+																	type="button" data-toggle="dropdown"
+																	aria-expanded="false">
+																	<ion-icon name="ellipsis-vertical-outline"></ion-icon>
+																</button>
+																<div class="dropdown-menu dropdown-menu-right">
+																	<button class="dropdown-item commentUpBtn"
+																		data-com-num="${com.commentNum }">수정</button>
+																	<button class="dropdown-item commentDelBtn"
+																		data-com-num="${com.commentNum }">삭제</button>
+																</div>
 															</div>
-														</div>
+														</c:if>
 													</div>
 												</div>
 											</div>

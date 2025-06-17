@@ -21,9 +21,12 @@
 					<!-- contents 내용 -->
 					<div style="width:400px; height:600px; margin: 0 auto;">
 						<form action="./masterAdd" method="post">
-							<div class="input-box">
-								<input type="text" name="userId.userId" placeholder="점주아이디">						
-							</div>
+							<select class="form-select" id="selectUser">
+								<option selected>추가할 점주를 선택하세요</option>
+								<c:forEach items="${notRegisterBranchMaster}" var="m">
+								<option value="${m.userId.userId}">${m.userId.name}</option>
+								</c:forEach>						
+							</select>
 							<div class="input-box">
 								<input type="text" name="contactNumber" id="contactNumber" placeholder="사업자등록번호">
 							</div>

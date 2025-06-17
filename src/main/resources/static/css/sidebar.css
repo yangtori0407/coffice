@@ -1,0 +1,7 @@
+.chat-active {
+    background-color: rgb(17, 106, 207);
+    color: white;
+    font-weight: bolder;
+    border-left: 4px solid #ffffff;
+    
+}

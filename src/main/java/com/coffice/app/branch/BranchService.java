@@ -6,15 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.users.UserVO;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class BranchService {
 
 	@Autowired
 	private BranchDAO branchDAO;
 	
 	public List<BranchVO> getList(Pager pager) throws Exception {
+		pager.make();
+		pager.makeNum(branchDAO.getBranchTotalCount(pager));
 		return branchDAO.getList(pager);
+	}
+	
+	public List<BranchVO> getDownList() throws Exception {
+		return branchDAO.getDownList();
 	}
 	
 	public int add(BranchVO branchVO) throws Exception {
@@ -39,5 +49,21 @@ public class BranchService {
 	
 	public int masterAdd(BranchMasterVO branchMasterVO) throws Exception {
 		return branchDAO.masterAdd(branchMasterVO);
+	}
+	
+	public List<BranchVO> myBranch(BranchVO branchVO) throws Exception {
+		return branchDAO.myBranch(branchVO);
+	}
+	
+	public Long totalBranchSales(BranchVO branchVO) throws Exception {
+		return branchDAO.totalBranchSales(branchVO);
+	}
+	
+	public List<BranchMasterVO> notRegisterBranchMaster() throws Exception {
+		return branchDAO.notRegisterBranchMaster();
+	}
+	
+	public Long totalSales() throws Exception {
+		return branchDAO.totalSales();
 	}
 }

@@ -1,6 +1,9 @@
 package com.coffice.app.users;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -17,9 +21,15 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/user/*")
 public class UserController {
+
+    private final WebSecurityCustomizer customizer;
 	
 	@Autowired
     private UserService userService;
+
+    UserController(WebSecurityCustomizer customizer) {
+        this.customizer = customizer;
+    }
 	
 	@GetMapping("login")
 	public void login() throws Exception {
@@ -51,6 +61,20 @@ public class UserController {
 	@GetMapping("afterLogout")
 	public void afterLogout() throws Exception {
 		
+	}
+	
+	
+	// 조직도
+	@GetMapping("organizationChart")
+	@ResponseBody
+	public List<DepartmentVO> getDeps() throws Exception {
+		return userService.getDeps();
+	}
+	
+	@GetMapping("getUsers")
+	@ResponseBody
+	public List<UserVO> getUsers(UserVO userVO) throws Exception {
+		return userService.getUsers(userVO);
 	}
 
 }

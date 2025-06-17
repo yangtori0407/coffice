@@ -67,7 +67,8 @@
 									<td><a href="../detail?documentId=${i.documentId}">${i.title}</a></td>
 									<td>${i.writerId }/${i.writerName }/${i.writerPosition }</td>
 									<td>${i.writerTime }</td>
-									<td>${i.currentStep }/${i.stepCount }</td>
+									<!-- currentStep을 1만큼 낮춰서 출력 -->
+									<td>${i.currentStep -1}/${i.stepCount }</td>
 									<td>${i.status }</td>
 								</tr>
 							</c:forEach>
