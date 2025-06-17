@@ -5,20 +5,23 @@
 
 <mapper namespace="com.coffice.app.posts.board.BoardDAO">
 	<insert id="add" parameterType="BoardVO">
-		INSERT INTO BOARD VALUES(NULL, #{boardTitle}, #{userId}, 0,
+		INSERT INTO BOARD VALUES(NULL,
+		#{boardTitle}, #{userId}, 0,
 		#{boardContents}, now(), 0, null)
 	</insert>
 
 	<insert id="addComment" parameterType="CommentVO"
 		useGeneratedKeys="true" keyProperty="commentNum">
-		INSERT INTO COMMENT VALUES(NULL, #{boardNum}, #{userId}, #{commentContents},
-		0, 0, now(), 0);
+		INSERT INTO COMMENT(COMMENT_NUM,
+		BOARD_NUM, USER_ID, DELETE_STATUS, COMMENT_DATE, COMMENT_CONTENTS,
+		COMMENT_P, IS_REPLY)
+		VALUES(NULL, #{boardNum}, #{userId},0,NOW(), #{commentContents}, 0, 0);
 	</insert>
 
 	<insert id="addReply" parameterType="CommentVO"
 		useGeneratedKeys="true" keyProperty="commentNum">
-		INSERT INTO COMMENT VALUES(NULL, #{boardNum}, #{userId}, #{commentContents},
-		#{commentP}, 0, now(), 1);
+		INSERT INTO COMMENT(COMMENT_NUM, BOARD_NUM, USER_ID, DELETE_STATUS, COMMENT_DATE, COMMENT_CONTENTS, COMMENT_P, IS_REPLY) 
+		VALUES(NULL,#{boardNum}, #{userId},0,NOW(), #{commentContents},#{commentP}, 1);
 	</insert>
 
 	<select id="getList" parameterType="Pager" resultType="BoardVO">
@@ -44,20 +47,22 @@
 				BOARD_CONTENTS LIKE CONCAT('%', #{search}, '%')
 			</when>
 			<otherwise>
-				BOARD_TITLE LIKE CONCAT('%', #{search}, '%') OR BOARD_CONTENTS LIKE CONCAT('%',
+				BOARD_TITLE LIKE CONCAT('%', #{search}, '%') OR
+				BOARD_CONTENTS LIKE CONCAT('%',
 				#{search}, '%')
 			</otherwise>
 		</choose>
 		AND DELETE_STATUS = 0
 	</sql>
-	<!-- board와 comment의 컬럼명이 동일해서 comment의 deleteStaus 말고 board의 값을 가지고 왔었던 것! 
-	꼭 컬럼명이 동일할 경우 별칭으로 나누기 -->
+	<!-- board와 comment의 컬럼명이 동일해서 comment의 deleteStaus 말고 board의 값을 가지고 왔었던 
+		것! 꼭 컬럼명이 동일할 경우 별칭으로 나누기 -->
 	<select id="getDetail" parameterType="BoardVO"
 		resultMap="getBoardDetail">
 		SELECT
 		A.BOARD_NUM AS A_BOARD_NUM,
 		A.BOARD_TITLE,
-		A.USER_ID AS A_USER_ID,
+		A.USER_ID AS
+		A_USER_ID,
 		A.BOARD_CONTENTS,
 		A.BOARD_DATE,
 		A.BOARD_HIT,
@@ -73,8 +78,10 @@
 		C.DELETE_STATUS
 		FROM BOARD A
 		LEFT OUTER JOIN
-		(SELECT * FROM COMMENT WHERE BOARD_NUM = #{boardNum} AND IS_REPLY = 0) C
-		ON A.BOARD_NUM = C.BOARD_NUM
+		(SELECT * FROM COMMENT WHERE
+		BOARD_NUM = #{boardNum} AND IS_REPLY = 0) C
+		ON A.BOARD_NUM =
+		C.BOARD_NUM
 		WHERE A.BOARD_NUM = #{boardNum}
 		ORDER BY C.COMMENT_DATE DESC
 	</select>
@@ -108,13 +115,15 @@
 
 	<select id="replyDetail" parameterType="CommentVO"
 		resultType="CommentVO">
-		SELECT * FROM COMMENT WHERE COMMENT_NUM = #{commentNum} and DELETE_STATUS =
+		SELECT * FROM COMMENT WHERE COMMENT_NUM = #{commentNum} and
+		DELETE_STATUS =
 		0
 	</select>
 
 	<select id="replyList" parameterType="CommentVO"
 		resultType="CommentVO">
-		SELECT * FROM COMMENT WHERE COMMENT_P = #{commentNum} AND IS_REPLY = 1 AND DELETE_STATUS = 0 
+		SELECT * FROM COMMENT WHERE COMMENT_P = #{commentNum} AND
+		IS_REPLY = 1 AND DELETE_STATUS = 0
 		ORDER BY COMMENT_DATE DESC
 	</select>
 
@@ -133,8 +142,9 @@
 		UPDATE COMMENT SET DELETE_STATUS = 1 WHERE
 		COMMENT_NUM = #{commentNum}
 	</update>
-	
+
 	<update id="commentUpdate">
-		UPDATE COMMENT SET COMMENT_CONTENTS = #{commentContents} WHERE COMMENT_NUM = #{commentNum}
+		UPDATE COMMENT SET COMMENT_CONTENTS =
+		#{commentContents} WHERE COMMENT_NUM = #{commentNum}
 	</update>
 </mapper>
