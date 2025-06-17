@@ -78,9 +78,9 @@
   	  	SELECT * FROM BRANCH b
   		LEFT OUTER JOIN USERS u
   		on b.USER_ID = u.USER_ID
-  		JOIN SALES s
+  		LEFT OUTER JOIN SALES s
   		on b.BRANCH_ID = s.BRANCH_ID
-  		JOIN MENU m
+  		LEFT OUTER JOIN MENU m
   		on m.MENU_ID = s.MENU_ID
   		WHERE u.USER_ID = #{userVO.userId}
   	</select>
@@ -116,7 +116,7 @@
 		AND ADD_TYPE IS NULL
   	</select>
   	
-  	<select id="getChartList" resultMap="getChart">
+  	<select id="getChartList" resultMap="getChart" parameterType="BranchVO">
   		SELECT MENU_NAME, SUM(
   		CASE 
   			WHEN SALES_TYPE = 1 THEN +SALES_PROFIT
@@ -126,6 +126,9 @@
   	  	FROM SALES
   	  	JOIN MENU
   	  	USING(MENU_ID)
+  	  	JOIN BRANCH 
+  	  	USING(BRANCH_ID)
+  	  	WHERE USER_ID = #{userVO.userId}
   	  	GROUP BY MENU_ID
   	</select>
   

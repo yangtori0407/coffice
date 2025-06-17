@@ -120,7 +120,7 @@ public class BranchController {
 		Long totalSale = branchService.totalBranchSales(branchVO);
 		model.addAttribute("total", totalSale);
 		
-		List<SalesVO> chart = branchService.getChartList();
+		List<SalesVO> chart = branchService.getChartList(branchVO);
 		model.addAttribute("chart", chart);
 		log.info("c:{}",chart);
 		

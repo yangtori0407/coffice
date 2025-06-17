@@ -68,7 +68,7 @@ public class BranchService {
 		return branchDAO.totalSales();
 	}
 	
-	public List<SalesVO> getChartList() throws Exception {
-		return branchDAO.getChartList();
+	public List<SalesVO> getChartList(BranchVO branchVO) throws Exception {
+		return branchDAO.getChartList(branchVO);
 	}
 }
