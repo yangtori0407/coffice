@@ -75,11 +75,11 @@ public class BranchController {
 		return "branch/add";
 	}
 	@PostMapping("updateUser")
-	public String updateUser(@AuthenticationPrincipal UserVO userVO,BranchVO branchVO) throws Exception {
+	public String updateUser(BranchVO branchVO) throws Exception {
 		log.info("b:{}",branchVO);
 		BranchVO branchVO2 = new BranchVO();
 		branchVO2.setBranchId(branchVO.getBranchId());
-		branchVO2.setUserId(userVO.getUserId());
+		branchVO2.setUserId(branchVO.getUserId());
 		
 		branchService.branchUpdate(branchVO2);
 		
@@ -97,6 +97,7 @@ public class BranchController {
 	public String masterAdd(Model model) throws Exception {
 		List<BranchMasterVO> notRegisterBranchMaster = branchService.notRegisterBranchMaster();
 		model.addAttribute("notRegisterBranchMaster", notRegisterBranchMaster);
+		log.info("nr:{}",notRegisterBranchMaster);
 		return "branch/masterAdd";
 	}
 	
