@@ -14,8 +14,21 @@
   	
   	<select id="detail" parameterType="UserVO" resultMap="detailResult">
   		  SELECT 
-		    U.*, 
-		    D.DEPT_NAME 
+		    U.USER_ID,
+		    U.PASSWORD,
+		    U.NAME,
+		    U.POSITION,
+		    U.HIRE_DATE,
+		    U.HIRE_TYPE,
+		    U.BIRTH_DATE,
+		    U.PHONE,
+		    U.EMAIL,
+		    U.STATUS,
+		    U.RESIGN_DATE,
+		    U.SAVE_NAME,
+		    U.ORIGIN_NAME,
+		    U.DEPT_ID, 
+		    D.DEPT_NAME
 		  FROM USERS U
 		  JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
 		  WHERE U.USER_ID = #{userId}
@@ -39,7 +52,26 @@
 	    <result column="DEPT_NAME" property="deptName"/>
   	</resultMap>
   	
+
+  	<select id="findByEmail" parameterType="UserVO" resultType="UserVO">
+  	 	SELECT * FROM USERS WHERE EMAIL = #{email}
+  	</select>
   	
+  	<update id="updatePassword" parameterType="UserVO">
+  		UPDATE USERS SET PASSWORD = #{password} WHERE USER_ID= #{userId}
+  	</update>
+  	
+  	<select id="checkPassword" parameterType="String" resultType="String">
+  		SELECT PASSWORD FROM USERS WHERE USER_ID= #{userId}
+  	</select>
+  	
+  	<select id="existUserId" parameterType="String" resultType="boolean">
+		SELECT COUNT(*) > 0 FROM USERS WHERE USER_ID = #{userId}	
+  	</select>
+  	
+  	
+  
+
   	
   	<!-- 조직도 -->
   	<select id="getDeps" resultType="DepartmentVO">
@@ -53,5 +85,6 @@
   			WHERE DEPT_ID = #{deptId}
   			AND STATUS = 1
   	</select>
+
   
   </mapper>

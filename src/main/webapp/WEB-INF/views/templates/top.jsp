@@ -105,7 +105,9 @@
 			  aria-haspopup="true"
 			aria-expanded="false"> <span
 				class="mr-2 d-none d-lg-inline text-gray-600 small">
-					${user.name} ${user.position}</span> <img class="img-profile rounded-circle"
+					<c:if test="${not empty user}">
+				    ${user.name} ${user.position}
+				</c:if></span> <img class="img-profile rounded-circle"
 				src="/images/coffice.png">
 		</span> <!-- Dropdown - User Information -->
 		</li>
