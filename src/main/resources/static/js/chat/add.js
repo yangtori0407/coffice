@@ -17,7 +17,11 @@ class sendChatInfo {
 
 addRoomBtn.addEventListener("click", () => {
     let name = inputRoomName.value;
-    let users = document.querySelectorAll(".user");
+    if(name == ""){
+        alert("채팅방 이름을 입력하세요.");
+        return;
+    }
+    let users = document.querySelectorAll(".chatUser");
     let info = new sendChatInfo();
 
     info.name = name;
