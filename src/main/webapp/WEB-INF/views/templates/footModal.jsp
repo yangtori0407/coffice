@@ -73,3 +73,4 @@
 	<script src="/js/demo/chart-pie-demo.js"></script>
 
 	<script src="/js/sidebar.js"></script>
+	<script src="/js/notification/notification.js"></script>

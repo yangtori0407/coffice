@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.files.FileManager;
+import com.coffice.app.ingredients.IngredientsService;
+import com.coffice.app.notification.NotificationService;
 import com.coffice.app.page.Pager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class NoticeService {
+
+    private final IngredientsService ingredientsService;
 
 	@Autowired
 	private FileManager fileManager;
@@ -29,6 +33,13 @@ public class NoticeService {
 
 	@Autowired
 	private NoticeDAO noticeDAO;
+	
+	@Autowired
+	private NotificationService notificationService;
+
+    NoticeService(IngredientsService ingredientsService) {
+        this.ingredientsService = ingredientsService;
+    }
 
 	public List<NoticeVO> getList(Pager pager) throws Exception {
 		pager.make();
@@ -57,6 +68,8 @@ public class NoticeService {
 			noticeDAO.addFiles(filesVO);
 
 		}
+		
+		notificationService.sendNotification();
 	}
 
 	public String quillUpload(MultipartFile multipartFile) throws Exception {

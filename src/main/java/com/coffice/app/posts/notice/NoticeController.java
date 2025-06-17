@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.files.FileVO;
+import com.coffice.app.notification.NotificationController;
+import com.coffice.app.notification.NotificationService;
 import com.coffice.app.page.Pager;
 import com.coffice.app.users.UserVO;
 
@@ -26,6 +28,7 @@ public class NoticeController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	
 	
 	@ModelAttribute("posts")
 	public String kind() {
@@ -62,6 +65,9 @@ public class NoticeController {
 		UserVO userVO = (UserVO)authentication.getPrincipal();
 		noticeVO.setUserId(userVO.getUserId());
 		noticeService.add(noticeVO, attaches);
+		
+		
+		
 		return "redirect:/notice/list";
 	}
 	
