@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,13 +17,13 @@
 <style type="text/css">
 #chatPeople {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, 140px);
-	grid-auto-rows: 70px; /* 고정 높이 */
-	gap: 8px;
+	grid-template-columns: repeat(auto-fill, 143px);
+	grid-auto-rows: 79px; /* 고정 높이 */
+	gap: 3px;
 }
 
-.user {
-	width: 145px;
+.chatUser {
+	width: 140px;
 }
 </style>
 </head>
@@ -50,24 +52,21 @@
 											data-toggle="modal" data-target="#exampleModal" id="diagram">
 											대화상태 추가하기</button>
 
-										<div class="card border-left-primary shadow mt-3"
-											style="width: 100%; height: 400px;">
-											<div class="card-body row" id="chatPeople">
-												
-
+										<div class="card border-left-primary shadow mt-3 pl-2"
+											style="width: 100%; height: 450px;">
+											<sec:authentication property="principal" var="user"/>
+											<div class="card-body row pt-4" id="chatPeople" data-login-chat="${user.userId }">
 												<!-- <div
 													class="alert alert-secondary d-flex justify-content-between align-items-center chatUser"
 													role="alert" data-user-id="test1">
-													<span>test1</span>
+													<div class="d-flex flex-column">
+													<span>대리</span>
+													<span>양은영양은영</span>
+													
+													</div>
 													<button class="btn btn-sm delPerson" type="button">x</button>
 												</div> -->
 												
-												
-
-
-
-
-
 											</div>
 										</div>
 										<button class="btn btn-primary ml-auto mt-4" type="button"
