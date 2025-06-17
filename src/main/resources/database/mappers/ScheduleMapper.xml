@@ -25,7 +25,6 @@
   			from SCHEDULE
   			where SCHEDULE_ID = #{scheduleId}
   			and DELETE_STATUS = 0
-  			and REPEAT_ID IS NULL
   	</select>
   	
   	<select id="getRepeatSchedules" resultType="ScheduleVO">
@@ -33,4 +32,10 @@
   			from SCHEDULE_REPEAT
   	</select>
   	
+  	<update id="updateSchedule" parameterType="ScheduleVO">
+  			update SCHEDULE
+  			set DETAIL = #{detail}, START_TIME = #{startTime}, END_TIME = #{endTime}, SCHEDULE_TYPE = #{scheduleType}, EDITOR = #{editor}, EDIT_TIME = now()
+  			where SCHEDULE_ID = #{scheduleId}
+  			and DELETE_STATUS = 0
+  	</update>
   </mapper>

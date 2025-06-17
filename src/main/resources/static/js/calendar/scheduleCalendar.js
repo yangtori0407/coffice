@@ -44,7 +44,9 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         // console.log(e.event.id)
         // console.log(e.event.groupId)
         console.log(e.event)
+        $("#detailModal").modal("show")
 
+        let scheduleId = e.event.id
         let type = document.querySelector(`input[name="detailResultOptions"][value="${e.event.extendedProps.type}"]`);
         type.checked = true;
         let detailResult = document.getElementById("detailResult")
@@ -60,13 +62,32 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         
         let dis = document.querySelectorAll("input[disabled], textarea[disabled], select[disabled]");
         let change = document.getElementById("change")
-        change.addEventListener("click", (e)=>{
+        let saveChange = document.getElementById("saveChange")
+        change.addEventListener("click", ()=>{
             for(a of dis) {
                 a.disabled = false;
             }
         })
-    
-        $("#detailModal").modal("show")
+
+        saveChange.addEventListener("click", ()=>{
+            let checked = document.querySelector('input[name="detailResultOptions"]:checked').value;
+            let params = new URLSearchParams
+            params.append("scheduleId", scheduleId)
+            params.append("scheduleType", checked)
+            params.append("detail", detailResult.value.trim())
+            params.append("startTime", rsDate.value+rsTime.value)
+            params.append("endTime", reDate.value+reTime.value)
+
+            fetch("schedule/update", {
+                method: "post",
+                body: params
+            })
+            .then(r=>r.text())
+            .then(r=>{
+                console.log(r)
+                location.reload()
+            })
+        })
 
         $('#detailModal').on('hidden.bs.modal', function () {
             for(a of dis) {
