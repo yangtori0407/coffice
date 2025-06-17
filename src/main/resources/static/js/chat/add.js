@@ -1,4 +1,4 @@
-const people = document.getElementById("people");
+const people = document.getElementById("chatPeople");
 
 const addRoomBtn = document.getElementById("addRoomBtn");
 const inputRoomName = document.getElementById("inputRoomName");

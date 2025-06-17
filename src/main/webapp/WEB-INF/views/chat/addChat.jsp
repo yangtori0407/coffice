@@ -12,6 +12,18 @@
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<style type="text/css">
+#chatPeople {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 140px);
+	grid-auto-rows: 70px; /* 고정 높이 */
+	gap: 8px;
+}
+
+.user {
+	width: 145px;
+}
+</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -40,36 +52,26 @@
 
 										<div class="card border-left-primary shadow mt-3"
 											style="width: 100%; height: 400px;">
-											<div class="card-body row" id="people">
-												<div class="col-3">
-													<div
-														class="alert alert-secondary d-flex justify-content-between align-items-center user"
-														role="alert" data-user-id="HRtest1">
-														<span>test1</span>
-														<button class="btn btn-sm delPerson" type="button">x</button>
-													</div>
-													<!-- <div
-														class="alert alert-secondary d-flex justify-content-between align-items-center user"
-														role="alert" data-user-id="test2">
-														<span>test2</span>
-														<button class="btn btn-sm delPerson" type="button">x</button>
-													</div> -->
-													
-												</div>
-												<div class="col-3">
-													
-												</div>
+											<div class="card-body row" id="chatPeople">
+												
 
-												<div class="col-3"></div>
-												<div class="col-3"></div>
+												<!-- <div
+													class="alert alert-secondary d-flex justify-content-between align-items-center chatUser"
+													role="alert" data-user-id="test1">
+													<span>test1</span>
+													<button class="btn btn-sm delPerson" type="button">x</button>
+												</div> -->
+												
+												
+
 
 
 
 
 											</div>
 										</div>
-										<button class="btn btn-primary ml-auto mt-4" type="button" id="addRoomBtn">채팅방
-											만들기</button>
+										<button class="btn btn-primary ml-auto mt-4" type="button"
+											id="addRoomBtn">채팅방 만들기</button>
 									</div>
 
 								</div>
