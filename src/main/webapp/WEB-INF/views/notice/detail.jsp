@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,12 +47,14 @@
 								</c:forEach>
 							</div>
 						</div>
-						<div class="mb-2">
-							<button class="btn btn-danger" id="delBtn" type="button"
-								data-notice-num="${detail.noticeNum }">삭제하기</button>
-							<a href="./update?noticeNum=${detail.noticeNum }"
-								class="btn btn-primary">수정하기</a>
-						</div>
+						<sec:authorize access="hasRole('ADMIN')">
+							<div class="mb-2">
+								<button class="btn btn-danger" id="delBtn" type="button"
+									data-notice-num="${detail.noticeNum }">삭제하기</button>
+								<a href="./update?noticeNum=${detail.noticeNum }"
+									class="btn btn-primary">수정하기</a>
+							</div>
+						</sec:authorize>
 					</div>
 				</div>
 				<!-- end Content -->

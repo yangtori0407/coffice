@@ -18,7 +18,7 @@ class BoardDAOTest {
 	void testGetList() throws Exception{
 		for(int i = 1; i <= 100;i++) {
 			BoardVO boardVO = new BoardVO();
-			boardVO.setUserId("TEST");
+			boardVO.setUserId("test1");
 			boardVO.setBoardTitle("BoardTitle " + i);
 			boardVO.setBoardContents("BoardContents " + i);
 			

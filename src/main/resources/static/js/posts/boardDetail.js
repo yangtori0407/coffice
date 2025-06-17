@@ -1,33 +1,39 @@
 const delBtn = document.getElementById("delBtn");
 const comBtn = document.getElementById("comBtn");
-const boardNum = delBtn.getAttribute("data-board-num");
+const board = document.getElementById("board");
+const boardNum = board.getAttribute("data-board-num");
 
 const inputContents = document.getElementById("contents");
 const comArea = document.getElementById("comArea");
 
 //원글 삭제 버튼
-delBtn.addEventListener("click", () => {
-	console.log("click")
-	let param = new URLSearchParams();
-	param.append("boardNum", boardNum);
-
-	fetch("./delete", {
-		method: "POST",
-		body: param
-	})
-		.then(r => r.text())
-		.then(r => {
-			if (r * 1 == 1) {
-				alert("삭제가 완료되었습니다.");
-				location.href = "/board/list";
-			} else {
-				alert("삭제를 실패하였습니다.");
-				location.href = "/board/list";
-			}
-
-
+try {
+	
+	delBtn.addEventListener("click", () => {
+		console.log("click")
+		let param = new URLSearchParams();
+		param.append("boardNum", boardNum);
+	
+		fetch("./delete", {
+			method: "POST",
+			body: param
 		})
-})
+			.then(r => r.text())
+			.then(r => {
+				if (r * 1 == 1) {
+					alert("삭제가 완료되었습니다.");
+					location.href = "/board/list";
+				} else {
+					alert("삭제를 실패하였습니다.");
+					location.href = "/board/list";
+				}
+	
+	
+			})
+	})
+} catch (error) {
+	
+}
 
 //==============댓글=================================
 
@@ -437,7 +443,8 @@ comArea.addEventListener("click", (e) => {
 				if (r * 1 == 1) {
 
 					const p = e.target.parentElement.parentElement.parentElement.previousElementSibling
-					console.log(p);
+					const coll = e.target.parentElement.previousElementSibling.parentElement
+					coll.remove();
 					p.innerText = "삭제된 댓글입니다."
 				}
 			})
@@ -481,6 +488,8 @@ comArea.addEventListener("click", (e) => {
 		// 버튼 영역 초기화
 		btnWrapper.innerHTML = "";
 
+		
+
 		// 저장 버튼 생성
 		const saveBtn = document.createElement("button");
 		saveBtn.classList.add("btn", "btn-primary", "saveCommentBtn", "mr-4");
@@ -488,6 +497,15 @@ comArea.addEventListener("click", (e) => {
 		saveBtn.innerText = "저장";
 
 		btnWrapper.appendChild(saveBtn);
+
+		input.addEventListener("keydown", (event)=>{
+			if(event.key == "Enter"){
+				event.preventDefault();
+				saveBtn.click();
+			}
+		})
+
+		input.focus();
 	}
 });
 
