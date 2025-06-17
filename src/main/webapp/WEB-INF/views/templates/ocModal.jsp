@@ -106,14 +106,14 @@
 
           //chat add 페이지에서만 작동 되는 코드
           const chatPeople = document.querySelector("#chatPeople")
-          if(chatPeople){
+          if (chatPeople) {
             const chatUser = document.querySelectorAll(".chatUser");
             chatMax = chatUser.length;
           }
         })
     })
 
-    
+
 
     depBoard.addEventListener('click', function (e) {
       if (e.target && e.target.classList.contains('department-item')) {
@@ -147,26 +147,39 @@
               li.setAttribute('data-emp-id', a.userId);
               li.setAttribute('data-emp-name', a.name);
               li.addEventListener('click', (e) => {
-                // let duplication = document.querySelectorAll("div[class='employee-pill']");
-                // console.log(e.target);
-                // console.log(e.target.getAttribute("data-emp-id"));
-                // for(a of selected){
-                //   console.log("선택: ", a.dataset.selected);
-                //   // if(a.dataset.selectedId == e.target.getAttribute("data-emp-id")){
-                //   //   alert("중복 선택입니다.");
-                //   //   return;
-
-                //   // }
-                // }
+                let empId = e.target.getAttribute("data-emp-id");
                 
+                //채팅----------------------------------------------------------------------------------
+                //채팅방 추가시 본인 선택 불가
+                const chatLoginUser = document.getElementById("chatPeople").getAttribute("data-login-chat");
+                if(chatLoginUser == empId){
+                  alert("본인을 선택할 수 없습니다.");
+                  return;
+                }
+                let duplication = document.querySelectorAll("div[class='employee-pill']");
+                //console.log(e.target.getAttribute("data-emp-id"));
+                if (duplication.length > 0) {
+
+                  for (d of duplication) {
+                    console.log("선택: ", d.dataset.selectedId);
+                    if (d.dataset.selectedId == empId) {
+                      alert("중복 선택입니다.");
+                      return;
+
+                    }
+                  }
+                }
+
                 //채팅 최대 인원 수
-                if(chatMax >= 10){
-                  alert("최대 인원은 10명까지 입니다.");
+                if (chatMax >= 25) {
+                  alert("최대 인원은 25명까지 입니다.");
                   return;
                 }
                 chatMax++;
+                //---------------------------------------------------------------------------------------------
+
                 addSelectedEmployee(a.userId, a.name, a.position);
-                console.log(chatMax)
+                
               });
               ul.appendChild(li)
             }
@@ -175,7 +188,7 @@
       }
     });
 
-    
+
 
     function addSelectedEmployee(id, name, position) {
 
@@ -197,7 +210,7 @@
       removeBtn.innerHTML = '&times;';
       removeBtn.addEventListener('click', () => {
         chatMax--;
-        console.log(chatMax)
+        //console.log(chatMax)
         pill.remove();
       });
 
@@ -212,7 +225,7 @@
       for (a of selected) {
         console.log(a.dataset.selectedId) // 사원번호 = a.dataset.selectedId
       }
-      
+
       //채팅방 모달창 관련 코드-----------------------
       const s = document.querySelector("#chatPeople");
       if (s) {
@@ -221,7 +234,7 @@
       }
       //----------------------------
 
-      
+
     })
 
 
@@ -239,7 +252,7 @@
 
     //참여 인원 만드는 함수
     function createChat(selected, chatPeople) {
-      for(a of selected){
+      for (a of selected) {
 
         const alertDiv = document.createElement("div");
         alertDiv.classList.add(
@@ -252,19 +265,28 @@
         );
         alertDiv.setAttribute("role", "alert");
         alertDiv.setAttribute("data-user-id", a.dataset.selectedId);
-  
+
+        const div = document.createElement("div");
+        div.classList.add("d-flex", "flex-column");
+
         // 2. span 요소 생성
-        const nameSpan = document.createElement("span");
-        nameSpan.textContent = a.dataset.selectedName; // 사용자 이름
-  
+        let nameSpan = document.createElement("span");
+        let nameString = a.dataset.selectedName;
+        let split = nameString.split(" ");
+        nameSpan.textContent = split[0]; // 사용자 이름
+        div.appendChild(nameSpan);
+        nameSpan = document.createElement("span");
+        nameSpan.textContent = split[1];
+        div.appendChild(nameSpan);
+
         // 3. button 요소 생성
         const deleteBtn = document.createElement("button");
         deleteBtn.classList.add("btn", "btn-sm", "delPerson");
         deleteBtn.setAttribute("type", "button");
         deleteBtn.textContent = "x";
-  
+
         // 4. 자식 요소로 추가
-        alertDiv.appendChild(nameSpan);
+        alertDiv.appendChild(div);
         alertDiv.appendChild(deleteBtn);
 
         chatPeople.appendChild(alertDiv);
