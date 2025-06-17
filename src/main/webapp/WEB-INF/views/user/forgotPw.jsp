@@ -9,13 +9,13 @@
   <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="/css/user/login.css">
+  <link rel="stylesheet" type="text/css" href="/css/user/forgotPw.css">
   
-	  <c:if test="${not empty msg}">
-		  <script>
-		    alert("${msg}");
-		  </script>
-	  </c:if>
+  <c:if test="${not empty error}">
+  <script>
+    alert("${error}");
+  </script>
+  </c:if>
 </head>
 <body>
   <img class="wave" src="/images/wave7.png">
@@ -27,13 +27,10 @@
     
     
     
-      <form action="/user/login" method="post">
+      <form action="/user/forgotPw" method="post">
       	<img src="/images/login2.png">
-        <h2 class="title">Welcome!</h2>
-        	<c:if test="${param.error == 'true'}">
-        		<div style="color:red;">아이디 또는 비밀번호가 올바르지 않습니다.</div>
-    		</c:if>
-    		<br>
+        <h5 class="title">입력하신 이메일로 인증코드를 발송해드립니다.
+        coffice에서 사용하시는 이메일로 입력바랍니다.</h5>
               <div class="input-div one">
                  <div class="i">
                     <i class="fas fa-user"></i>
@@ -48,12 +45,11 @@
                     <i class="fas fa-lock"></i>
                  </div>
                  <div class="div">
-                    <h5>Password</h5>
-                    <input type="password" class="input" name="password">
+                    <h5>Email</h5>
+                    <input type="text" class="input" name="email">
                  </div>
               </div>
-              <a href="/user/forgotPw">Forgot Password?</a>
-              <input type="submit" class="btn" value="Login">
+              <input type="submit" class="btn" value="submit">
             </form>
             
             

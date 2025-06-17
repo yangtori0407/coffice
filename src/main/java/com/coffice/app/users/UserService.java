@@ -24,20 +24,32 @@ public class UserService implements UserDetailsService{
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private FileManager fileManager;
+	
 	@Value("${app.profiles.base}")
 	private String path;
 
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+		System.out.println("🧪 userId: " + userId);
+		String pw;
+		try {
+			pw = userDAO.checkPassword(userId);
+			System.out.println("✅ 패스워드: " + pw);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		UserVO userVO = new UserVO();
 		userVO.setUserId(userId);
 		//System.out.println("로그인 요청 아이디 : "+ userId);
+
 		try {
 			userVO = userDAO.detail(userVO);
 			if (userVO == null) {
 	            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId);
 	        }
 			
+			System.out.println("🟢 DB에서 가져온 비밀번호: " + userVO.getPassword());
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -93,6 +105,17 @@ public class UserService implements UserDetailsService{
 			result = null;
 		}
 		return result;
+	}
+	
+	public UserVO findByEmail(String email) throws Exception {
+		return userDAO.findByEmail(email);
+	}
+	
+	public int updatePassword(UserVO userVO) throws Exception {
+		String encodedPassword = passwordEncoder.encode(userVO.getPassword());
+		userVO.setPassword(encodedPassword);
+		userDAO.updatePassword(userVO);
+		return userDAO.updatePassword(userVO);
 	}
 	
 	

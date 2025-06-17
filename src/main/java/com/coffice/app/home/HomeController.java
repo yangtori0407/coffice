@@ -16,11 +16,8 @@ import jakarta.servlet.http.HttpSession;
 public class HomeController {
 	
 	@GetMapping("/")
-	public String home(@AuthenticationPrincipal UserVO userVO, Model model) {
+	public String home() {
 		
-		if(userVO != null) {
-			model.addAttribute("user", userVO);
-		}
 		return "index";
 	}
 }

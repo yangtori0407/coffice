@@ -9,13 +9,18 @@
   <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="/css/user/login.css">
+  <link rel="stylesheet" type="text/css" href="/css/user/forgotPw.css">
   
-	  <c:if test="${not empty msg}">
-		  <script>
-		    alert("${msg}");
-		  </script>
-	  </c:if>
+  <c:if test="${not empty msg}">
+	  <script>
+	    alert("${msg}");
+	  </script>
+  </c:if>
+  
+  <c:if test="${param.error eq 'nouser'}">
+       <script>alert('해당 이메일로 등록된 사용자가 없습니다.');</script>
+  </c:if>
+  
 </head>
 <body>
   <img class="wave" src="/images/wave7.png">
@@ -27,20 +32,16 @@
     
     
     
-      <form action="/user/login" method="post">
+      <form action="/user/resetPw" method="post">
       	<img src="/images/login2.png">
-        <h2 class="title">Welcome!</h2>
-        	<c:if test="${param.error == 'true'}">
-        		<div style="color:red;">아이디 또는 비밀번호가 올바르지 않습니다.</div>
-    		</c:if>
-    		<br>
+        <h5 class="title">새로운 비밀번호를 입력해주세요.</h5>
               <div class="input-div one">
                  <div class="i">
                     <i class="fas fa-user"></i>
                  </div>
                  <div class="div">
-                    <h5>Employee Id</h5>
-                    <input type="text" class="input" name="userId">
+                    <h5>password</h5>
+                    <input type="password" class="input" name="password">
                  </div>
               </div>
               <div class="input-div pass">
@@ -48,12 +49,12 @@
                     <i class="fas fa-lock"></i>
                  </div>
                  <div class="div">
-                    <h5>Password</h5>
-                    <input type="password" class="input" name="password">
+                    <h5>password check</h5>
+                    <input type="password" class="input" name="passwordCheck">
                  </div>
               </div>
-              <a href="/user/forgotPw">Forgot Password?</a>
-              <input type="submit" class="btn" value="Login">
+              <input type="hidden" name="userId" value="${userId}">
+              <input type="submit" class="btn" value="reset my pw">
             </form>
             
             
