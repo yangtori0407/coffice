@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -65,5 +66,9 @@ public class BranchService {
 	
 	public Long totalSales() throws Exception {
 		return branchDAO.totalSales();
+	}
+	
+	public List<SalesVO> getChartList() throws Exception {
+		return branchDAO.getChartList();
 	}
 }

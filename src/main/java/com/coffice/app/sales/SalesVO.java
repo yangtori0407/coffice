@@ -14,5 +14,6 @@ public class SalesVO {
 	private Integer salesQuantity;
 	private Integer branchId;
 	private Integer menuId;
+	private Integer totalSale;
 	private MenuVO menuVO;
 }

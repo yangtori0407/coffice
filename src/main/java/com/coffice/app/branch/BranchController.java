@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -117,6 +118,10 @@ public class BranchController {
 		
 		Long totalSale = branchService.totalBranchSales(branchVO);
 		model.addAttribute("total", totalSale);
+		
+		List<SalesVO> chart = branchService.getChartList();
+		model.addAttribute("chart", chart);
+		log.info("c:{}",chart);
 		
 		return "branch/myBranch";
 	}
