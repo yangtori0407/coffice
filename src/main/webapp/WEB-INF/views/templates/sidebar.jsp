@@ -76,11 +76,11 @@
 		aria-expanded="true" aria-controls="collapseCalendar"> <ion-icon
 				name="calendar-outline"></ion-icon> <span>일정</span>
 	</a>
-		<div id="collapseCalendar" class="collapse"
+		<div id="collapseCalendar" class="collapse ${events == ('schedule' or 'vacation') ? 'show' :''}"
 			aria-labelledby="headingCalendar" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item" href="/events/schedule">일정 관리</a> <a
-					class="collapse-item" href="/events/vacation">휴가 관리</a>
+				<a class="collapse-item ${events == 'schedule' ? 'active' : ''}" href="/events/schedule">일정 관리</a> <a
+					class="collapse-item ${events == 'vacation' ? 'active' : ''}" href="/events/vacation">휴가 관리</a>
 			</div>
 
 		</div></li>
