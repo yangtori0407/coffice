@@ -180,7 +180,7 @@ public class UserController {
 			redirectAttributes.addFlashAttribute("fail", "비밀번호 변경 실패");
 			return "redirect:/user/resetPw?userId=" + userId;
 		}
-
+	}
 	
 	// 조직도
 	@GetMapping("organizationChart")
