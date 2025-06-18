@@ -23,10 +23,10 @@ public class HomeController {
 	
 	@GetMapping("/")
 
-	public String home() {
+	public String home(Model model) throws Exception{
 		
 
-
+		model.addAttribute("list", noticeService.getMainList()) ;
 		return "index";
 	}
 }
