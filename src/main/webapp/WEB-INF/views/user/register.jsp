@@ -72,6 +72,7 @@
 					      <option value="3">물류팀</option>
 					      <option value="4">영업팀</option>
 					      <option value="5">회계팀</option>
+					      <option value="6">소속없음</option>
 					    </select>
 					  </div>
 					
