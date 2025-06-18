@@ -1,9 +1,9 @@
 const notificationArea = document.getElementById("notificationArea");
-const userId = document.getElementById("alert").getAttribute("data-user-id");
+const userIdNotification = document.getElementById("alert").getAttribute("data-user-id");
 //const chatAlert = document.getElementById("chatAlert");
 
-const socket = new SockJS("/ws-stomp");
-const stompClient = Stomp.over(socket);
+const socketNotification = new SockJS("/ws-stomp");
+const stompClientNotification = Stomp.over(socketNotification);
 
 class Notification {
     notiNum = 0;
@@ -14,11 +14,11 @@ class Notification {
     relateId = "";
 }
 
-stompClient.connect({}, function (frame) {
+stompClientNotification.connect({}, function (frame) {
     console.log("Stomp 연결 성공: ", frame);
 
     //공지사항 알림
-    stompClient.subscribe(`/sub/notice`, function (message) {
+    stompClientNotification.subscribe(`/sub/notice`, function (message) {
         console.log("받음")
         const msg = JSON.parse(message.body); //서버에서 json으로 보낸걸 json 객체로 받음
         console.log(msg);
@@ -26,7 +26,7 @@ stompClient.connect({}, function (frame) {
         createAlert(msg);
     })
     //채팅방 알림
-    stompClient.subscribe(`/sub/chat/user.${userId}`, function (message) {
+    stompClientNotification.subscribe(`/sub/chat/user.${userIdNotification}`, function (message) {
         const msg = JSON.parse(message.body);
         console.log(msg);
         createToast(msg);

@@ -36,7 +36,16 @@
 										<c:forEach items="${list }" var="r">
 											<a href="./chatRoom?chatRoomNum=${r.chatRoomNum}"
 												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
-												<span>🌟${r.chatRoomName}</span></a>
+												<span>🌟${r.chatRoomName} 
+												<c:choose>
+													<c:when test="${r.alarmStatus eq 1 }">
+														<ion-icon name="notifications-outline" style="vertical-align: middle;"></ion-icon>
+													</c:when>
+													<c:otherwise>
+														<ion-icon name="notifications-off-outline" style="vertical-align: middle;"></ion-icon>
+													</c:otherwise>
+												</c:choose>
+												</span></a>
 										</c:forEach>
 										
 										 

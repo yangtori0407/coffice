@@ -31,23 +31,52 @@
 						style="height: 80vh;">
 						<div class="col-5 mt-3">
 							<div class="card shadow mb-4">
-								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+								<div
+									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 id="chatInfo" class="m-0 font-weight-bold text-primary"
 										data-chat-num="${chatRoomVO.chatRoomNum }"
 										data-user-id="${user.userId }">${chatRoomVO.chatRoomName}</h6>
-										
-									<div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" style="width: 250px; max-height: 300px; overflow-y: auto;" aria-labelledby="dropdownMenuLink" style="">
-                                            <div class="dropdown-header" style="font-size: 14px;  font-weight: initial;">채팅 참여자</div>
-                                            <c:forEach items="${users }" var="u">
-                                            	<div class="dropdown-item-text w-100 px-3 py-2">${u.deptName } ${u.name } ${u.position }</div>
-                                            </c:forEach>
-                                           
-                                        </div>
-                                    </div>
+									<div class="row align-items-center">
+										<div class="col-6 d-flex align-items-center">
+											
+												<c:choose>
+													<c:when test="${chatRoomVO.alarmStatus eq 1}">
+														<button class="btn" type="button" id="alarmBtn" data-ion-name="notifications">
+															<ion-icon name="notifications"
+																style="vertical-align: middle; font-size: 20px;"></ion-icon>
+														</button>
+													</c:when>
+													<c:otherwise>
+														<button class="btn" type="button" id="alarmBtn" data-ion-name="notifications-outline">
+															<ion-icon name="notifications-outline"
+																style="vertical-align: middle; font-size: 20px;"></ion-icon>
+														</button>
+													</c:otherwise>
+												</c:choose>
+											
+										</div>
+										<div class="col-6 d-flex align-items-center justify-content-end">
+											<div class="dropdown no-arrow">
+												<a class="dropdown-toggle" href="#" role="button"
+													id="dropdownMenuLink" data-toggle="dropdown"
+													aria-haspopup="true" aria-expanded="false"> <i
+													class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+												</a>
+												<div
+													class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+													style="width: 250px; max-height: 300px; overflow-y: auto;"
+													aria-labelledby="dropdownMenuLink">
+													<div class="dropdown-header"
+														style="font-size: 14px; font-weight: initial;">채팅
+														참여자</div>
+													<c:forEach items="${users }" var="u">
+														<div class="dropdown-item-text w-100 px-3 py-2">
+															${u.deptName } ${u.name } ${u.position }</div>
+													</c:forEach>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="card-body d-flex flex-column" style="height: 80vh;">
 									<!-- 채팅 메시지 영역 -->
@@ -76,7 +105,7 @@
 																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
 																<div class="card border-left-secondary"
 																	style="max-width: 60%;">
-																	<div class="card-body p-2 text-break" >${con.chatContents }</div>
+																	<div class="card-body p-2 text-break">${con.chatContents }</div>
 																</div>
 															</div>
 														</c:otherwise>

@@ -48,10 +48,14 @@ public interface ChatDAO {
 
 	FileVO getFileDetail(NoticeFilesVO filesVO) throws Exception;
 
-	List<String> getChatUserInfo(String chatRoomNum) throws Exception;
+	List<ChatPersonVO> getChatUserInfo(String chatRoomNum) throws Exception;
 
 	List<UserVO> getChatUsersDetail(String chatRoomNum) throws Exception;
 
 	int updateLastReadAt(Map<String, Object> info) throws Exception;
+
+	Integer getChatAlarm(Map<String, Object> info) throws Exception;
+
+	int updateAlarm(Map<String, Object> info) throws Exception;
 	
 }

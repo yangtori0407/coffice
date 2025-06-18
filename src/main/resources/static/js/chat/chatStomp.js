@@ -240,7 +240,7 @@ function createToast(msg) {
     </div>
     </div>
   `;
-  
+
   toast.addEventListener("click", () => {
         location.href = `/chat/chatRoom?chatRoomNum=${msg.chatContentsVO.chatRoomNum}`
     })
@@ -259,3 +259,42 @@ function createToast(msg) {
         setTimeout(() => toast.remove(), 1000); // transition 시간과 맞추기
     }, 1500); 
 }
+
+
+//==========================채팅방 알람 켜기 끄기
+const alarmBtn = document.getElementById("alarmBtn");
+
+alarmBtn.addEventListener("click", ()=>{
+    console.log("!!!!!!!!!!")
+    if(alarmBtn.getAttribute("data-ion-name") == "notifications"){
+        const p = new URLSearchParams();
+        p.append("chatNum",chatNum);
+
+        fetch("/chat/updateAlarm",{
+            method: "POST",
+            body: p
+        })
+        .then(r=>r.text())
+        .then(r =>{
+            if(r * 1 == 1){
+                alarmBtn.setAttribute("data-ion-name", 'notifications-outline')
+                alarmBtn.innerHTML = '<ion-icon name="notifications-outline"style="vertical-align: middle; font-size: 20px;"></ion-icon>'
+            }
+        })
+    }else{
+        const p = new URLSearchParams();
+        p.append("chatNum",chatNum);
+
+        fetch("/chat/updateAlarm",{
+            method: "POST",
+            body: p
+        })
+        .then(r=>r.text())
+        .then(r =>{
+            if(r * 1 == 1){
+                alarmBtn.setAttribute("data-ion-name", 'notifications')
+                alarmBtn.innerHTML = '<ion-icon name="notifications"style="vertical-align: middle; font-size: 20px;"></ion-icon>'
+            }
+        })
+    }
+})

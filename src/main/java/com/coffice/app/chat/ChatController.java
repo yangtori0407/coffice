@@ -66,16 +66,19 @@ public class ChatController {
 		log.info("/sub/chatRoom." + chatContentsVO.getChatRoomNum());
 		
 		//채팅 알람
-		List<String> users = chatService.getChatUserInfo(chatContentsVO.getChatRoomNum());
+		List<ChatPersonVO> users = chatService.getChatUserInfo(chatContentsVO.getChatRoomNum());
 		ChatRoomVO chatRoomVO = new ChatRoomVO();
 		chatRoomVO.setChatRoomNum(chatContentsVO.getChatRoomNum());
-		chatRoomVO = chatService.getChatInfo(chatRoomVO);
+		chatRoomVO = chatService.getChatInfo(chatRoomVO,userVO.getUserId());
 		Map<String, Object> alert = new HashMap<>();
 		alert.put("chatRoomName", chatRoomVO.getChatRoomName());
 		alert.put("chatContentsVO", chatContentsVO);
-		for(String u : users) {
-			if(u != chatContentsVO.getSender()) {
-				template.convertAndSend("/sub/chat/user." + u, alert);
+		for(ChatPersonVO u : users) {
+//			log.info("chat participate users : {}", u);
+			//String 비교는 반드시 equals!!!!!
+			if(!u.getUserId().equals(chatContentsVO.getSender()) && u.getAlarmStatus() == 1) {
+				log.info("chat participate users : {}", u);
+				template.convertAndSend("/sub/chat/user." + u.getUserId(), alert);
 			}
 		}
 	}
@@ -109,7 +112,7 @@ public class ChatController {
 	@GetMapping("chatRoom")
 	public void chatRoom(ChatRoomVO chatRoomVO, Model model, Authentication authentication) throws Exception{
 		String userId = authentication.getName();
-		chatRoomVO = chatService.getChatInfo(chatRoomVO);
+		chatRoomVO = chatService.getChatInfo(chatRoomVO, userId);
 		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO);
 		List<UserVO> users = chatService.getChatUsersDetail(chatRoomVO.getChatRoomNum());
 		chatService.updateLastReadAt(userId, chatRoomVO);
@@ -141,6 +144,15 @@ public class ChatController {
 		model.addAttribute("kind", "chatFile");
 		
 		return "fileDownView";
+	}
+	
+	@PostMapping("updateAlarm")
+	public String updateAlarm(Authentication authentication, String chatNum, Model model) throws Exception{
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		int result = chatService.updateAlarm(userVO, chatNum);
+		model.addAttribute("result", result);
+		
+		return "commons/ajaxResult";
 	}
 
 }
