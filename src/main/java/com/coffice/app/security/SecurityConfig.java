@@ -49,7 +49,7 @@ public class SecurityConfig {
 			
 			.authorizeHttpRequests(auth ->{
 					auth
-					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
+					//.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
 					.requestMatchers("/user/mypage","/user/update","/user/logout").authenticated()
 					.anyRequest().permitAll()
 					;

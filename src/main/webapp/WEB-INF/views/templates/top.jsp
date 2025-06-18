@@ -6,12 +6,12 @@
 	class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
 	<!-- Sidebar Toggle (Topbar) -->
-	<button id="sidebarToggleTop"
+	<!-- <button id="sidebarToggleTop"
 		class="btn btn-link d-md-none rounded-circle mr-3">
 		<i class="fa fa-bars"></i>
-	</button>
+	</button> -->
+	<!-- <div class="mt-2"><h3>공지사항</h3></div> -->
 
-	
 
 	<!-- Topbar Navbar -->
 	<ul class="navbar-nav ml-auto">
@@ -43,17 +43,24 @@
 		<li class="nav-item dropdown no-arrow mx-1"><a
 			class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
 			role="button" data-toggle="dropdown" aria-haspopup="true"
-			aria-expanded="false"> <ion-icon name="notifications-outline"></ion-icon> <!-- Counter - Alerts -->
-				<span class="badge badge-danger badge-counter">3+</span>
+			aria-expanded="false"> <ion-icon name="notifications-outline"></ion-icon>
+				<!-- Counter - Alerts --> <span
+				class="badge badge-danger badge-counter">3+</span>
 		</a> <!-- Dropdown - Alerts -->
 			<div
 				class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
 				aria-labelledby="alertsDropdown">
-				<h6 class="dropdown-header">Alerts Center</h6>
-				<a class="dropdown-item d-flex align-items-center" href="#">
+				<h6 class="dropdown-header" 
+					style="font-size: 15px; font-weight: initial;">알림</h6>
+					<div id="notificationArea">
+					
+					
+					
+					</div>
+			<!-- 	<a class="dropdown-item d-flex align-items-center" id="" href="#">
 					<div class="mr-3">
-						<div class="icon-circle bg-primary">
-							<i class="fas fa-file-alt text-white"></i>
+						<div class="icon-circle bg-info">
+							<ion-icon size="large" name="information-circle-outline"></ion-icon>
 						</div>
 					</div>
 					<div>
@@ -83,23 +90,24 @@
 						account.
 					</div>
 				</a> <a class="dropdown-item text-center small text-gray-500" href="#">Show
-					All Alerts</a>
+					All Alerts</a> -->
 			</div></li>
 
 		<!-- Nav Item - Messages -->
-		<li class="nav-item"><a
-			class="nav-link no-arrow mx-1" href="#" id="messagesDropdown"
-			role="button" aria-expanded="false"> <ion-icon name="person-outline"></ion-icon> <!-- Counter - Messages -->
+		<li class="nav-item"><a class="nav-link no-arrow mx-1" href="#"
+			id="messagesDropdown" role="button" aria-expanded="false"> <ion-icon
+					name="person-outline"></ion-icon> <!-- Counter - Messages -->
 		</a></li>
-		<li class="nav-item"><a
-			class="nav-link no-arrow mx-1" onclick="confirmLogout()" id="messagesDropdown"
-			role="button" aria-expanded="false"> <ion-icon name="log-out-outline"></ion-icon>
+		<li class="nav-item"><a class="nav-link no-arrow mx-1"
+			onclick="confirmLogout()" id="messagesDropdown" role="button"
+			aria-expanded="false"> <ion-icon name="log-out-outline"></ion-icon>
 		</a></li>
-		
+
 
 		<div class="topbar-divider d-none d-sm-block"></div>
 
 		<!-- Nav Item - User Information -->
+
 		<li class="nav-item no-arrow"><span
 			class="nav-link" id="userDropdown"
 			  aria-haspopup="true"
@@ -112,11 +120,14 @@
 		</span> <!-- Dropdown - User Information -->
 		</li>
 
+
 	</ul>
 
 </nav>
-<form id="logoutForm" action="/user/logout" method="post" style="display: none;">
-  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+<form id="logoutForm" action="/user/logout" method="post"
+	style="display: none;">
+	<input type="hidden" name="${_csrf.parameterName}"
+		value="${_csrf.token}" />
 </form>
 
 <script src="/js/user/logout.js"></script>

@@ -105,7 +105,7 @@
 															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
 															<td>관리자</td>
 															<td>${l.noticeHit }</td>
-															<td>${l.noticeDate }</td>
+															<td>${l.formatted }</td>
 														</tr>
 													</c:forEach>
 												</tbody>
