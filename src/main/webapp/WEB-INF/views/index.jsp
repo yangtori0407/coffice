@@ -287,17 +287,24 @@
 	<script src="/js/calendar/homeCalendar.js"></script>
 </body>
 <script type="text/javascript">
+const label = [
+	<c:forEach items="${chart}" var="c" varStatus="s">
+		"${c.branchName}"
+		<c:if test="${!s.last}">,</c:if>
+	</c:forEach>	
+];
+const datas = [
+	<c:forEach items="${chart}" var="c" varStatus="s">
+		"${c.totalSale}"
+		<c:if test="${!s.last}">,</c:if>
+	</c:forEach>	
+];
+
 const data = {
-		  labels: [
-		    '1호점',
-		    '2호점',
-		    '3호점',
-		    '4호점',
-		    '5호점'
-		  ],
+		  labels: label,
 		  datasets: [{
-		    label: 'My First Dataset',
-		    data: [300, 100, 50,20,10],
+		    label: 'branchSale',
+		    data: datas,
 		    backgroundColor: [
 		      'rgb(255, 99, 4)',
 		      'rgb(54, 162, 235)',

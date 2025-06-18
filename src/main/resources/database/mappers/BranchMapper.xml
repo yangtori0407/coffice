@@ -131,6 +131,28 @@
   	  	WHERE USER_ID = #{userVO.userId}
   	  	GROUP BY MENU_ID
   	</select>
+  	
+  	<select id="getTotalChart" resultType="BranchVO">
+  		SELECT *
+	  	FROM (
+	  	  	SELECT BRANCH_ID, BRANCH_NAME, SUM(
+		  		CASE 
+		  			WHEN SALES_TYPE = 1 THEN +SALES_PROFIT
+		  			WHEN SALES_TYPE = 0 THEN -SALES_PROFIT
+		  		END
+	  		) AS totalSale, 
+	  		RANK() OVER (ORDER BY SUM(
+		  		CASE 
+		  			WHEN SALES_TYPE = 1 THEN +SALES_PROFIT
+		  			WHEN SALES_TYPE = 0 THEN -SALES_PROFIT
+		  		END) DESC) AS ranking
+	  		FROM SALES
+	  		JOIN BRANCH
+	  		USING(BRANCH_ID)
+			GROUP BY BRANCH_ID) AS summarySale
+		WHERE ranking <![CDATA[ <= ]]> 5
+		ORDER BY totalSale DESC
+  	</select>
   
   <resultMap type="BranchMasterVO" id="getBranchMaster">
 	  	<result column="CONTACT_NUMBER" property="contactNumber"/>
