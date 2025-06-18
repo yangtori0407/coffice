@@ -30,11 +30,11 @@ public class EventController {
 
     @Autowired
 	private HolidayService holidayService;
-
 	
 	@GetMapping("schedule")
 	public String schedule(Model model) throws Exception {
 		model.addAttribute("kind", "일정");
+		model.addAttribute("events", "schedule");
 		return "events/schedule";
 	}
 	
@@ -59,6 +59,7 @@ public class EventController {
 	@GetMapping("vacation")
 	public String vacation(Model model) {
 		model.addAttribute("kind", "휴가");
+		model.addAttribute("events", "vacation");
 		return "events/schedule";
 	}
 	

@@ -21,7 +21,7 @@
 
 					<!-- contents 내용 -->
 					
-					<h1 class="h3 mb-2 text-gray-800" id="kind">${kind} </h1>
+					<input type="hidden" id="kind" value="${kind}">
 					<div id="calendar"></div>
 
 				</div>
