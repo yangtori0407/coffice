@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.coffice.app.chat.vo.ChatAddVO;
 import com.coffice.app.chat.vo.ChatContentsVO;
 import com.coffice.app.chat.vo.ChatFilesVO;
+import com.coffice.app.chat.vo.ChatPersonVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
 import com.coffice.app.files.FileVO;
 import com.coffice.app.posts.notice.NoticeFilesVO;
@@ -63,6 +64,20 @@ public class ChatController {
 		log.info("보낸 것 chatContentsVO : {}", chatContentsVO);
 		template.convertAndSend("/sub/chatRoom." + chatContentsVO.getChatRoomNum(), chatContentsVO);
 		log.info("/sub/chatRoom." + chatContentsVO.getChatRoomNum());
+		
+		//채팅 알람
+		List<String> users = chatService.getChatUserInfo(chatContentsVO.getChatRoomNum());
+		ChatRoomVO chatRoomVO = new ChatRoomVO();
+		chatRoomVO.setChatRoomNum(chatContentsVO.getChatRoomNum());
+		chatRoomVO = chatService.getChatInfo(chatRoomVO);
+		Map<String, Object> alert = new HashMap<>();
+		alert.put("chatRoomName", chatRoomVO.getChatRoomName());
+		alert.put("chatContentsVO", chatContentsVO);
+		for(String u : users) {
+			if(u != chatContentsVO.getSender()) {
+				template.convertAndSend("/sub/chat/user." + u, alert);
+			}
+		}
 	}
 	
 	@GetMapping("main")

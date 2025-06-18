@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <nav
 	class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -40,24 +42,25 @@
 			</div></li>
 
 		<!-- Nav Item - Alerts -->
-		<li class="nav-item dropdown no-arrow mx-1"><a
-			class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
-			role="button" data-toggle="dropdown" aria-haspopup="true"
-			aria-expanded="false"> <ion-icon name="notifications-outline"></ion-icon>
-				<!-- Counter - Alerts --> <span
-				class="badge badge-danger badge-counter">3+</span>
-		</a> <!-- Dropdown - Alerts -->
-			<div
-				class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-				aria-labelledby="alertsDropdown">
-				<h6 class="dropdown-header" 
-					style="font-size: 15px; font-weight: initial;">알림</h6>
-					<div id="notificationArea">
-					
-					
-					
-					</div>
-			<!-- 	<a class="dropdown-item d-flex align-items-center" id="" href="#">
+		<sec:authorize access="isAuthenticated()">
+			<sec:authentication property="principal" var="user" />
+
+
+			<li class="nav-item dropdown no-arrow mx-1" id="alert"
+				data-user-id=${user.userId }><a
+				class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
+				role="button" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false"> <ion-icon name="notifications-outline"></ion-icon>
+					<!-- Counter - Alerts --> <span
+					class="badge badge-danger badge-counter">3+</span>
+			</a> <!-- Dropdown - Alerts -->
+				<div
+					class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+					aria-labelledby="alertsDropdown">
+					<h6 class="dropdown-header"
+						style="font-size: 15px; font-weight: initial;">알림</h6>
+					<div id="notificationArea"></div>
+					<!-- 	<a class="dropdown-item d-flex align-items-center" id="" href="#">
 					<div class="mr-3">
 						<div class="icon-circle bg-info">
 							<ion-icon size="large" name="information-circle-outline"></ion-icon>
@@ -91,7 +94,8 @@
 					</div>
 				</a> <a class="dropdown-item text-center small text-gray-500" href="#">Show
 					All Alerts</a> -->
-			</div></li>
+				</div></li>
+		</sec:authorize>
 
 		<!-- Nav Item - Messages -->
 		<li class="nav-item"><a class="nav-link no-arrow mx-1" href="#"
@@ -108,17 +112,13 @@
 
 		<!-- Nav Item - User Information -->
 
-		<li class="nav-item no-arrow"><span
-			class="nav-link" id="userDropdown"
-			  aria-haspopup="true"
-			aria-expanded="false"> <span
-				class="mr-2 d-none d-lg-inline text-gray-600 small">
-					<c:if test="${not empty user}">
+		<li class="nav-item no-arrow"><span class="nav-link"
+			id="userDropdown" aria-haspopup="true" aria-expanded="false">
+				<span class="mr-2 d-none d-lg-inline text-gray-600 small"> <c:if
+						test="${not empty user}">
 				    ${user.name} ${user.position}
-				</c:if></span> <img class="img-profile rounded-circle"
-				src="/images/coffice.png">
-		</span> <!-- Dropdown - User Information -->
-		</li>
+				</c:if></span> <img class="img-profile rounded-circle" src="/images/coffice.png">
+		</span> <!-- Dropdown - User Information --></li>
 
 
 	</ul>

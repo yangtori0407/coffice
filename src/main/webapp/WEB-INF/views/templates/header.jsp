@@ -11,6 +11,7 @@
 <link href="/css/sb-admin-2.min.css" rel="stylesheet">
 
 <link href="/css/sidebar.css" rel="stylesheet">
+<link href="/css/chatAlert.css" rel="stylesheet">
 
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>

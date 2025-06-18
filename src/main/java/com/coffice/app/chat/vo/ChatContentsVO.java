@@ -18,6 +18,7 @@ public class ChatContentsVO {
 	private String chatContents;
 	private Timestamp sendDate;
 	private String sender;
+	//보내는 사람 이름
 	private String name;
 	private boolean flag;
 	private String fileNum;
