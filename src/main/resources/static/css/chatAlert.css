@@ -1,0 +1,18 @@
+/* CSS */
+.chat-preview {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* 너비는 적절히 조절하세요 */
+}
+
+.toast {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.toast.hide {
+  opacity: 0 !important;
+  display: block !important; /* ← Bootstrap의 display:none을 무력화 */
+}

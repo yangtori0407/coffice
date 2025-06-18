@@ -29,7 +29,7 @@
   	</select>
   	
   	<select id="getList" parameterType="UserVO" resultType="ChatRoomVO">
-  		SELECT R.CHATROOM_NUM, R.CHATROOM_NAME 
+  		SELECT R.CHATROOM_NUM, R.CHATROOM_NAME, P.ALARM_STATUS
   		FROM CHAT_ROOM R 
   		JOIN CHAT_PERSON P 
   		ON R.CHATROOM_NUM = P.CHATROOM_NUM 
@@ -75,6 +75,25 @@
   		WHERE FILE_NUM = #{fileNum}
   	</select>
   	
+  	<select id="getChatUserInfo" parameterType="java.lang.String" resultType="ChatPersonVO">
+  		SELECT USER_ID, ALARM_STATUS FROM CHAT_PERSON WHERE CHATROOM_NUM = #{chatRoomNum}
+  	</select>
+  	
+  	<select id="getChatUsersDetail" parameterType="java.lang.String" resultType="UserVO">
+  		SELECT U.USER_ID, U.NAME, U.POSITION, D.DEPT_NAME
+  		FROM USERS U
+  		JOIN
+ 		(SELECT USER_ID FROM CHAT_PERSON WHERE CHATROOM_NUM = #{chatRoomNum}) C
+ 		ON U.USER_ID = C.USER_ID
+ 		JOIN
+ 		DEPARTMENT D
+ 		ON U.DEPT_ID = D.DEPT_ID
+  	</select>
+  	
+  	<select id="getChatAlarm" parameterType="java.util.HashMap" resultType="Integer">
+  		SELECT ALARM_STATUS FROM CHAT_PERSON 
+  		WHERE USER_ID = #{userId} AND CHATROOM_NUM = #{chatRoomNum}
+  	</select>
   	
   	
   	<insert id="addChat" parameterType="ChatRoomVO" useGeneratedKeys="true" keyProperty="chatRoomNum">
@@ -82,9 +101,9 @@
   	</insert>
   	
   	<insert id="addUser" parameterType="ChatAddVO">
-  		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT, LAST_READ_AT) VALUES
+  		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT, LAST_READ_AT, ALARM_STATUS) VALUES
   		<foreach collection="users" item="u" separator=",">
-  			(#{chatRoomNum}, #{u}, NOW(), null)
+  			(#{chatRoomNum}, #{u}, NOW(), NOW(), 1)
   		</foreach>
   	</insert>
   	
@@ -103,5 +122,17 @@
   		VALUES(NULL, #{chatNum}, #{originName}, #{saveName})
   	</insert>
   	
+  	<update id="updateLastReadAt" parameterType="java.util.HashMap">
+  		UPDATE CHAT_PERSON SET LAST_READ_AT = NOW() WHERE USER_ID = #{userId} AND CHATROOM_NUM = #{chatRoomNum}
+  	</update>
+  	
+  	<update id="updateAlarm" parameterType="java.util.HashMap">
+  		UPDATE CHAT_PERSON SET
+  		ALARM_STATUS = CASE
+  						WHEN ALARM_STATUS = 1 THEN 0
+  						ELSE 1
+  						END
+  		WHERE USER_ID = #{userId} AND CHATROOM_NUM = #{chatRoomNum}
+  	</update>
   	
 </mapper>

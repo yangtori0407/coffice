@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.coffice.app.chat.vo.ChatAddVO;
 import com.coffice.app.chat.vo.ChatContentsVO;
 import com.coffice.app.chat.vo.ChatFilesVO;
+import com.coffice.app.chat.vo.ChatPersonVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
 import com.coffice.app.files.FileVO;
 import com.coffice.app.posts.notice.NoticeFilesVO;
@@ -63,6 +64,23 @@ public class ChatController {
 		log.info("보낸 것 chatContentsVO : {}", chatContentsVO);
 		template.convertAndSend("/sub/chatRoom." + chatContentsVO.getChatRoomNum(), chatContentsVO);
 		log.info("/sub/chatRoom." + chatContentsVO.getChatRoomNum());
+		
+		//채팅 알람
+		List<ChatPersonVO> users = chatService.getChatUserInfo(chatContentsVO.getChatRoomNum());
+		ChatRoomVO chatRoomVO = new ChatRoomVO();
+		chatRoomVO.setChatRoomNum(chatContentsVO.getChatRoomNum());
+		chatRoomVO = chatService.getChatInfo(chatRoomVO,userVO.getUserId());
+		Map<String, Object> alert = new HashMap<>();
+		alert.put("chatRoomName", chatRoomVO.getChatRoomName());
+		alert.put("chatContentsVO", chatContentsVO);
+		for(ChatPersonVO u : users) {
+//			log.info("chat participate users : {}", u);
+			//String 비교는 반드시 equals!!!!!
+			if(!u.getUserId().equals(chatContentsVO.getSender()) && u.getAlarmStatus() == 1) {
+				log.info("chat participate users : {}", u);
+				template.convertAndSend("/sub/chat/user." + u.getUserId(), alert);
+			}
+		}
 	}
 	
 	@GetMapping("main")
@@ -94,9 +112,10 @@ public class ChatController {
 	@GetMapping("chatRoom")
 	public void chatRoom(ChatRoomVO chatRoomVO, Model model, Authentication authentication) throws Exception{
 		String userId = authentication.getName();
-		chatRoomVO = chatService.getChatInfo(chatRoomVO);
+		chatRoomVO = chatService.getChatInfo(chatRoomVO, userId);
 		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO);
-		
+		List<UserVO> users = chatService.getChatUsersDetail(chatRoomVO.getChatRoomNum());
+		chatService.updateLastReadAt(userId, chatRoomVO);
 //		for(ChatContentsVO c : contents) {
 //			log.info("챗 내용 : {}", c);
 //		}
@@ -104,6 +123,7 @@ public class ChatController {
 		model.addAttribute("chatRoomVO", chatRoomVO);
 		model.addAttribute("userId", userId);
 		model.addAttribute("contents", contents);
+		model.addAttribute("users", users);
 		
 	}
 	
@@ -124,6 +144,15 @@ public class ChatController {
 		model.addAttribute("kind", "chatFile");
 		
 		return "fileDownView";
+	}
+	
+	@PostMapping("updateAlarm")
+	public String updateAlarm(Authentication authentication, String chatNum, Model model) throws Exception{
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		int result = chatService.updateAlarm(userVO, chatNum);
+		model.addAttribute("result", result);
+		
+		return "commons/ajaxResult";
 	}
 
 }

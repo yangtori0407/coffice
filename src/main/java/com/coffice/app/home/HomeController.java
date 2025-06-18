@@ -22,6 +22,7 @@ public class HomeController {
 	private BranchService branchService;
 	
 	@GetMapping("/")
+
 	public String home(@AuthenticationPrincipal UserVO userVO, Model model) throws Exception{
 		
 		if(userVO != null) {

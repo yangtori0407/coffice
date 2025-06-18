@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.coffice.app.chat.vo.ChatAddVO;
 import com.coffice.app.chat.vo.ChatContentsVO;
 import com.coffice.app.chat.vo.ChatFilesVO;
+import com.coffice.app.chat.vo.ChatPersonVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
 import com.coffice.app.files.FileManager;
 import com.coffice.app.files.FileVO;
@@ -83,9 +84,14 @@ public class ChatService {
 	
 	
 
-	public ChatRoomVO getChatInfo(ChatRoomVO chatRoomVO) throws Exception{
-		// TODO Auto-generated method stub
-		return chatDAO.getChatInfo(chatRoomVO);
+	public ChatRoomVO getChatInfo(ChatRoomVO chatRoomVO,String userId) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		info.put("chatRoomNum", chatRoomVO.getChatRoomNum());
+		chatRoomVO = chatDAO.getChatInfo(chatRoomVO);
+		chatRoomVO.setAlarmStatus(chatDAO.getChatAlarm(info));
+		
+		return chatRoomVO;
 	}
 
 	public ChatContentsVO addContents(ChatContentsVO chatContentsVO, UserVO userVO) throws Exception{
@@ -136,6 +142,32 @@ public class ChatService {
 	public FileVO fileDown(NoticeFilesVO filesVO) throws Exception{
 		
 		return chatDAO.getFileDetail(filesVO);
+	}
+
+	public List<ChatPersonVO> getChatUserInfo(String chatRoomNum) throws Exception{
+		// TODO Auto-generated method stub
+		return chatDAO.getChatUserInfo(chatRoomNum);
+	}
+
+	public List<UserVO> getChatUsersDetail(String chatRoomNum) throws Exception{
+		// TODO Auto-generated method stub
+		return chatDAO.getChatUsersDetail(chatRoomNum);
+	}
+
+	public int updateLastReadAt(String userId, ChatRoomVO chatRoomVO) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		info.put("chatRoomNum", chatRoomVO.getChatRoomNum());
+		return chatDAO.updateLastReadAt(info);
+	}
+
+	public int updateAlarm(UserVO userVO, String chatNum) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userVO.getUserId());
+		info.put("chatRoomNum", chatNum);
+		
+		return chatDAO.updateAlarm(info);
+		
 	}
 
 }

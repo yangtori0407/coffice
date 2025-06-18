@@ -29,11 +29,21 @@ stompClient.connect({}, function (frame) {
 
     stompClient.subscribe(`/sub/chatRoom.${chatNum}`, function (message) {
         const msg = JSON.parse(message.body); //서버에서 json으로 보낸걸 json 객체로 받음
-        console.log("받은 메세지 " + msg);
+        console.log(msg);
         let chat = displayReceiveMessage(msg);
         chatBox.append(chat);
         chatBox.scrollTop = chatBox.scrollHeight;
     })
+
+    stompClient.subscribe(`/sub/chat/user.${userId}`, function (message) {
+        const msg = JSON.parse(message.body);
+        console.log("채팅알림!!!");
+        console.log(msg);
+        if (chatNum != msg.chatContentsVO.chatRoomNum) {
+            createToast(msg);
+        }
+    })
+
 }, function (error) {
     console.error("stomp 연결 실패: ", error);
 })
@@ -191,4 +201,100 @@ fileUpload.addEventListener("change", (e) => {
             console.log(m);
             stompClient.send("/pub/sendMessage", {}, JSON.stringify(m))
         })
+})
+
+//notification에서도 같이 수정하기
+function createToast(msg) {
+    const container = document.getElementById("chatAlert");
+
+    const toast = document.createElement("div");
+    toast.className = "toast fade show"; // Bootstrap 스타일 수동 적용
+    toast.setAttribute("role", "alert");
+    toast.setAttribute("aria-live", "assertive");
+    toast.setAttribute("aria-atomic", "true");
+    toast.style.minWidth = "250px";
+    toast.style.marginBottom = "10px";
+    toast.style.backgroundColor = "#fff";
+    toast.style.boxShadow = "0 0 10px rgba(0,0,0,0.1)";
+    toast.style.borderRadius = "5px";
+    toast.style.border = "1px solid #ccc";
+
+    toast.innerHTML = `
+        <div class="toast-header d-flex align-items-center">
+    <ion-icon name="chatbubble-ellipses-outline" class="mr-2"></ion-icon>
+    <strong class="mr-auto">${msg.chatRoomName}</strong>
+    <small class="text-muted">${msg.chatContentsVO.formatted}</small>
+    <button type="button" class="ml-2 mb-1 close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+
+    <div class="toast-body p-2">
+    <div class="d-flex flex-column">
+        <div class="font-weight-bold mb-1" style="font-size: 14px;">
+        ${msg.chatContentsVO.name} <!-- 보낸 사람 -->
+        </div>
+        <div class="chat-preview">
+        ${msg.chatContentsVO.chatContents} <!-- 채팅 내용 -->
+        </div>
+    </div>
+    </div>
+  `;
+
+  toast.addEventListener("click", () => {
+        location.href = `/chat/chatRoom?chatRoomNum=${msg.chatContentsVO.chatRoomNum}`
+    })
+
+    // 닫기 버튼 이벤트
+    toast.querySelector(".close").addEventListener("click", () => {
+        toast.remove();
+    });
+
+    
+    container.appendChild(toast);
+
+    // 자동 사라지기 (예: 3초 후)
+    setTimeout(() => {
+        toast.classList.add("hide"); // fade-out 시작
+        setTimeout(() => toast.remove(), 1000); // transition 시간과 맞추기
+    }, 1500); 
+}
+
+
+//==========================채팅방 알람 켜기 끄기
+const alarmBtn = document.getElementById("alarmBtn");
+
+alarmBtn.addEventListener("click", ()=>{
+    console.log("!!!!!!!!!!")
+    if(alarmBtn.getAttribute("data-ion-name") == "notifications"){
+        const p = new URLSearchParams();
+        p.append("chatNum",chatNum);
+
+        fetch("/chat/updateAlarm",{
+            method: "POST",
+            body: p
+        })
+        .then(r=>r.text())
+        .then(r =>{
+            if(r * 1 == 1){
+                alarmBtn.setAttribute("data-ion-name", 'notifications-outline')
+                alarmBtn.innerHTML = '<ion-icon name="notifications-outline"style="vertical-align: middle; font-size: 20px;"></ion-icon>'
+            }
+        })
+    }else{
+        const p = new URLSearchParams();
+        p.append("chatNum",chatNum);
+
+        fetch("/chat/updateAlarm",{
+            method: "POST",
+            body: p
+        })
+        .then(r=>r.text())
+        .then(r =>{
+            if(r * 1 == 1){
+                alarmBtn.setAttribute("data-ion-name", 'notifications')
+                alarmBtn.innerHTML = '<ion-icon name="notifications"style="vertical-align: middle; font-size: 20px;"></ion-icon>'
+            }
+        })
+    }
 })
