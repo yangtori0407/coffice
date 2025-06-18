@@ -85,16 +85,16 @@
                                     <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div> -->
 								</div>
 							</div>
-							<div class="row" style="min-height: 500px;">
-								<div class="col" style="">
+							<div class="row">
+								<div class="col">
 									<!-- Roitation Utilities -->
-									<div class="card">
+									<div class="card mt-3" style="">
 										<div
 											class="card-header py-3 d-flex align-items-center justify-content-between">
 											<h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
 											<a href="/notice/list" class="btn btn-sm">+</a>
 										</div>
-										<div class="card-body text-center p-0" style="height: 100%;">
+										<div class="card-body text-center p-0" >
 											<table class="table table-striped mb-0">
 												<thead>
 													<tr>
@@ -107,10 +107,10 @@
 												<tbody>
 													<c:forEach items="${list }" var="l">
 														<tr>
-															<td><a
+															<td ><a
 																href="/notice/detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
-															<td><a
-																href="/notice/detail?noticeNum=${l.noticeNum }">${l.noticeDate }</a></td>
+															<td ><a
+																href="/notice/detail?noticeNum=${l.noticeNum }">${l.formatted }</a></td>
 
 														</tr>
 													</c:forEach>

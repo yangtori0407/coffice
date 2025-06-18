@@ -32,7 +32,7 @@
   		SELECT NOTICE_NUM, NOTICE_TITLE, NOTICE_DATE
   		FROM NOTICE
   		ORDER BY NOTICE_DATE DESC
-  		LIMIT 8
+  		LIMIT 6
   	</select>
   	
   	<sql id="search">
