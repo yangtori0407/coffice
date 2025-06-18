@@ -1,6 +1,7 @@
 package com.coffice.app.chat;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -50,5 +51,7 @@ public interface ChatDAO {
 	List<String> getChatUserInfo(String chatRoomNum) throws Exception;
 
 	List<UserVO> getChatUsersDetail(String chatRoomNum) throws Exception;
+
+	int updateLastReadAt(Map<String, Object> info) throws Exception;
 	
 }

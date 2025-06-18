@@ -98,7 +98,7 @@
   	<insert id="addUser" parameterType="ChatAddVO">
   		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT, LAST_READ_AT) VALUES
   		<foreach collection="users" item="u" separator=",">
-  			(#{chatRoomNum}, #{u}, NOW(), null)
+  			(#{chatRoomNum}, #{u}, NOW(), NOW())
   		</foreach>
   	</insert>
   	
@@ -116,6 +116,10 @@
   		INSERT INTO CHAT_FILES(FILE_NUM, CHAT_NUM, ORIGIN_NAME, SAVE_NAME)
   		VALUES(NULL, #{chatNum}, #{originName}, #{saveName})
   	</insert>
+  	
+  	<update id="updateLastReadAt" parameterType="java.util.HashMap">
+  		UPDATE CHAT_PERSON SET LAST_READ_AT = NOW() WHERE USER_ID = #{userId} AND CHATROOM_NUM = #{chatRoomNum}
+  	</update>
   	
   	
 </mapper>

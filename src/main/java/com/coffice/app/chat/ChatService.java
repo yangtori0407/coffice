@@ -149,4 +149,11 @@ public class ChatService {
 		return chatDAO.getChatUsersDetail(chatRoomNum);
 	}
 
+	public int updateLastReadAt(String userId, ChatRoomVO chatRoomVO) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		info.put("chatRoomNum", chatRoomVO.getChatRoomNum());
+		return chatDAO.updateLastReadAt(info);
+	}
+
 }

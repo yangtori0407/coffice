@@ -112,7 +112,7 @@ public class ChatController {
 		chatRoomVO = chatService.getChatInfo(chatRoomVO);
 		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO);
 		List<UserVO> users = chatService.getChatUsersDetail(chatRoomVO.getChatRoomNum());
-		
+		chatService.updateLastReadAt(userId, chatRoomVO);
 //		for(ChatContentsVO c : contents) {
 //			log.info("챗 내용 : {}", c);
 //		}
