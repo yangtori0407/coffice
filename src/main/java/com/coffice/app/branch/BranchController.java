@@ -2,6 +2,7 @@ package com.coffice.app.branch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.*;
@@ -109,30 +110,30 @@ public class BranchController {
 	}
 	
 	@GetMapping("myBranch")
-	public String myBranch(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Model model) throws Exception {
+	public String myBranch(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Model model, Pager pager) throws Exception {
 		String userId = userVO.getUserId();
 		userVO.setUserId(userId);
 		
 		branchVO.setUserVO(userVO);
-		List<BranchVO> list = branchService.myBranch(branchVO);
+		List<BranchVO> list = branchService.myBranch(branchVO, pager);
 		model.addAttribute("list", list);
+		model.addAttribute("pager", pager);
 		
 		Long totalSale = branchService.totalBranchSales(branchVO);
 		model.addAttribute("total", totalSale);
 		
 		List<SalesVO> chart = branchService.getChartList(branchVO);
 		model.addAttribute("chart", chart);
-		log.info("c:{}",chart);
 		
 		return "branch/myBranch";
 	}
 	
-	@GetMapping("/api/excel/download")
+	@GetMapping("/api/excel/download/branch")
 	public ResponseEntity<byte[]> downloadExcel() throws IOException  {
 		List<BranchVO> list;
 		try {
 			list = branchService.getDownList();
-			log.info("list:{}",list);
+			
 			Workbook workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet("지점");
 			
@@ -152,19 +153,23 @@ public class BranchController {
 			for (BranchVO branch : list) {
 				
 				Row dataRow = sheet.createRow(rowNum++);
-				
-				
-				
+
 				dataRow.createCell(0).setCellValue(branch.getBranchId());
 				dataRow.createCell(1).setCellValue(branch.getBranchName());
 				dataRow.createCell(2).setCellValue(branch.getBranchAddress());
 				dataRow.createCell(3).setCellValue(branch.getBranchPostcode());
-				dataRow.createCell(4).setCellValue(branch.isBranchStatus());
+				if(branch.isBranchStatus()== true) {
+					dataRow.createCell(4).setCellValue("운영중");
+				} else if (branch.isBranchStatus()== false) {
+					dataRow.createCell(4).setCellValue("운영안함");
+				}
+				
 				if(branch.getUserVO()==null) {
 					dataRow.createCell(5).setCellValue("");
 				}else {
 					dataRow.createCell(5).setCellValue(branch.getUserVO().getName());					
 				}
+				
 				if(branch.getBranchMasterVO()==null) {
 					dataRow.createCell(6).setCellValue("");
 				}else {
@@ -189,6 +194,84 @@ public class BranchController {
 			// HTTP 응답 헤더 설정
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Disposition", "attachment; filename=branch.xlsx");
+			headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			
+			return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@GetMapping("/api/excel/download/sale")
+	public ResponseEntity<byte[]> downloadSaleExcel(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Pager pager) throws IOException  {
+		List<BranchVO> list;
+		try {
+			String userId = userVO.getUserId();
+			userVO.setUserId(userId);
+			branchVO.setUserVO(userVO);
+			
+			list = branchService.myBranch(branchVO, pager);
+			log.info("list:{}",list.size());
+			Workbook workbook = new XSSFWorkbook();
+			Sheet sheet = workbook.createSheet("지점");
+			
+			CreationHelper creationHelper = workbook.getCreationHelper();
+			CellStyle dataCellStyle = workbook.createCellStyle();
+			dataCellStyle.setDataFormat(creationHelper.createDataFormat().getFormat("yyyy-mm-dd"));
+			
+			// 헤더 행 생성
+			Row headerRow = sheet.createRow(0);
+			headerRow.createCell(0).setCellValue("매출번호");
+			headerRow.createCell(1).setCellValue("수입/지출");
+			headerRow.createCell(2).setCellValue("금액");
+			headerRow.createCell(3).setCellValue("날짜");
+			headerRow.createCell(4).setCellValue("수량");
+			headerRow.createCell(5).setCellValue("메뉴이름");
+			
+			
+			// 데이터 행 생성
+			int rowNum = 1;
+			for (BranchVO branch : list) {
+
+				for(int i =0; i<branch.getSalesVO().size();i++) {
+					Row dataRow = sheet.createRow(rowNum++);
+					
+					dataRow.createCell(0).setCellValue(branch.getSalesVO().get(i).getSalesId());
+					if(branch.getSalesVO().get(i).isSalesType()== true){
+						dataRow.createCell(1).setCellValue("수입");
+					} else if (branch.getSalesVO().get(i).isSalesType()== false) {
+						dataRow.createCell(1).setCellValue("지출");
+					}
+					dataRow.createCell(2).setCellValue(branch.getSalesVO().get(i).getSalesProfit());
+					Cell dateCell = dataRow.createCell(3);
+					Date saleDate = branch.getSalesVO().get(i).getSalesDate();
+					dateCell.setCellValue(saleDate);
+					dateCell.setCellStyle(dataCellStyle);
+					dataRow.createCell(4).setCellValue(branch.getSalesVO().get(i).getSalesQuantity());
+					dataRow.createCell(5).setCellValue(branch.getSalesVO().get(i).getMenuVO().getMenuName());
+				}
+
+				
+			}
+			
+			// 열 너비 자동 조정
+			sheet.autoSizeColumn(0);
+			sheet.autoSizeColumn(1);
+			sheet.autoSizeColumn(2);
+			sheet.autoSizeColumn(3);
+			sheet.autoSizeColumn(4);
+			sheet.autoSizeColumn(5);
+			
+			// 엑셀 파일을 ByteArrayOutputStream에 작성
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			workbook.write(outputStream);
+			workbook.close();
+			
+			// HTTP 응답 헤더 설정
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Disposition", "attachment; filename=sales.xlsx");
 			headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			
 			return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);

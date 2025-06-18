@@ -1,5 +1,6 @@
 package com.coffice.app.branch;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,14 @@ public class BranchService {
 		return branchDAO.masterAdd(branchMasterVO);
 	}
 	
-	public List<BranchVO> myBranch(BranchVO branchVO) throws Exception {
-		return branchDAO.myBranch(branchVO);
+	public List<BranchVO> myBranch(BranchVO branchVO,Pager pager) throws Exception {
+		pager.make();
+		pager.makeNum(branchDAO.totalmyBranchCount(branchVO, pager));
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("branchVO", branchVO);
+		map.put("pager", pager);
+		return branchDAO.myBranch(branchVO, pager);
 	}
 	
 	public Long totalBranchSales(BranchVO branchVO) throws Exception {

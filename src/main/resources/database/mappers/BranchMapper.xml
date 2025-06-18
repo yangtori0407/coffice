@@ -74,7 +74,7 @@
 		VALUES (#{userId.userId},#{contactNumber},#{contactDate},0);
   	</insert>
   	
-  	<select id="myBranch" parameterType="BranchVO" resultMap="getMyBranch" >
+  	<select id="myBranch" parameterType="map" resultMap="getMyBranch" >
   	  	SELECT * FROM BRANCH b
   		LEFT OUTER JOIN USERS u
   		on b.USER_ID = u.USER_ID
@@ -82,7 +82,19 @@
   		on b.BRANCH_ID = s.BRANCH_ID
   		LEFT OUTER JOIN MENU m
   		on m.MENU_ID = s.MENU_ID
-  		WHERE u.USER_ID = #{userVO.userId}
+  		WHERE u.USER_ID = #{branchVO.userVO.userId}
+  		LIMIT #{pager.startNum}, #{pager.page}
+  	</select>
+  	
+  	<select id="totalmyBranchCount" parameterType="map" resultType="Long">
+  		SELECT COUNT(SALES_ID) FROM BRANCH b
+  		LEFT OUTER JOIN USERS u
+  		on b.USER_ID = u.USER_ID
+  		LEFT OUTER JOIN SALES s
+  		on b.BRANCH_ID = s.BRANCH_ID
+  		LEFT OUTER JOIN MENU m
+  		on m.MENU_ID = s.MENU_ID
+  		WHERE u.USER_ID = #{branchVO.userVO.userId}
   	</select>
   	
   	<select id="totalBranchSales" parameterType="BranchVO" resultType="Long">

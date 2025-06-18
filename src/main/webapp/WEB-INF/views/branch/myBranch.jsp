@@ -57,8 +57,37 @@
 							</c:forEach>
 						</tbody>
 					</table>
-				</div>
+			<div class="row">
+				<div class="col-sm-12 col-md-4"></div>
+					<div class="col-sm-12 col-md-4">
+						<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+							<ul class="pagination">
+								<li class="paginate_button page-item previous disabled" id="dataTable_previous">
+									<a href="./list?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+										Previous
+									</a>
+								</li>
+								<c:forEach begin="${pager.start }" end="${pager.end }" var="i">
+								<li class="paginate_button page-item ${pager.nowPage == i ? 'active' : '' }">
+									<a href="./list?nowPage=${i }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">
+										${i}
+									</a>
+								</li>
+								</c:forEach>
+								<li class="paginate_button page-item next ${pager.endCheck?'disabled':''}" id="dataTable_next">
+									<a href="./list?nowPage=${pager.end+1}&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">
+										Next
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div> 
+						<div style="width: 600px; margin: 0 auto; text-align: right;">
+							<a class="btn btn-success" href="./api/excel/download/sale">매출다운</a>						
+						</div>
 			</div>
+		</div>
+	</div>
 			<!-- end Content -->
 			<c:import url="/WEB-INF/views/templates/foot.jsp"></c:import>
 		</div>
