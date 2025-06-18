@@ -49,6 +49,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 
         if(e.event.groupId != "") {
             repeatScheduleDiv.setAttribute("style", "display: block;")
+            let repeatCheck = document.getElementById("repeatCheck")
         }
 
         let scheduleId = e.event.id
