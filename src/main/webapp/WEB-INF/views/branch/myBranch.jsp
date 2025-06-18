@@ -144,7 +144,7 @@
 	const labels = 
 		[
 		<c:forEach items="${chart}" var="c" varStatus="s">
-				"${c.menuVO.menuName}"
+				"${c.salesDate}"
 			<c:if test="${!s.last}">,</c:if>
 		</c:forEach>
 		];

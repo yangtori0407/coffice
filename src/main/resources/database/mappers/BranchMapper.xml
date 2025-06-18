@@ -129,7 +129,7 @@
   	</select>
   	
   	<select id="getChartList" resultMap="getChart" parameterType="BranchVO">
-  		SELECT MENU_NAME, SUM(
+  		SELECT SALES_DATE, SUM(
   		CASE 
   			WHEN SALES_TYPE = 1 THEN +SALES_PROFIT
   			WHEN SALES_TYPE = 0 THEN -SALES_PROFIT
@@ -141,7 +141,9 @@
   	  	JOIN BRANCH 
   	  	USING(BRANCH_ID)
   	  	WHERE USER_ID = #{userVO.userId}
-  	  	GROUP BY MENU_ID
+  	  	AND SALES_DATE BETWEEN now()-INTERVAL 2 DAY AND now()+INTERVAL 5 DAY
+  	  	GROUP BY SALES_DATE
+  		ORDER BY SALES_DATE ASC
   	</select>
   	
   	<select id="getTotalChart" resultType="BranchVO">
