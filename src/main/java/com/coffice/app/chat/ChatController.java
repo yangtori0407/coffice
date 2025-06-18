@@ -89,12 +89,12 @@ public class ChatController {
 		List<ChatRoomVO> list = chatService.getList(userVO);
 		log.info("ChatList size : {}", list.size());
 		model.addAttribute("list", list);
-		
+		model.addAttribute("kind", "메신저");
 	}
 	
 	@GetMapping("addChat")
-	public void addChat() throws Exception{
-		
+	public void addChat(Model model) throws Exception{
+		model.addAttribute("kind", "메신저 > 방만들기");
 	}
 	
 	//json 받음
@@ -124,6 +124,7 @@ public class ChatController {
 		model.addAttribute("userId", userId);
 		model.addAttribute("contents", contents);
 		model.addAttribute("users", users);
+		model.addAttribute("kind", "메신저");
 		
 	}
 	

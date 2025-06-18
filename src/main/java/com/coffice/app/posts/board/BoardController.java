@@ -37,6 +37,7 @@ public class BoardController {
 		List<BoardVO> list = boardService.getList(pager);
 		
 		model.addAttribute("list", list);
+		model.addAttribute("kind", "게시판 > 익명게시판");
 		
 		return "board/list";
 	}
@@ -48,6 +49,7 @@ public class BoardController {
 		for(CommentVO c : boardVO.getComments()) {
 			log.info("commentVO detail : {}", c);
 		}
+		model.addAttribute("kind", "게시판 > 익명게시판");
 		return "board/detail";
 	}
 	
@@ -60,7 +62,8 @@ public class BoardController {
 	}
 	
 	@GetMapping("add")
-	public String add() throws Exception{
+	public String add(Model model) throws Exception{
+		model.addAttribute("kind", "게시판 > 익명게시판 > 작성하기");
 		return "board/add";
 	}
 	
@@ -86,7 +89,7 @@ public class BoardController {
 		BoardVO boarVO = boardService.getDetail(boardVO);
 		
 		model.addAttribute("update", boarVO);
-		
+		model.addAttribute("kind", "게시판 > 익명게시판 > 수정하기");
 		return "board/update";
 	}
 	

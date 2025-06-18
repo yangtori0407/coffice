@@ -41,7 +41,7 @@ public class NoticeController {
 		//log.info("List size : {}", list.size());
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
-		
+		model.addAttribute("kind", "게시판 > 공지사항");
 		return "notice/list";
 	}
 	
@@ -51,12 +51,13 @@ public class NoticeController {
 		noticeVO = noticeService.getDetail(noticeVO);
 		//log.info("detail noticeVO : {}", noticeVO);
 		model.addAttribute("detail", noticeVO);
-		
+		model.addAttribute("kind", "게시판 > 공지사항");
 		return "notice/detail";
 	}
 	
 	@GetMapping("add")
-	public String add() throws Exception{
+	public String add(Model model) throws Exception{
+		model.addAttribute("kind", "게시판 > 공지사항 > 작성하기");
 		return "notice/add";
 	}
 	
@@ -103,7 +104,7 @@ public class NoticeController {
 		noticeVO = noticeService.getDetail(noticeVO);
 		//log.info("size : {}",noticeVO.getFiles().size());
 		model.addAttribute("update", noticeVO);
-		
+		model.addAttribute("kind", "게시판 > 공지사항 > 수정하기");
 		return "notice/update";
 	}
 	
