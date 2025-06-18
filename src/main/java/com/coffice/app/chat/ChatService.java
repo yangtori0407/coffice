@@ -144,4 +144,9 @@ public class ChatService {
 		return chatDAO.getChatUserInfo(chatRoomNum);
 	}
 
+	public List<UserVO> getChatUsersDetail(String chatRoomNum) throws Exception{
+		// TODO Auto-generated method stub
+		return chatDAO.getChatUsersDetail(chatRoomNum);
+	}
+
 }

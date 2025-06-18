@@ -79,6 +79,16 @@
   		SELECT USER_ID FROM CHAT_PERSON WHERE CHATROOM_NUM = #{chatRoomNum}
   	</select>
   	
+  	<select id="getChatUsersDetail" parameterType="java.lang.String" resultType="UserVO">
+  		SELECT U.USER_ID, U.NAME, U.POSITION, D.DEPT_NAME
+  		FROM USERS U
+  		JOIN
+ 		(SELECT USER_ID FROM CHAT_PERSON WHERE CHATROOM_NUM = #{chatRoomNum}) C
+ 		ON U.USER_ID = C.USER_ID
+ 		JOIN
+ 		DEPARTMENT D
+ 		ON U.DEPT_ID = D.DEPT_ID
+  	</select>
   	
   	
   	<insert id="addChat" parameterType="ChatRoomVO" useGeneratedKeys="true" keyProperty="chatRoomNum">

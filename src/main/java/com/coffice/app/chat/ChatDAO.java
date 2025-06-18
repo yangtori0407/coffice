@@ -48,5 +48,7 @@ public interface ChatDAO {
 	FileVO getFileDetail(NoticeFilesVO filesVO) throws Exception;
 
 	List<String> getChatUserInfo(String chatRoomNum) throws Exception;
+
+	List<UserVO> getChatUsersDetail(String chatRoomNum) throws Exception;
 	
 }

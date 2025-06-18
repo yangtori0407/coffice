@@ -31,11 +31,23 @@
 						style="height: 80vh;">
 						<div class="col-5 mt-3">
 							<div class="card shadow mb-4">
-								<div class="card-header py-3">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 id="chatInfo" class="m-0 font-weight-bold text-primary"
 										data-chat-num="${chatRoomVO.chatRoomNum }"
 										data-user-id="${user.userId }">${chatRoomVO.chatRoomName}</h6>
-									<!-- 나중에 userid 시큐리티에서 가지고 오기 -->
+										
+									<div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" style="width: 250px; max-height: 300px; overflow-y: auto;" aria-labelledby="dropdownMenuLink" style="">
+                                            <div class="dropdown-header" style="font-size: 14px;  font-weight: initial;">채팅 참여자</div>
+                                            <c:forEach items="${users }" var="u">
+                                            	<div class="dropdown-item-text w-100 px-3 py-2">${u.deptName } ${u.name } ${u.position }</div>
+                                            </c:forEach>
+                                            
+                                        </div>
+                                    </div>
 								</div>
 								<div class="card-body d-flex flex-column" style="height: 80vh;">
 									<!-- 채팅 메시지 영역 -->

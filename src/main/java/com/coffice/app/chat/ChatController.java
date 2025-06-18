@@ -111,6 +111,7 @@ public class ChatController {
 		String userId = authentication.getName();
 		chatRoomVO = chatService.getChatInfo(chatRoomVO);
 		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO);
+		List<UserVO> users = chatService.getChatUsersDetail(chatRoomVO.getChatRoomNum());
 		
 //		for(ChatContentsVO c : contents) {
 //			log.info("챗 내용 : {}", c);
@@ -119,6 +120,7 @@ public class ChatController {
 		model.addAttribute("chatRoomVO", chatRoomVO);
 		model.addAttribute("userId", userId);
 		model.addAttribute("contents", contents);
+		model.addAttribute("users", users);
 		
 	}
 	
