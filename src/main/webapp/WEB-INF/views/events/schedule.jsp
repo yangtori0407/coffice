@@ -239,15 +239,44 @@
 									</div>
 								</div>
 								<hr>
-
+								<div id="repeatScheduleDiv" style="display: none;">
 									<div class="form-check">
-										<div class="" id="repeatScheduleDiv" style="display: none;">
+										<div class="">
 											<input class="form-check-input" type="checkbox" id="repeatCheck">
 											<label class="form-check-label" for="repeatCheck">
 												반복 일정 일괄 변경
 											</label>
 										</div>
 									</div>
+									<hr>
+									<div class="form-group" id="changeAll" style="display: none;">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="radioOptionsResult" id="radio1" value="weekly" disabled>
+											<label class="form-check-label" for="radio1">Weekly</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="radioOptionsResult" id="radio2" value="monthly" disabled>
+											<label class="form-check-label" for="radio2">Monthly</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="radioOptionsResult" id="radio3" value="yearly" disabled>
+											<label class="form-check-label" for="radio3">Yearly</label>
+										</div>
+										<hr>
+										<div class="form-group">
+											<label for="repeat">반복 종료</label>
+											<div class="input-group" id="repeat">
+												<input type="date" class="form-control" id="reRepeat" disabled>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="repeat">반복 횟수</label>
+											<div class="input-group" id="repeat">
+												<input type="number" class="form-control" id="resultCount" disabled>
+											</div>
+										</div>
+									</div>
+								</div>
 
 							</form>
 						</div>

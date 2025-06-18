@@ -6,8 +6,8 @@
   <mapper namespace="com.coffice.app.events.schedule.ScheduleDAO">
   
   	<insert id="addSchedule" parameterType="ScheduleVO">
-  			insert into SCHEDULE (DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE, EDITOR, EDIT_TIME, USER_ID, INSERT_TIME)
-  			values (#{detail}, #{startTime}, #{endTime}, #{scheduleType}, #{editor}, now(), #{userId}, now())
+  			insert into SCHEDULE (REPEAT_ID, DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE, EDITOR, EDIT_TIME, USER_ID, INSERT_TIME)
+  			values (#{repeatId}, #{detail}, #{startTime}, #{endTime}, #{scheduleType}, #{editor}, now(), #{userId}, now())
   	</insert>
   	
   	<insert id="addRepeatSchedule">
@@ -27,10 +27,36 @@
   			and DELETE_STATUS = 0
   	</select>
   	
-  	<select id="getRepeatSchedules" resultType="ScheduleVO">
-  			select REPEAT_ID, DETAIL, START_TIME, END_TIME, REPEAT_COUNT, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE
-  			from SCHEDULE_REPEAT
+  	<select id="getRepeatSchedules" resultMap="ScheduleResultMap">
+			select sre.REPEAT_ID, DETAIL, START_TIME, END_TIME, REPEAT_COUNT, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE, sre.EXCEPTION_DATE
+			from SCHEDULE_REPEAT sr
+			left outer join SCHEDULE_REPEAT_EXCEPTION sre 
+			on sr.REPEAT_ID = sre.REPEAT_ID
   	</select>
+  	
+  	<resultMap type="ScheduleVO" id="ScheduleResultMap">
+  		<id property="repeatId" column="REPEAT_ID"/>
+  		<result property="detail" column="DETAIL"/>
+	    <result property="startTime" column="START_TIME"/>
+	    <result property="endTime" column="END_TIME"/>
+	    <result property="repeatCount" column="REPEAT_COUNT"/>
+	    <result property="repeatEnd" column="REPEAT_END"/>
+	    <result property="repeatType" column="REPEAT_TYPE"/>
+	    <result property="scheduleType" column="SCHEDULE_TYPE"/>
+	    <result property="editor" column="EDITOR"/>
+	    <result property="editTime" column="EDIT_TIME"/>
+	    <result property="userId" column="USER_ID"/>
+	    <result property="insertTime" column="INSERT_TIME"/>
+	    <result property="deleteStatus" column="DELETE_STATUS"/>
+	
+	    <!-- 반복 예외 리스트 매핑 -->
+	    <collection property="exceptions" ofType="ScheduleRepeatExceptionVO">
+	        <id property="exceptionId" column="EXCEPTION_ID"/>
+	        <result property="repeatId" column="REPEAT_ID"/>
+	        <result property="exceptionDate" column="EXCEPTION_DATE"/>
+	        <result property="exceptionType" column="EXCEPTION_TYPE"/>
+	    </collection>
+  	</resultMap>
   	
   	<update id="updateSchedule" parameterType="ScheduleVO">
   			update SCHEDULE
@@ -38,4 +64,9 @@
   			where SCHEDULE_ID = #{scheduleId}
   			and DELETE_STATUS = 0
   	</update>
+  	
+  	<insert id="addException" parameterType="ScheduleVO" >
+  			inesert into SCHEDULE_REPEAT_EXCEPTION (REPEAT_ID, EXCEPTION_DATE, EXCEPTION_TYPE)
+  			values (#{repeatId}, #{exceptionDate}, #{exceptionType})
+  	</insert>
   </mapper>

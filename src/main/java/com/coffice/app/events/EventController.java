@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.events.holidays.HolidayService;
 import com.coffice.app.events.holidays.HolidayVO;
-
 import com.coffice.app.events.schedule.ScheduleService;
 import com.coffice.app.events.schedule.ScheduleVO;
 import com.coffice.app.events.vacation.VacationVO;
@@ -77,10 +77,12 @@ public class EventController {
 	}
 	
 	@PostMapping("schedule/update")
-	public String updateSchedule(ScheduleVO scheduleVO) throws Exception {
+	public String updateSchedule(@ModelAttribute ScheduleVO scheduleVO) throws Exception {
 		scheduleVO.setEditor("scheduleTest");
-		int result = scheduleService.updateSchedule(scheduleVO);
-		log.info("{}, {}", result, scheduleVO);
+		scheduleVO.setUserId("scheduleTest");
+//		int result = scheduleService.updateSchedule(scheduleVO);
+//		log.info("{}, {}", result, scheduleVO);
+		log.info("{}", scheduleVO.getExceptions().get(0));
 		return "events/schedule";
 	}
 	
