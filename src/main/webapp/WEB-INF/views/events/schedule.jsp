@@ -241,7 +241,7 @@
 								<hr>
 
 									<div class="form-check">
-										<div class="">
+										<div class="" id="repeatScheduleDiv" style="display: none;">
 											<input class="form-check-input" type="checkbox" id="repeatCheck">
 											<label class="form-check-label" for="repeatCheck">
 												반복 일정 일괄 변경

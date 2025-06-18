@@ -41,10 +41,15 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         show()
     },
     eventClick: function(e) {
+        let repeatScheduleDiv = document.getElementById("repeatScheduleDiv")
         // console.log(e.event.id)
         // console.log(e.event.groupId)
         console.log(e.event)
         $("#detailModal").modal("show")
+
+        if(e.event.groupId != "") {
+            repeatScheduleDiv.setAttribute("style", "display: block;")
+        }
 
         let scheduleId = e.event.id
         let type = document.querySelector(`input[name="detailResultOptions"][value="${e.event.extendedProps.type}"]`);
@@ -92,6 +97,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         $('#detailModal').on('hidden.bs.modal', function () {
             for(a of dis) {
                 a.disabled = true;
+                repeatScheduleDiv.setAttribute("style", "display: none;")
             }
         })
     },
@@ -140,6 +146,7 @@ fetch("http://localhost/events/getRepeatSchedules")
                 until: a.repeatEnd,
                 count: a.repeatCount
             },
+            exdate: ['2025-06-20T10:00:00+09:00'],
             duration: calculateDurationObject(a.startTime, a.endTime)
         }
         calendar.addEvent(event);
