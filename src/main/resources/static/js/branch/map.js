@@ -86,7 +86,7 @@
             console.log(r)
             if(r.ok){
                 alert("추가되었습니다.")
-                window.location.reload();
+               location.reload();
             } else {
                 alert("다시추가부탁드립니다.")
             }

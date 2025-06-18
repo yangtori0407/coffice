@@ -1,7 +1,6 @@
 const addIngredientsBtn = document.getElementById("addIngredientsBtn")
 
 addIngredientsBtn.addEventListener("click",()=>{
-    console.log("click")
 
     const ingredientsName = document.getElementById("ingredientsName").value;
     const ingredientsPrice = document.getElementById("ingredientsPrice").value;
@@ -23,7 +22,7 @@ addIngredientsBtn.addEventListener("click",()=>{
         .then(r=>r.json())
         .then(r=>{
             console.log(r)
-            if(r.stauts === 'success'){
+            if(r.status === 'success'){
                 alert(r.message)
                 location.reload();
             } else {

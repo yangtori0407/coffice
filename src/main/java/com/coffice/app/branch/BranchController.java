@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -74,11 +75,11 @@ public class BranchController {
 		return "branch/add";
 	}
 	@PostMapping("updateUser")
-	public String updateUser(@AuthenticationPrincipal UserVO userVO,BranchVO branchVO) throws Exception {
+	public String updateUser(BranchVO branchVO) throws Exception {
 		log.info("b:{}",branchVO);
 		BranchVO branchVO2 = new BranchVO();
 		branchVO2.setBranchId(branchVO.getBranchId());
-		branchVO2.setUserId(userVO.getUserId());
+		branchVO2.setUserId(branchVO.getUserId());
 		
 		branchService.branchUpdate(branchVO2);
 		
@@ -96,6 +97,7 @@ public class BranchController {
 	public String masterAdd(Model model) throws Exception {
 		List<BranchMasterVO> notRegisterBranchMaster = branchService.notRegisterBranchMaster();
 		model.addAttribute("notRegisterBranchMaster", notRegisterBranchMaster);
+		log.info("nr:{}",notRegisterBranchMaster);
 		return "branch/masterAdd";
 	}
 	
@@ -117,6 +119,10 @@ public class BranchController {
 		
 		Long totalSale = branchService.totalBranchSales(branchVO);
 		model.addAttribute("total", totalSale);
+		
+		List<SalesVO> chart = branchService.getChartList(branchVO);
+		model.addAttribute("chart", chart);
+		log.info("c:{}",chart);
 		
 		return "branch/myBranch";
 	}
