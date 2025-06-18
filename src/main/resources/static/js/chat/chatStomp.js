@@ -39,9 +39,9 @@ stompClient.connect({}, function (frame) {
         const msg = JSON.parse(message.body);
         console.log("채팅알림!!!");
         console.log(msg);
-        if(chatNum != msg.chatContentsVO.chatRoomNum){
-          createToast(msg);  
-        } 
+        if (chatNum != msg.chatContentsVO.chatRoomNum) {
+            createToast(msg);
+        }
     })
 
 }, function (error) {
@@ -203,7 +203,7 @@ fileUpload.addEventListener("change", (e) => {
         })
 })
 
-
+//notification에서도 같이 수정하기
 function createToast(msg) {
     const container = document.getElementById("chatAlert");
 
@@ -240,18 +240,22 @@ function createToast(msg) {
     </div>
     </div>
   `;
+  
+  toast.addEventListener("click", () => {
+        location.href = `/chat/chatRoom?chatRoomNum=${msg.chatContentsVO.chatRoomNum}`
+    })
 
     // 닫기 버튼 이벤트
     toast.querySelector(".close").addEventListener("click", () => {
         toast.remove();
     });
 
+    
     container.appendChild(toast);
 
     // 자동 사라지기 (예: 3초 후)
     setTimeout(() => {
-        toast.classList.remove("show");
-        toast.classList.add("hide");
-        setTimeout(() => toast.remove(), 300); // fade-out 후 제거
-    }, 1000000000);
+        toast.classList.add("hide"); // fade-out 시작
+        setTimeout(() => toast.remove(), 1000); // transition 시간과 맞추기
+    }, 1500); 
 }
