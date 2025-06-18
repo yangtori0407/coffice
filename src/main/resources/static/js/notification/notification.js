@@ -146,7 +146,7 @@ function createToast(msg) {
         toast.remove();
     });
     
-    container.innerHTML = "";
+    //container.innerHTML = "";
     container.appendChild(toast);
 
     // 자동 사라지기 (예: 3초 후)
