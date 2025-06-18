@@ -1,24 +1,19 @@
 package com.coffice.app.home;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.coffice.app.branch.BranchService;
-import com.coffice.app.chat.ChatService;
 import com.coffice.app.posts.notice.NoticeService;
 import com.coffice.app.users.UserVO;
 
 
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@Slf4j
 public class HomeController {
 	
 	@Autowired
@@ -35,7 +30,6 @@ public class HomeController {
 		
 		model.addAttribute("list", noticeService.getMainList()) ;
 		model.addAttribute("chart", branchService.getTotalChart());
-		log.info("ch:{}",branchService.getTotalChart());
 
 		return "index";
 	}
