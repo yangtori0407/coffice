@@ -80,9 +80,9 @@ public class EventController {
 	public String updateSchedule(@ModelAttribute ScheduleVO scheduleVO) throws Exception {
 		scheduleVO.setEditor("scheduleTest");
 		scheduleVO.setUserId("scheduleTest");
-//		int result = scheduleService.updateSchedule(scheduleVO);
-//		log.info("{}, {}", result, scheduleVO);
-		log.info("{}", scheduleVO.getExceptions().get(0));
+		int result = scheduleService.updateSchedule(scheduleVO);
+		log.info("{}, {}", result, scheduleVO);
+//		log.info("{}", scheduleVO.getExceptions().get(0));
 		return "events/schedule";
 	}
 	

@@ -44,7 +44,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         let repeatScheduleDiv = document.getElementById("repeatScheduleDiv")
         // console.log(e.event.id)
         // console.log(e.event.groupId)
-        console.log(e.event.startStr)
+        console.log(e.event)
         $("#detailModal").modal("show")
         let scheduleId = e.event.id
         let repeatCheck = document.getElementById("repeatCheck")
@@ -103,7 +103,8 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             params.append("endTime", reDate.value+reTime.value)
 
             if(groupId != null) {
-                params.append("repeatId", groupId)
+                console.log(groupId)
+                params.append("exceptions[0].repeatId", groupId)
                 params.append("exceptions[0].exceptionDate", startStr)
                 params.append("exceptions[0].exceptionType", "override")
             }
@@ -114,7 +115,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             })
             .then(r=>r.text())
             .then(r=>{
-                console.log(r)
+                // console.log(r)
                 location.reload()
             })
         })
@@ -159,7 +160,13 @@ fetch("http://localhost/events/getRepeatSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
-        
+        console.log(a.exceptions)
+        let exdate = []
+        for(e of a.exceptions) {
+            if(e.exceptionDate != null) {
+                exdate.push(e.exceptionDate)
+            }
+        }
         let event = {
             groupId: a.repeatId,
             title: a.detail,
@@ -178,7 +185,7 @@ fetch("http://localhost/events/getRepeatSchedules")
                 until: a.repeatEnd,
                 count: a.repeatCount
             },
-            exdate: ['2025-06-20T10:00:00+09:00'],
+            exdate: exdate,
             duration: calculateDurationObject(a.startTime, a.endTime)
         }
         calendar.addEvent(event);

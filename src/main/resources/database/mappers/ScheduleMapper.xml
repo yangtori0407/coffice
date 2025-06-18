@@ -28,7 +28,7 @@
   	</select>
   	
   	<select id="getRepeatSchedules" resultMap="ScheduleResultMap">
-			select sre.REPEAT_ID, DETAIL, START_TIME, END_TIME, REPEAT_COUNT, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE, sre.EXCEPTION_DATE
+			select sr.REPEAT_ID, DETAIL, START_TIME, END_TIME, REPEAT_COUNT, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE, sre.REPEAT_ID, sre.EXCEPTION_DATE
 			from SCHEDULE_REPEAT sr
 			left outer join SCHEDULE_REPEAT_EXCEPTION sre 
 			on sr.REPEAT_ID = sre.REPEAT_ID
@@ -50,7 +50,7 @@
 	    <result property="deleteStatus" column="DELETE_STATUS"/>
 	
 	    <!-- 반복 예외 리스트 매핑 -->
-	    <collection property="exceptions" ofType="ScheduleRepeatExceptionVO">
+	    <collection property="exceptions" javaType="java.util.List" ofType="ScheduleRepeatExceptionVO">
 	        <id property="exceptionId" column="EXCEPTION_ID"/>
 	        <result property="repeatId" column="REPEAT_ID"/>
 	        <result property="exceptionDate" column="EXCEPTION_DATE"/>
@@ -65,8 +65,11 @@
   			and DELETE_STATUS = 0
   	</update>
   	
-  	<insert id="addException" parameterType="ScheduleVO" >
-  			inesert into SCHEDULE_REPEAT_EXCEPTION (REPEAT_ID, EXCEPTION_DATE, EXCEPTION_TYPE)
-  			values (#{repeatId}, #{exceptionDate}, #{exceptionType})
-  	</insert>
+  	<insert id="addException" parameterType="ScheduleVO">
+		  INSERT INTO SCHEDULE_REPEAT_EXCEPTION (REPEAT_ID, EXCEPTION_DATE, EXCEPTION_TYPE)
+		  VALUES
+		  <foreach collection="exceptions" item="ex" separator=",">
+		    (#{ex.repeatId}, #{ex.exceptionDate}, #{ex.exceptionType})
+		  </foreach>
+	</insert>
   </mapper>
