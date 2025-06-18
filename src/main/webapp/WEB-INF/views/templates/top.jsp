@@ -107,12 +107,19 @@
 		<div class="topbar-divider d-none d-sm-block"></div>
 
 		<!-- Nav Item - User Information -->
-		<li class="nav-item no-arrow"><span class="nav-link"
-			id="userDropdown" aria-haspopup="true" aria-expanded="false">
-				<span class="mr-2 d-none d-lg-inline text-gray-600 small">
-					${user.name} ${user.position}</span> <img
-				class="img-profile rounded-circle" src="/images/coffice.png">
-		</span> <!-- Dropdown - User Information --></li>
+
+		<li class="nav-item no-arrow"><span
+			class="nav-link" id="userDropdown"
+			  aria-haspopup="true"
+			aria-expanded="false"> <span
+				class="mr-2 d-none d-lg-inline text-gray-600 small">
+					<c:if test="${not empty user}">
+				    ${user.name} ${user.position}
+				</c:if></span> <img class="img-profile rounded-circle"
+				src="/images/coffice.png">
+		</span> <!-- Dropdown - User Information -->
+		</li>
+
 
 	</ul>
 

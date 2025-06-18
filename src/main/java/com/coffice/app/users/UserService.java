@@ -1,6 +1,10 @@
 package com.coffice.app.users;
 
+
+import java.util.Random;
+
 import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,20 +30,33 @@ public class UserService implements UserDetailsService{
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private FileManager fileManager;
+	
 	@Value("${app.profiles.base}")
 	private String path;
 
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+		//System.out.println(" userId: " + userId);
+		String pw;
+		try {
+			pw = userDAO.checkPassword(userId);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		UserVO userVO = new UserVO();
 		userVO.setUserId(userId);
 		//System.out.println("로그인 요청 아이디 : "+ userId);
+
 		try {
 			userVO = userDAO.detail(userVO);
 			if (userVO == null) {
 	            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId);
 	        }
 			
+			//System.out.println(" DB에서 가져온 비밀번호: " + userVO.getPassword());
+	        
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -76,6 +93,14 @@ public class UserService implements UserDetailsService{
 	}
 	
 	public int register(UserVO userVO, MultipartFile file) throws Exception {
+		if(userVO.getUserId()==null || userVO.getUserId().isBlank()) {
+			String employeeId;
+			do {
+				employeeId = String.format("co%06d", new Random().nextInt(1_000_000));
+			} while (userDAO.existUserId(employeeId));
+			userVO.setUserId(employeeId);
+		}
+		
 		if(!file.isEmpty()) {
 			String fileName = fileManager.fileSave(path , file);
 			userVO.setSaveName(fileName);
@@ -95,6 +120,20 @@ public class UserService implements UserDetailsService{
 			result = null;
 		}
 		return result;
+	}
+	
+	public UserVO findByEmail(String email) throws Exception {
+		return userDAO.findByEmail(email);
+	}
+	
+	public int updatePassword(String userId, String newPassword) throws Exception {
+		String encodedPassword = passwordEncoder.encode(newPassword);
+		
+		UserVO userVO = new UserVO();
+		userVO.setUserId(userId);
+		userVO.setPassword(encodedPassword);
+		
+		return userDAO.updatePassword(userVO);
 	}
 	
 	

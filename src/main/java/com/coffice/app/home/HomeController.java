@@ -22,14 +22,11 @@ public class HomeController {
 	private NoticeService noticeService;
 	
 	@GetMapping("/")
-	public String home(@AuthenticationPrincipal UserVO userVO, Model model) throws Exception{
+
+	public String home() {
 		
-		if(userVO != null) {
-			model.addAttribute("user", userVO);
-		}
-		
-		model.addAttribute("list", noticeService.getMainList()) ;
-		
+
+
 		return "index";
 	}
 }
