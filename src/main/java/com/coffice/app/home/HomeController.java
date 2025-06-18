@@ -25,12 +25,9 @@ public class HomeController {
 
 	public String home(@AuthenticationPrincipal UserVO userVO, Model model) throws Exception{
 		
-		if(userVO != null) {
-			model.addAttribute("user", userVO);
-		}
-		
 		model.addAttribute("list", noticeService.getMainList()) ;
 		model.addAttribute("chart", branchService.getTotalChart());
+		model.addAttribute("kind", "홈");
 
 		return "index";
 	}

@@ -22,7 +22,7 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-					<h2 class="mb-2 text-gray-800">공지사항</h2>
+					<!-- <h2 class="mb-2 text-gray-800">공지사항</h2> -->
 					<!-- contents 내용 -->
 					<div>
 
