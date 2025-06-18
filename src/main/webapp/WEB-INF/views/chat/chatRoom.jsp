@@ -45,7 +45,7 @@
                                             <c:forEach items="${users }" var="u">
                                             	<div class="dropdown-item-text w-100 px-3 py-2">${u.deptName } ${u.name } ${u.position }</div>
                                             </c:forEach>
-                                            
+                                           
                                         </div>
                                     </div>
 								</div>
@@ -64,19 +64,19 @@
 																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
 																<div class="card border-left-secondary"
 																	style="max-width: 60%;">
-																	<div class="card-body p-2">
+																	<div class="card-body p-2 text-break">
 																		<a href="./fileDown?fileNum=${con.fileNum}">${con.chatContents }</a>
 																	</div>
 																</div>
 															</div>
 														</c:when>
 														<c:otherwise>
-
+															<!-- 상대방 채팅 -->
 															<div class="d-flex justify-content-end mb-2">
 																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
 																<div class="card border-left-secondary"
 																	style="max-width: 60%;">
-																	<div class="card-body p-2">${con.chatContents }</div>
+																	<div class="card-body p-2 text-break" >${con.chatContents }</div>
 																</div>
 															</div>
 														</c:otherwise>
@@ -93,7 +93,7 @@
 																<div class="d-flex">
 																	<div class="card border-left-warning"
 																		style="max-width: 70%;">
-																		<div class="card-body p-2">
+																		<div class="card-body p-2 text-break">
 																			<a href="./fileDown?fileNum=${con.fileNum}">${con.chatContents }</a>
 																		</div>
 																	</div>
@@ -111,7 +111,7 @@
 																<div class="d-flex">
 																	<div class="card border-left-warning"
 																		style="max-width: 70%;">
-																		<div class="card-body p-2">${con.chatContents }</div>
+																		<div class="card-body p-2 text-break">${con.chatContents }</div>
 																	</div>
 																	<div class="ml-2 text-muted small align-self-end">${con.formatted}</div>
 																</div>
