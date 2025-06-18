@@ -31,5 +31,17 @@ public class ScheduleService {
 	public List<ScheduleVO> getRepeatSchedules() throws Exception {
 		return scheduleDAO.getRepeatSchedules();
 	}
+	
+	public int updateSchedule(ScheduleVO scheduleVO) throws Exception {
+		int result = 0;
+		if(scheduleVO.getExceptions().size() > 0) {
+			scheduleDAO.addException(scheduleVO);
+			scheduleVO.setRepeatId(scheduleVO.getExceptions().get(0).getRepeatId());
+			result = scheduleDAO.addSchedule(scheduleVO);
+		}else {
+			result = scheduleDAO.updateSchedule(scheduleVO);
+		}
+		return result;
+	}
 
 }
