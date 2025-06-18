@@ -83,6 +83,9 @@
 						</div>
 					</div> 
 						<div style="width: 600px; margin: 0 auto; text-align: right;">
+							<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#order">
+								주문
+							</a>	
 							<a class="btn btn-success" href="./api/excel/download/sale">매출다운</a>						
 						</div>
 			</div>
@@ -94,7 +97,47 @@
 		<!-- End Content Wrapper -->
 	</div>
 	<!-- End Wrapper -->
-	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
+	
+	<div class="modal" id="order" tabindex="-1">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title">상품주문</h5>
+		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">×</span>
+		            </button>
+		      </div>
+		      <div class="modal-body" aria-label="Default select example">
+		      		<div class="form-check">
+					  <input class="form-check-input" type="radio" name="receive" id="input" value="true">
+					  <label class="form-check-label" for="radioDefault1">
+					    수입
+					  </label>
+					</div>
+					<div class="form-check">
+					  <input class="form-check-input" type="radio" name="receive" id="output" value="false">
+					  <label class="form-check-label" for="radioDefault2">
+					    지출
+					  </label>
+					</div>
+			        <select class="form-select" id="selectMenu">
+			            <option selected>메뉴를 선택해주세요</option>
+						<c:forEach items="${menuList}" var="m">
+							<option value="${m.menuId}">${m.menuName}</option>
+						</c:forEach>
+			        </select>
+					
+			        <input type="text" name="number" id="number" placeholder="상품수량을 입력하세요">
+			      <div class="modal-footer">
+			        <button class="btn btn-primary" id="addPurchase">ok</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+			      </div>
+			  </div>
+		    </div>
+		  </div>
+		</div>
+		
+			<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
 <script>
 	
@@ -118,7 +161,7 @@
 		
 	const chart = document.getElementById("chart");
 	new Chart(chart,{
-		type:'bar',
+		type:'line',
 		data:{
 			  labels: labels,
 			  datasets:[{

@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.sales.MenuVO;
+import com.coffice.app.sales.SalesService;
 import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
 
@@ -36,6 +38,8 @@ public class BranchController {
 	private String appkey;
 	@Autowired
 	private BranchService branchService;
+	@Autowired
+	private SalesService salesService;
 	
 	@ModelAttribute("appkey")
 	public String getAppkey() {
@@ -124,6 +128,9 @@ public class BranchController {
 		
 		List<SalesVO> chart = branchService.getChartList(branchVO);
 		model.addAttribute("chart", chart);
+		
+		List<MenuVO> menuList = salesService.menuList();
+		model.addAttribute("menuList", menuList);
 		
 		return "branch/myBranch";
 	}
