@@ -41,6 +41,9 @@ public class IngredientsController {
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
 		
+		List<IngredientsVO> totalList = ingredientsService.totlaList();
+		model.addAttribute("totalList", totalList);
+		
 		model.addAttribute("ingredientsVO", new IngredientsVO());
 		return "ingredients/list";
 	}
@@ -91,12 +94,15 @@ public class IngredientsController {
 	@Transactional
 	public int addHistory(@AuthenticationPrincipal UserVO userVO, History history) throws Exception {
 		History history2 = new History();
+		log.info("h1:{}",history);
 		log.info("h a:{}",history2);
-		history2.setHistoryId(history.getHistoryId());
-		history2.setReceive(history.isReceive());
-		history2.setNumber(history.getNumber());
-		history2.setUserId(userVO.getUserId());
-		history2.setIngredientsID(history.getIngredientsID());
+		
+			history2.setHistoryId(history.getHistoryId());
+			history2.setReceive(history.isReceive());
+			history2.setNumber(history.getNumber());
+			history2.setUserId(userVO.getUserId());
+			history2.setIngredientsID(history.getIngredientsID());			
+		
 
 		ingredientsService.addHistory(history2);
 		int result2 = ingredientsService.plusStock(history2);
