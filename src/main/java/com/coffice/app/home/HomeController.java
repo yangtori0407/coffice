@@ -36,6 +36,7 @@ public class HomeController {
 		model.addAttribute("list", noticeService.getMainList()) ;
 		model.addAttribute("chart", branchService.getTotalChart());
 		log.info("ch:{}",branchService.getTotalChart());
+
 		return "index";
 	}
 }

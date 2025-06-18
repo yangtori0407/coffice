@@ -14,6 +14,12 @@ public class FileConfig implements WebMvcConfigurer{
 	@Value("${app.files.url}")
 	private String url;
 	
+	@Value("${app.profiles.url}")
+	private String profileUrl;
+	
+	@Value("${app.profiles.base}")
+	private String profilePath;
+	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		//url 경로로 온 요청을 file:\\ + path 경로로 연결해준다.
@@ -21,9 +27,12 @@ public class FileConfig implements WebMvcConfigurer{
 		registry.addResourceHandler(url).addResourceLocations("file:\\" + path);
 		
 		registry
-			.addResourceHandler("/coffice/upload/profile/**")
-			.addResourceLocations("file:///D:/coffice/upload/profile/")
+			.addResourceHandler(profileUrl)
+			.addResourceLocations("file:\\"+ profilePath)
 			;
+		
+		registry.addResourceHandler("/signs/**").addResourceLocations("file:///" + path + "signs/");
+		
 	}
 	
 }

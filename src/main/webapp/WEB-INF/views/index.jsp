@@ -239,21 +239,21 @@
 						<!-- 파트3 -->
 						<div class="col-3">
 							<!-- 일정부분 -->
-							<div class="row" style="height: 500px;">
+							<div class="row" style="height: 400px;">
 								<div class="col" style="min-width: 300px;">
 									<!-- Custom Text Color Utilities -->
 									<div class="card shadow mb-4">
 										<div class="card-header py-3">
 											<h6 class="m-0 font-weight-bold text-primary">일정부분</h6>
 										</div>
-										<div class="card-body" style="min-height: 400px;">
+										<div class="card-body" style="min-height: 300px;">
 											<div id="schedule"></div>
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- 달력부분 -->
-							<div class="row" style="min-height: 500px;">
+							<div class="row" style="min-height: 600px;">
 								<!-- Custom Text Color Utilities -->
 								<div class="col" style="min-width: 300px;">
 									<div class="card shadow mb-4">
@@ -265,6 +265,7 @@
 										</div>
 									</div>
 								</div>
+                
 							</div>
 						</div>
 

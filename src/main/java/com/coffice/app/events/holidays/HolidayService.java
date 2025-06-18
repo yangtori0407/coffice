@@ -29,8 +29,13 @@ public class HolidayService {
 		return holidayDAO.getHolidays();
 	}
 	
-	public int addHoliday() throws Exception {
-		return holidayDAO.addHoliday(this.holidaySetting(2025));
+	public int addHoliday(int year) throws Exception {
+		List<HolidayVO> list = this.holidaySetting(year);
+		int result = 0;
+		for(HolidayVO vo : list) {
+			result = result + holidayDAO.addHoliday(vo);
+		}
+		return result;
 	}
 	
 	public List<HolidayVO> holidaySetting(int year) throws Exception {

@@ -41,6 +41,8 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         show()
     },
     eventClick: function(e) {
+        // console.log(e.event.id)
+        // console.log(e.event.groupId)
         console.log(e.event)
 
         let type = document.querySelector(`input[name="detailResultOptions"][value="${e.event.extendedProps.type}"]`);
@@ -103,7 +105,7 @@ fetch("http://localhost/events/getRepeatSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
-        console.log(a.startTime)
+        
         let event = {
             groupId: a.repeatId,
             title: a.detail,
@@ -191,8 +193,11 @@ send.addEventListener("click", ()=>{
         let eRepeat = document.getElementById("eRepeat")
         let rCount = document.getElementById("repeatCount")
         params.append("repeatType", rType)
-        params.append("repeatEnd", eRepeat.value+" 23:59:59")
-        params.append("repeatCount", rCount.value)
+        if(eRepeat.value != "") {
+            params.append("repeatEnd", eRepeat.value+" 23:59:59")
+        }else if(rCount.value != "") {
+            params.append("repeatCount", rCount.value)
+        }
     }
 
     fetch("schedule/add", {
@@ -215,7 +220,6 @@ function calculateDurationObject(startStr, endStr) {
   const start = new Date(startStr);
   const end = new Date(endStr);
   const ms = end - start;
-  console.log(ms)
 
   const seconds = Math.floor(ms / 1000);
   const minutes = Math.floor((seconds % 3600) / 60);

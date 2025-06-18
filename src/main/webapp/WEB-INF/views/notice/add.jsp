@@ -41,7 +41,7 @@
 								<button id="fileAdd" class="btn btn-danger mb-3" type="button">첨부파일 추가하기</button>
 								</div>
 								<div>
-								<button class="btn btn-primary mb-3" type="submit">글 작성하기</button>
+								<button id="noticeAdd" class="btn btn-primary mb-3" type="submit">글 작성하기</button>
 								</div>
 							</form>
 						</div>

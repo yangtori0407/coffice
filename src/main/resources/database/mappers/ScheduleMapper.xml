@@ -24,6 +24,8 @@
   			select DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE
   			from SCHEDULE
   			where SCHEDULE_ID = #{scheduleId}
+  			and DELETE_STATUS = 0
+  			and REPEAT_ID IS NULL
   	</select>
   	
   	<select id="getRepeatSchedules" resultType="ScheduleVO">

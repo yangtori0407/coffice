@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +33,7 @@
 						<div class="card shadow mb-3" style="min-height: 600px;">
 							<div class="card-header py-3">
 								<h6 class="m-0 font-weight-bold text-primary">작성일:
-									${detail.noticeDate }</h6>
+									${detail.formatted }</h6>
 								<h6 class="m-0 font-weight-bold text-primary">조회수:
 									${detail.noticeHit }</h6>
 							</div>
@@ -45,12 +47,14 @@
 								</c:forEach>
 							</div>
 						</div>
-						<div class="mb-2">
-							<button class="btn btn-danger" id="delBtn" type="button"
-								data-notice-num="${detail.noticeNum }">삭제하기</button>
-							<a href="./update?noticeNum=${detail.noticeNum }"
-								class="btn btn-primary">수정하기</a>
-						</div>
+						<sec:authorize access="hasRole('ADMIN')">
+							<div class="mb-2">
+								<button class="btn btn-danger" id="delBtn" type="button"
+									data-notice-num="${detail.noticeNum }">삭제하기</button>
+								<a href="./update?noticeNum=${detail.noticeNum }"
+									class="btn btn-primary">수정하기</a>
+							</div>
+						</sec:authorize>
 					</div>
 				</div>
 				<!-- end Content -->

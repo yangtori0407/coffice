@@ -3,6 +3,7 @@ package com.coffice.app.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,9 +12,34 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.coffice.app.users.UserService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	
+	@Autowired
+    private LoginSuccessHandler loginSuccessHandler;
+	
+	@Autowired
+	private UserService userService;
+
+
+    SecurityConfig(LoginSuccessHandler loginSuccessHandler) {
+        this.loginSuccessHandler = loginSuccessHandler;
+    }
+	
+	
+	@Bean
+	public AuthenticationManager authenticationManager (HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception{
+		return http
+				.getSharedObject(AuthenticationManagerBuilder.class)
+				.userDetailsService(userService)
+				.passwordEncoder(passwordEncoder)
+				.and()
+				.build();
+	}
+	
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -23,7 +49,7 @@ public class SecurityConfig {
 			
 			.authorizeHttpRequests(auth ->{
 					auth
-					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
+					//.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
 					.requestMatchers("/user/mypage","/user/update","/user/logout").authenticated()
 					.anyRequest().permitAll()
 					;
@@ -35,7 +61,7 @@ public class SecurityConfig {
 				.loginProcessingUrl("/user/login")
 				.usernameParameter("userId")
 				.passwordParameter("password")
-				.defaultSuccessUrl("/")
+				.successHandler(loginSuccessHandler)
 				.failureUrl("/user/login?error=true")
 				.permitAll()
 				;
@@ -64,28 +90,10 @@ public class SecurityConfig {
 				.requestMatchers("/vendor/**")
 				;
 		};
+	
+	
+	
+	
+	
 	}
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
