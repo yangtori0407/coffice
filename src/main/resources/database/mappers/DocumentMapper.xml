@@ -23,8 +23,8 @@
   		SELECT * FROM USERS
 	  </select>
 	  
-	  <select id="getForms" resultType="FormVO">
-	  	SELECT * FROM FORMS
+	  <select id="getFormsIdName" resultType="FormVO">
+	  	SELECT FORM_ID, NAME FROM FORMS
 	  </select>
   
   	<sql id="search">

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
     <style>
       /* 부서 선택시 강조 스타일 */
@@ -58,9 +59,19 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer">      	      	
+        
+        <c:if test="${isWritePage eq 1}">
+      		<button id="btn_toApprovers" type="button" class="btn btn-info" id="choose">결재선 넣기</button>
+      		<button id="btn_toReferrers" type="button" class="btn btn-primary" id="choose">참조선 넣기</button>
+      	</c:if>
+      	
+      	<c:if test="${isWritePage ne 1}">
+	        <button type="button" class="btn btn-primary" id="choose">선택 완료</button>
+      	</c:if>
+        
         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary" id="choose">선택 완료</button>
+        
       </div>
       </div>
     </div>
@@ -152,6 +163,8 @@
       const pill = document.createElement('div');
       pill.className = 'employee-pill';
       pill.setAttribute('data-selected-id', id);
+      pill.setAttribute('data-selected-name', name);
+      pill.setAttribute('data-selected-position', position);
 
       const nameSpan = document.createElement('span');
       nameSpan.textContent = position+" "+name;

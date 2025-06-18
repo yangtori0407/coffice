@@ -102,51 +102,9 @@
 	    <!-- 본문 내용, 스크립트 째로 content 프로퍼티에 집어 넣을 영역 -->
 	    <div class="m-0 p-0" style="height: 500px; border: 1px solid #000; border-top: none;">
 	    
-	      <div class="col d-flex justify-content-center align-items-center">
-	      	<!-- ${vo.content }로 불러온다 -->
-	      	
-	      	<table border="1" cellspacing="0" cellpadding="5" style="border-collapse: collapse; width: 100%; text-align: center;">
-			  <thead>
-			    <tr style="background-color: #d9edf7;">
-			      <th colspan="7" style="padding: 10px; font-weight: bold;">지 출 내 역</th>
-			    </tr>
-			    <tr>
-			      <th>연번</th>
-			      <th>구분</th>
-			      <th>적요</th>
-			      <th>단가</th>
-			      <th>수량</th>
-			      <th>금액</th>
-			      <th>비고</th>
-			    </tr>
-			  </thead>
-			  <tbody>
-			  	<c:forEach begin="1" end="5">
-				    <tr style="height: 35px";>
-				      <c:forEach begin="1" end="7">
-				      	<td></td>
-				      </c:forEach>			      
-				    </tr>			  	
-			  	</c:forEach>
-			    
-			    <!-- 합계 -->
-			    <tr>
-			      <td colspan="5" style="text-align: center; font-weight: bold;">합 계</td>
-			      <td style="font-weight: bold;"></td>
-			      <td></td>
-			    </tr>
-			  </tbody>
-			</table>
-	      	
-			
-		  </div>
+	      <!-- ${vo.content }로 불러온다 -->
 	      
-	      <div class="col d-flex justify-content-center align-items-center">
-	      	<div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 130px;">
-	    		<div>상기 금액을 지출하고자 합니다.</div>
-	    		<div>ㅇㅇ년 ㅇㅇ월 ㅇㅇ일</div>
-	    	</div>
-	      </div>
+	      
 	      	
 	      
 	    </div>

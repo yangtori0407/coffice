@@ -22,6 +22,7 @@ import com.coffice.app.page.Pager;
 import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -57,9 +58,9 @@ public class DocumentService {
 	
 	
 	//
-	public List<FormVO> getForms() throws Exception {
+	public List<FormVO> getFormsIdName() throws Exception {
 				
-		List<FormVO> list = documentDAO.getForms(); 
+		List<FormVO> list = documentDAO.getFormsIdName(); 
 		
 		return list;
 	}
@@ -158,7 +159,7 @@ public class DocumentService {
 	
 	
 	//
-	public int add(DocumentVO documentVO, List<UserVO> approverList, List<UserVO> referrerList,
+	public int add(DocumentVO documentVO, List<ApprovalLineVO> approverList, List<ReferenceLineVO> referrerList,
 			MultipartFile [] multipartFiles, HttpSession session) throws Exception {
 		
 		// documentVO에 데이터들 넣기
@@ -166,53 +167,35 @@ public class DocumentService {
 		documentVO.setCurrentStep(1L);
 		documentVO.setStatus("진행중");
 		
-		
-		// formId, writerId만 있는 상태 
-		// writerName, writerPosition, writerDept 넣어야함
 		// formName, stepCount는 문서 작성 시점의 폼 관련 값을 고정할 필요가 없으므로 문서 조회할 때 가져오겠다
-		UserVO user = (UserVO)session.getAttribute("userVO"); // 접속자의 정보를 가져왔다 
-		user = documentDAO.getUserDetail(user); // 접속자의 userId를 이용해 DB로부터 user에 데이터를 담아온다
-		documentVO.setWriterName(user.getName());
-		documentVO.setWriterPosition(user.getPosition());
-		documentVO.setWriterDept(user.getDeptName());
+		 
 		
 		
-		// 결재선 데이터 넣기
-		List<ApprovalLineVO> aList = new ArrayList<>();
+		
+		
+		// 결재선 데이터 넣기 (userId, name, position 들어가 있는 상태)		
 		Long step = 1L;
 
-		for (UserVO vo : approverList) {
-			ApprovalLineVO aLineVO = new ApprovalLineVO();
-			aLineVO.setUserId(vo.getUserId());
-			aLineVO.setUserName(vo.getName());
-			aLineVO.setUserPosition(vo.getPosition());
-			aLineVO.setStepOrder(step++);	System.out.println("step : " + step);
-			aLineVO.setStatus("결재대기");
-			aList.add(aLineVO);
+		for (ApprovalLineVO vo : approverList) {			
+			vo.setStepOrder(step++);	System.out.println("step : " + step);
+			vo.setStatus("결재대기");			
 		}		
 
 		
-		// 참조선 데이터 넣기
-		List<ReferenceLineVO> rList = new ArrayList<>();
-
-		for (UserVO vo : referrerList) {
-			ReferenceLineVO rLineVO = new ReferenceLineVO();
-			rLineVO.setUserId(vo.getUserId());
-			rLineVO.setUserName(vo.getName());
-			rLineVO.setUserPosition(vo.getPosition());
-			rList.add(rLineVO);
-		}
 		
-		
+		System.out.println("docu writerName은 : " + documentVO.getWriterName());
+		System.out.println("docu Name은 : " + documentVO.getWriterName());
+		System.out.println("docu Position은 : " + documentVO.getWriterPosition());
+		System.out.println("docu Dept은 : " + documentVO.getWriterDept());
 		// 문서 DB추가
 		int result = documentDAO.add(documentVO);
-		// insert 실행하면서 생긴 documentId (PK)
+		// insert 실행하면서 생긴 documentId (PK) **
 		// Mapper에서 Mybatis의 useGeneratedKeys="true" keyProperty="documentId"를 써서 가져옴
 		
 		
 		// 결재선 DB추가
-		if (aList != null) {
-			for(ApprovalLineVO vo : aList) {
+		if (approverList != null) {
+			for(ApprovalLineVO vo : approverList) {
 				
 				vo.setDocumentId(documentVO.getDocumentId());
 				// documentId, userId, userName, userPosition, stepOrder, status 있는 상태
@@ -224,8 +207,8 @@ public class DocumentService {
 		
 		
 		// 참조선 DB추가
-		if (rList != null) {
-			for(ReferenceLineVO vo : rList) {
+		if (referrerList != null) {
+			for(ReferenceLineVO vo : referrerList) {
 				
 				vo.setDocumentId(documentVO.getDocumentId());
 				// documentId, userId, userName, userPosition있는 상태

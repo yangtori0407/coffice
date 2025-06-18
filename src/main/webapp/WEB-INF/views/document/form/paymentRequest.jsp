@@ -26,7 +26,7 @@
 
 			  <div class="whole-content row m-0 p-0" style="width: 1200px;">
 			  	
-			  	<div class="left-content" style="width: 150px; border: 1px solid #000;">
+			  	<div class="left-content" style="width: 100px; border: 1px solid #000;">
 				  
 				</div>
 			  
@@ -81,11 +81,11 @@
 	    </div>
 	
 	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none;">
-	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">작성 시간</div>
+	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">작성일</div>
 	      <div class="col-4 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000; height: 35px;">
 	        ${vo.writerTime }
 	      </div>
-	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">처리 시간</div>
+	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">승인/반려일</div>
 	      <div class="col-4 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000; height: 35px;">
 	        ${vo.modifierTime }
 	      </div>
@@ -95,16 +95,61 @@
 	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none;">
 	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">제목</div>
 	      <div class="col-10 d-flex align-items-center justify-content-center" style="height: 35px;">
-	        ${vo.title }
+	        ${vo.title}
 	      </div>
 	    </div>
 	
 	    <!-- 본문 내용, 스크립트 째로 content 프로퍼티에 집어 넣을 영역 -->
-	    <div class="row m-0 p-0" style="height: 400px; border: 1px solid #000; border-top: none;">
+	    <div class="m-0 p-0" style="min-height: 400px; border: 1px solid #000; border-top: none;">
 	      
+	      	<div class="col d-flex justify-content-center align-items-center">
 	      	<!-- ${vo.content }로 불러온다 -->
 	      	
+	      	<table border="1" cellspacing="0" cellpadding="5" style="border-collapse: collapse; width: 100%; text-align: center;">
+			  <thead>
+			    <tr style="background-color: #d9edf7;">
+			      <th colspan="7" style="padding: 10px; font-weight: bold;">지 출 내 역</th>
+			      <!-- 입출고 상태 (입고, 출고), 상품명, 상품 갯수 -->
+			    </tr>
+			    <tr>
+			      <th>분류</th>
+			      <th>상세</th>
+			      <th>단가</th>
+			      <th>수량</th>
+			      <th>금액</th>
+			      <th>비고</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	<c:forEach begin="1" end="5">
+				    <tr style="height: 35px";>
+				      <c:forEach begin="1" end="6">
+				      	<td></td>
+				      </c:forEach>			      
+				    </tr>			  	
+			  	</c:forEach>
+			    
+			    <!-- 합계 -->
+			    <tr>
+			      <td colspan="5" style="text-align: center; font-weight: bold;">합 계</td>
+			      <td style="font-weight: bold;"></td>
+			      <td></td>
+			    </tr>
+			  </tbody>
+			</table>
+			
+			
 	      	
+			
+		  </div>
+	      	
+	      
+	      <div class="col">
+	      	<div class="m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 130px;">
+	    		<div>상기 금액을 지출하고자 합니다.</div>
+	    		<div>ㅇㅇ년 ㅇㅇ월 ㅇㅇ일</div>
+	    	</div>
+	      </div>	
 	      	
 	      	
 	      
@@ -148,42 +193,32 @@
 	  
 	  
 	  
-	  <div class="right-content" style="width: 150px; border: 1px solid #000;">
+	  <div class="right-content" style="width: 250px; border: 1px solid #000;">
 	  
-	  		<div>양식</div>
+	  		<div>양식 데이타</div>
 			<div>${formVO.formId}</div>
 			<br>
 			
 			<div>결재선</div>
-			<c:forEach var="i" items="${approvers}">
-				<div>${i.userId} ${i.name} ${i.position}</div>
-			</c:forEach>
+			<div style="border: 1px solid black;"> 결재자
+				<c:forEach var="i" items="${approvers}">
+					<div>${i.userId} ${i.name} ${i.position}</div>
+				</c:forEach>			
+			</div>
 			<br>
 	
 			<div>참조선</div>
-			<c:forEach var="i" items="${referrers}">
-				<div>${i.userId} ${i.name} ${i.position}</div>
-			</c:forEach>
+			<div style="border: 1px solid black;"> 참조자
+				<c:forEach var="i" items="${referrers}">
+					<div>${i.userId} ${i.name} ${i.position}</div>
+				</c:forEach>			
+			</div>
 			<br>		
 			
-			<form id="writeForm" action="/document/write" method="post">
-			  <input type="text" name="formId" id="formId" value="${formVO.formId}" > <br><br>
-			  <input type="text" name="writerId" id="writerId" value="${userVO.userId}" > <br><br>
-			
-			  <input type="text" name="title" id="title" placeholder="제목"> <br><br>
-			  <input type="text" name="content" id="content" placeholder="내용"> <br><br>
-			  <input type="file" name="attaches" id="attaches"> <br><br>
-			  <!-- 처음 문서 작성 시 보낼 수 있는 결재선 정보 -->
-			  <!-- 
-			  	문서 번호, 사원 번호, 사원 이름, 사원 직급 결재 순번	
-			   -->
-			   
-			   <!-- 처음 문서 작성 시 보낼 수 있는 참조선 정보 -->
-			  <!-- 
-			  	문서 번호, 사원 번호, 사원 이름, 사원 직급
-			   -->
-			   <button type="submit">작성 완료</button>
-			</form>
+			<div id="id_reject_wrapper">
+				<div style="border: 1px solid black;">반려 제목</div>
+				<div style="border: 1px solid black;">반려 내용</div>			
+			</div>
 	  
 	  </div>
 	  

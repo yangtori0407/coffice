@@ -43,7 +43,7 @@
 		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
 			data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item" href="/document/make">기안 작성</a> <a
+				<a class="collapse-item" href="/document/selectform">기안 작성</a> <a
 					class="collapse-item" href="/document/list/online">기안 문서함</a> <a
 					class="collapse-item" href="/document/list/onwaiting">결재 대기 문서함</a>
 				<a class="collapse-item" href="/document/list/onreference">참조
@@ -135,6 +135,9 @@
 	<!-- <div class="sidebar-card d-none d-lg-flex">
 			날씨?
 		</div> -->
-
+	
+	
+	
 </ul>
 
+	
