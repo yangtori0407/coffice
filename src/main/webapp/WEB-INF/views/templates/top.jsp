@@ -12,7 +12,9 @@
 		class="btn btn-link d-md-none rounded-circle mr-3">
 		<i class="fa fa-bars"></i>
 	</button> -->
-	<div class="mt-2 ml-3"><h4>${kind }</h4></div>
+	<div class="mt-2 ml-3">
+		<h4>${kind }</h4>
+	</div>
 
 
 	<!-- Topbar Navbar -->
@@ -46,8 +48,7 @@
 			<sec:authentication property="principal" var="user" />
 
 
-			<li class="nav-item dropdown no-arrow mx-1" id="alert"
-				data-user-id=${user.userId }><a
+			<li class="nav-item dropdown no-arrow mx-1" id="alert"><a
 				class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"
 				aria-expanded="false"> <ion-icon name="notifications-outline"></ion-icon>

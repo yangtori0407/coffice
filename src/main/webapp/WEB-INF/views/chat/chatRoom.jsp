@@ -34,28 +34,30 @@
 								<div
 									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 id="chatInfo" class="m-0 font-weight-bold text-primary"
-										data-chat-num="${chatRoomVO.chatRoomNum }"
-										data-user-id="${user.userId }">${chatRoomVO.chatRoomName}</h6>
+										data-chat-num="${chatRoomVO.chatRoomNum }">${chatRoomVO.chatRoomName}</h6>
 									<div class="row align-items-center">
 										<div class="col-6 d-flex align-items-center">
-											
-												<c:choose>
-													<c:when test="${chatRoomVO.alarmStatus eq 1}">
-														<button class="btn" type="button" id="alarmBtn" data-ion-name="notifications">
-															<ion-icon name="notifications"
-																style="vertical-align: middle; font-size: 20px;"></ion-icon>
-														</button>
-													</c:when>
-													<c:otherwise>
-														<button class="btn" type="button" id="alarmBtn" data-ion-name="notifications-outline">
-															<ion-icon name="notifications-outline"
-																style="vertical-align: middle; font-size: 20px;"></ion-icon>
-														</button>
-													</c:otherwise>
-												</c:choose>
-											
+
+											<c:choose>
+												<c:when test="${chatRoomVO.alarmStatus eq 1}">
+													<button class="btn" type="button" id="alarmBtn"
+														data-ion-name="notifications">
+														<ion-icon name="notifications"
+															style="vertical-align: middle; font-size: 20px;"></ion-icon>
+													</button>
+												</c:when>
+												<c:otherwise>
+													<button class="btn" type="button" id="alarmBtn"
+														data-ion-name="notifications-outline">
+														<ion-icon name="notifications-outline"
+															style="vertical-align: middle; font-size: 20px;"></ion-icon>
+													</button>
+												</c:otherwise>
+											</c:choose>
+
 										</div>
-										<div class="col-6 d-flex align-items-center justify-content-end">
+										<div
+											class="col-6 d-flex align-items-center justify-content-end">
 											<div class="dropdown no-arrow">
 												<a class="dropdown-toggle" href="#" role="button"
 													id="dropdownMenuLink" data-toggle="dropdown"

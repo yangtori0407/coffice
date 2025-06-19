@@ -55,7 +55,7 @@
 										<div class="card border-left-primary shadow mt-3 pl-2"
 											style="width: 100%; height: 450px;">
 											<sec:authentication property="principal" var="user"/>
-											<div class="card-body row pt-4" id="chatPeople" data-login-chat="${user.userId }">
+											<div class="card-body row pt-4" id="chatPeople">
 												<!-- <div
 													class="alert alert-secondary d-flex justify-content-between align-items-center chatUser"
 													role="alert" data-user-id="test1">
