@@ -153,7 +153,7 @@
 					
 			        <select class="form-select" id="selectIngredients">
 				       <option selected>상품을 선택해주세요</option>
-				       <c:forEach items="${list}" var="vo">
+				       <c:forEach items="${totalList}" var="vo">
 				       		<option value="${vo.ingredientsID}">${vo.ingredientsName}</option>
 				       </c:forEach>
 			        </select>
