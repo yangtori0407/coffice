@@ -67,12 +67,7 @@ public class EventController {
 	@PostMapping("schedule/add")
 	public String addSchedule(ScheduleVO scheduleVO) throws Exception {
 		scheduleVO.setUserId("scheduleTest");
-		int result = 0;
-		if(scheduleVO.getRepeatType() == null) {
-			result = scheduleService.addSchedule(scheduleVO);			
-		}else {
-			result = scheduleService.addRepeatSchedule(scheduleVO);
-		}
+		int result =  scheduleService.addSchedule(scheduleVO);			
 		log.info("{}, {}", result, scheduleVO);
 		return "events/schedule";
 	}

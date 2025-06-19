@@ -13,11 +13,13 @@ public class ScheduleService {
 	private ScheduleDAO scheduleDAO;
 	
 	public int addSchedule(ScheduleVO scheduleVO) throws Exception {
-		return scheduleDAO.addSchedule(scheduleVO); 
-	}
-	
-	public int addRepeatSchedule(ScheduleVO scheduleVO) throws Exception {
-		return scheduleDAO.addRepeatSchedule(scheduleVO);
+		int result = 0;
+		if(scheduleVO.getRepeatType() == null) {
+			scheduleDAO.addSchedule(scheduleVO);
+		}else {
+			scheduleDAO.addRepeatSchedule(scheduleVO);
+		}
+		return result; 
 	}
 	
 	public List<ScheduleVO> getAll() throws Exception {
@@ -34,11 +36,13 @@ public class ScheduleService {
 	
 	public int updateSchedule(ScheduleVO scheduleVO) throws Exception {
 		int result = 0;
-		if(scheduleVO.getExceptions().size() > 0) {
+		if(scheduleVO.getExceptions().get(0).getRepeatId() != null) {
 			scheduleDAO.addException(scheduleVO);
 			scheduleVO.setRepeatId(scheduleVO.getExceptions().get(0).getRepeatId());
 			result = scheduleDAO.addSchedule(scheduleVO);
-		}else {
+		}else if(scheduleVO.getRepeatId() != null){
+			result = scheduleDAO.updateRepeatSchedule(scheduleVO);
+		}else {			
 			result = scheduleDAO.updateSchedule(scheduleVO);
 		}
 		return result;
