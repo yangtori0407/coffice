@@ -283,3 +283,27 @@ window.addEventListener("beforeunload", ()=>{
     })
     
 })
+
+//========채팅방 나가기
+const exitBtn = document.getElementById("exitBtn");
+
+exitBtn.addEventListener("click", ()=>{
+    let p = new URLSearchParams();
+    p.append("chatRoomNum", chatNum);
+    let flag = confirm("채팅방을 나가시겠습니까?");
+    if(flag){
+
+        fetch("./exit",{
+            method: "POST",
+            body: p
+        })
+        .then(r=>r.text())
+        .then(r => {
+            if(r * 1 == 1){
+                location.href = "./main";
+            }
+        })
+    } else{
+        return;
+    }
+})

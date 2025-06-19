@@ -61,5 +61,7 @@ public interface ChatDAO {
 	List<ChatContentsVO> getChatMore(Map<String, Object> info) throws Exception;
 
 	int getChatAmount(Map<String, Object> info) throws Exception;
+
+	int exit(Map<String, Object> info) throws Exception;
 	
 }

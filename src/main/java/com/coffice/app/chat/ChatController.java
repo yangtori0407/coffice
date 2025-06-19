@@ -169,5 +169,14 @@ public class ChatController {
 		
 		return "commons/ajaxResult";
 	}
+	
+	@PostMapping("exit")
+	public String exit(String chatRoomNum, Authentication authentication, Model model) throws Exception{
+		log.info("exit");
+		int result = chatService.exit(chatRoomNum, authentication.getName());
+		model.addAttribute("result", result);
+		
+		return "commons/ajaxResult";
+	}
 
 }

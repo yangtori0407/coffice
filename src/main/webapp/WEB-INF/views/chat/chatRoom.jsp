@@ -34,16 +34,22 @@
 								<div
 									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<div class="d-flex align-items-center">
-										
-											<a href="./main" class="mr-3"><ion-icon name="arrow-back-outline"></ion-icon></a>
-										
+
+										<a href="./main" class="mr-3"><ion-icon
+												name="arrow-back-outline"></ion-icon></a>
+
 										<h6 id="chatInfo" class="m-0 font-weight-bold text-primary"
 											data-chat-num="${chatRoomVO.chatRoomNum }">${chatRoomVO.chatRoomName}</h6>
 									</div>
-										
-									<div class="row align-items-center">
-										
-										<div class="col-6 d-flex align-items-center">
+									<div class="d-flex align-items-center">
+										<div class="align-items-center">
+											<button class="btn" id="exitBtn">
+												<ion-icon name="exit-outline"
+													style="vertical-align: middle; font-size: 23px;"></ion-icon>
+											</button>
+										</div>
+
+										<div class="d-flex align-items-center mr-2">
 
 											<c:choose>
 												<c:when test="${chatRoomVO.alarmStatus eq 1}">
@@ -63,8 +69,7 @@
 											</c:choose>
 
 										</div>
-										<div
-											class="col-6 d-flex align-items-center justify-content-end">
+										<div class="d-flex align-items-center justify-content-end">
 											<div class="dropdown no-arrow">
 												<a class="dropdown-toggle" href="#" role="button"
 													id="dropdownMenuLink" data-toggle="dropdown"
@@ -75,6 +80,7 @@
 													class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
 													style="width: 250px; max-height: 300px; overflow-y: auto;"
 													aria-labelledby="dropdownMenuLink">
+
 													<div class="dropdown-header"
 														style="font-size: 14px; font-weight: initial;">채팅
 														참여자</div>
@@ -85,6 +91,7 @@
 												</div>
 											</div>
 										</div>
+
 									</div>
 								</div>
 								<div class="card-body d-flex flex-column" style="height: 80vh;">
@@ -98,7 +105,8 @@
 												<c:when test="${con.sender eq user.userId }">
 													<c:choose>
 														<c:when test="${con.fileNum ne null }">
-															<div class="d-flex justify-content-end mb-2" data-chat-num=${con.chatNum }>
+															<div class="d-flex justify-content-end mb-2"
+																data-chat-num=${con.chatNum }>
 																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
 																<div class="card border-left-secondary"
 																	style="max-width: 60%;">
@@ -110,7 +118,8 @@
 														</c:when>
 														<c:otherwise>
 															<!-- 상대방 채팅 -->
-															<div class="d-flex justify-content-end mb-2" data-chat-num=${con.chatNum }>
+															<div class="d-flex justify-content-end mb-2"
+																data-chat-num=${con.chatNum }>
 																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
 																<div class="card border-left-secondary"
 																	style="max-width: 60%;">
@@ -123,7 +132,8 @@
 												<c:otherwise>
 													<c:choose>
 														<c:when test="${con.fileNum ne null }">
-															<div class="d-flex flex-column align-items-start mb-2" data-chat-num=${con.chatNum }>
+															<div class="d-flex flex-column align-items-start mb-2"
+																data-chat-num=${con.chatNum }>
 
 																<div class="mb-1 text-primary font-weight-bold small">${con.name }</div>
 
@@ -141,7 +151,8 @@
 														</c:when>
 														<c:otherwise>
 
-															<div class="d-flex flex-column align-items-start mb-2" data-chat-num=${con.chatNum }>
+															<div class="d-flex flex-column align-items-start mb-2"
+																data-chat-num=${con.chatNum }>
 
 																<div class="mb-1 text-primary font-weight-bold small">${con.name }</div>
 

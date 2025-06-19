@@ -21,9 +21,9 @@
 		GROUP BY CP.CHATROOM_NUM
 		HAVING COUNT(DISTINCT CP.USER_ID) = #{size}
 		AND COUNT(DISTINCT CP.USER_ID) = (
-		SELECT COUNT(DISTINCT CP2.USER_ID)
-		FROM CHAT_PERSON CP2
-		WHERE CP2.CHATROOM_NUM = CP.CHATROOM_NUM
+			SELECT COUNT(DISTINCT CP2.USER_ID)
+			FROM CHAT_PERSON CP2
+			WHERE CP2.CHATROOM_NUM = CP.CHATROOM_NUM AND CP2.EXIT_STATUS = 0
 		)
 	</select>
 
@@ -41,7 +41,7 @@
 		JOIN CHAT_PERSON P
 		ON R.CHATROOM_NUM = P.CHATROOM_NUM
 		WHERE
-		P.USER_ID = #{userId}
+		P.USER_ID = #{userId} AND P.EXIT_STATUS = 0
 		ORDER BY P.LAST_READ_AT DESC
 	</select>
 
@@ -163,9 +163,9 @@
 
 	<insert id="addUser" parameterType="ChatAddVO">
 		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT,
-		LAST_READ_AT, ALARM_STATUS) VALUES
+		LAST_READ_AT, ALARM_STATUS, EXIT_STATUS) VALUES
 		<foreach collection="users" item="u" separator=",">
-			(#{chatRoomNum}, #{u}, NOW(), NOW(), 1)
+			(#{chatRoomNum}, #{u}, NOW(), NOW(), 1, 0)
 		</foreach>
 	</insert>
 
@@ -210,6 +210,10 @@
 		END
 		WHERE USER_ID
 		= #{userId} AND CHATROOM_NUM = #{chatRoomNum}
+	</update>
+	
+	<update id="exit" parameterType="java.util.HashMap">
+		UPDATE CHAT_PERSON SET EXIT_STATUS = 1 WHERE CHATROOM_NUM = #{chatRoomNum} AND USER_ID = #{userId}
 	</update>
 
 </mapper>

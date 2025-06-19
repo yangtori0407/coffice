@@ -195,5 +195,17 @@ public class ChatService {
 //		}
 		return list;
 	}
+	public int exit(String chatRoomNum, String userId) throws Exception{
+		
+		log.info("chatRoomNum : {}", chatRoomNum);
+		log.info("userId : {}", userId);
+		Map<String, Object> info = new HashMap<>();
+		info.put("chatRoomNum", chatRoomNum);
+		info.put("userId", userId);
+		
+		int result = chatDAO.exit(info);
+		
+		return result;
+	}
 
 }
