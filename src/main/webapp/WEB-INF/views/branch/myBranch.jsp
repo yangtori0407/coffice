@@ -164,8 +164,10 @@
 			  datasets:[{
 				label: '매출',
 				data: value,
+				fill: false,
 				backgroundColor: '#36A2EB',
-				borderWidth: 1				  
+				borderWidth: 1,
+				borderColor: '#36A2EB'
 			  }]
 		},
 		options:{
