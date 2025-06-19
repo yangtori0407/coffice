@@ -93,7 +93,7 @@
 								</div>
 							</div>
 							<div style="width: 600px; margin: 0 auto; text-align: right;">
-								<a class="btn btn-success" href="./api/excel/download">지점정보다운</a>
+								<a class="btn btn-success" href="./api/excel/download/branch">지점정보다운</a>
 								<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addBranch">
 									점주지정등록
 								</a>							

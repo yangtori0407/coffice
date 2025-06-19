@@ -36,10 +36,14 @@
   		LIKE CONCAT('%',#{pager.search},'%')
   	</sql>
   	
+  	<select id="totlaList" resultType="IngredientsVO">
+  		SELECT * FROM INGREDIENTS
+  	</select>
+  	
   	<select id="getList" resultType="IngredientsVO" parameterType="Pager">
   		SELECT * FROM INGREDIENTS
   		<include refid="search"></include>
-  		ORDER BY INGREDIENTS_ID DESC
+  		ORDER BY INGREDIENTS_ID ASC
   		LIMIT #{startNum}, #{page}
   	</select>
   	
@@ -87,7 +91,7 @@
   	
   	<insert id="addHistory" parameterType="History" useGeneratedKeys="true" keyProperty="historyId">
   		INSERT INTO HISTORY
-		VALUES (null, #{receive}, #{number}, #{ingredientsID},#{userId}, DATE_ADD(now(), INTERVAL 9 HOUR))
+		VALUES (null, #{receive}, #{number}, #{ingredientsID},#{userId}, now())
   	</insert>
   	
   	<update id="plusStock" parameterType="History">

@@ -23,7 +23,7 @@
 
 					<!-- contents 내용 -->
 					<!-- Page Heading -->
-					<h1 class="mb-2 text-gray-800">공지사항</h1>
+					<!-- <h1 class="mb-2 text-gray-800">공지사항</h1> -->
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
@@ -64,7 +64,7 @@
 												</form>
 
 												<!-- 추가 버튼 -->
-												<a href="./add" class="btn btn-danger">추가하기</a>
+												<a href="./add" class="btn btn-danger">작성하기</a>
 											</div>
 										</div>
 									</div>
@@ -105,7 +105,7 @@
 															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
 															<td>관리자</td>
 															<td>${l.noticeHit }</td>
-															<td>${l.noticeDate }</td>
+															<td>${l.formatted }</td>
 														</tr>
 													</c:forEach>
 												</tbody>

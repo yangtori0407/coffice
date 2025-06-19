@@ -19,7 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.coffice.app.branch.BranchVO;
 import com.coffice.app.page.Pager;
+import com.coffice.app.sales.MenuVO;
+import com.coffice.app.sales.SalesService;
+import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
 
 import jakarta.validation.Valid;
@@ -33,6 +37,8 @@ public class IngredientsController {
 	
 	@Autowired
 	private IngredientsService ingredientsService;
+	@Autowired
+	private SalesService salesService;
 
 	@GetMapping("list")
 	public String getList(Model model, Pager pager) throws Exception {
@@ -40,6 +46,9 @@ public class IngredientsController {
 		List<IngredientsVO> list = ingredientsService.getList(pager);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
+		
+		List<IngredientsVO> totalList = ingredientsService.totlaList();
+		model.addAttribute("totalList", totalList);
 		
 		model.addAttribute("ingredientsVO", new IngredientsVO());
 		return "ingredients/list";
@@ -91,12 +100,15 @@ public class IngredientsController {
 	@Transactional
 	public int addHistory(@AuthenticationPrincipal UserVO userVO, History history) throws Exception {
 		History history2 = new History();
+		log.info("h1:{}",history);
 		log.info("h a:{}",history2);
-		history2.setHistoryId(history.getHistoryId());
-		history2.setReceive(history.isReceive());
-		history2.setNumber(history.getNumber());
-		history2.setUserId(userVO.getUserId());
-		history2.setIngredientsID(history.getIngredientsID());
+		
+			history2.setHistoryId(history.getHistoryId());
+			history2.setReceive(history.isReceive());
+			history2.setNumber(history.getNumber());
+			history2.setUserId(userVO.getUserId());
+			history2.setIngredientsID(history.getIngredientsID());			
+		
 
 		ingredientsService.addHistory(history2);
 		int result2 = ingredientsService.plusStock(history2);
@@ -106,5 +118,37 @@ public class IngredientsController {
 		}
 		
 		return result2;
+	}
+	
+	@GetMapping("menuList")
+	@ResponseBody
+	public List<MenuVO> selectMenu() throws Exception {
+		List<MenuVO> menuList = salesService.menuList();
+		return menuList;
+	}
+	
+	@GetMapping("ingredientsList")
+	@ResponseBody
+	public List<IngredientsVO> selectIngredients() throws Exception {
+		List<IngredientsVO> ingredientsList = ingredientsService.totlaList();
+		return ingredientsList;
+	}
+	
+	@PostMapping("profit")
+	@ResponseBody
+	public int profit(@AuthenticationPrincipal UserVO userVO, SalesVO salesVO) throws Exception {
+		log.info("p:{}",salesVO);
+		salesVO.setUserId(userVO.getUserId());
+		int result = salesService.profit(salesVO);
+		return result;
+	}
+	
+	@PostMapping("expenditure")
+	@ResponseBody
+	public int expenditure(@AuthenticationPrincipal UserVO userVO,SalesVO salesVO) throws Exception {
+		log.info("e:{}",salesVO);
+		salesVO.setUserId(userVO.getUserId());
+		int result = salesService.expenditure(salesVO);
+		return result;
 	}
 }

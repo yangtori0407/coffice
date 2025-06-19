@@ -26,7 +26,6 @@ import lombok.ToString;
 @ToString
 public class UserVO implements UserDetails{
 	
-	@NotBlank(message = "필수사항입니다", groups = RegisterGroup.class)
 	private String userId;
 	@Size(min=8, message = "비밀번호 8자리 이상 필수사항입니다", groups= UpdateGroup.class)
 	@NotBlank(message = "필수사항입니다",groups = RegisterGroup.class)
@@ -66,6 +65,15 @@ public class UserVO implements UserDetails{
 	public String getUsername() {
 		// TODO Auto-generated method stub
 		return this.userId;
+	}
+	
+	@Override
+	public String getPassword() {
+		return this.password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	@Override

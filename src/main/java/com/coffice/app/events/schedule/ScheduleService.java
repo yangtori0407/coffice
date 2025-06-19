@@ -7,16 +7,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ScheduleService {
+
 	
 	@Autowired
 	private ScheduleDAO scheduleDAO;
 	
 	public int addSchedule(ScheduleVO scheduleVO) throws Exception {
-		return scheduleDAO.addSchedule(scheduleVO); 
-	}
-	
-	public int addRepeatSchedule(ScheduleVO scheduleVO) throws Exception {
-		return scheduleDAO.addRepeatSchedule(scheduleVO);
+		int result = 0;
+		if(scheduleVO.getRepeatType() == null) {
+			scheduleDAO.addSchedule(scheduleVO);
+		}else {
+			scheduleDAO.addRepeatSchedule(scheduleVO);
+		}
+		return result; 
 	}
 	
 	public List<ScheduleVO> getAll() throws Exception {
@@ -29,6 +32,34 @@ public class ScheduleService {
 	
 	public List<ScheduleVO> getRepeatSchedules() throws Exception {
 		return scheduleDAO.getRepeatSchedules();
+	}
+	
+	public int updateSchedule(ScheduleVO scheduleVO) throws Exception {
+		int result = 0;
+		if(scheduleVO.isException()) {
+			scheduleDAO.addException(scheduleVO);
+			scheduleVO.setRepeatId(scheduleVO.getExceptions().get(0).getRepeatId());
+			result = scheduleDAO.addSchedule(scheduleVO);
+		}else if(scheduleVO.getRepeatId() != null){
+			result = scheduleDAO.updateRepeatSchedule(scheduleVO);
+		}else {			
+			result = scheduleDAO.updateSchedule(scheduleVO);
+		}
+		return result;
+	}
+	
+	public int deleteSchedule(ScheduleVO scheduleVO) throws Exception {
+		int result = 0;
+		
+		if(scheduleVO.isException()) {
+			result = scheduleDAO.addException(scheduleVO);
+		}else if(scheduleVO.getRepeatId() != null) {
+			result = scheduleDAO.deleteRepeatSchedule(scheduleVO);
+		}else {
+			result = scheduleDAO.deleteSchedule(scheduleVO);
+		}
+		
+		return result;
 	}
 
 }

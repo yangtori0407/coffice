@@ -1,6 +1,8 @@
 package com.coffice.app.events.schedule;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,5 +23,7 @@ public class ScheduleVO extends EventVO{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:SS")
 	private Date repeatEnd;
 	private String repeatType;
+	private List<ScheduleRepeatExceptionVO> exceptions = new ArrayList<>();
+	private boolean exception;
 
 }

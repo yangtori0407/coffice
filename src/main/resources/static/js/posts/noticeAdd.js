@@ -81,7 +81,6 @@ function selectLocalImage() {
 				console.log(r);
 				const range = quill.getSelection();
 				quill.insertEmbed(range.index, 'image', "/files/" + r);
-
 			})
 
 	})
@@ -127,5 +126,16 @@ fileArea.addEventListener("click", (e) =>{
 		console.log("del");
 		e.target.parentElement.remove();
 		max--;
+	}
+})
+
+document.addEventListener("keydown", (e)=>{
+	if(e.key == "Enter"){
+		const tagName = e.target.tagName.toLowerCase();
+
+		// input, 버튼 등에서만 기본 동작 막기 (submit 방지)
+		if (tagName === "input") {
+			e.preventDefault();
+		}
 	}
 })

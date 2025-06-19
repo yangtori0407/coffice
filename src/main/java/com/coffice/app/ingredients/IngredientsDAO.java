@@ -10,6 +10,7 @@ import com.coffice.app.page.Pager;
 public interface IngredientsDAO {
 
 	public List<IngredientsVO> getList(Pager pager) throws Exception;
+	public List<IngredientsVO> totlaList() throws Exception;
 	public IngredientsVO getDetail(IngredientsVO ingredientsVO) throws Exception;
 	public Long getTotalCount(Pager pager) throws Exception;
 	public int add(IngredientsVO ingredientsVO) throws Exception;

@@ -10,6 +10,12 @@
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="/css/user/login.css">
+  
+	  <c:if test="${not empty reset}">
+		  <script>
+		    alert("${reset}");
+		  </script>
+	  </c:if>
 </head>
 <body>
   <img class="wave" src="/images/wave7.png">
@@ -43,10 +49,10 @@
                  </div>
                  <div class="div">
                     <h5>Password</h5>
-                    <input type="password" class="input" name="password">
+                    <input type="password" class="input" name="password" >
                  </div>
               </div>
-              <a href="#">Forgot Password?</a>
+              <a href="/user/forgotPw">Forgot Password?</a>
               <input type="submit" class="btn" value="Login">
             </form>
             

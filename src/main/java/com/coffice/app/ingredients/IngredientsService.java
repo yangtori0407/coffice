@@ -21,6 +21,10 @@ public class IngredientsService {
 		return ingredeintsDAO.getList(pager);
 	}
 	
+	public List<IngredientsVO> totlaList() throws Exception {
+		return ingredeintsDAO.totlaList();
+	}
+	
 	public IngredientsVO getDetail(IngredientsVO ingredientsVO) throws Exception {
 		return ingredeintsDAO.getDetail(ingredientsVO);
 	}

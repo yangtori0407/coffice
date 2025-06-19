@@ -5,14 +5,25 @@ let selectValue = null;
 const number = document.getElementById("number");
 
 addReceiveBtn.addEventListener("click",()=>{
-
+    
+    
     for(let i=0;i<receive.length;i++){
         if(receive[i].checked){
             selectValue = receive[i].value;
             break;
         }
     }
-    
+
+    if(selectValue === null){
+        alert("입/출고가 필요합니다.")
+        return;
+    } else if(selectIngredients.value==="상품을 선택해주세요"){
+        alert("상품을 선택해주세요")
+        return;
+    } else if(number.value===""){
+        alert("수량을 입력해주세요.")
+        return;
+    }
     const params = new URLSearchParams();
         if(selectValue){
             params.append("receive", selectValue);

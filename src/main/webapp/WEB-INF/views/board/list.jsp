@@ -28,7 +28,7 @@
 
 					<!-- contents 내용 -->
 					<!-- Page Heading -->
-					<h1 class="mb-2 text-gray-800">익명게시판</h1>
+					<!-- <h1 class="mb-2 text-gray-800">익명게시판</h1> -->
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">

@@ -15,7 +15,7 @@ class NoticeDAOTest {
 	void testAdd() throws Exception{
 		for(int i = 1; i <= 100;i++) {
 			NoticeVO noticeVO = new NoticeVO();
-			noticeVO.setUserId("TEST");
+			noticeVO.setUserId("test1");
 			noticeVO.setNoticeTitle("NoticeTitle" + i);
 			noticeVO.setNoticeContents("NoticeContents"+ i);
 			

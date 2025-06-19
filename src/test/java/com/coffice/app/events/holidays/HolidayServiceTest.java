@@ -2,6 +2,7 @@ package com.coffice.app.events.holidays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,8 @@ class HolidayServiceTest {
 
 	@Test
 	void test() throws Exception {
-		int result = holidayService.addHoliday();
+		Calendar calendar = Calendar.getInstance();
+		int result = holidayService.addHoliday(calendar.get(Calendar.YEAR));
 		
 		assertNotEquals(0, result);
 	}

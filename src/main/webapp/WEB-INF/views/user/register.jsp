@@ -26,10 +26,7 @@
 					  <h3 class="title">Coffice 사원 등록</h3>
 					
 					  <div class="input-wrap">
-					    <input type="text" id="userId" name="userId" placeholder="사원번호">
-					    <div>
-			               <form:errors path="userId" cssClass="error-message"/>
-                        </div>   
+					    <input type="text" placeholder="사원번호는 자동으로 생성됩니다." readonly>  
 					  </div>
 					
 					  <div class="input-wrap">
@@ -75,6 +72,7 @@
 					      <option value="3">물류팀</option>
 					      <option value="4">영업팀</option>
 					      <option value="5">회계팀</option>
+					      <option value="6">소속없음</option>
 					    </select>
 					  </div>
 					

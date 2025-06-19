@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
 
 
@@ -20,8 +21,11 @@ public interface BranchDAO {
 	public int branchUpdate(BranchVO branchVO) throws Exception;
 	public BranchVO getDetail(BranchVO branchVO) throws Exception;
 	public int masterAdd(BranchMasterVO branchMasterVO) throws Exception;
-	public List<BranchVO> myBranch(BranchVO branchVO) throws Exception;
+	public List<BranchVO> myBranch(BranchVO branchVO, Pager pager) throws Exception;
+	public Long totalmyBranchCount(BranchVO branchVO, Pager pager) throws Exception;
 	public Long totalBranchSales(BranchVO branchVO) throws Exception;
 	public Long totalSales() throws Exception;
 	public List<BranchMasterVO> notRegisterBranchMaster() throws Exception;
+	public List<SalesVO> getChartList(BranchVO branchVO) throws Exception;
+	public List<BranchVO> getTotalChart() throws Exception;
 }

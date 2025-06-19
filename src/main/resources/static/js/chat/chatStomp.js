@@ -3,15 +3,54 @@ const stompClient = Stomp.over(socket);
 
 const chatInfo = document.getElementById("chatInfo");
 const chatNum = chatInfo.getAttribute("data-chat-num");
-const userId = chatInfo.getAttribute("data-user-id");
+const userId = getUserIdCookie("userId");
 const chatInput = document.getElementById("chat-input");
 const sendBtn = document.getElementById("chat-send-btn");
 
 const chatBox = document.getElementById("chat-box");
 
+function getUserIdCookie(name) {
+    return document.cookie
+        .split("; ")
+        .find(cookie => cookie.startsWith(name + "="))
+        ?.split("=")[1] ?? null;
+}
+
+
 window.addEventListener("load", function () {
     chatBox.scrollTop = chatBox.scrollHeight;
 });
+
+//채팅방 무한 스크롤
+chatBox.addEventListener("scroll", ()=>{
+   if(chatBox.scrollTop == 0){
+    const topChat = chatBox.firstElementChild.getAttribute("data-chat-num");
+
+    //채팅 새로 들어오기 전 높이
+    const preScrollHeight = chatBox.scrollHeight;
+
+    let p = new URLSearchParams();
+    p.append("chatRoomNum", chatNum);
+    p.append("chatNum", topChat);
+    fetch("./getChatMore",{
+        method:"POST",
+        body: p
+    })
+    .then(r=>r.json())
+    .then(r => {
+        //이미 json 객체
+        for(j of r){
+            chatBox.prepend(displayReceiveMessage(j));
+        }
+        
+        //더해지고 난 뒤에 스크롤 높이
+        const newScrollHeight = chatBox.scrollHeight;
+        //불러오고 난 뒤 - 이전
+        chatBox.scrollTop = newScrollHeight - preScrollHeight;
+    })
+       
+   } 
+})
 
 //클래스 이름은 반드시 대문자로 해야한다
 class Message {
@@ -28,12 +67,13 @@ stompClient.connect({}, function (frame) {
     console.log("Stomp 연결 성공: ", frame);
 
     stompClient.subscribe(`/sub/chatRoom.${chatNum}`, function (message) {
-        const msg = JSON.parse(message.body); //서버에서 json으로 보낸걸 json 객체로 받음
-        console.log("받은 메세지 " + msg);
+        const msg = JSON.parse(message.body); //서버에서 문자열로 보낸걸 json 객체로 받음
+        console.log(msg);
         let chat = displayReceiveMessage(msg);
         chatBox.append(chat);
         chatBox.scrollTop = chatBox.scrollHeight;
     })
+
 }, function (error) {
     console.error("stomp 연결 실패: ", error);
 })
@@ -191,4 +231,55 @@ fileUpload.addEventListener("change", (e) => {
             console.log(m);
             stompClient.send("/pub/sendMessage", {}, JSON.stringify(m))
         })
+})
+
+//==========================채팅방 알람 켜기 끄기
+const alarmBtn = document.getElementById("alarmBtn");
+
+alarmBtn.addEventListener("click", () => {
+    console.log("!!!!!!!!!!")
+    if (alarmBtn.getAttribute("data-ion-name") == "notifications") {
+        const p = new URLSearchParams();
+        p.append("chatNum", chatNum);
+
+        fetch("/chat/updateAlarm", {
+            method: "POST",
+            body: p
+        })
+            .then(r => r.text())
+            .then(r => {
+                if (r * 1 == 1) {
+                    alarmBtn.setAttribute("data-ion-name", 'notifications-outline')
+                    alarmBtn.innerHTML = '<ion-icon name="notifications-outline"style="vertical-align: middle; font-size: 20px;"></ion-icon>'
+                }
+            })
+    } else {
+        const p = new URLSearchParams();
+        p.append("chatNum", chatNum);
+
+        fetch("/chat/updateAlarm", {
+            method: "POST",
+            body: p
+        })
+            .then(r => r.text())
+            .then(r => {
+                if (r * 1 == 1) {
+                    alarmBtn.setAttribute("data-ion-name", 'notifications')
+                    alarmBtn.innerHTML = '<ion-icon name="notifications"style="vertical-align: middle; font-size: 20px;"></ion-icon>'
+                }
+            })
+    }
+})
+
+//==============채팅방 나갈 때 마지막으로 읽은 시간 업데이트 하기
+
+window.addEventListener("beforeunload", ()=>{
+    let p = new URLSearchParams();
+    p.append("chatRoomNum", chatNum);
+    fetch("./updateLastReadAt", {
+        method: "POST",
+        body: p,
+        keepalive: true //언로드 중에도 요청을 끝까지 보내준다.
+    })
+    
 })

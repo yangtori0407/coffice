@@ -1,12 +1,14 @@
 package com.coffice.app.chat;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.coffice.app.chat.vo.ChatAddVO;
 import com.coffice.app.chat.vo.ChatContentsVO;
 import com.coffice.app.chat.vo.ChatFilesVO;
+import com.coffice.app.chat.vo.ChatPersonVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
 import com.coffice.app.files.FileVO;
 import com.coffice.app.posts.notice.NoticeFilesVO;
@@ -45,5 +47,19 @@ public interface ChatDAO {
 	ChatContentsVO getChatContentsInfo(Long chatNum) throws Exception;
 
 	FileVO getFileDetail(NoticeFilesVO filesVO) throws Exception;
+
+	List<ChatPersonVO> getChatUserInfo(String chatRoomNum) throws Exception;
+
+	List<UserVO> getChatUsersDetail(String chatRoomNum) throws Exception;
+
+	int updateLastReadAt(Map<String, Object> info) throws Exception;
+
+	Integer getChatAlarm(Map<String, Object> info) throws Exception;
+
+	int updateAlarm(Map<String, Object> info) throws Exception;
+
+	List<ChatContentsVO> getChatMore(Map<String, Object> info) throws Exception;
+
+	int getChatAmount(Map<String, Object> info) throws Exception;
 	
 }

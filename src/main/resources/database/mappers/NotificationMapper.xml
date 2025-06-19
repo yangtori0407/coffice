@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.notification.NotificationDAO">
+  	<insert id="add" parameterType="NotificationVO" useGeneratedKeys="true" keyProperty="notiNum">
+  		INSERT INTO NOTIFICATION(NOTI_NUM, NOTI_KIND, NOTI_CONTENTS,NOTI_DATE,RELATE_ENTITY, RELATE_ID)
+  		VALUES(null, #{notiKind}, #{notiContents}, now(), #{relateEntity}, #{relateId})
+  	</insert>
+  </mapper>

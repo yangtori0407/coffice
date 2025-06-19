@@ -47,7 +47,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     }
 });
 
-if(kind.innerText.trim() == '일정') {
+if(kind.value.trim() == '일정') {
     let event = {
         title: 'test',
         start: '2025-06-09',
@@ -58,7 +58,7 @@ if(kind.innerText.trim() == '일정') {
     calendar.addEvent(event);
 }
 
-if(kind.innerText.trim() == '휴가') {
+if(kind.value.trim() == '휴가') {
     let event = {
         title: 'test',
         start: '2025-06-12T15:30:00'

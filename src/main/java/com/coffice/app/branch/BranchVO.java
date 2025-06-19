@@ -19,4 +19,6 @@ public class BranchVO {
 	private UserVO userVO;
 	private BranchMasterVO branchMasterVO;
 	private List<SalesVO> salesVO;
+	private Integer totalSale;
+	private Integer ranking;
 }

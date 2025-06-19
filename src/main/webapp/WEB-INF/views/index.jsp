@@ -12,6 +12,7 @@
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src= "https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <link rel="stylesheet" type="text/css"
 	href="/css/user/index_employee.css">
@@ -33,14 +34,14 @@
 
 					<!-- contents 내용 -->
 
-					<div class="row" style="height: 1000px;">
+					<div class="row" style="height: 1050px;">
 
 						<!-- 파트1 -->
 						<!-- 사원정보 부분 -->
 						<div class="col-3">
 
 							<!-- Background Gradient Utilities -->
-							<div class="card shadow mb-4">
+							<div class="card shadow mb-4" style="height: 500px;">
 								<div class="card-header py-3">
 									<h6 class="m-0 font-weight-bold text-primary">사원정보 부분</h6>
 								</div>
@@ -82,6 +83,42 @@
                                     <div class="px-3 py-5 bg-gradient-info text-white">.bg-gradient-info</div>
                                     <div class="px-3 py-5 bg-gradient-warning text-white">.bg-gradient-warning</div>
                                     <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div> -->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<!-- Roitation Utilities -->
+									<div class="card mt-3" style="">
+										<div
+											class="card-header py-3 d-flex align-items-center justify-content-between">
+											<h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
+											<a href="/notice/list" class="btn btn-sm">+</a>
+										</div>
+										<div class="card-body text-center p-0" >
+											<table class="table table-striped mb-0">
+												<thead>
+													<tr>
+														
+														<th scope="col">제목</th>
+														<th scope="col">날짜</th>
+
+													</tr>
+												</thead>
+												<tbody>
+													<c:forEach items="${list }" var="l">
+														<tr>
+															<td ><a
+																href="/notice/detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
+															<td ><a
+																href="/notice/detail?noticeNum=${l.noticeNum }">${l.formatted }</a></td>
+
+														</tr>
+													</c:forEach>
+
+												</tbody>
+											</table>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -182,41 +219,17 @@
 
 							</div>
 
-							<!-- 게시판 부분 -->
+							<!-- 그래프 부분 -->
 							<div class="row" style="height: 700px;">
 								<div class="col" style="height: 700px;">
 									<!-- Roitation Utilities -->
 									<div class="card">
 										<div
 											class="card-header py-3 d-flex align-items-center justify-content-between">
-											<h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
-											<a href="/notice/list" class="btn btn-sm">+</a>
+											<h6 class="m-0 font-weight-bold text-primary">지점별매출</h6>
 										</div>
 										<div class="card-body text-center p-0" style="height: 100%;">
-											<table class="table table-striped mb-0">
-												<thead>
-													<tr>
-														<th scope="col">번호</th>
-														<th scope="col">제목</th>
-														<th scope="col">날짜</th>
-
-													</tr>
-												</thead>
-												<tbody>
-													<c:forEach items="${list }" var="l">
-														<tr>
-															<th scope="row"><a
-																href="/notice/detail?noticeNum=${l.noticeNum }">${l.noticeNum }</a></th>
-															<td><a
-																href="/notice/detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
-															<td><a
-																href="/notice/detail?noticeNum=${l.noticeNum }">${l.noticeDate }</a></td>
-
-														</tr>
-													</c:forEach>
-
-												</tbody>
-											</table>
+											<canvas id="salesChart"  height="600" width="800"></canvas>
 										</div>
 									</div>
 								</div>
@@ -226,21 +239,21 @@
 						<!-- 파트3 -->
 						<div class="col-3">
 							<!-- 일정부분 -->
-							<div class="row" style="height: 500px;">
+							<div class="row" style="height: 400px;">
 								<div class="col" style="min-width: 300px;">
 									<!-- Custom Text Color Utilities -->
 									<div class="card shadow mb-4">
 										<div class="card-header py-3">
 											<h6 class="m-0 font-weight-bold text-primary">일정부분</h6>
 										</div>
-										<div class="card-body" style="min-height: 400px;">
+										<div class="card-body" style="min-height: 300px;">
 											<div id="schedule"></div>
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- 달력부분 -->
-							<div class="row" style="min-height: 500px;">
+							<div class="row" style="min-height: 600px;">
 								<!-- Custom Text Color Utilities -->
 								<div class="col" style="min-width: 300px;">
 									<div class="card shadow mb-4">
@@ -252,12 +265,14 @@
 										</div>
 									</div>
 								</div>
+                
 							</div>
 						</div>
 
 
 					</div>
 					<!-- contents 내용 끝 -->
+					
 
 				</div>
 			</div>
@@ -273,4 +288,39 @@
 	<script src='/fullcalendar/dist/index.global.js'></script>
 	<script src="/js/calendar/homeCalendar.js"></script>
 </body>
+<script type="text/javascript">
+const label = [
+	<c:forEach items="${chart}" var="c" varStatus="s">
+		"${c.branchName}"
+		<c:if test="${!s.last}">,</c:if>
+	</c:forEach>	
+];
+const datas = [
+	<c:forEach items="${chart}" var="c" varStatus="s">
+		"${c.totalSale}"
+		<c:if test="${!s.last}">,</c:if>
+	</c:forEach>	
+];
+
+const data = {
+		  labels: label,
+		  datasets: [{
+		    label: 'branchSale',
+		    data: datas,
+		    backgroundColor: [
+		      'rgb(255, 99, 4)',
+		      'rgb(54, 162, 235)',
+		      'rgb(255, 205, 86)',
+		      'rgb(186,234,31)',
+		      'rgb(31,75,234)',
+		    ],
+		    hoverOffset: 4
+		  }]
+		};
+	const salesChart = document.getElementById("salesChart");
+	new Chart (salesChart,{
+		type: 'doughnut',
+		  data: data,
+	})
+</script>
 </html>

@@ -2,106 +2,214 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
- <mapper namespace="com.coffice.app.chat.ChatDAO">
-  	<select id="getRoomList" resultType="ChatRoomVO">
-  		SELECT CHATROOM_NUM, CHATROOM_NAME, CHATROOM_DATE FROM CHAT_ROOM
-  	</select>
-  	
-  	<select id="checkDuplication" parameterType="ChatAddVO" resultType="java.lang.String">
-  		SELECT CP.CHATROOM_NUM
-  		FROM CHAT_PERSON CP
-  		WHERE CP.USER_ID IN
-  		<foreach collection="users" item="u" open="(" separator="," close=")">
-  			#{u}
-  		</foreach>
-  		GROUP BY CP.CHATROOM_NUM
-  		HAVING COUNT(DISTINCT CP.USER_ID) = #{size}
-  		AND COUNT(DISTINCT CP.USER_ID) = (
-  				SELECT COUNT(DISTINCT CP2.USER_ID)
-  				FROM CHAT_PERSON CP2
-  				WHERE CP2.CHATROOM_NUM = CP.CHATROOM_NUM
-  			)
-  	</select>
-  	
-  	<select id="getRoomUsers" parameterType="java.lang.String" resultType="java.lang.String">
-  		SELECT USER_ID FROM CHAT_PERSON WHERE CHATROOM_NUM = #{room}
-  	</select>
-  	
-  	<select id="getList" parameterType="UserVO" resultType="ChatRoomVO">
-  		SELECT R.CHATROOM_NUM, R.CHATROOM_NAME 
-  		FROM CHAT_ROOM R 
-  		JOIN CHAT_PERSON P 
-  		ON R.CHATROOM_NUM = P.CHATROOM_NUM 
-  		WHERE P.USER_ID = #{userId} 
-  		ORDER BY P.LAST_READ_AT DESC
-  	</select>
-  	
-  	<select id="getChatInfo" parameterType="ChatRoomVO" resultType="ChatRoomVO">
-  		SELECT CHATROOM_NAME, CHATROOM_NUM 
-  		FROM CHAT_ROOM 
-  		WHERE CHATROOM_NUM = #{chatRoomNum}
-  	</select>
-  	
-  	<select id="getContentsInfo" parameterType="ChatContentsVO" resultType="ChatContentsVO">
-  		SELECT CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER
-  		FROM CHAT_CONTENTS
-  		WHERE CHAT_NUM = #{chatNum}
-  	</select>
-  	
-  	<select id="getChatContentsList" parameterType="ChatContentsVO" resultType="ChatContentsVO">
-  		SELECT C.CHAT_NUM, C.CHATROOM_NUM, C.CHAT_CONTENTS, C.SEND_DATE, C.SENDER, U.NAME, CF.FILE_NUM
-  		FROM CHAT_CONTENTS C
-  		JOIN USERS U
-  		ON C.SENDER = U.USER_ID
-  		LEFT JOIN CHAT_FILES CF
-  		ON C.CHAT_NUM = CF.CHAT_NUM
-  		WHERE CHATROOM_NUM = #{chatRoomNum}
-  	</select>
-  	
-  	<select id="getUserInfo" parameterType="ChatContentsVO" resultType="java.lang.String">
-  		SELECT NAME FROM USERS WHERE USER_ID = #{sender}
-  	</select>
-  	
-  	<select id="getChatContentsInfo" parameterType="Long" resultType="ChatContentsVO">
-  		SELECT CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER
-  		FROM CHAT_CONTENTS
-  		WHERE CHAT_NUM = #{chatNum}
-  	</select>
-  	
-  	<select id="getFileDetail" parameterType="FileVO" resultType="FileVO">
-  		SELECT FILE_NUM, CHAT_NUM, ORIGIN_NAME, SAVE_NAME
-  		FROM CHAT_FILES
-  		WHERE FILE_NUM = #{fileNum}
-  	</select>
-  	
-  	
-  	
-  	<insert id="addChat" parameterType="ChatRoomVO" useGeneratedKeys="true" keyProperty="chatRoomNum">
-  		INSERT INTO CHAT_ROOM VALUES(#{chatRoomNum}, #{chatRoomName}, NOW(), #{chatRoomCreator})
-  	</insert>
-  	
-  	<insert id="addUser" parameterType="ChatAddVO">
-  		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT, LAST_READ_AT) VALUES
-  		<foreach collection="users" item="u" separator=",">
-  			(#{chatRoomNum}, #{u}, NOW(), null)
-  		</foreach>
-  	</insert>
-  	
-  	<insert id="addContents" parameterType="ChatContentsVO" useGeneratedKeys="true" keyProperty="chatNum">
-  		INSERT INTO CHAT_CONTENTS(CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER)
-  		VALUES (NULL, #{chatRoomNum}, #{chatContents}, now(), #{sender})
-  	</insert>
-  	
-  	<insert id="addFileContents" parameterType="ChatContentsVO" useGeneratedKeys="true" keyProperty="chatNum">
-  		INSERT INTO CHAT_CONTENTS(CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE, SENDER)
-  		VALUES (NULL, #{chatRoomNum}, #{chatContents}, now(), #{sender})
-  	</insert>
-  	
-  	<insert id="addFile" parameterType="ChatFilesVO" useGeneratedKeys="true" keyProperty="fileNum">
-  		INSERT INTO CHAT_FILES(FILE_NUM, CHAT_NUM, ORIGIN_NAME, SAVE_NAME)
-  		VALUES(NULL, #{chatNum}, #{originName}, #{saveName})
-  	</insert>
-  	
-  	
+
+<mapper namespace="com.coffice.app.chat.ChatDAO">
+	<select id="getRoomList" resultType="ChatRoomVO">
+		SELECT CHATROOM_NUM,
+		CHATROOM_NAME, CHATROOM_DATE FROM CHAT_ROOM
+	</select>
+
+	<select id="checkDuplication" parameterType="ChatAddVO"
+		resultType="java.lang.String">
+		SELECT CP.CHATROOM_NUM
+		FROM CHAT_PERSON CP
+		WHERE CP.USER_ID IN
+		<foreach collection="users" item="u" open="(" separator=","
+			close=")">
+			#{u}
+		</foreach>
+		GROUP BY CP.CHATROOM_NUM
+		HAVING COUNT(DISTINCT CP.USER_ID) = #{size}
+		AND COUNT(DISTINCT CP.USER_ID) = (
+		SELECT COUNT(DISTINCT CP2.USER_ID)
+		FROM CHAT_PERSON CP2
+		WHERE CP2.CHATROOM_NUM = CP.CHATROOM_NUM
+		)
+	</select>
+
+	<select id="getRoomUsers" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT USER_ID FROM CHAT_PERSON WHERE CHATROOM_NUM =
+		#{room}
+	</select>
+
+	<select id="getList" parameterType="UserVO"
+		resultType="ChatRoomVO">
+		SELECT R.CHATROOM_NUM, R.CHATROOM_NAME, P.ALARM_STATUS
+		FROM
+		CHAT_ROOM R
+		JOIN CHAT_PERSON P
+		ON R.CHATROOM_NUM = P.CHATROOM_NUM
+		WHERE
+		P.USER_ID = #{userId}
+		ORDER BY P.LAST_READ_AT DESC
+	</select>
+
+	<select id="getChatInfo" parameterType="ChatRoomVO"
+		resultType="ChatRoomVO">
+		SELECT CHATROOM_NAME, CHATROOM_NUM
+		FROM CHAT_ROOM
+		WHERE
+		CHATROOM_NUM = #{chatRoomNum}
+	</select>
+
+	<select id="getContentsInfo" parameterType="ChatContentsVO"
+		resultType="ChatContentsVO">
+		SELECT CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE,
+		SENDER
+		FROM CHAT_CONTENTS
+		WHERE CHAT_NUM = #{chatNum}
+	</select>
+
+	<select id="getChatContentsList" parameterType="ChatContentsVO"
+		resultType="ChatContentsVO">
+		SELECT D.CHAT_NUM, D.CHATROOM_NUM, D.CHAT_CONTENTS,
+		D.SEND_DATE,
+		D.SENDER, D.NAME, D.FILE_NUM
+		FROM (
+			SELECT C.CHAT_NUM, C.CHATROOM_NUM, C.CHAT_CONTENTS, C.SEND_DATE, C.SENDER,
+			U.NAME, CF.FILE_NUM
+			FROM CHAT_CONTENTS C
+			JOIN USERS U ON C.SENDER = U.USER_ID
+			LEFT JOIN CHAT_FILES CF ON C.CHAT_NUM = CF.CHAT_NUM
+			WHERE C.CHATROOM_NUM = #{chatRoomNum}
+			ORDER BY C.SEND_DATE DESC
+			LIMIT 30
+		) D
+		ORDER BY D.SEND_DATE ASC
+	</select>
+
+	<select id="getUserInfo" parameterType="ChatContentsVO"
+		resultType="java.lang.String">
+		SELECT NAME FROM USERS WHERE USER_ID = #{sender}
+	</select>
+
+	<select id="getChatContentsInfo" parameterType="Long"
+		resultType="ChatContentsVO">
+		SELECT CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE,
+		SENDER
+		FROM CHAT_CONTENTS
+		WHERE CHAT_NUM = #{chatNum}
+	</select>
+
+	<select id="getFileDetail" parameterType="FileVO"
+		resultType="FileVO">
+		SELECT FILE_NUM, CHAT_NUM, ORIGIN_NAME, SAVE_NAME
+		FROM
+		CHAT_FILES
+		WHERE FILE_NUM = #{fileNum}
+	</select>
+
+	<select id="getChatUserInfo" parameterType="java.lang.String"
+		resultType="ChatPersonVO">
+		SELECT USER_ID, ALARM_STATUS FROM CHAT_PERSON WHERE
+		CHATROOM_NUM =
+		#{chatRoomNum}
+	</select>
+
+	<select id="getChatUsersDetail" parameterType="java.lang.String"
+		resultType="UserVO">
+		SELECT U.USER_ID, U.NAME, U.POSITION, D.DEPT_NAME
+		FROM USERS
+		U
+		JOIN
+		(SELECT USER_ID FROM CHAT_PERSON WHERE CHATROOM_NUM =
+		#{chatRoomNum}) C
+		ON U.USER_ID = C.USER_ID
+		JOIN
+		DEPARTMENT D
+		ON U.DEPT_ID
+		= D.DEPT_ID
+	</select>
+
+	<select id="getChatAlarm" parameterType="java.util.HashMap"
+		resultType="Integer">
+		SELECT ALARM_STATUS FROM CHAT_PERSON
+		WHERE USER_ID =
+		#{userId} AND CHATROOM_NUM = #{chatRoomNum}
+	</select>
+	
+	<select id="getChatMore" parameterType="java.util.HashMap" resultType="ChatContentsVO">
+		SELECT D.CHAT_NUM, D.CHATROOM_NUM, D.CHAT_CONTENTS, D.SEND_DATE, D.SENDER, D.NAME, D.FILE_NUM
+		FROM
+		(SELECT C.CHAT_NUM, C.CHATROOM_NUM, C.CHAT_CONTENTS, C.SEND_DATE, C.SENDER,
+			U.NAME, CF.FILE_NUM
+			FROM CHAT_CONTENTS C
+			JOIN USERS U ON C.SENDER = U.USER_ID
+			LEFT JOIN CHAT_FILES CF ON C.CHAT_NUM = CF.CHAT_NUM
+			WHERE C.CHATROOM_NUM = #{chatRoomNum} AND #{chatNum} > C.CHAT_NUM
+			ORDER BY C.CHAT_NUM DESC
+			LIMIT 30) D
+		ORDER BY D.SEND_DATE ASC
+	</select>
+	
+	<select id="getChatAmount" parameterType="java.util.HashMap" resultType="Integer">
+		SELECT COUNT(CHAT_NUM) as CHAT_AMOUNT
+		FROM CHAT_CONTENTS
+		WHERE SEND_DATE >
+				(SELECT LAST_READ_AT
+					FROM CHAT_PERSON
+					WHERE CHATROOM_NUM = #{chatRoomNum} AND USER_ID = #{userId})
+		AND CHATROOM_NUM = #{chatRoomNum}
+	</select>
+
+
+	<insert id="addChat" parameterType="ChatRoomVO"
+		useGeneratedKeys="true" keyProperty="chatRoomNum">
+		INSERT INTO CHAT_ROOM
+		VALUES(#{chatRoomNum}, #{chatRoomName}, NOW(),
+		#{chatRoomCreator})
+	</insert>
+
+	<insert id="addUser" parameterType="ChatAddVO">
+		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT,
+		LAST_READ_AT, ALARM_STATUS) VALUES
+		<foreach collection="users" item="u" separator=",">
+			(#{chatRoomNum}, #{u}, NOW(), NOW(), 1)
+		</foreach>
+	</insert>
+
+	<insert id="addContents" parameterType="ChatContentsVO"
+		useGeneratedKeys="true" keyProperty="chatNum">
+		INSERT INTO
+		CHAT_CONTENTS(CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE,
+		SENDER)
+		VALUES (NULL, #{chatRoomNum}, #{chatContents}, now(),
+		#{sender})
+	</insert>
+
+	<insert id="addFileContents" parameterType="ChatContentsVO"
+		useGeneratedKeys="true" keyProperty="chatNum">
+		INSERT INTO
+		CHAT_CONTENTS(CHAT_NUM, CHATROOM_NUM, CHAT_CONTENTS, SEND_DATE,
+		SENDER)
+		VALUES (NULL, #{chatRoomNum}, #{chatContents}, now(),
+		#{sender})
+	</insert>
+
+	<insert id="addFile" parameterType="ChatFilesVO"
+		useGeneratedKeys="true" keyProperty="fileNum">
+		INSERT INTO CHAT_FILES(FILE_NUM,
+		CHAT_NUM, ORIGIN_NAME, SAVE_NAME)
+		VALUES(NULL, #{chatNum},
+		#{originName}, #{saveName})
+	</insert>
+
+	<update id="updateLastReadAt" parameterType="java.util.HashMap">
+		UPDATE CHAT_PERSON
+		SET LAST_READ_AT = NOW() WHERE USER_ID = #{userId} AND
+		CHATROOM_NUM =
+		#{chatRoomNum}
+	</update>
+
+	<update id="updateAlarm" parameterType="java.util.HashMap">
+		UPDATE CHAT_PERSON SET
+		ALARM_STATUS = CASE
+		WHEN ALARM_STATUS = 1 THEN 0
+		ELSE 1
+		END
+		WHERE USER_ID
+		= #{userId} AND CHATROOM_NUM = #{chatRoomNum}
+	</update>
+
 </mapper>

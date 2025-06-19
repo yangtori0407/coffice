@@ -3,6 +3,7 @@ package com.coffice.app.posts.board;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +37,7 @@ public class BoardController {
 		List<BoardVO> list = boardService.getList(pager);
 		
 		model.addAttribute("list", list);
+		model.addAttribute("kind", "게시판 > 익명게시판");
 		
 		return "board/list";
 	}
@@ -46,6 +49,7 @@ public class BoardController {
 		for(CommentVO c : boardVO.getComments()) {
 			log.info("commentVO detail : {}", c);
 		}
+		model.addAttribute("kind", "게시판 > 익명게시판");
 		return "board/detail";
 	}
 	
@@ -58,12 +62,15 @@ public class BoardController {
 	}
 	
 	@GetMapping("add")
-	public String add() throws Exception{
+	public String add(Model model) throws Exception{
+		model.addAttribute("kind", "게시판 > 익명게시판 > 작성하기");
 		return "board/add";
 	}
 	
 	@PostMapping("add")
-	public String add(BoardVO boardVO, Model model) throws Exception{
+	public String add(BoardVO boardVO, Model model, Authentication authentication) throws Exception{
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		boardVO.setUserId(userVO.getUserId());
 		int result = boardService.add(boardVO);
 		
 		return "redirect:./list";
@@ -82,7 +89,7 @@ public class BoardController {
 		BoardVO boarVO = boardService.getDetail(boardVO);
 		
 		model.addAttribute("update", boarVO);
-		
+		model.addAttribute("kind", "게시판 > 익명게시판 > 수정하기");
 		return "board/update";
 	}
 	
@@ -98,16 +105,20 @@ public class BoardController {
 	
 	@PostMapping("addComment")
 	@ResponseBody
-	public CommentVO addComment(CommentVO commentVO) throws Exception{
-		//log.info("{}", commentVO);
+	public CommentVO addComment(CommentVO commentVO, Authentication authentication) throws Exception{
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		//log.info("addCommentVO : {}", commentVO);
+		commentVO.setUserId(userVO.getUserId());
 		return boardService.addComment(commentVO);
 	}
 	
 	@PostMapping("reply")
 	@ResponseBody
-	public CommentVO reply(CommentVO commentVO, Model model) throws Exception{
-		log.info("reply : {}", commentVO);
+	public CommentVO reply(CommentVO commentVO, Model model, Authentication authentication) throws Exception{
+		//log.info("reply : {}", commentVO);
 		//작성자 넣기
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		commentVO.setUserId(userVO.getUserId());
 		commentVO = boardService.reply(commentVO);
 		return commentVO;
 	}
@@ -121,7 +132,7 @@ public class BoardController {
 	
 	@PostMapping("commentDelete")
 	public String commentDelete(CommentVO commentVO, Model model) throws Exception{
-		log.info("del : {}", commentVO);
+		//log.info("del : {}", commentVO);
 		int result = boardService.commentDelete(commentVO);
 		model.addAttribute("result", result);
 		return "commons/ajaxResult";
