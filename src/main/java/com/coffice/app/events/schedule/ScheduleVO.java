@@ -24,5 +24,6 @@ public class ScheduleVO extends EventVO{
 	private Date repeatEnd;
 	private String repeatType;
 	private List<ScheduleRepeatExceptionVO> exceptions = new ArrayList<>();
+	private boolean exception;
 
 }

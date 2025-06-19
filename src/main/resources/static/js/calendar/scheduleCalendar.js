@@ -44,7 +44,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         let repeatScheduleDiv = document.getElementById("repeatScheduleDiv")
         // console.log(e.event.id)
         // console.log(e.event.groupId)
-        console.log(e.event)
+        console.log(e.event.groupId)
         $("#detailModal").modal("show")
         let scheduleId = e.event.id
         let repeatCheck = document.getElementById("repeatCheck")
@@ -61,11 +61,22 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         let dis = document.querySelectorAll("input[disabled], textarea[disabled], select[disabled]");
         let change = document.getElementById("change")
         let saveChange = document.getElementById("saveChange")
+        let deleteSchedule = document.getElementById("deleteSchedule")
         let startStr = e.event.startStr
         let groupId = e.event.groupId
         let startTime = e.event.extendedProps.startDate
         let endTime = e.event.extendedProps.endDate
 
+        type.checked = true;
+        detailResult.innerText = e.event.title
+        let rstartDate = e.event.startStr.slice(0, 10)
+        let rstartTime = e.event.startStr.slice(11, 16)
+        let rendDate = e.event.endStr.slice(0, 10)
+        let rendTime = e.event.endStr.slice(11, 16)
+        rsDate.value = rstartDate
+        rsTime.value = rstartTime
+        reDate.value = rendDate
+        reTime.value = rendTime
         if(e.event.groupId != "") {
             repeatScheduleDiv.setAttribute("style", "display: block;")
             rType.checked = true;
@@ -77,24 +88,26 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             repeatCheck.addEventListener("change", (e)=>{
                 if(e.target.checked) {
                     changeAll.setAttribute("style", "display: block;")
+                    rsDate.value = startTime.slice(0, 10)
+                    rsTime.value = startTime.slice(11, 16)
+                    reDate.value = endTime.slice(0, 10)
+                    reTime.value = endTime.slice(11, 16)
                 }else {
                     changeAll.setAttribute("style", "display: none;")
+                    rsDate.value = rstartDate
+                    rsTime.value = rstartTime
+                    reDate.value = rendDate
+                    reTime.value = rendTime
                 }
             })
         }
-        type.checked = true;
-        detailResult.innerText = e.event.title
-        rsDate.value = e.event.startStr.slice(0, 10)
-        rsTime.value = e.event.startStr.slice(11, 16)
-        reDate.value = e.event.endStr.slice(0, 10)
-        reTime.value = e.event.endStr.slice(11, 16)
-
+        
         change.addEventListener("click", ()=>{
             for(a of dis) {
                 a.disabled = false;
             }
         })
-
+        
         saveChange.addEventListener("click", ()=>{
             let checked = document.querySelector('input[name="detailResultOptions"]:checked').value;
             let params = new FormData
@@ -103,13 +116,14 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             params.append("detail", detailResult.value.trim())
             params.append("startTime", rsDate.value+rsTime.value)
             params.append("endTime", reDate.value+reTime.value)
-
-            if(groupId != null && !repeatCheck.checked) {
+            
+            if(groupId != "" && !repeatCheck.checked) {
                 console.log(groupId)
+                params.append("exception", true)
                 params.append("exceptions[0].repeatId", groupId)
                 params.append("exceptions[0].exceptionDate", startStr)
                 params.append("exceptions[0].exceptionType", "override")
-            }else if(groupId != null && repeatCheck.checked) {
+            }else if(groupId != "" && repeatCheck.checked) {
                 let rType = document.querySelector('input[name="radioOptionsResult"]:checked').value;
                 let eRepeat = document.getElementById("reRepeat")
                 let rCount = document.getElementById("resultCount")
@@ -121,7 +135,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     params.append("repeatCount", rCount.value)
                 }
             }
-
+            
             fetch("schedule/update", {
                 method: "post",
                 body: params
@@ -132,6 +146,35 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             })
         })
 
+        deleteSchedule.addEventListener("click", ()=>{
+            if(confirm("정말 삭제 하시겠습니까?")) {
+                let params = new FormData
+
+                if(groupId != "" && !repeatCheck.checked) {
+                    console.log("isException and notAll")
+                    params.append("exception", true)
+                    params.append("exceptions[0].repeatId", groupId)
+                    params.append("exceptions[0].exceptionDate", startStr)
+                    params.append("exceptions[0].exceptionType", "skip")
+                }else if(groupId != "" && repeatCheck.checked) {
+                    console.log("isAll")
+                    params.append("repeatId", groupId)
+                }else {
+                    console.log("notException and notAll")
+                    params.append("scheduleId", scheduleId)
+                }
+                fetch("schedule/delete", {
+                    method: "post",
+                    body: params
+                })
+                .then(r=>r.text())
+                .then(r=>{
+                    // console.log(r)
+                    location.reload()
+                })
+            }
+        })
+        
         $('#detailModal').on('hidden.bs.modal', function () {
             for(a of dis) {
                 a.disabled = true;
