@@ -35,6 +35,14 @@ stompClientNotification.connect({}, function (frame) {
     //채팅방 알림
     stompClientNotification.subscribe(`/sub/chat/user.${userIdNotification}`, function (message) {
         const msg = JSON.parse(message.body);
+        const chatInfo = document.querySelector("#chatInfo");
+        //만약 채팅 번호가 존재한다면
+        if(chatInfo){
+            //그리고 그 채팅번호가 지금 알림 받은 방 번호랑 같다면 알림을 띄우지 않음
+            if(chatInfo.getAttribute("data-chat-num") == msg.chatContentsVO.chatRoomNum){
+                return;
+            }
+        }
         console.log(msg);
         createToast(msg);
     })

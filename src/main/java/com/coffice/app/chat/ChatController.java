@@ -155,5 +155,11 @@ public class ChatController {
 		
 		return "commons/ajaxResult";
 	}
+	
+	@PostMapping("getChatMore")
+	@ResponseBody
+	public List<ChatContentsVO> getChatMore(String chatRoomNum, String chatNum) throws Exception{
+		return chatService.getChatMore(chatRoomNum, chatNum);
+	}
 
 }

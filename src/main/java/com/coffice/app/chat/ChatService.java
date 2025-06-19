@@ -170,4 +170,17 @@ public class ChatService {
 		
 	}
 
+	public List<ChatContentsVO> getChatMore(String chatRoomNum, String chatNum) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("chatRoomNum", chatRoomNum);
+		info.put("chatNum", Long.parseLong(chatNum));
+		
+		List<ChatContentsVO> list = chatDAO.getChatMore(info);
+		
+//		for(ChatContentsVO l : list) {
+//			log.info("getChatMore : {}", l);
+//		}
+		return list;
+	}
+
 }

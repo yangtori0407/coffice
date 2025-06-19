@@ -21,6 +21,37 @@ window.addEventListener("load", function () {
     chatBox.scrollTop = chatBox.scrollHeight;
 });
 
+//채팅방 무한 스크롤
+chatBox.addEventListener("scroll", ()=>{
+   if(chatBox.scrollTop == 0){
+    const topChat = chatBox.firstElementChild.getAttribute("data-chat-num");
+
+    //채팅 새로 들어오기 전 높이
+    const preScrollHeight = chatBox.scrollHeight;
+
+    let p = new URLSearchParams();
+    p.append("chatRoomNum", chatNum);
+    p.append("chatNum", topChat);
+    fetch("./getChatMore",{
+        method:"POST",
+        body: p
+    })
+    .then(r=>r.json())
+    .then(r => {
+        //이미 json 객체
+        for(j of r){
+            chatBox.prepend(displayReceiveMessage(j));
+        }
+        
+        //더해지고 난 뒤에 스크롤 높이
+        const newScrollHeight = chatBox.scrollHeight;
+        //불러오고 난 뒤 - 이전
+        chatBox.scrollTop = newScrollHeight - preScrollHeight;
+    })
+       
+   } 
+})
+
 //클래스 이름은 반드시 대문자로 해야한다
 class Message {
     chatNum = 0;
@@ -36,7 +67,7 @@ stompClient.connect({}, function (frame) {
     console.log("Stomp 연결 성공: ", frame);
 
     stompClient.subscribe(`/sub/chatRoom.${chatNum}`, function (message) {
-        const msg = JSON.parse(message.body); //서버에서 json으로 보낸걸 json 객체로 받음
+        const msg = JSON.parse(message.body); //서버에서 문자열로 보낸걸 json 객체로 받음
         console.log(msg);
         let chat = displayReceiveMessage(msg);
         chatBox.append(chat);
