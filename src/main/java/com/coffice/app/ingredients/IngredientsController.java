@@ -39,6 +39,11 @@ public class IngredientsController {
 	private IngredientsService ingredientsService;
 	@Autowired
 	private SalesService salesService;
+	
+	@ModelAttribute("ingredients")
+	public String posts() {
+		return "list";
+	}
 
 	@GetMapping("list")
 	public String getList(Model model, Pager pager) throws Exception {
@@ -51,6 +56,8 @@ public class IngredientsController {
 		model.addAttribute("totalList", totalList);
 		
 		model.addAttribute("ingredientsVO", new IngredientsVO());
+		
+		model.addAttribute("kind", "물류 > 물류관리");
 		return "ingredients/list";
 	}
 	

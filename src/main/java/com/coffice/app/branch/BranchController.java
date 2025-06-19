@@ -63,6 +63,7 @@ public class BranchController {
 		model.addAttribute("total", total);
 		
 		model.addAttribute("kind", "지점 > 지점지도");
+		model.addAttribute("branch", "map");
 		
 		return "branch/map";
 	}
@@ -70,6 +71,7 @@ public class BranchController {
 	@GetMapping("add")
 	public String add(Model model) throws Exception {
 		model.addAttribute("kind", "지점 > 지점추가");
+		model.addAttribute("branch", "add");
 		return "branch/add";
 	}
 	@PostMapping("add")
@@ -106,6 +108,7 @@ public class BranchController {
 		List<BranchMasterVO> notRegisterBranchMaster = branchService.notRegisterBranchMaster();
 		model.addAttribute("notRegisterBranchMaster", notRegisterBranchMaster);
 		model.addAttribute("kind", "지점 > 점주등록");
+		model.addAttribute("branch", "masterAdd");
 		return "branch/masterAdd";
 	}
 	
@@ -137,6 +140,7 @@ public class BranchController {
 		model.addAttribute("menuList", menuList);
 		
 		model.addAttribute("kind", "지점 > my지점");
+		model.addAttribute("branch", "myBranch");
 		
 		return "branch/myBranch";
 	}

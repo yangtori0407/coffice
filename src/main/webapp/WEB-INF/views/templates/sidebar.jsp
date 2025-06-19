@@ -91,13 +91,13 @@
 			<ion-icon name="map-outline"></ion-icon>
 				<span>지점</span>
 			</a>
-			<div id="collapseBranch" class="collapse" aria-labelledby="headingCalendar"
+			<div id="collapseBranch" class="collapse  ${branch == ('map' or 'add' or 'masterAdd' or 'myBranch') ? 'show' :''}" aria-labelledby="headingCalendar"
 				data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
-					<a class="collapse-item" href="/branch/map">지점지도</a>
-					<a class="collapse-item" href="/branch/add">지점추가</a>
-					<a class="collapse-item" href="/branch/masterAdd">점주등록</a>
-					<a class="collapse-item" href="/branch/myBranch">my지점</a>
+					<a class="collapse-item ${branch == ('map') ? 'active' :''}" href="/branch/map">지점지도</a>
+					<a class="collapse-item ${branch == ('add') ? 'active' :''}" href="/branch/add">지점추가</a>
+					<a class="collapse-item ${branch == ('masterAdd') ? 'active' :''}" href="/branch/masterAdd">점주등록</a>
+					<a class="collapse-item ${branch == ('myBranch') ? 'active' :''}" href="/branch/myBranch">my지점</a>
 				</div>
 
 			</div>
@@ -108,10 +108,10 @@
 		aria-expanded="true" aria-controls="collapseCalendar"> <ion-icon
 				name="cube-outline"></ion-icon> <span>물류</span>
 	</a>
-		<div id="collapseIngredients" class="collapse"
+		<div id="collapseIngredients" class="collapse ${ingredients == ('list') ? 'show' :''}"
 			aria-labelledby="headingCalendar" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item" href="/ingredients/list">물류관리</a>
+				<a class="collapse-item ${ingredients == ('list') ? 'active' :''}" href="/ingredients/list">물류관리</a>
 			</div>
 		</div></li>
 
