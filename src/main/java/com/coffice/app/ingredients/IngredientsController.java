@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.coffice.app.branch.BranchVO;
 import com.coffice.app.page.Pager;
 import com.coffice.app.sales.MenuVO;
 import com.coffice.app.sales.SalesService;
@@ -135,13 +136,19 @@ public class IngredientsController {
 	
 	@PostMapping("profit")
 	@ResponseBody
-	public void profit(SalesVO salesVO) throws Exception {
+	public int profit(@AuthenticationPrincipal UserVO userVO, SalesVO salesVO) throws Exception {
 		log.info("p:{}",salesVO);
+		salesVO.setUserId(userVO.getUserId());
+		int result = salesService.profit(salesVO);
+		return result;
 	}
 	
 	@PostMapping("expenditure")
 	@ResponseBody
-	public void expenditure(SalesVO salesVO) throws Exception {
+	public int expenditure(@AuthenticationPrincipal UserVO userVO,SalesVO salesVO) throws Exception {
 		log.info("e:{}",salesVO);
+		salesVO.setUserId(userVO.getUserId());
+		int result = salesService.expenditure(salesVO);
+		return result;
 	}
 }

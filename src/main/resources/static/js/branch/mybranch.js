@@ -58,6 +58,10 @@ let expenditureOptions =[];
 
           
             button.addEventListener('click', function() {
+                let c = confirm("정말 입력하시겠습니까?")
+                if(!c){
+                    return;
+                }
             const selectedMenuId = selectMenu.value;
             const salesQuantity = document.getElementById('salesQuantity').value;
             
@@ -73,8 +77,6 @@ let expenditureOptions =[];
                 params.append("salesQuantity",salesQuantity);
             }
 
-            console.log(params);
-
             isImport ?
             fetch('/ingredients/profit',{
                 method: 'POST',
@@ -85,7 +87,13 @@ let expenditureOptions =[];
             })
             .then(r=>r.json())
             .then(r=>{
-
+                console.log(r)
+                if(r>0){
+                    alert("처리되었습니다.")
+                    location.reload();
+                }else {
+                    alert("다시부탁드립니다.")
+                }
             })
             .catch(e=>{
                 console.error(e)
@@ -100,27 +108,18 @@ let expenditureOptions =[];
             })
             .then(r=>r.json())
             .then(r=>{
-
+                console.log(r)
+                if(r>0){
+                    alert("처리되었습니다.")
+                    location.reload();
+                }else {
+                    alert("다시부탁드립니다.")
+                }
             })
             .catch(e=>{
                 console.error(e)
                 alert("오류")
             })
-
-            // fetch('/your/api/endpoint', {
-            // method: 'POST',
-            // headers: { 'Content-Type': 'application/json' },
-            // body: JSON.stringify(requestData)
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            // console.log('성공:', data);
-            // alert('추가 성공!');
-            // })
-            // .catch(error => {
-            // console.error('에러:', error);
-            // alert('추가 실패!');
-            // });
         });
 
         modalFooter[0].appendChild(button);

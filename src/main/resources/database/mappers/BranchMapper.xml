@@ -82,6 +82,8 @@
   		on b.BRANCH_ID = s.BRANCH_ID
   		LEFT OUTER JOIN MENU m
   		on m.MENU_ID = s.MENU_ID
+  		LEFT OUTER JOIN INGREDIENTS i 
+  		on i.INGREDIENTS_ID = s.INGREDIENTS_ID
   		WHERE u.USER_ID = #{branchVO.userVO.userId}
   		LIMIT #{pager.startNum}, #{pager.page}
   	</select>
@@ -136,8 +138,6 @@
   		END
   		) AS totalSale
   	  	FROM SALES
-  	  	JOIN MENU
-  	  	USING(MENU_ID)
   	  	JOIN BRANCH 
   	  	USING(BRANCH_ID)
   	  	WHERE USER_ID = #{userVO.userId}
@@ -278,10 +278,17 @@
 		  	<result column="SALES_DATE" property="salesDate"/>
 		  	<result column="SALES_QUANTITY" property="salesQuantity"/>
 		  	<result column="MENU_ID" property="menuId"/>
+		  	<result column="INGREDIENTS_ID" property="ingredientsId"/>
 		  	
 		  	<association property="menuVO" javaType="MenuVO">
 		  		<result column="MENU_NAME" property="menuName"/>
 		  		<result column="MENU_PRICE" property="menuPrice"/>
+		  	</association>
+		  	<association property="ingredientsVO" javaType="IngredientsVO">
+		  		<result column="INGREDIENTS_NAME" property="ingredientsName"/>
+		  		<result column="INGREDIENTS_STOCK" property="ingredientsStock"/>
+		  		<result column="INGREDIENTS_PRICE" property="ingredientsPrice"/>
+		  		<result column="INGREDIENTS_DATE" property="ingredientsDate"/>
 		  	</association>
 		</collection>
 	</resultMap>

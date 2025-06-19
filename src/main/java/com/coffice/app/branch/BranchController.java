@@ -125,6 +125,7 @@ public class BranchController {
 		List<BranchVO> list = branchService.myBranch(branchVO, pager);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
+		log.info("my list:{}",list);
 		
 		Long totalSale = branchService.totalBranchSales(branchVO);
 		model.addAttribute("total", totalSale);

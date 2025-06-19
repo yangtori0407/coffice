@@ -50,7 +50,7 @@
 										<td style="color:${item.salesType?'blue':'red'};">${item.salesType?"수입":"지출"}</td>
 										<td>${item.salesProfit}</td>
 										<td>${item.salesQuantity}</td>			
-										<td>${item.menuVO.menuName}</td>
+										<td>${item.salesType ? item.menuVO.menuName:item.ingredientsVO.ingredientsName}</td>
 										<td>${item.salesDate}</td>
 									</tr>
 								</c:forEach>
