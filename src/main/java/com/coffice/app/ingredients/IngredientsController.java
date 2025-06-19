@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.coffice.app.page.Pager;
 import com.coffice.app.sales.MenuVO;
 import com.coffice.app.sales.SalesService;
+import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
 
 import jakarta.validation.Valid;
@@ -130,5 +131,17 @@ public class IngredientsController {
 	public List<IngredientsVO> selectIngredients() throws Exception {
 		List<IngredientsVO> ingredientsList = ingredientsService.totlaList();
 		return ingredientsList;
+	}
+	
+	@PostMapping("profit")
+	@ResponseBody
+	public void profit(SalesVO salesVO) throws Exception {
+		log.info("p:{}",salesVO);
+	}
+	
+	@PostMapping("expenditure")
+	@ResponseBody
+	public void expenditure(SalesVO salesVO) throws Exception {
+		log.info("e:{}",salesVO);
 	}
 }

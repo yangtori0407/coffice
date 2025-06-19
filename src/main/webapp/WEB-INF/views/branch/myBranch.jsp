@@ -124,9 +124,8 @@
 			            <option selected>수입/지출을 선택해주세요</option>
 			        </select>
 					
-			        <input type="text" name="number" id="number" placeholder="수량을 입력하세요">
+			        <input type="text" name="salesQuantity" id="salesQuantity" placeholder="수량을 입력하세요">
 			      <div class="modal-footer">
-			        <button class="btn btn-primary" id="addPurchase">ok</button>
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
 			      </div>
 			  </div>
