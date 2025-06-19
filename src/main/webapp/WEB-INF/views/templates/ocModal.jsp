@@ -24,7 +24,7 @@
         align-items: center;
       }
 
-      .employee-pill .remove-pill {
+      .remove-pill {
         margin-left: 0.5em;
         cursor: pointer;
         font-weight: bold;

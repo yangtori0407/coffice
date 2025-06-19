@@ -22,7 +22,7 @@
 					<!-- contents 내용 -->
 					<c:forEach items="${formList}" var="i">						
 						<div class="formLinks m-2" style="border: 1px solid black; width: 100px;" 
-						data-form-id="${i.formId}" data-form-name="${i.name}">${i.name}</div>
+						data-form-id="${i.formId}" >${i.name}</div>
 					</c:forEach>
 					
 					<br>

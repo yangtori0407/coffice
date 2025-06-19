@@ -1,5 +1,6 @@
 package com.coffice.app.documents;
 
+import java.sql.Timestamp;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -118,9 +119,9 @@ public class DocumentController {
 	@GetMapping("list/*")
 	public String getList(Pager pager, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 
-		List<DocumentVO> list = documentService.getList(pager, request, session);
-		model.addAttribute("list", list);
-		System.out.println("list size : " + list.size());
+		List<DocumentVO> docuList = documentService.getList(pager, request, session);
+		model.addAttribute("docuList", docuList);
+		System.out.println("list size : " + docuList.size());
 		model.addAttribute("pager", pager);
 
 		return "document/list";
@@ -131,18 +132,21 @@ public class DocumentController {
 	public String getDetail(DocumentVO documentVO, Model model, HttpSession session) throws Exception {
 
 		//
-		DocumentVO vo = documentService.getDetail(documentVO);
+		DocumentVO docuVO = documentService.getDetail(documentVO);
 
-		if (vo == null) {
-			System.out.println("document detail vo가 null입니다");
+		if (docuVO == null) {
+			System.out.println("document detail docuVO가 null입니다");
 		}
-		model.addAttribute("vo", vo);
+		
+		
+		
+		model.addAttribute("docuVO", docuVO);
 
 		// 문서 정보 가져올 때, 접속자의 직인 정보들도 모달에 뿌려놓는다 (모달창 열면 서버 다시 안가고 바로 뜨도록)
 		List<SignVO> signList = documentService.getSignList(session);
 		model.addAttribute("signList", signList);
 
-		return "document/form/paymentDetail";
+		return "document/form/variableForm";
 	}
 
 	
@@ -160,7 +164,8 @@ public class DocumentController {
 	@GetMapping("write")
 	public String write(Model model, HttpSession session, FormVO formVO) throws Exception {
 				
-		// 처음 양식 선택 시 보낸 formId와 formName을 받아온다 
+		// 처음 양식 선택 시 보낸 formId를 이용해서 form 정보를 조회 해온다.
+		formVO = documentService.formDetail(formVO);		
 		model.addAttribute("formVO",formVO);
 		
 		int isWritePage = 1;
@@ -169,12 +174,10 @@ public class DocumentController {
 		LocalDateTime time = LocalDateTime.now();		 
 		model.addAttribute("timeNow", time);
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
-		String formattedDate = time.format(formatter);
-		model.addAttribute("formattedDate", formattedDate);
+		
 
 		
-		return "document/form/inAndOutConfirm";
+		return "document/form/variableForm";
 	}
 	
 	
@@ -186,7 +189,7 @@ public class DocumentController {
 
 		ObjectMapper mapper = new ObjectMapper();
 	    List<ApprovalLineVO> approverList = mapper.readValue(approversJson, new TypeReference<List<ApprovalLineVO>>() {});
-	    List<ReferenceLineVO> referrerList = mapper.readValue(approversJson, new TypeReference<List<ReferenceLineVO>>() {});
+	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
 	    
 
 		// 서비스 메서드 실행
@@ -225,6 +228,10 @@ public class DocumentController {
 	@PostMapping("proceed")
 	public String updateApprovalProceed(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
 
+		System.out.println("user "+approvalLineVO.getUserId());
+		System.out.println("docu "+approvalLineVO.getDocumentId());
+		System.out.println("sign "+approvalLineVO.getSignId());
+		
 		int result = documentService.updateApprovalProceed(approvalLineVO, session);
 
 		return "redirect:./detail?documentId=" + approvalLineVO.getDocumentId();

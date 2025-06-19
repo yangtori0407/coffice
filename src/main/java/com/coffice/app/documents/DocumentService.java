@@ -92,7 +92,7 @@ public class DocumentService {
 		// 파싱한 키워드에 따라 조건 분기 생성
 		switch(url) {
 		case "online" : // 문서 중 작성자가 접속자인 문서만 가져온다, status는 "임시"를 제외한 "결재 중", "반려", "결재 완료"만 해당한다 
-			list = documentDAO.getListLine(map);
+			list = documentDAO.getListLine(map);			
 			
 			break;
 		
@@ -122,6 +122,13 @@ public class DocumentService {
 		default :
 			list = documentDAO.getListLine(map);
 			
+		}
+		
+		// 각기 다른 성격의 document가 담긴 list가 만들어졌다.
+		// document마다 결재선이 있으므로 반복을 돌면서 결재선을 조회해온다. 조회한 결재선을 document에 각각 집어넣는다.
+		for(DocumentVO vo : list) {
+			List<ApprovalLineVO> childrenApprovers = documentDAO.getChildrenApprovers(vo);
+			vo.setApprovalLineVOs(childrenApprovers);
 		}
 		
 		return list;
@@ -168,9 +175,6 @@ public class DocumentService {
 		documentVO.setStatus("진행중");
 		
 		// formName, stepCount는 문서 작성 시점의 폼 관련 값을 고정할 필요가 없으므로 문서 조회할 때 가져오겠다
-		 
-		
-		
 		
 		
 		// 결재선 데이터 넣기 (userId, name, position 들어가 있는 상태)		
@@ -357,16 +361,19 @@ public class DocumentService {
 		documentVO = documentDAO.getDetail(documentVO);  // 그릇 재활용하여 업데이트 대상인 문서 정보 담아오기 (결재 전 문서 정보)
 		
 		
+		// documentId 이용해서 그 문서의 결재선들 가져오기 (결재선 갯수 구하려고)
+		List<ApprovalLineVO> childrenApprovers = documentDAO.getChildrenApprovers(documentVO);
+		
 		// 결재 관련 데이터를 변경해준다. 수정자 변수에 접속자 정보(수정하는 사람)도 넣어준다.		
-		// 중간 결재자면 status 유지 및 step은 +1
-		// 마지막 결재자면 status는 '결재완료'로 변경, step은 유지
-		System.out.println("docuVO stepCount : " + documentVO.getStepCount());
+		// 중간 결재자면 status 유지 및 문서의 step은 +1
+		// 마지막 결재자면 status는 '결재완료'로 변경
+		System.out.println("childrenApprovers size : " + childrenApprovers.size());
 		System.out.println("appVO StepOrder : " + approvalLineVO.getStepOrder());
 		
-		if(documentVO.getStepCount() == approvalLineVO.getStepOrder()) {
+		if(childrenApprovers.size() == approvalLineVO.getStepOrder()) {
 			documentVO.setStatus("결재완료");			
 		} 		
-		documentVO.setCurrentStep(documentVO.getCurrentStep() + 1); // 결재할 때마다 +1
+		documentVO.setCurrentStep(documentVO.getCurrentStep() + 1); // 결재할 때마다 문서 스텝 +1
 		
 		documentVO.setModifierId(user.getUserId());
 		documentVO.setModifierName(user.getName());

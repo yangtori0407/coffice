@@ -27,8 +27,7 @@ public class DocumentVO {
 		
 	// 양식 컬럼
 	private Long formId;
-	private String formName;
-	private Long stepCount;
+	private String formName;	
 	
 	// 작성자 컬럼
 	private String writerId;

@@ -1,6 +1,6 @@
 
 
-//
+// 사인 선택하면 강조 기능
 const signWrappers = document.getElementsByClassName("signWrapper");
 
 for (const wrapper of signWrappers) {
@@ -21,7 +21,7 @@ for (const wrapper of signWrappers) {
 }
 
 
-//
+// 사인 사용하기 버튼
 const useSign = document.getElementById("id_useSign");
 
 useSign.addEventListener("click", function(){
@@ -79,7 +79,7 @@ document.getElementById('btn-bring-sign').addEventListener('click', function () 
 
 // "직접 그리기" 버튼 클릭 시
 document.getElementById('btn-draw-sign').addEventListener('click', function () {
-    const wrapper = document.querySelector('.imageWrapper');
+    const wrapper = document.getElementById("id_imageWrapper");
 
     // 캔버스를 imageWrapper 안에 넣음
     wrapper.innerHTML = `
@@ -184,13 +184,21 @@ document.getElementById('btn-draw-sign').addEventListener('click', function () {
 
 // "추가하기" 버튼 클릭 시
 document.getElementById('btn-send-sign').addEventListener('click', function () {
-	const canvas = document.getElementById('signCanvas');	
+
+    const signFileInput = document.getElementById('signFileInput');
+	const canvas = document.getElementById('signCanvas');
+
+    if (!canvas && !signFileInput) {
+        alert("추가할 방법을 선택해주세요")
+        return;
+    }
+
 	const signNameInput = document.getElementById("signNameInput");
     let signName = signNameInput.value.trim();
 	const imageWrapper = document.getElementById("id_imageWrapper");
 	
-    if (!canvas) {
-        alert("사인을 먼저 그려주세요.")
+    if (signName === "") {
+        alert("사인 용도 또는 별명을 입력해주세요")
         return;
     }
 

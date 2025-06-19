@@ -54,8 +54,7 @@
   	<!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
   	<sql id="selectDocument_Form">  		 
 		    D.*,
-		    F.NAME AS FORM_NAME,		  -- 양식 이름
-		    F.STEP_COUNT AS STEP_COUNT	  -- 결재 단계 수
+		    F.NAME AS FORM_NAME		  -- 양식 이름
   	</sql>
 
 	<!-- 작성자가 자신이 올린 문서를 볼 수 있는 리스트 -->

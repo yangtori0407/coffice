@@ -22,6 +22,7 @@ if (btn_toApprovers) {
 			alert("결재자 지정은 최대 4명까지만 가능합니다");
 			return;
 		}
+		
 		// box 초기화 해주고
 		box_approvers.innerHTML = '';
 		
@@ -31,6 +32,40 @@ if (btn_toApprovers) {
             employee.className = 'employee_approval';
             box_approvers.appendChild(employee);
         }
+		
+		
+		// 위쪽 결재칸 영역 가져오기 (4칸)
+        const approverWrappers = document.querySelectorAll('.approver-wrapper');
+
+        // 모든 결재칸 초기화 + 숨기기
+        for (let i = 0; i < approverWrappers.length; i++) {
+            let wrapper = approverWrappers[i];
+            wrapper.style.visibility = 'hidden';            
+        }
+
+        // employee 정보로 위 결재칸 채우기
+        for (let i = 0; i < employee_pills.length; i++) {
+            let employee = employee_pills[i];
+            let wrapper = approverWrappers[i];
+            if (!wrapper) continue;
+
+            // ✅ wrapper 표시
+            wrapper.style.visibility = 'visible';
+
+            // 이름과 직급 추출 (span 내부 기준)
+            let span = employee.querySelector('span');
+            let text = span ? span.textContent.trim() : '';
+            let split = text.split(' ');
+            let name = split[0] || '';
+            let position = split[1] || '';
+
+            wrapper.querySelector('.grade-title').textContent = position;
+            wrapper.querySelector('.approver_name').textContent = name;
+            wrapper.querySelector('.stamp-box').innerHTML = ''; // 직인은 없음
+        }
+		
+		
+		
 
         
     })
@@ -161,29 +196,78 @@ btn_complete.addEventListener("click", function() {
 })
 
 
-// 본문 내용의 data 속성 값으로 documentId를 줘서 문서 정보가 null인지 판단한다.
-// null이라면 tds들의 속성에 모두 contenteditable="true" 를 준다.
-// null이라면 tds들의 속성에 모두 contenteditable="false" 를 준다.
 
+
+// 본문 내용의 data 속성 값으로 documentId를 줘서 문서 정보가 null인지 판단한다.
+// null이라면 tds들의 속성에 모두 contenteditable="true" 를 준다. >> 초기 작성 문서라면 내용 입력 가능 하도록 만듦
+// null이라면 tds들의 속성에 모두 contenteditable="false" 를 준다. >> 기존 문서라면 내용 입력 불가능 하도록 만듦
 const insert_content = document.getElementById("insert_content");
 const tds = document.getElementsByClassName("tds");
 
-if(insert_content.dataset.voCheck != "") {
+// 문서 작성 취소 (나가기) 버튼
+const btn_cancle = document.getElementById("btn_cancle");
+
+if(insert_content.dataset.voCheck != "") { // docuVO가 있는 경우 : 상세조회 등 (!! 임시저장 문서에 관한 기능은 추가로 구현해야함)
     for(let td of tds){
-		td.contentEditable = "false";	
+		td.contentEditable = "false";
+			
 	}
 	
-} else {
+	btn_cancle.addEventListener("click", function () {
+			  
+	    location.href = "/"; // 홈 경로로 이동
+	  
+	});
+	
+} else { // docuVO가 없는 경우 : 초기 작성 화면 
 	for(let td of tds){
     	td.contentEditable = "true";
 	}
+	
+	btn_cancle.addEventListener("click", function () {
+	  const confirmed = confirm("작성 중인 내용은 저장되지 않습니다. 작성 화면에서 나가시겠습니까?");
+	  if (confirmed) {
+	    location.href = "/"; // 홈 경로로 이동
+	  }
+	});
+			
 }
 
 
 
+// 행추가 버튼, 행삭제 버튼, 양식의 tbody1, trs(trs는 클래스)을 가져온다.
+const add_row = document.getElementById("add-row");
+const remove_row = document.getElementById("remove-row");
+
+const tbody1 = document.getElementById("tbody1");
+const trs = document.getElementsByClassName("trs");
 
 
+    let tr1 = trs[0].cloneNode(true); // true로 해야 하위 요소 (td들)까지 복사된다.
 
+
+// 행 추가
+add_row.addEventListener("click", function () {
+  const newRow = tr1.cloneNode(true);
+  
+  	// td 내용 초기화
+	const tds = newRow.querySelectorAll("td");
+	for (let i = 0; i < tds.length; i++) {
+	  tds[i].textContent = "";
+	}
+  
+  tbody1.appendChild(newRow);
+});
+
+// 행 삭제
+remove_row.addEventListener("click", function () {
+  const rows = tbody1.getElementsByClassName("trs");
+  if (rows.length > 1) {
+    tbody1.removeChild(rows[rows.length - 1]);
+  } else {
+    alert("최소 한 개의 행은 남아있어야 합니다.");
+  }
+});
 
 
 
