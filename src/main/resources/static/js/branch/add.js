@@ -24,7 +24,7 @@ function daumPostcode() {
 				}
 				
 				document.getElementById("branchPostcode").value=data.zonecode;
-				document.getElementById("branchAddress").value=roadAddr;
+				document.getElementById("branchAddress").value = roadAddr + extraRoadAddr;
 				
 			}
 		}).open();

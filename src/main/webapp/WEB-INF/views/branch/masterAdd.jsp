@@ -77,6 +77,35 @@
     .form-container button[type="submit"]:hover {
         background-color: #218838;
     }
+	
+	.input-box {
+	    display: flex;
+	    align-items: center;
+	}
+
+	.input-box input[type="text"] {
+	    flex: 1;
+	    padding: 10px 15px;
+	    margin: 10px 5px 10px 0; /* 오른쪽 간격 추가 */
+	    border: 1px solid #ddd;
+	    border-radius: 8px;
+	    box-sizing: border-box;
+	    transition: border-color 0.3s;
+	}
+
+	.input-box span {
+	    padding: 10px 15px;
+	    background-color: #007bff;
+	    color: #fff;
+	    border-radius: 8px;
+	    cursor: pointer;
+	    transition: background-color 0.3s;
+	    white-space: nowrap; /* 줄바꿈 방지 */
+	}
+
+	.input-box span:hover {
+	    background-color: #0056b3;
+	}
 </style>
 </head>
 <body id="page-top">
