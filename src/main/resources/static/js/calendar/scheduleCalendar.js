@@ -63,6 +63,8 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         let saveChange = document.getElementById("saveChange")
         let startStr = e.event.startStr
         let groupId = e.event.groupId
+        let startTime = e.event.extendedProps.startDate
+        let endTime = e.event.extendedProps.endDate
 
         if(e.event.groupId != "") {
             repeatScheduleDiv.setAttribute("style", "display: block;")
@@ -102,11 +104,22 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             params.append("startTime", rsDate.value+rsTime.value)
             params.append("endTime", reDate.value+reTime.value)
 
-            if(groupId != null) {
+            if(groupId != null && !repeatCheck.checked) {
                 console.log(groupId)
                 params.append("exceptions[0].repeatId", groupId)
                 params.append("exceptions[0].exceptionDate", startStr)
                 params.append("exceptions[0].exceptionType", "override")
+            }else if(groupId != null && repeatCheck.checked) {
+                let rType = document.querySelector('input[name="radioOptionsResult"]:checked').value;
+                let eRepeat = document.getElementById("reRepeat")
+                let rCount = document.getElementById("resultCount")
+                params.append("repeatId", groupId)
+                params.append("repeatType", rType)
+                if(eRepeat.value != "") {
+                    params.append("repeatEnd", eRepeat.value+" 23:59:59")
+                }else if(rCount.value != "") {
+                    params.append("repeatCount", rCount.value)
+                }
             }
 
             fetch("schedule/update", {
@@ -115,7 +128,6 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             })
             .then(r=>r.text())
             .then(r=>{
-                // console.log(r)
                 location.reload()
             })
         })
@@ -126,6 +138,8 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                 repeatScheduleDiv.setAttribute("style", "display: none;")
                 eRepeat.value = null;
                 rCount.value = null;
+                groupId = null
+                startStr = null
             }
         })
     },
@@ -160,7 +174,6 @@ fetch("http://localhost/events/getRepeatSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
-        console.log(a.exceptions)
         let exdate = []
         for(e of a.exceptions) {
             if(e.exceptionDate != null) {

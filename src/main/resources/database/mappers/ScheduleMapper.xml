@@ -72,4 +72,11 @@
 		    (#{ex.repeatId}, #{ex.exceptionDate}, #{ex.exceptionType})
 		  </foreach>
 	</insert>
+	
+	<update id="updateRepeatSchedule">
+			update SCHEDULE_REPEAT
+			set DETAIL = #{detail}, START_TIME = #{startTime}, END_TIME = #{endTime}, REPEAT_COUNT = #{repeatCount}, REPEAT_END = #{repeatEnd}, REPEAT_TYPE = #{repeatType}, SCHEDULE_TYPE = #{scheduleType}, EDITOR = #{editor}, EDIT_TIME = now()
+			where REPEAT_ID = #{repeatId}
+  			and DELETE_STATUS = 0
+	</update>
   </mapper>
