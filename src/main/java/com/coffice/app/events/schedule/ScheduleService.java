@@ -36,7 +36,7 @@ public class ScheduleService {
 	
 	public int updateSchedule(ScheduleVO scheduleVO) throws Exception {
 		int result = 0;
-		if(scheduleVO.getExceptions().get(0).getRepeatId() != null) {
+		if(scheduleVO.isException()) {
 			scheduleDAO.addException(scheduleVO);
 			scheduleVO.setRepeatId(scheduleVO.getExceptions().get(0).getRepeatId());
 			result = scheduleDAO.addSchedule(scheduleVO);
@@ -45,6 +45,20 @@ public class ScheduleService {
 		}else {			
 			result = scheduleDAO.updateSchedule(scheduleVO);
 		}
+		return result;
+	}
+	
+	public int deleteSchedule(ScheduleVO scheduleVO) throws Exception {
+		int result = 0;
+		
+		if(scheduleVO.isException()) {
+			result = scheduleDAO.addException(scheduleVO);
+		}else if(scheduleVO.getRepeatId() != null) {
+			result = scheduleDAO.deleteRepeatSchedule(scheduleVO);
+		}else {
+			result = scheduleDAO.deleteSchedule(scheduleVO);
+		}
+		
 		return result;
 	}
 

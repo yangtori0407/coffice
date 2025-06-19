@@ -82,6 +82,15 @@ public class EventController {
 		return "events/schedule";
 	}
 	
+	@PostMapping("schedule/delete")
+	public String deleteSchedule(ScheduleVO scheduleVO) throws Exception {
+		scheduleVO.setEditor("scheduleTest");
+		scheduleVO.setUserId("scheduleTest");
+		int result = scheduleService.deleteSchedule(scheduleVO);
+		log.info("{}, {}", result, scheduleVO);
+		return "events/schedule";
+	}
+	
 	@GetMapping("getHolidays")
 	@ResponseBody
 	public List<HolidayVO> getHolidays() throws Exception {

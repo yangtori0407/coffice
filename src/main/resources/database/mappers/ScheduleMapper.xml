@@ -18,6 +18,7 @@
   	<select id="getAll" resultType="ScheduleVO">
   			select SCHEDULE_ID, DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE
   			from SCHEDULE
+  			where DELETE_STATUS = 0
   	</select>
   	
   	<select id="getSchedule" resultType="ScheduleVO" parameterType="ScheduleVO">
@@ -32,6 +33,7 @@
 			from SCHEDULE_REPEAT sr
 			left outer join SCHEDULE_REPEAT_EXCEPTION sre 
 			on sr.REPEAT_ID = sre.REPEAT_ID
+			where DELETE_STATUS = 0
   	</select>
   	
   	<resultMap type="ScheduleVO" id="ScheduleResultMap">
@@ -73,10 +75,22 @@
 		  </foreach>
 	</insert>
 	
-	<update id="updateRepeatSchedule">
+	<update id="updateRepeatSchedule" parameterType="ScheduleVO">
 			update SCHEDULE_REPEAT
 			set DETAIL = #{detail}, START_TIME = #{startTime}, END_TIME = #{endTime}, REPEAT_COUNT = #{repeatCount}, REPEAT_END = #{repeatEnd}, REPEAT_TYPE = #{repeatType}, SCHEDULE_TYPE = #{scheduleType}, EDITOR = #{editor}, EDIT_TIME = now()
 			where REPEAT_ID = #{repeatId}
   			and DELETE_STATUS = 0
+	</update>
+	
+	<update id="deleteSchedule">
+			update SCHEDULE
+			set DELETE_STATUS = 1, EDITOR = #{editor}, EDIT_TIME = now()
+			where SCHEDULE_ID = #{scheduleId}
+	</update>
+	
+	<update id="deleteRepeatSchedule">
+			update SCHEDULE_REPEAT
+			set DELETE_STATUS = 1, EDITOR = #{editor}, EDIT_TIME = now()
+			where REPEAT_ID = #{repeatId}
 	</update>
   </mapper>

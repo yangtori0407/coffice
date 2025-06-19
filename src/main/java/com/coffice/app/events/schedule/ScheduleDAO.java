@@ -15,5 +15,7 @@ public interface ScheduleDAO {
 	public int updateSchedule(ScheduleVO scheduleVO) throws Exception;
 	public int addException(ScheduleVO scheduleVO) throws Exception;
 	public int updateRepeatSchedule(ScheduleVO scheduleVO) throws Exception;
+	public int deleteSchedule(ScheduleVO scheduleVO) throws Exception;
+	public int deleteRepeatSchedule(ScheduleVO scheduleVO) throws Exception;
 
 }

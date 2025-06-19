@@ -173,8 +173,8 @@
 					<div class="modal-content" id="detailModalContent">
 						<div class="modal-header">
 							<h5 class="modal-title" id="detailModalLabel">${kind}</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
+							<button type="button" class="btn btn-danger" id="deleteSchedule">
+								<i class="fas fa-trash"></i>
 							</button>
 						</div>
 						<div class="modal-body">
