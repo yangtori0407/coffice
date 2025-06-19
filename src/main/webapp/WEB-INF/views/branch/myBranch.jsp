@@ -107,27 +107,24 @@
 		                <span aria-hidden="true">×</span>
 		            </button>
 		      </div>
-		      <div class="modal-body" aria-label="Default select example">
+		      <div class="modal-body" aria-label="Default select example" id="orderBody">
 		      		<div class="form-check">
-					  <input class="form-check-input" type="radio" name="receive" id="input" value="true">
+					  <input class="form-check-input" type="radio" name="salesType" id="import" value="true">
 					  <label class="form-check-label" for="radioDefault1">
 					    수입
 					  </label>
 					</div>
 					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="receive" id="output" value="false">
+					  <input class="form-check-input" type="radio" name="salesType" id="expenditure" value="false">
 					  <label class="form-check-label" for="radioDefault2">
 					    지출
 					  </label>
 					</div>
 			        <select class="form-select" id="selectMenu">
-			            <option selected>메뉴를 선택해주세요</option>
-						<c:forEach items="${menuList}" var="m">
-							<option value="${m.menuId}">${m.menuName}</option>
-						</c:forEach>
+			            <option selected>수입/지출을 선택해주세요</option>
 			        </select>
 					
-			        <input type="text" name="number" id="number" placeholder="상품수량을 입력하세요">
+			        <input type="text" name="number" id="number" placeholder="수량을 입력하세요">
 			      <div class="modal-footer">
 			        <button class="btn btn-primary" id="addPurchase">ok</button>
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
@@ -138,6 +135,7 @@
 		</div>
 		
 			<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
+			<script src="/js/branch/mybranch.js">></script>
 </body>
 <script>
 	

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.page.Pager;
+import com.coffice.app.sales.MenuVO;
+import com.coffice.app.sales.SalesService;
 import com.coffice.app.users.UserVO;
 
 import jakarta.validation.Valid;
@@ -33,6 +35,8 @@ public class IngredientsController {
 	
 	@Autowired
 	private IngredientsService ingredientsService;
+	@Autowired
+	private SalesService salesService;
 
 	@GetMapping("list")
 	public String getList(Model model, Pager pager) throws Exception {
@@ -112,5 +116,19 @@ public class IngredientsController {
 		}
 		
 		return result2;
+	}
+	
+	@GetMapping("menuList")
+	@ResponseBody
+	public List<MenuVO> selectMenu() throws Exception {
+		List<MenuVO> menuList = salesService.menuList();
+		return menuList;
+	}
+	
+	@GetMapping("ingredientsList")
+	@ResponseBody
+	public List<IngredientsVO> selectIngredients() throws Exception {
+		List<IngredientsVO> ingredientsList = ingredientsService.totlaList();
+		return ingredientsList;
 	}
 }
