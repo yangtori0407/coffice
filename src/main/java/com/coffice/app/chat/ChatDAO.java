@@ -57,5 +57,7 @@ public interface ChatDAO {
 	Integer getChatAlarm(Map<String, Object> info) throws Exception;
 
 	int updateAlarm(Map<String, Object> info) throws Exception;
+
+	List<ChatContentsVO> getChatMore(Map<String, Object> info) throws Exception;
 	
 }

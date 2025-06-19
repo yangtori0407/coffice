@@ -91,7 +91,7 @@
 												<c:when test="${con.sender eq user.userId }">
 													<c:choose>
 														<c:when test="${con.fileNum ne null }">
-															<div class="d-flex justify-content-end mb-2">
+															<div class="d-flex justify-content-end mb-2" data-chat-num=${con.chatNum }>
 																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
 																<div class="card border-left-secondary"
 																	style="max-width: 60%;">
@@ -103,7 +103,7 @@
 														</c:when>
 														<c:otherwise>
 															<!-- 상대방 채팅 -->
-															<div class="d-flex justify-content-end mb-2">
+															<div class="d-flex justify-content-end mb-2" data-chat-num=${con.chatNum }>
 																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
 																<div class="card border-left-secondary"
 																	style="max-width: 60%;">
@@ -116,7 +116,7 @@
 												<c:otherwise>
 													<c:choose>
 														<c:when test="${con.fileNum ne null }">
-															<div class="d-flex flex-column align-items-start mb-2">
+															<div class="d-flex flex-column align-items-start mb-2" data-chat-num=${con.chatNum }>
 
 																<div class="mb-1 text-primary font-weight-bold small">${con.name }</div>
 
@@ -134,7 +134,7 @@
 														</c:when>
 														<c:otherwise>
 
-															<div class="d-flex flex-column align-items-start mb-2">
+															<div class="d-flex flex-column align-items-start mb-2" data-chat-num=${con.chatNum }>
 
 																<div class="mb-1 text-primary font-weight-bold small">${con.name }</div>
 
