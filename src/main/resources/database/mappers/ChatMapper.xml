@@ -142,6 +142,16 @@
 			LIMIT 30) D
 		ORDER BY D.SEND_DATE ASC
 	</select>
+	
+	<select id="getChatAmount" parameterType="java.util.HashMap" resultType="Integer">
+		SELECT COUNT(CHAT_NUM) as CHAT_AMOUNT
+		FROM CHAT_CONTENTS
+		WHERE SEND_DATE >
+				(SELECT LAST_READ_AT
+					FROM CHAT_PERSON
+					WHERE CHATROOM_NUM = #{chatRoomNum} AND USER_ID = #{userId})
+		AND CHATROOM_NUM = #{chatRoomNum}
+	</select>
 
 
 	<insert id="addChat" parameterType="ChatRoomVO"

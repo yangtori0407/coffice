@@ -1,5 +1,6 @@
 package com.coffice.app.chat;
 
+import java.beans.Transient;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.chat.vo.ChatAddVO;
@@ -38,10 +40,19 @@ public class ChatService {
 	private String path;
 
 	public List<ChatRoomVO> getList(UserVO userVO) throws Exception {
-		//userVO.setUserId("test1"); //로그인 되면 이거 지우기!!!!!!!!
-		return chatDAO.getList(userVO);
+		
+		List<ChatRoomVO> list = chatDAO.getList(userVO);
+		
+		for(ChatRoomVO l : list) {
+			Map<String, Object> info = new HashMap<>();
+			info.put("userId", userVO.getUserId());
+			info.put("chatRoomNum", l.getChatRoomNum());
+			l.setChatAmount(chatDAO.getChatAmount(info));
+		}
+		
+		return list;
 	}
-
+	@Transactional
 	public Map<String, Object> addChat(ChatAddVO chatAddVO, UserVO userVO) throws Exception {
 		// -1 => 동일한 사용자와 만든 방이 있다.
 		// 인원수 => 방 만들어짐
@@ -83,7 +94,7 @@ public class ChatService {
 	}
 	
 	
-
+	@Transactional
 	public ChatRoomVO getChatInfo(ChatRoomVO chatRoomVO,String userId) throws Exception{
 		Map<String, Object> info = new HashMap<>();
 		info.put("userId", userId);
@@ -93,7 +104,8 @@ public class ChatService {
 		
 		return chatRoomVO;
 	}
-
+	
+	@Transactional
 	public ChatContentsVO addContents(ChatContentsVO chatContentsVO, UserVO userVO) throws Exception{
 		chatContentsVO.setSender(userVO.getUserId());
 		log.info("sender name : {}", chatContentsVO);
@@ -108,7 +120,8 @@ public class ChatService {
 		// TODO Auto-generated method stub
 		return chatDAO.getChatContentsList(chatRoomVO);
 	}
-
+	
+	@Transactional
 	public Map<String, Object> fileUpload(MultipartFile file, String chatRoomNum, UserVO userVO) throws Exception{
 		ChatContentsVO chatContentsVO = new ChatContentsVO();
 		chatContentsVO.setSender(userVO.getUserId());
@@ -154,10 +167,10 @@ public class ChatService {
 		return chatDAO.getChatUsersDetail(chatRoomNum);
 	}
 
-	public int updateLastReadAt(String userId, ChatRoomVO chatRoomVO) throws Exception{
+	public int updateLastReadAt(String userId, String chatRoomNum) throws Exception{
 		Map<String, Object> info = new HashMap<>();
 		info.put("userId", userId);
-		info.put("chatRoomNum", chatRoomVO.getChatRoomNum());
+		info.put("chatRoomNum", chatRoomNum);
 		return chatDAO.updateLastReadAt(info);
 	}
 

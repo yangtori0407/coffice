@@ -43,6 +43,12 @@ stompClientNotification.connect({}, function (frame) {
                 return;
             }
         }
+        const chatAmount = document.querySelector("#chatAmount");
+        if(chatAmount){
+            let chatAmountNum = Number(chatAmount.innerText);
+            chatAmountNum++;
+            chatAmount.innerText = chatAmountNum;
+        }
         console.log(msg);
         createToast(msg);
     })

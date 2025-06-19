@@ -270,3 +270,16 @@ alarmBtn.addEventListener("click", () => {
             })
     }
 })
+
+//==============채팅방 나갈 때 마지막으로 읽은 시간 업데이트 하기
+
+window.addEventListener("beforeunload", ()=>{
+    let p = new URLSearchParams();
+    p.append("chatRoomNum", chatNum);
+    fetch("./updateLastReadAt", {
+        method: "POST",
+        body: p,
+        keepalive: true //언로드 중에도 요청을 끝까지 보내준다.
+    })
+    
+})
