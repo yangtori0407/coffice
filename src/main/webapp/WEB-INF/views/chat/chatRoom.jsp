@@ -33,9 +33,16 @@
 							<div class="card shadow mb-4">
 								<div
 									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 id="chatInfo" class="m-0 font-weight-bold text-primary"
-										data-chat-num="${chatRoomVO.chatRoomNum }">${chatRoomVO.chatRoomName}</h6>
+									<div class="d-flex align-items-center">
+										
+											<a href="./main" class="mr-3"><ion-icon name="arrow-back-outline"></ion-icon></a>
+										
+										<h6 id="chatInfo" class="m-0 font-weight-bold text-primary"
+											data-chat-num="${chatRoomVO.chatRoomNum }">${chatRoomVO.chatRoomName}</h6>
+									</div>
+										
 									<div class="row align-items-center">
+										
 										<div class="col-6 d-flex align-items-center">
 
 											<c:choose>

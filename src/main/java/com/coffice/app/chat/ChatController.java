@@ -115,7 +115,7 @@ public class ChatController {
 		chatRoomVO = chatService.getChatInfo(chatRoomVO, userId);
 		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO);
 		List<UserVO> users = chatService.getChatUsersDetail(chatRoomVO.getChatRoomNum());
-		chatService.updateLastReadAt(userId, chatRoomVO);
+		//chatService.updateLastReadAt(userId, chatRoomVO);
 //		for(ChatContentsVO c : contents) {
 //			log.info("챗 내용 : {}", c);
 //		}
@@ -160,6 +160,14 @@ public class ChatController {
 	@ResponseBody
 	public List<ChatContentsVO> getChatMore(String chatRoomNum, String chatNum) throws Exception{
 		return chatService.getChatMore(chatRoomNum, chatNum);
+	}
+	
+	@PostMapping("updateLastReadAt")
+	public String updateLastReadAt(String chatRoomNum, Authentication authentication, Model model) throws Exception{
+		int result = chatService.updateLastReadAt(authentication.getName(), chatRoomNum);
+		model.addAttribute("result", result);
+		
+		return "commons/ajaxResult";
 	}
 
 }

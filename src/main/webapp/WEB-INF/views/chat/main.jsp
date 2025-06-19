@@ -35,20 +35,28 @@
 									<div class="list-group">
 										<c:forEach items="${list }" var="r">
 											<a href="./chatRoom?chatRoomNum=${r.chatRoomNum}"
-												class="list-group-item list-group-item-action d-flex align-items-center" style="height:80px;">
-												<span>🌟${r.chatRoomName} 
-												<c:choose>
-													<c:when test="${r.alarmStatus eq 1 }">
-														<ion-icon name="notifications-outline" style="vertical-align: middle;"></ion-icon>
-													</c:when>
-													<c:otherwise>
-														<ion-icon name="notifications-off-outline" style="vertical-align: middle;"></ion-icon>
-													</c:otherwise>
-												</c:choose>
-												</span></a>
+												class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+												style="height: 80px;"> <span>🌟${r.chatRoomName}
+													<c:choose>
+														<c:when test="${r.alarmStatus eq 1 }">
+															<ion-icon name="notifications-outline"
+																style="vertical-align: middle;"></ion-icon>
+														</c:when>
+														<c:otherwise>
+															<ion-icon name="notifications-off-outline"
+																style="vertical-align: middle;"></ion-icon>
+														</c:otherwise>
+													</c:choose>
+											</span> <c:if test="${r.chatAmount ne 0 }">
+													<div id="chatAmount"
+														style="width: 8%; border: 1px solid red; border-radius: 10px; background-color: red; color: white; text-align: center;">
+														${r.chatAmount }</div>
+												</c:if>
+
+											</a>
 										</c:forEach>
-										
-										 
+
+
 									</div>
 								</div>
 							</div>

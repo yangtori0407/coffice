@@ -17,5 +17,5 @@ public class ChatRoomVO {
 	
 	//DB에서 조회시 담을 때만 사용 DB에는 없는 컬럼명
 	private Integer alarmStatus;
-	
+	private Integer chatAmount;
 }
