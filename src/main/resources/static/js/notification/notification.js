@@ -1,6 +1,13 @@
 const notificationArea = document.getElementById("notificationArea");
-const userIdNotification = document.getElementById("alert").getAttribute("data-user-id");
+const userIdNotification = getUserIdCookie("userId");
 //const chatAlert = document.getElementById("chatAlert");
+
+function getUserIdCookie(name) {
+    return document.cookie
+        .split("; ")
+        .find(cookie => cookie.startsWith(name + "="))
+        ?.split("=")[1] ?? null;
+}
 
 const socketNotification = new SockJS("/ws-stomp");
 const stompClientNotification = Stomp.over(socketNotification);

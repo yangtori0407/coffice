@@ -151,7 +151,8 @@
                 
                 //채팅----------------------------------------------------------------------------------
                 //채팅방 추가시 본인 선택 불가
-                const chatLoginUser = document.getElementById("chatPeople").getAttribute("data-login-chat");
+                const chatLoginUser = getUserIdCookie("userId");
+                //console.log("chatLoginUser");
                 if(chatLoginUser == empId){
                   alert("본인을 선택할 수 없습니다.");
                   return;
@@ -187,6 +188,13 @@
           })
       }
     });
+
+    function getUserIdCookie(name){
+      return document.cookie
+                      .split("; ")
+                      .find(cookie => cookie.startsWith(name + "="))
+                      ?.split("=")[1] ?? null;
+    }
 
 
 
