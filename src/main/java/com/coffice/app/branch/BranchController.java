@@ -36,15 +36,21 @@ public class BranchController {
 	
 	@Value("${kakao.map.appkey}")
 	private String appkey;
+	@Value("${business.service.key}")
+	private String servicekey;
 	@Autowired
 	private BranchService branchService;
 	@Autowired
 	private SalesService salesService;
 	
 	@ModelAttribute("appkey")
-	public String getAppkey() {
-		
+	public String getAppkey() {	
 		return this.appkey;
+	}
+	
+	@ModelAttribute("servicekey")
+	public String getServicekey() {	
+		return this.servicekey;
 	}
 
 	@GetMapping("map")

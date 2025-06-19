@@ -10,6 +10,74 @@
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<style>
+    .form-container {
+        width: 400px;
+        height: auto;
+        margin: 50px auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-container select,
+    .form-container input[type="text"],
+    .form-container input[type="date"] {
+        width: 100%;
+        padding: 10px 15px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    .form-container select:focus,
+    .form-container input[type="text"]:focus,
+    .form-container input[type="date"]:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .form-container span {
+        display: inline-block;
+        margin-top: 5px;
+        padding: 8px 12px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .form-container span:hover {
+        background-color: #0056b3;
+    }
+
+    .form-container button[type="submit"] {
+        width: 100%;
+        padding: 12px 0;
+        background-color: #28a745;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 20px;
+    }
+
+    .form-container button[type="submit"]:hover {
+        background-color: #218838;
+    }
+</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -19,7 +87,8 @@
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
 					<!-- contents 내용 -->
-					<div style="width:400px; height:600px; margin: 0 auto;">
+					<div class="form-container">
+					    <h2>점주 등록</h2>
 						<form action="./masterAdd" method="post">
 							<select class="form-select" id="selectUser" name="userId.userId">
 								<option selected>추가할 점주를 선택하세요</option>
@@ -28,9 +97,12 @@
 								</c:forEach>						
 							</select>
 							<div class="input-box">
-								<input type="text" name="contactNumber" id="contactNumber" placeholder="사업자등록번호" maxlength="10">
-								<span style="cursor:hand" onclick="code_check();">확인</span>
+								<input type="text" id="contactNumber" placeholder="사업자등록번호(10자리)" maxlength="10">
+								<span style="cursor:pointer" onclick="code_check();">확인</span>
 							</div>
+							
+							<input type="hidden" name="contactNumber" id="hiddenContactNumber" value="">
+							<div id="serviceKeyHolder" data-servicekey="${servicekey}"></div>
 							<div class="input-box">	
 								<input type="date" name="contactDate" id="contactDate" placeholder="사업자등록날짜">					
 							</div>
@@ -47,41 +119,5 @@
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
-<script>
-   function code_check(){
-   	if(!checkInput_null('frm1','code1,code2,code3')){ frm1.overlap_code_ok.value = "";}
-    else{
-    	document.frm1.code.value = frm1.code1.value + frm1.code2.value + frm1.code3.value;
-		var data = {
-			"b_no":[document.frm1.code.value]	
-		};
-   			
-   			$.ajax({
-   		        url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=MnUQss9Aqei9MrPS7u5PuGDn6bHqVr3ej2KGG4CmUluPTK7gF5nbVBgnx9lNPB1E4HNe97uDig783%2BUgURa%2FQg%3D%3D", //활용 신청 시 발급 되는 serviceKey값을 [서비스키]에 입력해준다.
-   		        type: "POST",
-   		        data: JSON.stringify(data), // json 을 string으로 변환하여 전송
-   		        dataType: "JSON",
-   		        traditional: true,
-   		        contentType: "application/json; charset:UTF-8",
-   		        accept: "application/json",
-   		        success: function(result) {
-   		            console.log(result);
-   		            if(result.match_cnt == "1") {
-                    	//성공
-   		                console.log("success");
-   		             	document.frm1.submit();
-   		            } else {
-                    	//실패
-   		                console.log("fail");
-   		                alert(result.data[0]["tax_type"]);
-   		            }
-   		        },
-   		        error: function(result) {
-   		            console.log("error");
-   		            console.log(result.responseText); //responseText의 에러메세지 확인
-   		        }
-   		    });
- 		}
-   }
-</script>
+<script src="/js/branch/masterAdd.js">></script>
 </html>
