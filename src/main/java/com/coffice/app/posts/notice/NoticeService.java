@@ -70,6 +70,7 @@ public class NoticeService {
 		}
 		
 		noticeVO= noticeDAO.getDetail(noticeVO);
+		//알림 보내기
 		
 		notificationService.sendNotice(noticeVO);
 	}

@@ -9,6 +9,16 @@ function getUserIdCookie(name) {
         ?.split("=")[1] ?? null;
 }
 
+window.addEventListener("load", ()=>{
+    fetch("/notification/getNotification")
+    .then(r => r.json())
+    .then(r => {
+        for(j of r){
+            createAlert(j);
+        }
+    })
+})
+
 const socketNotification = new SockJS("/ws-stomp");
 const stompClientNotification = Stomp.over(socketNotification);
 
@@ -61,6 +71,11 @@ function createAlert(msg) {
 
     const a = document.createElement("a");
     a.classList.add("dropdown-item", "d-flex", "align-items-center");
+    if(msg.notiCheckStatus == 0){
+
+        a.style.backgroundColor = "lightgoldenrodyellow";
+        // a.style.color = "gray"
+    }
     if (msg.notiKind == "NOTICE") {
         a.href = `/notice/detail?noticeNum=${msg.relateId}`
     } else {
