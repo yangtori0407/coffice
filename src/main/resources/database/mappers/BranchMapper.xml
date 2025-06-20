@@ -74,6 +74,11 @@
 		VALUES (#{userId.userId},#{contactNumber},#{contactDate},0);
   	</insert>
   	
+  	 <select id="nameCheck" resultType="BranchMasterVO" parameterType="BranchMasterVO">
+	    SELECT * FROM BRANCHMASTER
+	    WHERE CONTACT_NUMBER = #{contactNumber}
+	</select>
+  	
   	<select id="myBranch" parameterType="map" resultMap="getMyBranch" >
   	  	SELECT * FROM BRANCH b
   		LEFT OUTER JOIN USERS u

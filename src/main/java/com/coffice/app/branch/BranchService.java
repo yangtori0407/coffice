@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
+import com.coffice.app.ingredients.IngredientsVO;
 import com.coffice.app.page.Pager;
 import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
@@ -51,6 +53,21 @@ public class BranchService {
 	
 	public int masterAdd(BranchMasterVO branchMasterVO) throws Exception {
 		return branchDAO.masterAdd(branchMasterVO);
+	}
+	
+	public boolean nameErrorCheck(BranchMasterVO branchMasterVO, BindingResult bindingResult) throws Exception {
+		boolean check = false;
+		
+		check = bindingResult.hasErrors();
+		
+		BranchMasterVO checkVO = branchDAO.nameCheck(branchMasterVO);
+		if(checkVO != null) {
+			check = true;
+			bindingResult.rejectValue("contactNumber", "branchMasterVO.contactNumber.equal");
+			return true;
+		}
+		
+		return check;
 	}
 	
 	public List<BranchVO> myBranch(BranchVO branchVO,Pager pager) throws Exception {

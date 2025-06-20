@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -118,7 +119,7 @@
 					<!-- contents 내용 -->
 					<div class="form-container">
 					    <h2>점주 등록</h2>
-						<form action="./masterAdd" method="post">
+						<form:form modelAttribute="branchMasterVO" cssClass="branchMaster" action="/branch/masterAdd" method="post">
 							<select class="form-select" id="selectUser" name="userId.userId">
 								<option selected>추가할 점주를 선택하세요</option>
 								<c:forEach items="${notRegisterBranchMaster}" var="m">
@@ -126,17 +127,21 @@
 								</c:forEach>						
 							</select>
 							<div class="input-box">
-								<input type="text" id="contactNumber" placeholder="사업자등록번호(10자리)" maxlength="10">
+								<input type="text" id="contactNumber" name="contactNumber" placeholder="사업자등록번호(10자리)" maxlength="10">
 								<span style="cursor:pointer" onclick="code_check();">확인</span>
+								<input type="hidden" name="contactNumber" id="hiddenContactNumber" value="">
+								 <div>
+					               <form:errors path="contactNumber" cssClass="error"/>
+		                        </div>  
 							</div>
 							
-							<input type="hidden" name="contactNumber" id="hiddenContactNumber" value="">
 							<div id="serviceKeyHolder" data-servicekey="${servicekey}"></div>
 							<div class="input-box">	
-								<input type="date" name="contactDate" id="contactDate" placeholder="사업자등록날짜">					
+								<form:input type="date" path="contactDate" placeholder="사업자등록날짜"/>
+					            <form:errors path="contactDate" cssClass="text-danger"/>				
 							</div>
 							<button type="submit" class="btn btn-primary">점주등록</button>
-						</form>
+						</form:form>
 					</div>
 				</div>
 			</div>

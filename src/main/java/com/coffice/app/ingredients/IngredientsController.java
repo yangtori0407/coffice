@@ -83,7 +83,6 @@ public class IngredientsController {
 		   HashMap<String, Object> map = new HashMap<>();
 		   
 		if(bindingResult.hasErrors()) {
-			log.info("Validation errors found.");
 			map.put("status", "fail");
 			map.put("message", "이름이 필요합니다.");
 		    return map;

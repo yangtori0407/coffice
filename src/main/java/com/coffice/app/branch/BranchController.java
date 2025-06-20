@@ -15,16 +15,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.coffice.app.page.Pager;
 import com.coffice.app.sales.MenuVO;
 import com.coffice.app.sales.SalesService;
 import com.coffice.app.sales.SalesVO;
+import com.coffice.app.users.RegisterGroup;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +58,7 @@ public class BranchController {
 	}
 
 	@GetMapping("map")
-	public String map(Model model, Pager pager) throws Exception {
+	public void map(Model model, Pager pager) throws Exception {
 		List<BranchVO> list = branchService.getList(pager);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
@@ -70,23 +74,22 @@ public class BranchController {
 		
 		model.addAttribute("kind", "지점 > 지점지도");
 		model.addAttribute("branch", "map");
-		
-		return "branch/map";
 	}
 	
 	@GetMapping("add")
-	public String add(Model model) throws Exception {
+	public void add(Model model) throws Exception {
 		model.addAttribute("kind", "지점 > 지점추가");
 		model.addAttribute("branch", "add");
-		return "branch/add";
 	}
+	
 	@PostMapping("add")
-	public String add(BranchVO branchVO) throws Exception {
+	public String add(BranchVO branchVO, RedirectAttributes redirectAttributes) throws Exception {
 		int result = branchService.add(branchVO);
 		
 		
 		if(result > 0) {
-			return "redirect:/";
+			redirectAttributes.addFlashAttribute("msg", "지점등록이 완료되었습니다!");
+			return "redirect:./map";
 		}
 		return "branch/add";
 	}
@@ -110,7 +113,7 @@ public class BranchController {
 	}
 	
 	@GetMapping("masterAdd")
-	public String masterAdd(Model model) throws Exception {
+	public String masterAdd(Model model, @ModelAttribute BranchMasterVO branchMasterVO) throws Exception {
 		List<BranchMasterVO> notRegisterBranchMaster = branchService.notRegisterBranchMaster();
 		model.addAttribute("notRegisterBranchMaster", notRegisterBranchMaster);
 		model.addAttribute("kind", "지점 > 점주등록");
@@ -119,14 +122,30 @@ public class BranchController {
 	}
 	
 	@PostMapping("masterAdd")
-	public String masterAdd(BranchMasterVO branchMasterVO) throws Exception {
+	public String masterAdd(@Validated(RegisterGroup.class) @ModelAttribute BranchMasterVO branchMasterVO,
+							RedirectAttributes redirectAttributes, 
+							BindingResult bindingResult,
+							Model model) throws Exception {
 		log.info("bm:{}",branchMasterVO);
+		
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("branchMasterVO", branchMasterVO);
+			model.addAttribute("notRegisterBranchMaster", branchService.notRegisterBranchMaster());
+			return "branch/masterAdd";
+		}
+		
+		if(branchService.nameErrorCheck(branchMasterVO, bindingResult)) {
+			model.addAttribute("notRegisterBranchMaster", branchService.notRegisterBranchMaster());
+			return "branch/masterAdd";
+		}
+		
 		branchService.masterAdd(branchMasterVO);
-		return "redirect:/";
+		redirectAttributes.addFlashAttribute("msg", "점주등록이 완료되었습니다!");
+		return "redirect:./map";
 	}
 	
 	@GetMapping("myBranch")
-	public String myBranch(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Model model, Pager pager) throws Exception {
+	public void myBranch(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Model model, Pager pager) throws Exception {
 		String userId = userVO.getUserId();
 		userVO.setUserId(userId);
 		
@@ -147,8 +166,6 @@ public class BranchController {
 		
 		model.addAttribute("kind", "지점 > my지점");
 		model.addAttribute("branch", "myBranch");
-		
-		return "branch/myBranch";
 	}
 	
 	@GetMapping("/api/excel/download/branch")
