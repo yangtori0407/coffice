@@ -16,5 +16,9 @@ public class VacationService {
 	public List<UserVO> getDepsUsers(UserVO userVO) throws Exception {
 		return vacationDAO.getDepsUsers(userVO);
 	}
+	
+	public int applyForLeave(VacationVO vacationVO) throws Exception {
+		return vacationDAO.applyForLeave(vacationVO);
+	}
 
 }

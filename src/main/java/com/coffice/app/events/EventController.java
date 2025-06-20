@@ -108,5 +108,11 @@ public class EventController {
 		log.info("{}", userVO.getUserId());
 		return vacationService.getDepsUsers(userVO);
 	}
+	
+	@PostMapping("vacation/apply")
+	public String applyForLeave(VacationVO vacationVO) throws Exception {
+		vacationService.applyForLeave(vacationVO);
+		return "events/vacation";
+	}
 
 }

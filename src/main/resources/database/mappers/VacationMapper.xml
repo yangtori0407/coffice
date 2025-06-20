@@ -15,4 +15,9 @@
   			and USER_ID != #{userId}
   	</select>
   	
+  	<insert id="applyForLeave">
+  			insert into VACATION (START_TIME, END_TIME, USER_ID, INSERT_TIME, EDITOR, EDIT_TIME, TYPE, APPROVAL_AUTHORITY)
+  			values (#{startTime}, #{endTime}, #{userId}, now(), #{editor}, now(), #{type}, #{approvalAuthority})
+  	</insert>
+  	
   </mapper>

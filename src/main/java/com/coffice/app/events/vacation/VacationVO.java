@@ -9,5 +9,7 @@ public class VacationVO extends EventVO {
 	
 	private Long vacationId;
 	private String status;
+	private String type;
+	private String approvalAuthority;
 
 }

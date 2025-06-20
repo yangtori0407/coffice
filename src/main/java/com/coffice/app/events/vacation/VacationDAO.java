@@ -10,5 +10,6 @@ import com.coffice.app.users.UserVO;
 public interface VacationDAO {
 	
 	public List<UserVO> getDepsUsers(UserVO userVO) throws Exception;
+	public int applyForLeave(VacationVO vacationVO) throws Exception;
 
 }

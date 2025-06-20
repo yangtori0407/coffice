@@ -50,7 +50,31 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     }
 });
 
+const send = document.getElementById("send")
+send.addEventListener("click", ()=>{
+    let vType = document.getElementById("vType")
+    let sDate = document.getElementById("sDate")
+    let sTime = document.getElementById("sTime")
+    let eDate = document.getElementById("eDate")
+    let eTime = document.getElementById("eTime")
+    let accept = document.getElementById("accept")
 
+    let params = new FormData
+    params.append("userId", userId)
+    params.append("type", vType.value)
+    params.append("startTime", sDate.value+sTime.value)
+    params.append("endTime", eDate.value+eTime.value)
+    params.append("approvalAuthority", accept.value)
+
+    fetch("http://localhost/events/vacation/apply", {
+        method: "post",
+        body: params
+    })
+    .then(r=>r.text)
+    .then(r=>{
+        console.log(r)
+    })
+})
 
 fetch("http://localhost/events/getHolidays")
 .then(r=>r.json())
