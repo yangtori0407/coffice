@@ -59,7 +59,8 @@ class Message {
     chatContents = "";
     sendDate = "";
     sender = "";
-    flag = false;
+    flag = false; //파일인지 아닌지
+    system = false; //나가는 메세지인지 아닌지
     fileNum = "";
 }
 
@@ -104,7 +105,18 @@ function sendMessage() {
 }
 
 function displayReceiveMessage(msg) {
-    if (msg.sender != userId) {
+
+    if(String(msg.sender) == 'system'){
+        
+        const div = document.createElement("div");
+        div.classList.add("mx-auto" , "m-1");
+        const span = document.createElement("span");
+        span.innerText = msg.chatContents;
+        div.appendChild(span);
+
+        return div;
+    }else if (msg.sender != userId) {
+        
         // 최상위 div
         const wrapper = document.createElement("div");
         wrapper.className = "d-flex flex-column align-items-start mb-2";
@@ -149,7 +161,7 @@ function displayReceiveMessage(msg) {
         wrapper.appendChild(messageRow);
 
         return wrapper;
-    }
+    } 
     else {
         const wrapper = document.createElement("div");
         wrapper.className = "d-flex justify-content-end mb-2";
@@ -300,10 +312,23 @@ exitBtn.addEventListener("click", ()=>{
         .then(r=>r.text())
         .then(r => {
             if(r * 1 == 1){
+                let m = new Message();
+                m.sender = userId
+                m.chatContents = 'exit'
+                m.system = true;
+                m.chatRoomNum = chatNum;
+                stompClient.send("/pub/sendMessage", {}, JSON.stringify(m))
                 location.href = "./main";
             }
         })
     } else{
         return;
     }
+})
+
+//채팅방 사람 목록 가지고 오기
+const chatUsersList = document.getElementById("chatUsersList");
+
+chatUsersList.addEventListener("click", () => {
+    console.log("!!!!!")
 })

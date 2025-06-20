@@ -72,7 +72,7 @@
 										<div class="d-flex align-items-center justify-content-end">
 											<div class="dropdown no-arrow">
 												<a class="dropdown-toggle" href="#" role="button"
-													id="dropdownMenuLink" data-toggle="dropdown"
+													id="chatUsersList" data-toggle="dropdown"
 													aria-haspopup="true" aria-expanded="false"> <i
 													class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
 												</a>
@@ -81,13 +81,13 @@
 													style="width: 250px; max-height: 300px; overflow-y: auto;"
 													aria-labelledby="dropdownMenuLink">
 
-													<div class="dropdown-header"
+													<div id="chatUserListArea" class="dropdown-header"
 														style="font-size: 14px; font-weight: initial;">채팅
 														참여자</div>
-													<c:forEach items="${users }" var="u">
+													<%-- <c:forEach items="${users }" var="u">
 														<div class="dropdown-item-text w-100 px-3 py-2">
 															${u.deptName } ${u.name } ${u.position }</div>
-													</c:forEach>
+													</c:forEach> --%>
 												</div>
 											</div>
 										</div>
@@ -102,11 +102,16 @@
 
 										<c:forEach items="${contents }" var="con">
 											<c:choose>
+												<c:when test="${con.sender eq 'system' }">
+													<div class="mx-auto m-1">
+														<span>${con.chatContents }</span>
+													</div>
+												</c:when>
 												<c:when test="${con.sender eq user.userId }">
 													<c:choose>
 														<c:when test="${con.fileNum ne null }">
 															<div class="d-flex justify-content-end mb-2"
-																data-chat-num=${con.chatNum }>
+																data-chat-num="${con.chatNum }">
 																<div class="mr-2 text-muted small align-self-end">${con.formatted}</div>
 																<div class="card border-left-secondary"
 																	style="max-width: 60%;">
@@ -131,6 +136,7 @@
 												</c:when>
 												<c:otherwise>
 													<c:choose>
+
 														<c:when test="${con.fileNum ne null }">
 															<div class="d-flex flex-column align-items-start mb-2"
 																data-chat-num=${con.chatNum }>

@@ -107,11 +107,22 @@ public class ChatService {
 	
 	@Transactional
 	public ChatContentsVO addContents(ChatContentsVO chatContentsVO, UserVO userVO) throws Exception{
-		chatContentsVO.setSender(userVO.getUserId());
+		if(chatContentsVO.isSystem()) {
+			String name = chatDAO.getUserInfo(chatContentsVO);
+			chatContentsVO.setChatContents(name + " 님이 나갔습니다.");
+			chatContentsVO.setSender("system");
+			chatDAO.addContents(chatContentsVO);
+			
+			return chatContentsVO;
+		}else {
+			
+			chatContentsVO.setSender(userVO.getUserId());
+			chatDAO.addContents(chatContentsVO);
+			chatContentsVO = chatDAO.getContentsInfo(chatContentsVO);
+			chatContentsVO.setName(chatDAO.getUserInfo(chatContentsVO));
+		}
 		log.info("sender name : {}", chatContentsVO);
-		chatDAO.addContents(chatContentsVO);
-		chatContentsVO = chatDAO.getContentsInfo(chatContentsVO);
-		chatContentsVO.setName(chatDAO.getUserInfo(chatContentsVO));
+		
 		
 		return chatContentsVO;
 	}
@@ -195,6 +206,7 @@ public class ChatService {
 //		}
 		return list;
 	}
+	
 	public int exit(String chatRoomNum, String userId) throws Exception{
 		
 		log.info("chatRoomNum : {}", chatRoomNum);

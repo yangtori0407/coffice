@@ -22,6 +22,7 @@ public class ChatContentsVO {
 	private String name;
 	private boolean flag;
 	private String fileNum;
+	private boolean system; //나간건지 아닌지
 	
 	public String getFormatted() {
 		if(getSendDate() != null) {
