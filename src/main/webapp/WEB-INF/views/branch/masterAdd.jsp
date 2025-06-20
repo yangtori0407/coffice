@@ -119,7 +119,7 @@
 					<!-- contents 내용 -->
 					<div class="form-container">
 					    <h2>점주 등록</h2>
-						<form:form modelAttribute="branchMasterVO" cssClass="branchMaster" action="/branch/masterAdd" method="post">
+						<form:form modelAttribute="branchMasterVO" cssClass="branchMaster" action="./masterAdd" method="post">
 							<select class="form-select" id="selectUser" name="userId.userId">
 								<option selected>추가할 점주를 선택하세요</option>
 								<c:forEach items="${notRegisterBranchMaster}" var="m">
@@ -129,10 +129,7 @@
 							<div class="input-box">
 								<input type="text" id="contactNumber" name="contactNumber" placeholder="사업자등록번호(10자리)" maxlength="10">
 								<span style="cursor:pointer" onclick="code_check();">확인</span>
-								<input type="hidden" name="contactNumber" id="hiddenContactNumber" value="">
-								 <div>
-					               <form:errors path="contactNumber" cssClass="error"/>
-		                        </div>  
+					            <form:errors path="contactNumber" cssClass="error-message"/>
 							</div>
 							
 							<div id="serviceKeyHolder" data-servicekey="${servicekey}"></div>
@@ -153,5 +150,5 @@
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
-<script src="/js/branch/masterAdd.js">></script>
+<script src="/js/branch/masterAdd.js"></script>
 </html>

@@ -64,7 +64,6 @@ public class BranchService {
 		if(checkVO != null) {
 			check = true;
 			bindingResult.rejectValue("contactNumber", "branchMasterVO.contactNumber.equal");
-			return true;
 		}
 		
 		return check;

@@ -23,10 +23,9 @@ function code_check(){
 		               console.log(result);
 		               if (result.match_cnt === 1 || result.match_cnt === "1") {
 		                   alert("유효한 사업자등록번호입니다.");
-		                   document.getElementById('hiddenContactNumber').value = contactNumber;
+		                	contactNumber;
 		               } else {
 		                   alert("유효하지 않은 사업자등록번호입니다.");
-		                   document.getElementById('hiddenContactNumber').value = "";
 		               }
 		           } else {
 		               console.error("HTTP 요청 오류: ", xhr.status);

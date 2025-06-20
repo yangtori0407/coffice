@@ -12,6 +12,25 @@
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script src= "https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.side-menu-right {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100vh;
+  z-index: 1050;
+  background-color: #fff;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;
+}
+
+.side-menu-right.show {
+  transform: translateX(0);
+}
+</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -32,6 +51,9 @@
 						</c:forEach>	
 							${total}	
 					</div>
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#sideMenu" aria-expanded="false">
+					  메뉴 열기
+					</button>
 				</div>
 					<table class="table table-striped" style="margin:20px auto;width: 600px;">
 						<thead>
@@ -97,6 +119,18 @@
 		<!-- End Content Wrapper -->
 	</div>
 	<!-- End Wrapper -->
+	
+	<div class="collapse side-menu-right" id="sideMenu">
+	  <div class="bg-light border p-4" style="position: fixed; top: 0; left: 0; height: 100vh; width: 250px; z-index: 1050;">
+	    <h5 class="mb-3">메뉴</h5>
+	    <ul class="list-unstyled">
+	      <li><a href="#">메뉴1</a></li>
+	      <li><a href="#">메뉴2</a></li>
+	      <li><a href="#">메뉴3</a></li>
+	    </ul>
+	    <button class="btn btn-danger mt-3" data-toggle="collapse" data-target="#sideMenu">닫기</button>
+	  </div>
+	</div>
 	
 	<div class="modal" id="order" tabindex="-1">
 		  <div class="modal-dialog">
