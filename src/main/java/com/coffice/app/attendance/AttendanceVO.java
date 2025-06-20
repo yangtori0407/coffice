@@ -1,5 +1,6 @@
 package com.coffice.app.attendance;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import lombok.ToString;
 public class AttendanceVO {
 	
 	private Long attendanceId;
-	private Date attendanceDate;
+	private LocalDate attendanceDate;
 	private LocalDateTime  startTime;
 	private LocalDateTime endTime;
 	private String status;

@@ -1,5 +1,7 @@
 package com.coffice.app.attendance;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +23,19 @@ public class AttendanceController {
 	@PostMapping("/checkIn")
 	@ResponseBody
 	public boolean checkIn(HttpSession session) throws Exception{
-		String userId = ((UserVO)session.getAttribute("user")).getUserId();
-		return attendanceService.checkIn(userId);
+		UserVO userVO = (UserVO) session.getAttribute("user");
+		if (userVO == null) return false;
+
+	    return attendanceService.checkIn(userVO.getUserId());
 	}
 	
 	@PostMapping("/checkOut")
 	@ResponseBody
 	public boolean checkOut(HttpSession session) throws Exception{
-		String userId = ((UserVO)session.getAttribute("user")).getUserId();
-		return attendanceService.checkOut(userId);
+		UserVO user = (UserVO) session.getAttribute("user");
+		if (user == null) return false;
+
+	    return attendanceService.checkOut(user.getUserId());
 	}
 	
 	@GetMapping("/todayStatus")
@@ -41,7 +47,9 @@ public class AttendanceController {
 			throw new IllegalStateException("로그인이 필요합니다.");
 		}
 		String userId = userVO.getUserId();
-		return attendanceService.todayStatus(userId);
+		LocalDate today = LocalDate.now();
+		
+		return attendanceService.todayStatus(userId, today);
 	}
 
 

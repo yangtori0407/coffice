@@ -6,14 +6,14 @@ import java.time.LocalTime;
 
 public class StatusCalculator {
 	
-	public static String detemineStatus(LocalDateTime start, LocalDateTime end) throws Exception {
+	public static String determineStatus(LocalDateTime start, LocalDateTime end){
 		if (start == null || end == null) return "결근";
 		
 		long workMinutes = Duration.between(start, end).toMinutes();
 		LocalTime startTime = start.toLocalTime();
 		LocalTime endTime = end.toLocalTime();
 		
-		if(startTime.isBefore(LocalTime.of(9, 0))&&
+		if(startTime.isBefore(LocalTime.of(9, 01))&&
 			endTime.isAfter(LocalTime.of(18, 0)) &&
 			workMinutes >= 480) {
 			return "정상근무";

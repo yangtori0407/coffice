@@ -8,19 +8,19 @@
   	<insert id="checkIn" parameterType="AttendanceVO">
   		INSERT INTO ATTENDANCE 
   		(ATTENDANCE_DATE, START_TIME, STATUS, USER_ID)
-   		VALUES (#{attendanceDate}, #{startTime}, '출근', #{userId})
+   		VALUES (#{attendanceDate}, #{startTime}, '근무중', #{userId})
   	</insert>
   	
   	<update id="checkOut" parameterType="AttendanceVO">
-  		UPDATE ATTENDANCE SET END_TIME = #{endTime}, STATUS='퇴근'
-  		WHERE USER_ID = #{userId} AND DATE(ATTENDANCE_DATE)= CURRENT_DATE()
+  		UPDATE ATTENDANCE SET END_TIME = #{endTime}, STATUS= #{status}
+  		WHERE USER_ID = #{userId} AND ATTENDANCE_DATE = #{attendanceDate}
   	</update>
   	
-  	<select id="todayStatus" parameterType="String" resultType="AttendanceVO">
+  	<select id="todayStatus"  resultType="AttendanceVO">
   		SELECT ATTENDANCE_ID, ATTENDANCE_DATE, START_TIME, END_TIME, STATUS, DURATION_TIME, USER_ID
   		FROM ATTENDANCE
   		WHERE USER_ID = #{userId}
-  		AND DATE(ATTENDANCE_DATE) = CURRENT_DATE()
+  		AND DATE(`ATTENDANCE_DATE`) = #{attendanceDate}
   	</select>
   
   

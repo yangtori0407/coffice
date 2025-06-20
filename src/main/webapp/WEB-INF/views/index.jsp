@@ -62,8 +62,14 @@
 										<span id="currentDateTime"></span>
 									</div>
 									<div style="text-align: center;">
-										<button type="button" class="btn btn-outline-primary checkInBtn">출근</button>
-										<button type="button" class="btn btn-outline-danger checkOutBtn" style="display:none;">퇴근</button>
+										<form action="/attendance/check-in" method="post">
+										  <button type="button" class="btn btn-outline-primary checkInBtn">출근</button>
+										</form>
+										
+										<form action="/attendance/check-out" method="post">
+										  <button type="button" class="btn btn-outline-danger checkOutBtn" style="display:none;">퇴근</button>
+										</form>
+										
 									</div>
 									<div class="text-start">
 										<div class="mb-7">근무정보</div>
@@ -76,6 +82,7 @@
 										    <div class="label">퇴근 |</div>
 										    <div class="time"><span id="endTime">--</span></div>
 										  </div>
+										  
 										</div>
 									</div>
 									<!-- <div class="px-3 py-5 bg-gradient-success text-white">
