@@ -13,8 +13,7 @@
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-<link rel="stylesheet" type="text/css"
-	href="/css/user/index_employee.css">
+<link rel="stylesheet" type="text/css" href="/css/user/index_employee.css">
 
 
 <c:if test="${not empty msg}">
@@ -57,21 +56,26 @@
 											</c:otherwise>
 										</c:choose>
 										<div class="employee-name">${user.name}</div>
-										<div class="employee-info">${user.deptName}/
-											${user.position}</div>
+										<div class="employee-info">${user.deptName} / ${user.position}</div>
 									</div>
-									<div class="now text-center">날짜 | 시간</div>
+									<div class="now">
+										<span id="currentDateTime"></span>
+									</div>
 									<div style="text-align: center;">
-										<button type="button"
-											class="btn btn-outline-primary custom-btn">출근</button>
+										<button type="button" class="btn btn-outline-primary checkInBtn">출근</button>
+										<button type="button" class="btn btn-outline-danger checkOutBtn" style="display:none;">퇴근</button>
 									</div>
 									<div class="text-start">
 										<div class="mb-7">근무정보</div>
 										<div class="work-info">
-											<div class="label">출근</div>
-											<div class="time">09:00</div>
-											<div class="label">퇴근</div>
-											<div class="time">18:00</div>
+										  <div class="item">
+										    <div class="label">출근 |</div>
+										    <div class="time"><span id="startTime">--</span></div>
+										  </div>
+										  <div class="item">
+										    <div class="label">퇴근 |</div>
+										    <div class="time"><span id="endTime">--</span></div>
+										  </div>
 										</div>
 									</div>
 									<!-- <div class="px-3 py-5 bg-gradient-success text-white">
@@ -273,5 +277,6 @@
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 	<script src='/fullcalendar/dist/index.global.js'></script>
 	<script src="/js/calendar/homeCalendar.js"></script>
+	<script src="/js/user/attendance.js"></script>
 </body>
 </html>

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.files.FileManager;
@@ -126,6 +127,10 @@ public class UserService implements UserDetailsService{
 		return userDAO.findByEmail(email);
 	}
 	
+	public UserVO findById(String userId) throws Exception {
+	    return userDAO.findById(userId);
+	}
+	
 	public int updatePassword(String userId, String newPassword) throws Exception {
 		String encodedPassword = passwordEncoder.encode(newPassword);
 		
@@ -135,6 +140,44 @@ public class UserService implements UserDetailsService{
 		
 		return userDAO.updatePassword(userVO);
 	}
+	
+	public boolean checkPassword(String userId, String inputPassword) throws Exception {
+		UserVO userVO = userDAO.findById(userId);
+		if (userVO == null) {
+			//System.out.println("❌ 사용자 정보 없음: " + userId);
+			return false;
+		}
+		
+		 //System.out.println("🔑 입력 비밀번호 (평문): " + inputPassword);
+		 //System.out.println("🧾 DB 비밀번호 (암호화): " + userVO.getPassword());
+		
+		 boolean matches = passwordEncoder.matches(inputPassword, userVO.getPassword());
+		 //System.out.println("✅ 비밀번호 일치 여부: " + matches);
+		 
+		 return matches;
+	}
+	
+	public int update(UserVO userVO, MultipartFile file) throws Exception {
+		UserVO originalUser = userDAO.findById(userVO.getUserId());
+		
+		if(!file.isEmpty()) {
+			String fileName = fileManager.fileSave(path, file);
+			userVO.setSaveName(fileName);
+			userVO.setOriginName(file.getOriginalFilename());
+		} else {
+			userVO.setSaveName(originalUser.getSaveName());
+			userVO.setOriginName(originalUser.getOriginName());
+		}
+		
+		if(userVO.getPassword() != null && !userVO.getPassword().isBlank()) {
+			userVO.setPassword(passwordEncoder.encode(userVO.getPassword()));
+		}else {
+			userVO.setPassword(originalUser.getPassword()); //변경 안했음 유지
+		}
+		
+		return userDAO.update(userVO);
+	}
+	
 	
 	
 	

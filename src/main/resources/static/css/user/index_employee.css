@@ -25,69 +25,42 @@
 }
 
 .work-info {
-   background-color: #f8f9fa;
-   padding: 10px;
-   border-radius: 5px;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
   display: flex;
-  align-items: center;
-  gap: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
   width: 100%;
   margin-top : 10px;
 }
 
-
-.work-info > div {
-  flex: 0.5;
-  position: relative;
-  padding: 0 5px; 
-  white-space: nowrap;        /* 한 줄로 유지 */
-  word-break: normal;         /* 글자 자르기 방지 */
-  overflow-wrap: normal;      /* 단어 줄 바꿈 방지 */
+.item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
-/* 첫 번째 div는 왼쪽 패딩을 줄임 */
-.work-info > div:first-child {
-  padding-left: 1px;  /* 원하는 만큼 조절 */
+
+
+
+.checkInBtn {
+  width: 120px;     
+  padding: 10px 20px;  
+  margin-bottom: 20px;
 }
 
-/* 마지막 div는 오른쪽 패딩을 줄임 */
-.work-info > div:last-child {
-  padding-right: 1px; /* 원하는 만큼 조절 */
-}
-
-/* 마지막 div 제외하고 오른쪽에 세로선 넣기 */
-.work-info > div:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  top: 20%;
-  right: 0;
-  width: 1px;
-  height: 60%;
-  background-color: #ccc;
-}
-
-.work-info > .label {
-  flex: 1;
-  font-size: 1rem;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.work-info > .time {
-  flex: 2;
-  font-size: 1rem;
-  text-align: left;
-  white-space: nowrap;
-}
-
-.custom-btn {
-  width: 120px;     /* 원하는 너비로 조절 */
-  padding: 10px 20px;  /* 위아래, 좌우 여백 조절 */
+.checkOutBtn {
+	width: 120px;     
+  padding: 10px 20px;  
   margin-bottom: 20px;
 }
 
 .now {
 	margin-bottom : 20px;
+	text-align : center;
+	font-size : 17px;
 } 
 
 

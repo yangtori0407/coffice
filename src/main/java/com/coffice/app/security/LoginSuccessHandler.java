@@ -20,6 +20,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		
+		//System.out.println("✅ 로그인 성공!");
+		
 		UserVO userVO = (UserVO) authentication.getPrincipal();
 		
 		HttpSession session = request.getSession();

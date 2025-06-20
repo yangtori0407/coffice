@@ -69,6 +69,30 @@
 		SELECT COUNT(*) > 0 FROM USERS WHERE USER_ID = #{userId}	
   	</select>
   	
+  	<select id="findById" parameterType="String" resultType="UserVO">
+  		  SELECT 
+		    u.USER_ID,
+		    u.PASSWORD,
+		    u.NAME,
+		    u.EMAIL,
+		    u.PHONE,
+		    u.POSITION,     
+		    u.DEPT_ID,
+		    d.DEPT_NAME,
+		    u.SAVE_NAME,
+		    u.ORIGIN_NAME
+		  FROM USERS u
+		  JOIN DEPARTMENT d ON u.DEPT_ID = d.DEPT_ID
+		  WHERE u.USER_ID = #{userId}
+  	</select>
+  	
+  	<update id="update" parameterType="UserVO">
+  		UPDATE USERS SET
+  		PASSWORD = #{password}, PHONE = #{phone}, EMAIL = #{email}, 
+  		SAVE_NAME = #{saveName}, ORIGIN_NAME = #{originName}
+  		WHERE USER_ID = #{userId}
+  	</update>
+  	
   	
   
 

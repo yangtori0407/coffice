@@ -33,9 +33,6 @@ form {
   font-family: 'Poppins', sans-serif;
 }
 
-.input-wrap input[type="radio"] {
-  margin-right: 5px;
-}
 
 .btn {
   display: block;
@@ -62,3 +59,7 @@ form {
   font-size: 12px;
   margin-top: 4px;
 }
+
+
+
+
