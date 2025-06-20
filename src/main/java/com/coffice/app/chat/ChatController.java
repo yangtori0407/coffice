@@ -116,7 +116,7 @@ public class ChatController {
 		String userId = authentication.getName();
 		chatRoomVO = chatService.getChatInfo(chatRoomVO, userId);
 		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO);
-		List<UserVO> users = chatService.getChatUsersDetail(chatRoomVO.getChatRoomNum());
+		//List<UserVO> users = chatService.getChatUsersDetail(chatRoomVO.getChatRoomNum());
 		// chatService.updateLastReadAt(userId, chatRoomVO);
 //		for(ChatContentsVO c : contents) {
 //			log.info("챗 내용 : {}", c);
@@ -125,7 +125,7 @@ public class ChatController {
 		model.addAttribute("chatRoomVO", chatRoomVO);
 		model.addAttribute("userId", userId);
 		model.addAttribute("contents", contents);
-		model.addAttribute("users", users);
+		//model.addAttribute("users", users);
 		model.addAttribute("kind", "메신저");
 
 	}
@@ -180,6 +180,13 @@ public class ChatController {
 		model.addAttribute("result", result);
 
 		return "commons/ajaxResult";
+	}
+	
+	@PostMapping("chatUsersList")
+	@ResponseBody
+	public List<String> chatUsersList(String chatRoomNum) throws Exception{
+		List<String> users = chatService.getChatUsersDetail(chatRoomNum);
+		return users;
 	}
 
 }

@@ -81,11 +81,11 @@
 													style="width: 250px; max-height: 300px; overflow-y: auto;"
 													aria-labelledby="dropdownMenuLink">
 
-													<div id="chatUserListArea" class="dropdown-header"
+													<div id="chatUsersListArea" class="dropdown-header"
 														style="font-size: 14px; font-weight: initial;">채팅
 														참여자</div>
 													<%-- <c:forEach items="${users }" var="u">
-														<div class="dropdown-item-text w-100 px-3 py-2">
+														<div class="dropdown-item-text w-100 px-3 py-2 chatUsersList">
 															${u.deptName } ${u.name } ${u.position }</div>
 													</c:forEach> --%>
 												</div>

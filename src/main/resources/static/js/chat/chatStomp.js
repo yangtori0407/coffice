@@ -318,6 +318,9 @@ exitBtn.addEventListener("click", ()=>{
                 m.system = true;
                 m.chatRoomNum = chatNum;
                 stompClient.send("/pub/sendMessage", {}, JSON.stringify(m))
+
+                let userList = document.querySelectorAll("#")
+
                 location.href = "./main";
             }
         })
@@ -328,7 +331,33 @@ exitBtn.addEventListener("click", ()=>{
 
 //채팅방 사람 목록 가지고 오기
 const chatUsersList = document.getElementById("chatUsersList");
-
+const chatUsersListArea = document.getElementById("chatUsersListArea");
 chatUsersList.addEventListener("click", () => {
+
+    let current = chatUsersListArea.nextElementSibling;
+    while(current){
+        const next = current.nextElementSibling;
+        if(current.nodeType === 1){
+            current.remove();
+        }
+        current = next;
+    }
+
     console.log("!!!!!")
+    let p = new URLSearchParams();
+    p.append("chatRoomNum", chatNum);
+    fetch("./chatUsersList", {
+        method: "POST",
+        body: p
+    })
+    .then(r => r.json())
+    .then(r => {
+        chatUsersListArea
+        for(j of r){
+            const div = document.createElement("div");
+            div.classList.add("dropdown-item-text", "w-100", "px-3" , "py-2")
+            div.innerText = j
+            chatUsersListArea.after(div);
+        }
+    })
 })

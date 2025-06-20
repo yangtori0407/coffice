@@ -1,6 +1,7 @@
 package com.coffice.app.chat;
 
 import java.beans.Transient;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -173,9 +174,15 @@ public class ChatService {
 		return chatDAO.getChatUserInfo(chatRoomNum);
 	}
 
-	public List<UserVO> getChatUsersDetail(String chatRoomNum) throws Exception{
-		// TODO Auto-generated method stub
-		return chatDAO.getChatUsersDetail(chatRoomNum);
+	public List<String> getChatUsersDetail(String chatRoomNum) throws Exception{
+		
+		List<UserVO> list = chatDAO.getChatUsersDetail(chatRoomNum);
+		List<String> result = new ArrayList<>();
+		for(UserVO l : list) {
+			result.add(l.getDeptName() + " " + l.getName() + " " + l.getPosition());
+		}
+		
+		return result;
 	}
 
 	public int updateLastReadAt(String userId, String chatRoomNum) throws Exception{
