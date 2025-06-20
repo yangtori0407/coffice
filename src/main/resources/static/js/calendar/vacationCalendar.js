@@ -11,16 +11,22 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         addButton: {
             text: '휴가 신청',
             click:  function() {
-                        $("#exampleModal").modal("show")
-
-                    }
+                $("#exampleModal").modal("show")
+                
+            }
+        },
+        listButton: {
+            text: '신청 목록',
+            click: function() {
+                $("#listModal").modal("show")
+            }
         }
     },
     nowIndicator: true,
     headerToolbar: {
         left:'prevYear,prev,next,nextYear today',
         center: 'title',
-        right: 'addButton'
+        right: 'listButton addButton'
     },
     initialDate: Date.now(),
     navLinks: false, // can click day/week names to navigate views
@@ -58,14 +64,14 @@ send.addEventListener("click", ()=>{
     let eDate = document.getElementById("eDate")
     let eTime = document.getElementById("eTime")
     let accept = document.getElementById("accept")
-
+    
     let params = new FormData
     params.append("userId", userId)
     params.append("type", vType.value)
     params.append("startTime", sDate.value+sTime.value)
     params.append("endTime", eDate.value+eTime.value)
     params.append("approvalAuthority", accept.value)
-
+    
     fetch("http://localhost/events/vacation/apply", {
         method: "post",
         body: params
@@ -74,6 +80,16 @@ send.addEventListener("click", ()=>{
     .then(r=>{
         console.log(r)
     })
+})
+
+const chooseOne = document.getElementById("chooseOne")
+chooseOne.addEventListener("click", ()=>{
+    $("#vacationDetailModal").modal("show")
+})
+
+const undo = document.getElementById("undo")
+undo.addEventListener("click", ()=>{
+    $("#listModal").modal("show")
 })
 
 fetch("http://localhost/events/getHolidays")

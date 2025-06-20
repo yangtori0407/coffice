@@ -297,6 +297,47 @@
 				</div>
 			</div>
 
+			<!-- listModal -->
+			<div class="modal fade" id="listModal" tabindex="-1" aria-labelledby="listModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="listModalLabel">신청 목록</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body" style="height: 500px;">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="chooseOne">detail</button>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- vacationDetailModal -->
+			<div class="modal fade" id="vacationDetailModal" tabindex="-1" aria-labelledby="vacationDetailModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="vacationDetailModalLabel">상세</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body" style="height: 500px;">
+							
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="undo">목록으로</button>
+							<button type="button" class="btn btn-primary" id="updateVacation" data-dismiss="modal">수정하기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<c:import url="/WEB-INF/views/templates/foot.jsp"></c:import>
 		</div>
 		<!-- End Content Wrapper -->
