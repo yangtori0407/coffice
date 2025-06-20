@@ -392,6 +392,58 @@ public class DocumentService {
 	
 	
 	
+	// 결재 처리 (결재선 업데이트)
+		public int updateApprovalReject(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
+			
+			int result = 0;
+			
+			// approvalLineVO : documentId, rejectReason, userId(접속자) 가져온 상태
+			approvalLineVO.setStatus("반려");
+			approvalLineVO.setHandlingTime(Timestamp.valueOf(LocalDateTime.now()));
+			
+			// 결재자 정보 업데이트
+			result = documentDAO.updateApprovalReject(approvalLineVO);
+			
+			// 결재자 정보 가져오기 (
+			approvalLineVO = documentDAO.getApprovalDetail(approvalLineVO);
+			
+			
+			//------------------------------------------------------------
+			UserVO user = (UserVO)session.getAttribute("userVO"); // 접속자의 정보를 가져왔다 
+			user = documentDAO.getUserDetail(user); // 접속자의 userId를 이용해 DB로부터 user에 데이터를 담아온다
+			
+			//
+			DocumentVO documentVO = new DocumentVO(); 
+			documentVO.setDocumentId(approvalLineVO.getDocumentId()); // documentId 전달할 그릇 생성
+			
+			documentVO = documentDAO.getDetail(documentVO);  // 그릇 재활용하여 업데이트 대상인 문서 정보 담아오기 (결재 전 문서 정보)
+			
+			
+			// documentId 이용해서 그 문서의 결재선들 가져오기 (결재선 갯수 구하려고)
+			List<ApprovalLineVO> childrenApprovers = documentDAO.getChildrenApprovers(documentVO);
+			
+			// 결재 관련 데이터를 변경해준다. 수정자 변수에 접속자 정보(수정하는 사람)도 넣어준다.		
+			// 중간 결재자면 status 유지 및 문서의 step은 +1
+			// 마지막 결재자면 status는 '결재완료'로 변경
+			System.out.println("childrenApprovers size : " + childrenApprovers.size());
+			System.out.println("appVO StepOrder : " + approvalLineVO.getStepOrder());
+			
+			documentVO.setCurrentStep(401L);
+			documentVO.setStatus("반려");
+			
+			documentVO.setModifierId(user.getUserId());
+			documentVO.setModifierName(user.getName());
+			documentVO.setModifierPosition(user.getPosition());
+			documentVO.setModifierDept(user.getDeptName());
+			documentVO.setModifierTime(approvalLineVO.getHandlingTime()); // 가장 최근 결재선의 처리 시간을 넣는다.
+			
+			
+			// 문서 정보 업데이트
+			result = documentDAO.updateDocumentProceed(documentVO); 			
+			
+			
+			return result;
+		}
 	
 	
 	

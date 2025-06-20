@@ -67,8 +67,17 @@
 									<td><a href="../detail?documentId=${i.documentId}">${i.title}</a></td>
 									<td>${i.writerId } / ${i.writerName } / ${i.writerPosition }</td>
 									<td>${i.writerTime }</td>
-									<!-- currentStep을 1만큼 낮춰서 출력 -->
-									<td>${i.currentStep -1} / ${i.approvalLineVOs.size() }</td>
+									
+									<c:if test="${i.status eq '반려' || i.status eq '결재완료' }">
+										<td>-</td>
+									</c:if>
+									
+									<c:if test="${i.status eq '진행중' || i.status eq '임시저장' }">
+										<!-- currentStep을 1만큼 낮춰서 출력 -->
+										<td>${i.currentStep -1} / ${i.approvalLineVOs.size() }</td>
+									</c:if>
+									
+									
 									<td>${i.status }</td>
 								</tr>
 							</c:forEach>

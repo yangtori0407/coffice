@@ -20,7 +20,7 @@
       padding: 0.4em 0.75em;
       margin: 0.25em;
       background-color: #007bff;
-      color: white;
+      color: white;      
       display: inline-flex;
       align-items: center;
     }

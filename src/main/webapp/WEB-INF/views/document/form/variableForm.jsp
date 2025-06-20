@@ -106,6 +106,10 @@
 						            <c:if test="${not empty i.signVO}">
 						              <img src="/signs/${i.signVO.saveName}" style="width: 100%; height: 100%; object-fit: contain;" />
 						            </c:if>
+						            
+						            <c:if test="${i.status eq '반려' && docuVO.status eq '반려'}">
+						            	<img src="/signs/banryeo.png" style="width: 100%; height: 100%; object-fit: contain;" />
+						            </c:if>
 						          </div>
 						          <div class="approver_name" style="border-bottom: 1px solid #000; font-weight: bold; width: 100%; height: 30px;">
 						            ${i.userName}
@@ -250,6 +254,10 @@
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 결재하기
             </a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#writeRejectReason">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                반려하기
+            </a>
 	        <button id="btn_complete" class="btn btn-outline-secondary me-2 mr-3">작성 완료</button>
 	        <button id="btn_cancle" class="btn btn-outline-secondary mr-3">나가기</button>
 	      </div>
@@ -289,9 +297,7 @@
 			</div>
 					
 			
-			<div id="id_reject_wrapper">
-				<div style="border: 1px solid black;">반려 사유</div>
-				<div style="border: 1px solid black;">반려 내용</div>
+			<div id="id_reject_wrapper">				
 				<button class="btn btn-info" type="button" id="id_view_reject" 
 				data-toggle="modal" data-target="#rejectReasonModal">반려 사유 보기</button>
 			</div>
@@ -346,6 +352,7 @@
 	
 	<script src="/js/document/writeJs.js"></script>
 	<script src="/js/document/signTool.js"></script>
+	<script src="/js/document/toReject.js"></script>
 	
 </body>
 </html>

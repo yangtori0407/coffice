@@ -43,7 +43,9 @@ public interface DocumentDAO {
 	// 결재 관련 ----------------------------------	
 	public int updateDocumentProceed(DocumentVO documentVO) throws Exception;
 		
-	public int updateApprovalProceed(ApprovalLineVO approvalLineVO) throws Exception;	
+	public int updateApprovalProceed(ApprovalLineVO approvalLineVO) throws Exception;
+	
+	public int updateApprovalReject(ApprovalLineVO approvalLineVO) throws Exception;
 	
 	public List<SignVO> getSignList(UserVO userVO)throws Exception;
 	
