@@ -3,6 +3,7 @@ package com.coffice.app.branch;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.*;
@@ -118,6 +119,7 @@ public class BranchController {
 		model.addAttribute("notRegisterBranchMaster", notRegisterBranchMaster);
 		model.addAttribute("kind", "지점 > 점주등록");
 		model.addAttribute("branch", "masterAdd");
+		model.addAttribute("today", LocalDate.now());
 		return "branch/masterAdd";
 	}
 	
@@ -126,6 +128,7 @@ public class BranchController {
 							RedirectAttributes redirectAttributes, 
 							BindingResult bindingResult,
 							Model model) throws Exception {
+		
 		log.info("bm:{}",branchMasterVO);
 		
 		if(bindingResult.hasErrors()) {
@@ -290,7 +293,11 @@ public class BranchController {
 					dateCell.setCellValue(saleDate);
 					dateCell.setCellStyle(dataCellStyle);
 					dataRow.createCell(4).setCellValue(branch.getSalesVO().get(i).getSalesQuantity());
-					dataRow.createCell(5).setCellValue(branch.getSalesVO().get(i).getMenuVO().getMenuName());
+					if(branch.getSalesVO().get(i).getMenuVO() != null) {
+						dataRow.createCell(5).setCellValue(branch.getSalesVO().get(i).getMenuVO().getMenuName());
+					}else {
+						dataRow.createCell(5).setCellValue(branch.getSalesVO().get(i).getIngredientsVO().getIngredientsName());
+					}
 				}
 
 				
