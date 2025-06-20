@@ -12,7 +12,6 @@ public interface UserDAO {
 	
 	public UserVO detail(UserVO userVO) throws Exception;
 	
-
 	public UserVO findByEmail(String email) throws Exception;
 	
 	public UserVO checkIdEmail(String email, String userId) throws Exception;
@@ -23,6 +22,11 @@ public interface UserDAO {
 	
 	public boolean existUserId(String userId) throws Exception;
 
+	public UserVO mypage(UserVO userVO) throws Exception;
+	
+	public UserVO findById (String userId) throws Exception; 
+	
+	public int update(UserVO userVO) throws Exception;
 	
 	
 	//  조직도

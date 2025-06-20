@@ -31,9 +31,9 @@ public class UserVO implements UserDetails{
 	@NotBlank(message = "필수사항입니다",groups = RegisterGroup.class)
 	private String password;
 	//db 저장 x
-	@NotBlank(message = "필수사항입니다",groups = RegisterGroup.class)
-	private String passwordCheck;
 	@NotBlank(message = "필수사항입니다",groups = {RegisterGroup.class, UpdateGroup.class})
+	private String passwordCheck;
+	@NotBlank(message = "필수사항입니다",groups = RegisterGroup.class)
 	private String name;
 	private String position;
 	private Date hireDate;

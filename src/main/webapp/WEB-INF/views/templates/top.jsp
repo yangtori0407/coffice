@@ -99,7 +99,7 @@
 		</sec:authorize>
 
 		<!-- Nav Item - Messages -->
-		<li class="nav-item"><a class="nav-link no-arrow mx-1" href="#"
+		<li class="nav-item"><a class="nav-link no-arrow mx-1" href="/user/mypage"
 			id="messagesDropdown" role="button" aria-expanded="false"> <ion-icon
 					name="person-outline"></ion-icon> <!-- Counter - Messages -->
 		</a></li>

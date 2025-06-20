@@ -1,6 +1,8 @@
 package com.coffice.app.users;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +37,7 @@ public class UserController {
 	@Autowired
 	private UserDAO userDAO;
 	@Autowired
-  private UserService userService;
+    private UserService userService;
 
 	@Autowired
 	private MailService mailService;
@@ -181,6 +184,49 @@ public class UserController {
 			return "redirect:/user/resetPw?userId=" + userId;
 		}
 	}
+	
+	@GetMapping("mypage")
+	public void mypage() throws Exception{
+		
+	}
+	
+	@PostMapping("mypage/checkPassword")
+	@ResponseBody
+	public Map<String, Boolean> checkPassword(@RequestBody Map<String, String> payload, HttpSession session) throws Exception {
+		String inputPw = payload.get("password");
+		UserVO loginUser = (UserVO) session.getAttribute("user");
+		
+		boolean result = userService.checkPassword(loginUser.getUserId(), inputPw);
+		return Collections.singletonMap("result", result);
+	}
+	
+	@GetMapping("update")
+	public String update(HttpSession session, Model model) throws Exception {
+		UserVO userVO = (UserVO)session.getAttribute("user");
+		if(userVO != null) {
+			model.addAttribute("user", userVO);
+		}
+		
+		return "user/update";
+	}
+	
+	@PostMapping("update")
+	public String update(@ModelAttribute UserVO userVO, BindingResult bindingResult,
+						@RequestParam("file") MultipartFile file,
+						HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
+		if (userVO.getPassword() != null && !userVO.getPassword().equals(userVO.getPasswordCheck())) {
+		    redirectAttributes.addFlashAttribute("error", "비밀번호가 일치하지 않습니다.");
+		    return "redirect:/user/update";
+		}
+		
+		userService.update(userVO, file);
+		UserVO updateUser = userService.findById(userVO.getUserId());
+		session.setAttribute("user", updateUser);
+		redirectAttributes.addFlashAttribute("success", "내 정보가 성공적으로 수정되었습니다!");
+		return "redirect:/user/mypage";
+	}
+	
+	
 	
 	// 조직도
 	@GetMapping("organizationChart")
