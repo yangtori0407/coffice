@@ -234,7 +234,26 @@ public class DocumentController {
 		
 		int result = documentService.updateApprovalProceed(approvalLineVO, session);
 
-		return "redirect:./detail?documentId=" + approvalLineVO.getDocumentId();
+		return "redirect:./list/handled";
 	}
+	
+	
+	//
+	@PostMapping("reject")
+	public String updateApprovalReject(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
+
+		System.out.println("user "+approvalLineVO.getUserId());
+		System.out.println("docu "+approvalLineVO.getDocumentId());
+		System.out.println("reason "+approvalLineVO.getRejectReason());
+		
+		int result = documentService.updateApprovalReject(approvalLineVO, session);
+
+		return "redirect:./list/handled";
+	}
+	
+	
+	
+	
+	
 
 }
