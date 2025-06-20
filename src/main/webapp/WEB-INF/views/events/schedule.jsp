@@ -156,7 +156,16 @@
 										</div>
 									</div>
 								</c:if>
-								<c:if test="${kind eq '휴가' }"></c:if>
+								<c:if test="${kind eq '휴가' }">
+									<div class="form-group">
+									<label for="accept">승인자 지정</label>
+									<div class="input-group">
+										<select name="accept" id="accept" class="form-control">
+											<option value="" selected>선택</option>
+										</select>
+									</div>
+								</div>
+								</c:if>
 							</form>
 						</div>
 						<div class="modal-footer">

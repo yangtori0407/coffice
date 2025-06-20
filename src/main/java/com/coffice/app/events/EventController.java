@@ -16,7 +16,9 @@ import com.coffice.app.events.holidays.HolidayService;
 import com.coffice.app.events.holidays.HolidayVO;
 import com.coffice.app.events.schedule.ScheduleService;
 import com.coffice.app.events.schedule.ScheduleVO;
+import com.coffice.app.events.vacation.VacationService;
 import com.coffice.app.events.vacation.VacationVO;
+import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +32,9 @@ public class EventController {
 
     @Autowired
 	private HolidayService holidayService;
+    
+    @Autowired
+    private VacationService vacationService;
 	
 	@GetMapping("schedule")
 	public String schedule(Model model) throws Exception {
@@ -95,6 +100,13 @@ public class EventController {
 	@ResponseBody
 	public List<HolidayVO> getHolidays() throws Exception {
 		return holidayService.getHolidays();
+	}
+	
+	@PostMapping("getDepsUsers")
+	@ResponseBody
+	public List<UserVO> getDepsUsers(@RequestBody UserVO userVO) throws Exception {
+		log.info("{}", userVO.getUserId());
+		return vacationService.getDepsUsers(userVO);
 	}
 
 }

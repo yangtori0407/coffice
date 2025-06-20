@@ -1,5 +1,7 @@
 const kind = document.getElementById("kind")
 let flag = true;
+let cookie = document.cookie
+let userId = cookie.substring(cookie.indexOf("=")+1)
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -10,6 +12,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             text: '휴가 신청',
             click:  function() {
                         $("#exampleModal").modal("show")
+
                     }
         }
     },
@@ -47,24 +50,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     }
 });
 
-if(kind.value.trim() == '일정') {
-    let event = {
-        title: 'test',
-        start: '2025-06-09',
-        allDay: true,
-        color: '#378006',
-        source: 'detail'
-    }
-    calendar.addEvent(event);
-}
 
-if(kind.value.trim() == '휴가') {
-    let event = {
-        title: 'test',
-        start: '2025-06-12T15:30:00'
-    }
-    calendar.addEvent(event);
-}
 
 fetch("http://localhost/events/getHolidays")
 .then(r=>r.json())
@@ -81,70 +67,31 @@ fetch("http://localhost/events/getHolidays")
     }
 })
 
-fetch("http://localhost/events/getSchedule")
+fetch("http://localhost/events/getDepsUsers", {
+    method: "post",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        "userId" : userId
+    })
+})
 .then(r=>r.json())
 .then(r=>{
+    console.log(r)
+    let accept = document.getElementById("accept")
     for(a of r) {
-        let event = {
-            title: a.detail,
-            start: a.startTime,
-            end: a.endTime,
-            color: '#378006'
-        }
-        calendar.addEvent(event);
+        let opt = document.createElement("option")
+        opt.value = a.userId
+        opt.innerText = a.position + " " + a.name
+        accept.appendChild(opt)
     }
 })
-
 
 calendar.render();
 
-// 반복 일정
-const repeat = document.getElementById("repeat-condition")
-const check = document.getElementById("gridCheck")
 
-check.addEventListener("click", (e)=>{
-    if(e.target.checked) {
-        repeat.style.display = 'block';
-    }else {
-        repeat.style.display = 'none';
-    }
-})
-
-const send = document.getElementById("send")
-send.addEventListener("click", ()=>{
-    let type = document.querySelector('input[name="inlineRadioOptions"]:checked').value;
-    let detail = document.getElementById("details")
-    let sDate = document.getElementById("sDate")
-    let sTime = document.getElementById("sTime")
-    let eDate = document.getElementById("eDate")
-    let eTime = document.getElementById("eTime")
-
-    let params = new FormData()
-    params.append("scheduleType", type)
-    params.append("detail", detail.value)
-    params.append("startTime", sDate.value+" "+sTime.value)
-    params.append("endTime", eDate.value+" "+eTime.value)
-
-    if(check.checked){
-        let rType = document.querySelector('input[name="radioOptions"]:checked').value;
-        let sRepeat = document.getElementById("sRepeat")
-        let eRepeat = document.getElementById("eRepeat")
-        params.append("repeatType", rType)
-        params.append("repeatStart", sRepeat.value)
-        params.append("repeatEnd", eRepeat.value)
-    }
-
-    fetch("schedule/add", {
-        method: "post",
-        body: params
-    })
-    .then(r=>{
-        console.log(r)
-    })
-
-    $("#exampleModal").modal("hide")
-})
-
+// $("#exampleModal").modal("hide")
 function show() {
     $("#exampleModal").modal("show")
 }

@@ -328,7 +328,6 @@ send.addEventListener("click", ()=>{
         body: params
     })
     .then(r=>{
-        console.log(r)
         location.reload()
     })
 

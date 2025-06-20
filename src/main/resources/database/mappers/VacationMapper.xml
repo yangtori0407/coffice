@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.events.vacation.VacationDAO">
+  	
+  	<select id="getDepsUsers" parameterType="UserVO" resultType="UserVO">
+  			select USER_ID, NAME, POSITION, DEPT_ID
+  			from USERS
+  			where DEPT_ID = (select DEPT_ID
+  								from USERS
+  								where USER_ID = #{userId}
+  							)
+  			and USER_ID != #{userId}
+  	</select>
+  	
+  </mapper>
