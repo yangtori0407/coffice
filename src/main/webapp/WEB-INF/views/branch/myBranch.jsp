@@ -12,25 +12,7 @@
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script src= "https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-.side-menu-right {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 280px;
-  height: 100vh;
-  z-index: 1050;
-  background-color: #fff;
-  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
-  transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
-  overflow-y: auto;
-}
-
-.side-menu-right.show {
-  transform: translateX(0);
-}
-</style>
+<link rel="stylesheet" type="text/css" href="/css/branch/mybranch.css">
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -39,7 +21,7 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-					<div style="width:500px; height:350xp; border:3px solid #aaa; margin:20px auto;">
+					<div style="width:500px; height:250px; border:3px solid #aaa; margin:20px auto;">
 						<canvas id="chart"></canvas>
 					</div>
 				<div style="width:500px; margin:20px auto; text-align:center">
@@ -51,8 +33,10 @@
 						</c:forEach>	
 							${total}	
 					</div>
-					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#sideMenu" aria-expanded="false">
-					  메뉴 열기
+					<button class="btn btn-light shadow-sm rounded-circle" 
+							type="button" data-toggle="collapse" data-target="#sideMenu" 
+							aria-expanded="false">
+					  <ion-icon name="menu-outline" style="font-size: 24px; color: #333;"></ion-icon>
 					</button>
 				</div>
 					<table class="table table-striped" style="margin:20px auto;width: 600px;">
@@ -121,14 +105,28 @@
 	<!-- End Wrapper -->
 	
 	<div class="collapse side-menu-right" id="sideMenu">
-	  <div class="bg-light border p-4" style="position: fixed; top: 0; left: 0; height: 100vh; width: 250px; z-index: 1050;">
-	    <h5 class="mb-3">메뉴</h5>
-	    <ul class="list-unstyled">
-	      <li><a href="#">메뉴1</a></li>
-	      <li><a href="#">메뉴2</a></li>
-	      <li><a href="#">메뉴3</a></li>
-	    </ul>
-	    <button class="btn btn-danger mt-3" data-toggle="collapse" data-target="#sideMenu">닫기</button>
+	  <div class="bg-light border p-4" 
+	       style="position: fixed; top: 0; left: 0; height: 100vh; width: 250px; z-index: 1050; box-shadow: 2px 0 5px rgba(0,0,0,0.1); overflow-y: auto;">
+	    
+	    <h5 class="mb-4" style="text-align:center; font-weight: bold;">☕ 카페 메뉴판</h5>
+
+	    <div style="display: flex; flex-direction: column; gap: 20px;">
+	      <c:forEach items="${menuList}" var="m">
+	        <div style="background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 10px; display: flex; flex-direction: column; align-items: center;">
+	          <!-- 이미지 자리 -->
+	          <img src="/img/커피지도마커3.png" alt="${m.menuName}" 
+	               style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 8px;">
+	          
+	          <!-- 메뉴명 + 가격 -->
+	          <div style="display: flex; justify-content: space-between; width: 100%;">
+	            <span style="font-size: 14px; font-weight: 500;">${m.menuName}</span>
+	            <span style="font-size: 14px; font-weight: bold;">₩${m.menuPrice}</span>
+	          </div>
+	        </div>
+	      </c:forEach>
+	    </div>
+
+	    <button class="btn btn-danger mt-4" data-toggle="collapse" data-target="#sideMenu" style="width:100%;">닫기</button>
 	  </div>
 	</div>
 	
