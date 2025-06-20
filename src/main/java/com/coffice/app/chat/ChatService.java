@@ -1,6 +1,7 @@
 package com.coffice.app.chat;
 
 import java.beans.Transient;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -107,11 +108,22 @@ public class ChatService {
 	
 	@Transactional
 	public ChatContentsVO addContents(ChatContentsVO chatContentsVO, UserVO userVO) throws Exception{
-		chatContentsVO.setSender(userVO.getUserId());
+		if(chatContentsVO.isSystem()) {
+			String name = chatDAO.getUserInfo(chatContentsVO);
+			chatContentsVO.setChatContents(name + " 님이 나갔습니다.");
+			chatContentsVO.setSender("system");
+			chatDAO.addContents(chatContentsVO);
+			
+			return chatContentsVO;
+		}else {
+			
+			chatContentsVO.setSender(userVO.getUserId());
+			chatDAO.addContents(chatContentsVO);
+			chatContentsVO = chatDAO.getContentsInfo(chatContentsVO);
+			chatContentsVO.setName(chatDAO.getUserInfo(chatContentsVO));
+		}
 		log.info("sender name : {}", chatContentsVO);
-		chatDAO.addContents(chatContentsVO);
-		chatContentsVO = chatDAO.getContentsInfo(chatContentsVO);
-		chatContentsVO.setName(chatDAO.getUserInfo(chatContentsVO));
+		
 		
 		return chatContentsVO;
 	}
@@ -162,9 +174,15 @@ public class ChatService {
 		return chatDAO.getChatUserInfo(chatRoomNum);
 	}
 
-	public List<UserVO> getChatUsersDetail(String chatRoomNum) throws Exception{
-		// TODO Auto-generated method stub
-		return chatDAO.getChatUsersDetail(chatRoomNum);
+	public List<String> getChatUsersDetail(String chatRoomNum) throws Exception{
+		
+		List<UserVO> list = chatDAO.getChatUsersDetail(chatRoomNum);
+		List<String> result = new ArrayList<>();
+		for(UserVO l : list) {
+			result.add(l.getDeptName() + " " + l.getName() + " " + l.getPosition());
+		}
+		
+		return result;
 	}
 
 	public int updateLastReadAt(String userId, String chatRoomNum) throws Exception{
@@ -194,6 +212,19 @@ public class ChatService {
 //			log.info("getChatMore : {}", l);
 //		}
 		return list;
+	}
+	
+	public int exit(String chatRoomNum, String userId) throws Exception{
+		
+		log.info("chatRoomNum : {}", chatRoomNum);
+		log.info("userId : {}", userId);
+		Map<String, Object> info = new HashMap<>();
+		info.put("chatRoomNum", chatRoomNum);
+		info.put("userId", userId);
+		
+		int result = chatDAO.exit(info);
+		
+		return result;
 	}
 
 }
