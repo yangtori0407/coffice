@@ -1,4 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
   <style>
     /* 부서 선택시 강조 스타일 */
@@ -23,12 +25,12 @@
       align-items: center;
     }
 
-    .employee-pill .remove-pill {
-      margin-left: 0.5em;
-      cursor: pointer;
-      font-weight: bold;
-    }
-  </style>
+      .remove-pill {
+        margin-left: 0.5em;
+        cursor: pointer;
+        font-weight: bold;
+      }
+    </style>
 
   <!-- 조직도 모달 사용법 - 아래 주석 처리된 버튼 복붙해서 이용 -->
   <!-- Button trigger modal -->
@@ -40,12 +42,14 @@
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
+
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">조직도</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+
         <div class="modal-body" style="height: 500px;">
           <div class="row">
             <div class="col border-right border-grey" style="height: 360px; overflow: auto;" id="depBoard"></div>
@@ -58,12 +62,27 @@
             </div>
           </div>
         </div>
+
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-          <button type="button" class="btn btn-primary" id="choose" data-dismiss="modal">선택 완료</button>
+          
+          <c:if test="${isWritePage eq 1}">
+            <button id="btn_toApprovers" type="button" class="btn btn-info" id="choose">결재선 넣기</button>
+            <button id="btn_toReferrers" type="button" class="btn btn-primary" id="choose">참조선 넣기</button>
+          </c:if>
+          
+          <c:if test="${isWritePage ne 1}">
+            <button type="button" class="btn btn-primary" id="choose">선택 완료</button>
+          </c:if>
+          
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>          
+        
         </div>
+
+
       </div>
+      
     </div>
+    
   </div>
 
 
@@ -208,7 +227,8 @@
       const pill = document.createElement('div');
       pill.className = 'employee-pill';
       pill.setAttribute('data-selected-id', id);
-      pill.setAttribute('data-selected-name', position + " " + name);
+      pill.setAttribute('data-selected-name', name);
+      pill.setAttribute('data-selected-position', position);
 
       const nameSpan = document.createElement('span');
       nameSpan.textContent = position + " " + name;

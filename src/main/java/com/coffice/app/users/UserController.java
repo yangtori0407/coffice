@@ -191,7 +191,7 @@ public class UserController {
 	
 	@GetMapping("getUsers")
 	@ResponseBody
-	public List<UserVO> getUsers(UserVO userVO) throws Exception {
+	public List<UserVO> getUsers(UserVO userVO) throws Exception {		
 		return userService.getUsers(userVO);
 
 	}

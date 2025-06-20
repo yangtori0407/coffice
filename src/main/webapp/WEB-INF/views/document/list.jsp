@@ -54,21 +54,21 @@
 								<th>양식종류</th>
 								<th>제목</th>
 								<th>작성자</th>
-								<th>작성시간</th>
+								<th>작성일</th>
 								<th>진행단계</th>
 								<th>문서상태</th>								
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${list}" var="i">
+							<c:forEach items="${docuList}" var="i">
 								<tr>
 									<td>${i.documentId }</td>
 									<td>${i.formId}/${i.formName }</td>
 									<td><a href="../detail?documentId=${i.documentId}">${i.title}</a></td>
-									<td>${i.writerId }/${i.writerName }/${i.writerPosition }</td>
+									<td>${i.writerId } / ${i.writerName } / ${i.writerPosition }</td>
 									<td>${i.writerTime }</td>
 									<!-- currentStep을 1만큼 낮춰서 출력 -->
-									<td>${i.currentStep -1}/${i.stepCount }</td>
+									<td>${i.currentStep -1} / ${i.approvalLineVOs.size() }</td>
 									<td>${i.status }</td>
 								</tr>
 							</c:forEach>

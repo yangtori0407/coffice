@@ -1,0 +1,48 @@
+<div class="col">
+	      	 	<button id="add-row">행 추가</button>
+	      	 	<button id="remove-row">행 삭제</button>
+	      	 </div>
+
+<div class="col d-flex justify-content-center align-items-center">
+	      	
+	      	<table border="1" cellspacing="0" cellpadding="5" style="border-collapse: collapse; width: 100%; text-align: center;">
+			  <thead>
+			    <tr style="background-color: #d9edf7;">
+			      <th colspan="7" style="padding: 10px; font-weight: bold;">입 출 고 내 역</th>
+			      <!-- 입출고 상태 (입고, 출고), 상품명, 상품 갯수 -->
+			    </tr>
+			    <tr>
+			      <th>일시</th>
+			      <th>분류</th>
+			      <th>상세</th>
+			      <th>입고 수량</th>
+			      <th>출고 수량</th>
+			      <th>현재 재고</th>
+			      <th>비고</th>
+			    </tr>
+			  </thead>
+			  <tbody id="tbody1">
+			  	<c:forEach begin="1" end="5">
+				    <tr class="trs" style="height: 35px;">
+				    	<td class="td_date tds" style="width: 15%;"></td>
+				      	<td class="td_kind tds" style="width: 15%;"></td>
+				      	<td class="td_name tds" style="width: 15%;"></td>
+				      	<td class="td_inbound tds" style="width: 15%;"></td>
+				      	<td class="td_outbound tds" style="width: 15%;"></td>
+				      	<td class="td_remain tds" style="width: 15%;"></td>
+				      	<td class="td_etc tds" style="width: 10%;"></td>		      
+				    </tr>			  	
+			  	</c:forEach>			    
+			    
+			  </tbody>
+			</table>
+			
+			
+		  </div>	      	
+	      
+	      <div class="col">
+	      	<div class="m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 130px;">
+	    		<div>상기 입출고 내역을 제출하고자 합니다.</div>
+	    	</div>
+
+</div>

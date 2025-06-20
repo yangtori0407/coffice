@@ -23,7 +23,7 @@ public interface DocumentDAO {
 	
 	public List<UserVO> getUsers() throws Exception;
 	
-	public List<FormVO> getForms() throws Exception;
+	public List<FormVO> getFormsIdName() throws Exception;
 	
 	public Long getTotalCount(Pager pager)throws Exception;
 	

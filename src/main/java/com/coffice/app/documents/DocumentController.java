@@ -1,5 +1,10 @@
 package com.coffice.app.documents;
 
+import java.sql.Timestamp;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.coffice.app.documents.attachments.AttachmentVO;
 import com.coffice.app.documents.forms.FormVO;
 import com.coffice.app.documents.lines.ApprovalLineVO;
+import com.coffice.app.documents.lines.ReferenceLineVO;
 import com.coffice.app.page.Pager;
 import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
@@ -34,74 +40,71 @@ public class DocumentController {
 	@Autowired
 	private DocumentService documentService;
 
-	
 	//
 	@GetMapping("tempLogin1")
 	public String tempLogin1(HttpSession session) {
 		// 테스트용 임시 유저
 		UserVO userVO = new UserVO();
-		userVO.setUserId("사원아디");
-		userVO.setName("박사원");
-		userVO.setDeptId(10);
+		userVO.setUserId("아디1");
+		userVO.setName("브라움");
+		userVO.setDeptName("인사팀");
 		userVO.setPosition("사원");
 		session.setAttribute("userVO", userVO);
-		
-		return "redirect:./make";
-	}	
-	
+
+		return "redirect:./selectform";
+	}
+
 	//
 	@GetMapping("tempLogin2")
 	public String tempLogin2(HttpSession session) {
 		// 테스트용 임시 유저
 		UserVO userVO = new UserVO();
-		userVO.setUserId("사원아디2");
-		userVO.setName("김사원");
-		userVO.setDeptId(10);
-		userVO.setPosition("사원");
+		userVO.setUserId("아디3");
+		userVO.setName("소라카");
+		userVO.setDeptName("인사팀");
+		userVO.setPosition("대리");
 		session.setAttribute("userVO", userVO);
-		
-		return "redirect:./make";
+
+		return "redirect:./selectform";
 	}
-	
+
 	//
 	@GetMapping("tempLogin3")
 	public String tempLogin3(HttpSession session) {
 		// 테스트용 임시 유저
 		UserVO userVO = new UserVO();
-		userVO.setUserId("과장아디");
-		userVO.setName("이과장");
-		userVO.setDeptId(10);
+		userVO.setUserId("아디4");
+		userVO.setName("소나");
+		userVO.setDeptName("인사팀");
 		userVO.setPosition("과장");
 		session.setAttribute("userVO", userVO);
-		
-		return "redirect:./make";
+
+		return "redirect:./selectform";
 	}
-	
+
 	//
 	@GetMapping("tempLogin4")
 	public String tempLogin4(HttpSession session) {
 		// 테스트용 임시 유저
 		UserVO userVO = new UserVO();
-		userVO.setUserId("부장아디");
-		userVO.setName("최부장");
-		userVO.setDeptId(10);
+		userVO.setUserId("아디6");
+		userVO.setName("쓰레쉬");
+		userVO.setDeptName("인사팀");
 		userVO.setPosition("부장");
 		session.setAttribute("userVO", userVO);
-		
-		return "redirect:./make";
+
+		return "redirect:./selectform";
 	}
-	
-	
+
 	//
 	@GetMapping("tempLogout")
 	public String tempLogout(HttpSession session) {
-				
+
 		session.invalidate();
-		
-		return "redirect:./make";
+
+		return "redirect:./selectform";
 	}
-	
-	
+
 	//
 	@PostMapping("form")
 	@ResponseBody
@@ -112,149 +115,105 @@ public class DocumentController {
 		return resultVO;
 	}
 
-	
 	//
 	@GetMapping("list/*")
 	public String getList(Pager pager, Model model, HttpServletRequest request, HttpSession session) throws Exception {
-		
-		List<DocumentVO> list = documentService.getList(pager, request, session);
-		model.addAttribute("list", list);	System.out.println("list size : " + list.size());
+
+		List<DocumentVO> docuList = documentService.getList(pager, request, session);
+		model.addAttribute("docuList", docuList);
+		System.out.println("list size : " + docuList.size());
 		model.addAttribute("pager", pager);
 
 		return "document/list";
 	}
 
-	
 	//
 	@GetMapping("detail") // 임시저장 문서로 넘어갈 때는 수정 가능하도록 조건을 나누어야한다.
 	public String getDetail(DocumentVO documentVO, Model model, HttpSession session) throws Exception {
 
 		//
-		DocumentVO vo = documentService.getDetail(documentVO);
-		
-		if (vo == null) {
-			System.out.println("document detail vo가 null입니다");
+		DocumentVO docuVO = documentService.getDetail(documentVO);
+
+		if (docuVO == null) {
+			System.out.println("document detail docuVO가 null입니다");
 		}
-		model.addAttribute("vo", vo);
 		
+		
+		
+		model.addAttribute("docuVO", docuVO);
+
 		// 문서 정보 가져올 때, 접속자의 직인 정보들도 모달에 뿌려놓는다 (모달창 열면 서버 다시 안가고 바로 뜨도록)
 		List<SignVO> signList = documentService.getSignList(session);
 		model.addAttribute("signList", signList);
+
+		return "document/form/variableForm";
+	}
+
+	
+	// 양식 선택 화면 요청 (GET)
+	@GetMapping("selectform")
+	public String selectform(Model model) throws Exception {
+		
+		List<FormVO> formList = documentService.getFormsIdName();
+		model.addAttribute("formList", formList);
+		
+		return "document/form/selectForm";
+	}
+	
+	// 선택한 양식 출력 요청 (GET)
+	@GetMapping("write")
+	public String write(Model model, HttpSession session, FormVO formVO) throws Exception {
+				
+		// 처음 양식 선택 시 보낸 formId를 이용해서 form 정보를 조회 해온다.
+		formVO = documentService.formDetail(formVO);		
+		model.addAttribute("formVO",formVO);
+		
+		int isWritePage = 1;
+		model.addAttribute("isWritePage", isWritePage);
+		
+		LocalDateTime time = LocalDateTime.now();		 
+		model.addAttribute("timeNow", time);
+		
 		
 
-		return "document/detail";
+		
+		return "document/form/variableForm";
 	}
-
 	
-	// 양식 설정 요청 (GET)
-	@GetMapping("make")
-	public String make(Model model) throws Exception {
-
-		// 유저 리스트 조회
-		List<UserVO> users = documentService.getUsers();
-
-		// 폼 리스트 조회
-		List<FormVO> forms = documentService.getForms();
-
-		for (FormVO form : forms) {
-			System.out.println("id : " + form.getFormId());
-		}
-
-		model.addAttribute("users", users);
-		model.addAttribute("forms", forms);
-
-		return "document/makeSetting";
-	}
-
-	
-	// 양식 설정 요청 (POST)
-	@PostMapping("make")
-	public String make(HttpSession session, Model model, FormVO formVO, @RequestParam String approvers,
-			@RequestParam String referrers) throws Exception {
-
-		// 파라미터 값들을 받아와서
-		ObjectMapper mapper = new ObjectMapper();
-		List<UserVO> approverList = mapper.readValue(approvers, new TypeReference<List<UserVO>>() {
-		});
-		List<UserVO> referrerList = mapper.readValue(referrers, new TypeReference<List<UserVO>>() {
-		});
-
-		/*
-		 * System.out.println("formId : " + formVO.getFormId());
-		 * 
-		 * System.out.println("approversLength : " + approverList.size());
-		 * if(approverList.size() != 0) {
-		 * System.out.println(approverList.get(0).getUserId()); }
-		 * 
-		 * System.out.println("referrersLength : " + referrerList.size());
-		 * if(referrerList.size() != 0) {
-		 * System.out.println(referrerList.get(0).getUserId()); }
-		 */
-
-		model.addAttribute("formVO", formVO);
-		model.addAttribute("approvers", approverList);
-		model.addAttribute("referrers", referrerList);
-
-		session.setAttribute("sessionApprovers", approverList);
-		session.setAttribute("sessionReferrers", referrerList);
-
-		// formVO 안의 formId에 따라 return 다르게 주기
-		if (formVO.getFormId() == 10) {
-
-			return "document/form/form10";
-
-		} else if (formVO.getFormId() == 11) {
-
-			return "document/form/form11";
-
-		} else if (formVO.getFormId() == 12) {
-
-			return "document/form/form12";
-
-		} else if (formVO.getFormId() == 13) {
-
-			return "document/form/form13";
-
-		} else {
-			System.out.println("없는 양식입니다");
-			return "index";
-		}
-
-	}
-
 	
 	//
 	@PostMapping("write")
-	public String add(HttpSession session, DocumentVO documentVO, MultipartFile[] attaches) throws Exception {
+	public String add(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
+			HttpSession session, MultipartFile[] files) throws Exception {
+		
 
-		List<UserVO> approverList = (List<UserVO>) session.getAttribute("sessionApprovers");
-		List<UserVO> referrerList = (List<UserVO>) session.getAttribute("sessionReferrers");
-		
+		ObjectMapper mapper = new ObjectMapper();
+	    List<ApprovalLineVO> approverList = mapper.readValue(approversJson, new TypeReference<List<ApprovalLineVO>>() {});
+	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
+	    
+
 		// 서비스 메서드 실행
-		int result = documentService.add(documentVO, approverList, referrerList, attaches, session);
-		
+		int result = documentService.add(documentVO, approverList, referrerList, files, session);
 
 		return "redirect:./list/online";
 	}
 	
-	
+
 	//
 	@PostMapping(value = "addSign", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	// 새 sign을 insert하고 전체 sign 목록을 다시 select해서 가져온다.
 	public List<SignVO> addSign(HttpSession session, MultipartFile[] attaches) throws Exception {
-		
+
 		// 사인 추가
 		int result = documentService.addSign(session, attaches);
-		
-		
+
 		// 사인 리스트 조회
 		List<SignVO> resultList = documentService.getSignList(session);
 
 		return resultList;
 	}
 
-	
 	//
 	public String getFileDetail(AttachmentVO attachmentVO, Model model) throws Exception {
 
@@ -264,19 +223,18 @@ public class DocumentController {
 
 		return "fileDownView";
 	}
-	
-	
+
 	//
 	@PostMapping("proceed")
 	public String updateApprovalProceed(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
+
+		System.out.println("user "+approvalLineVO.getUserId());
+		System.out.println("docu "+approvalLineVO.getDocumentId());
+		System.out.println("sign "+approvalLineVO.getSignId());
 		
 		int result = documentService.updateApprovalProceed(approvalLineVO, session);
-		
-		return "redirect:./detail?documentId="+approvalLineVO.getDocumentId();
+
+		return "redirect:./detail?documentId=" + approvalLineVO.getDocumentId();
 	}
-	
-	
-	
-	
 
 }
