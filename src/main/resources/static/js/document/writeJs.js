@@ -190,6 +190,9 @@ btn_complete.addEventListener("click", function() {
 	const input_referrers = document.getElementById("input_referrers");
 	input_referrers.value = JSON.stringify(referrerList);
 	
+    // 문서 status 데이터 삽입
+    const input_docuStatus = document.getElementById("input_docuStatus");
+    input_docuStatus.value = "진행중";
 	
 	const form_document = document.getElementById("form_document");
 	form_document.submit()

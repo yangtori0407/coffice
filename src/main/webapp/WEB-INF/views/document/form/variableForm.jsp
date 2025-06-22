@@ -258,6 +258,7 @@
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 반려하기
             </a>
+			<button id="btn_temporary" class="btn btn-outline-secondary me-2 mr-3">임시 저장</button>
 	        <button id="btn_complete" class="btn btn-outline-secondary me-2 mr-3">작성 완료</button>
 	        <button id="btn_cancle" class="btn btn-outline-secondary mr-3">나가기</button>
 	      </div>
@@ -321,6 +322,7 @@
 				
 				<input id="input_referrers" name="referrers" type="hidden">
 				
+				<input id="input_docuStatus" name="status" type="hidden">
  
 				
 			</form>
@@ -353,6 +355,7 @@
 	<script src="/js/document/writeJs.js"></script>
 	<script src="/js/document/signTool.js"></script>
 	<script src="/js/document/toReject.js"></script>
+	<script src="/js/document/toTemporary.js"></script>
 	
 </body>
 </html>

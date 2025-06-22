@@ -172,7 +172,9 @@ public class DocumentService {
 		// documentVO에 데이터들 넣기
 		documentVO.setWriterTime(Timestamp.valueOf(LocalDateTime.now()));
 		documentVO.setCurrentStep(1L);
-		documentVO.setStatus("진행중");
+		// 임시저장 기능 추가로 (documentVO의 status에 임의 값 세팅이 아닌 '임시저장' 또는 '진행중' 데이터를 받아오는 것으로 코드 변경
+		//documentVO.setStatus("진행중");
+		System.out.println("status : " + documentVO.getStatus());
 		
 		// formName, stepCount는 문서 작성 시점의 폼 관련 값을 고정할 필요가 없으므로 문서 조회할 때 가져오겠다
 		
