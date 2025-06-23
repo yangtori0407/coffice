@@ -128,68 +128,75 @@
 		</div>
 		<!-- End Content Wrapper -->
 	</div>
-		<div class="modal" id="addReceive" tabindex="-1">
+		<div class="modal fade" id="addReceive" tabindex="-1" aria-hidden="true">
 		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title">입/출고</h5>
-		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-		                <span aria-hidden="true">×</span>
+		    <div class="modal-content shadow content">
+		      <div class="modal-header bg-dark text-white">
+		        <h5 class="modal-title"><i class="fas fa-box-open mr-2"></i>입/출고</h5>
+		            <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">&times;</span>
 		            </button>
 		      </div>
-		      <div class="modal-body" aria-label="Default select example">
-			        <div class="form-check">
+		      <div class="modal-body p-4">
+		      	<div class="form-group mb-3">
+			        <div class="form-check form-check-inline">
 					  <input class="form-check-input" type="radio" name="receive" id="input" value="true">
-					  <label class="form-check-label" for="radioDefault1">
-					    입고
+					  <label class="form-check-label text-success font-weight-bold" for="input">
+					     <i class="fas fa-arrow-down"></i>입고
 					  </label>
 					</div>
-					<div class="form-check">
+					<div class="form-check form-check-inline">
 					  <input class="form-check-input" type="radio" name="receive" id="output" value="false">
-					  <label class="form-check-label" for="radioDefault2">
-					    출고
+					  <label class="form-check-label text-danger font-weight-bold" for="output">
+					     <i class="fas fa-arrow-up"></i>출고
 					  </label>
 					</div>
-					
-			        <select class="form-select" id="selectIngredients">
-				       <option selected>상품을 선택해주세요</option>
+				</div>
+				<div class="form-group mb-3">
+					<label for="selectIngredients" class="font-weight-bold">상품</label>
+			        <select class="form-select form-control" id="selectIngredients" required>
+				       <option value="" selected>상품을 선택해주세요</option>
 				       <c:forEach items="${totalList}" var="vo">
 				       		<option value="${vo.ingredientsID}">${vo.ingredientsName}</option>
 				       </c:forEach>
 			        </select>
-			        <input type="text" name="number" id="number">
-			        <input type='button' onclick='count("plus")' value='+'/>
-					<input type='button' onclick='count("minus")' value='-'/>
+				</div>
+				<div class="form-group mb-3">
+					<label for="number" class="font-weight-bold">수량</label>
+			        <input type="number" class="form-control" name="number" id="number" min="0">
+				</div>
 			      <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-			        <button class="btn btn-primary" id="addReceiveBtn">등록</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button"><i class="fas fa-times"></i>Close</button>
+			        <button class="btn btn-primary" id="addReceiveBtn"><i class="fas fa-plus-circle"></i>등록</button>
 			      </div>
 			  </div>
 		    </div>
 		  </div>
 		</div>
 		
-		<div class="modal" id="addIngredients" tabindex="-1">
+		<div class="modal fade" id="addIngredients" tabindex="-1" aria-hidden="true">
 		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title">상품추가</h5>
-		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-		                <span aria-hidden="true">×</span>
+		    <div class="modal-content shadow rounded">
+		      <div class="modal-header bg-primary text-white">
+		        <h5 class="modal-title"><i class="fas fa-plus-circle mr-2"></i>상품추가</h5>
+		            <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">&times;</span>
 		            </button>
 		      </div>
-		      <div class="modal-body" aria-label="Default select example">
+		      <div class="modal-body p-4">
 					<form:form modelAttribute="ingredientsVO" action="./add" method="post">
-						<div class="input-box">
-							<form:input path="ingredientsName" id="ingredientsName" placeholder="이름"/>						
-				            <form:errors path="ingredientsName" cssClass="error"/>
-						</div>
+					<div class="form-group mb-3">
+						<label for="ingredientsName" class="font-weight-bold">상품 이름</label>
+						<form:input path="ingredientsName" class="form-control" id="ingredientsName" placeholder="ex)고구마" required="true"/>
+					</div>
 
-						<div class="input-box">
-							<form:input path="ingredientsPrice" id="ingredientsPrice" placeholder="가격"/>					
+						<div class="form-group mb-3">
+							<label for="ingredientsPrice" class="font-weight-bold">상품 가격</label>
+							<form:input path="ingredientsPrice" class="form-control" id="ingredientsPrice" placeholder="ex)1000" required="true"/>					
 						</div>
-											
-							<button type="button" class="btn btn-primary" id="addIngredientsBtn">상품등록</button>
+						<div class="text-right">
+							<button type="button" class="btn btn-success" id="addIngredientsBtn"><i class="fas fa-check"></i> 상품등록</button>
+						</div>				
 					</form:form>
 			  </div>
 		    </div>
@@ -198,7 +205,7 @@
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
-	<script src="/js/ingredients/list.js">></script>
+	<script src="/js/ingredients/list.js"></script>
 	<script src="/js/ingredients/history.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>

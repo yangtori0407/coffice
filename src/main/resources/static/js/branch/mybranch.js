@@ -3,6 +3,7 @@ const selectMenu = document.getElementById('selectMenu');
 const orderBody = document.getElementById('orderBody');
 const addPurchase = document.getElementById('addPurchase');
 const modalFooter = document.getElementsByClassName('modal-footer');
+
 let importOptions = [];
 let expenditureOptions =[];
   fetch('/ingredients/menuList')
@@ -26,6 +27,7 @@ let expenditureOptions =[];
       const defaultOption = document.createElement('option');
       const isImport = this.id === 'import'
       defaultOption.text = isImport ? '메뉴를 선택해주세요' : '식자재를 선택해주세요';
+      defaultOption.value="";
       defaultOption.selected = true;
       defaultOption.disabled = true;
       selectMenu.appendChild(defaultOption);
@@ -56,25 +58,44 @@ let expenditureOptions =[];
             button.id = isImport ? "addImport" : "addExpenditure";
             button.innerText = isImport ? "수입 추가" : "지출 추가";
 
+            const selectedMenuId = selectMenu.value;
+            const salesQuantity = document.getElementById('salesQuantity');
+
+            salesQuantity.addEventListener('input',()=>{
+                if(salesQuantity.value=="" || salesQuantity.value <= 0){
+                    button.disabled = true;
+                } else {
+                    button.disabled = false;
+                }
+            })
           
             button.addEventListener('click', function() {
                 let c = confirm("정말 입력하시겠습니까?")
                 if(!c){
                     return;
                 }
-            const selectedMenuId = selectMenu.value;
-            const salesQuantity = document.getElementById('salesQuantity').value;
             
   
             let params = new URLSearchParams();
+            if(selectedMenuId==""){
+                alert("메뉴/식자재를 선택해주세요");
+                return;
+            }
+
+            if(salesQuantity.value==""){
+                alert("수량을 입력하세요");
+                return;
+            }else if(salesQuantity.value <= 0){
+                alert("0보다 작은수는 입력이 안됩니다.");
+                return;
+            }
 
             if(isImport){
-                
                 params.append("menuId",selectedMenuId);
-                params.append("salesQuantity",salesQuantity);
+                params.append("salesQuantity",salesQuantity.value);
             }else {
                 params.append("ingredientsId",selectedMenuId);
-                params.append("salesQuantity",salesQuantity);
+                params.append("salesQuantity",salesQuantity.value);
             }
 
             isImport ?

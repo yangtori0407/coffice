@@ -68,8 +68,17 @@
         const userId = document.getElementById("selectUser").value;
         const branchId = document.getElementById("selectBranch").value;
 
+        let c = confirm("정말 입력하시겠습니까?")
+        if(!c){
+            return;
+        }
+
         console.log(userId)
         console.log(branchId)
+        if(userId==""||branchId==""){
+            alert("모두선택되어야합니다.")
+            return;
+        }
 
         const params = new URLSearchParams();
         params.append("userId", userId);

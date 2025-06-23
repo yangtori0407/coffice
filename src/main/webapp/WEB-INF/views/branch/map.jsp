@@ -115,32 +115,37 @@
 		<!-- End Content Wrapper -->
 	</div>
 	<!-- 점주지점등록 modal-->
-	<div class="modal" id="addBranch" tabindex="-1">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title">지점점주등록</h5>
-		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-		                <span aria-hidden="true">×</span>
+	<div class="modal" id="addBranch" tabindex="-1" aria-hidden="true">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content shadow rounded">
+		      <div class="modal-header bg-primary text-white">
+		        <h5 class="modal-title"><i class="fas fa-user-plus mr-2"></i>지점점주등록</h5>
+		            <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">&times;</span>
 		            </button>
 		      </div>
-		      <div class="modal-body" aria-label="Default select example">
-			        <select class="form-select" id="selectUser">
-			            <option selected>추가할 점주를 선택하세요</option>
+		      <div class="modal-body p-4">
+		      	 <div class="form-group mb-3">
+		      	 <label for="selectUser" class="font-weight-bold">점주 선택</label>
+			        <select class="form-select form-control" id="selectUser" required>
+			            <option value="" selected>추가할 점주를 선택하세요</option>
 						<c:forEach items="${notAddBranchMasterList}" var="m">
 							<option value="${m.userId.userId}">${m.userId.name}</option>
 						</c:forEach>
 			        </select>
-					
-			        <select class="form-select" id="selectBranch">
-				            <option selected>추가할 지점을 선택하세요</option>
+			        </div>
+					<div class="form-group mb-3">
+					 <label for="selectBranch" class="font-weight-bold">지점 선택</label>
+			        <select class="form-select form-control" id="selectBranch">
+				            <option value="" selected>추가할 지점을 선택하세요</option>
 						<c:forEach items="${notAddBranchList}" var="b" varStatus="s">
 				            <option value="${s.current.branchId}">${b.branchName},${s.current.branchId}</option>					
 						</c:forEach>
 			        </select>
+			        </div>
 			      <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-			        <button class="btn btn-primary" id="addBranchBtn">add</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button"><i class="fas fa-times"></i>닫기</button>
+			        <button class="btn btn-primary" id="addBranchBtn"><i class="fas fa-plus-circle"></i>등록</button>
 			      </div>
 			  </div>
 		    </div>

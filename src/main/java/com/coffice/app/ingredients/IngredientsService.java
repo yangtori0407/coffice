@@ -37,7 +37,6 @@ public class IngredientsService {
 		
 		IngredientsVO checkVO = ingredeintsDAO.nameCheck(ingredientsVO);
 		if(checkVO != null) {
-			bindingResult.rejectValue("ingredientsName", "ingredientsVO.ingredientsID.equal");
 			return true;
 		}
 		

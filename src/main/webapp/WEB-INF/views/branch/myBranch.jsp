@@ -130,33 +130,36 @@
 	  </div>
 	</div>
 	
-	<div class="modal" id="order" tabindex="-1">
+	<div class="modal fade" id="order" tabindex="-1" aria-hidden="true">
 		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title">상품주문</h5>
-		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-		                <span aria-hidden="true">×</span>
+		    <div class="modal-content shadow rounded">
+		      <div class="modal-header bg-dark text-white">
+		        <h5 class="modal-title"><i class="fas fa-shopping-cart mr-2"></i>상품주문</h5>
+		            <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">&times;</span>
 		            </button>
 		      </div>
 		      <div class="modal-body" aria-label="Default select example" id="orderBody">
-		      		<div class="form-check">
+		      		<div class="form-check form-check-inline">
 					  <input class="form-check-input" type="radio" name="salesType" id="import" value="true">
-					  <label class="form-check-label" for="radioDefault1">
-					    수입
+					  <label class="form-check-label text-success font-weight-bold" for="import">
+					    <i class="fas fa-arrow-down"></i>수입
 					  </label>
 					</div>
-					<div class="form-check">
+					<div class="form-check form-check-inline">
 					  <input class="form-check-input" type="radio" name="salesType" id="expenditure" value="false">
-					  <label class="form-check-label" for="radioDefault2">
-					    지출
+					  <label class="form-check-label text-danger font-weight-bold" for="expenditure">
+					    <i class="fas fa-arrow-up"></i>지출
 					  </label>
 					</div>
-			        <select class="form-select" id="selectMenu">
-			            <option selected>수입/지출을 선택해주세요</option>
-			        </select>
-					
-			        <input type="text" name="salesQuantity" id="salesQuantity" placeholder="수량을 입력하세요">
+					<div class="form-group mt-3">
+				        <select class="form-control" id="selectMenu" required>
+				            <option value="" selected>수입/지출을 선택해주세요</option>
+				        </select>					
+					</div>
+					<div class="form-group">
+				        <input type="number" class="form-control" name="salesQuantity" id="salesQuantity" placeholder="수량을 입력하세요" min="0">
+					</div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
 			      </div>
@@ -166,7 +169,7 @@
 		</div>
 		
 			<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
-			<script src="/js/branch/mybranch.js">></script>
+			<script src="/js/branch/mybranch.js"></script>
 </body>
 <script>
 	
