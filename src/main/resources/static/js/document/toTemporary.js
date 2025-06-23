@@ -1,33 +1,70 @@
 
 
 
-const btn_temporary = document.getElementById("btn_temporary");  
+const btn_temporary = document.getElementById("btn_temporary");
 
 btn_temporary.addEventListener("click", function() {
   // 작성 완료 버튼의 기능에서 마지막 status의 입력 값만 바꿔주었다
 
 
-  // formId 및 writer 정보는 이미 들어가 있으므로 데이터 입력 생략
-	// writerTime은 시간까지 저장해야하므로 java에서 생성해서 DB에 넣어준다
+  // writerTime은 시간까지 저장해야하므로 java에서 생성해서 DB에 넣어준다
+	// documentId와 formId를 제외한 writer 정보를 받아와준다
 	
+	// 작성자 이름
+	const input_writerName = document.getElementById("input_writerName");
+	const insert_writerName = document.getElementById("insert_writerName");
+	
+	if(!insert_writerName.innerText.trim()) {
+	       alert("성함을 입력해주세요");
+	       insert_writerName.focus();
+	       return;
+	    }
+
+	    input_writerName.value = insert_writerName.innerText.trim();
+	
+	// 작성자 직급
+	const input_writerPosition = document.getElementById("input_writerPosition");
+	const insert_writerPosition = document.getElementById("insert_writerPosition");
+	
+	if(!insert_writerPosition.innerText.trim()) {
+	       alert("직급을 입력해주세요");
+	       insert_writerPosition.focus();
+	       return;
+	    }
+
+	    input_writerPosition.value = insert_writerPosition.innerText.trim();
+	
+	// 작성자 부서
+	const input_writerDept = document.getElementById("input_writerDept");
+	const insert_writerDept = document.getElementById("insert_writerDept");
+	
+	if(!insert_writerDept.innerText.trim()) {
+	       alert("부서를 입력해주세요");
+	       insert_writerDept.focus();
+	       return;
+	    }
+
+	    input_writerDept.value = insert_writerDept.innerText.trim();
+			
+	// 문서 제목
 	const input_title = document.getElementById("input_title");
-  const insert_title = document.getElementById("insert_title");
+    const insert_title = document.getElementById("insert_title");
 
-  if(!insert_title.innerText.trim()) {
-     alert("제목을 입력해주세요");
-     insert_title.focus();
-     return;
-  }
+    if(!insert_title.innerText.trim()) {
+       alert("제목을 입력해주세요");
+       insert_title.focus();
+       return;
+    }
 
-  input_title.value = insert_title.innerText.trim();
+    input_title.value = insert_title.innerText.trim();
   
-const input_content = document.getElementById("input_content");
-const insert_content = document.getElementById("insert_content");
+  const input_content = document.getElementById("input_content");
+  const insert_content = document.getElementById("insert_content");
   
   input_content.value = insert_content.innerHTML;
 
   //
-const input_files = document.getElementById("input_files");
+  const input_files = document.getElementById("input_files");
 
 
   // 결재자 정보 추출 → JSON 문자열로 변환하여 hidden input에 삽입
@@ -70,7 +107,18 @@ input_referrers.value = JSON.stringify(referrerList);
   const input_docuStatus = document.getElementById("input_docuStatus");
   input_docuStatus.value = "임시저장";
 
-const form_document = document.getElementById("form_document");
-form_document.submit()
+  const form_document = document.getElementById("form_document");
+
+
+  // 문서가 최초 임시저장이냐 기존 임시저장이 있냐에 따라 컨트롤러 경로를 바꿔준다
+  if(insert_content.dataset.voCheck =="임시저장"){
+    form_document.action="/document/updatetemp"
+	form_document.submit(); // 경로를 바꿔서 컨트롤러로 보낸다
+
+  } else if (insert_content.dataset.voCheck == ""){
+    form_document.submit(); //기존 write경로를 컨트롤러로 보낸다
+
+  }
+
 
 })

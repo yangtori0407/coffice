@@ -325,6 +325,37 @@
   		(#{documentId}, #{originName}, #{saveName})
   	</insert>
   	
+  	<!-- 구분선 -->
+  	
+  	<!-- 업데이트 대상 컬럼 : 제목, 내용, 작성자 이름, 작성자 직급, 작성자 부서, 작성 시간 -->
+  	<update id="updateTemp" parameterType="DocumentVO">  		
+		UPDATE DOCUMENTS 
+		
+		SET 
+		TITLE = #{title}, 
+		CONTENT = #{content},
+		STATUS = #{status},
+		WRITER_NAME = #{writerName}, 
+		WRITER_POSITION = #{writerPosition}, 
+		WRITER_DEPT = #{writerDept}, 
+		WRITER_TIME = #{writerTime}
+		
+		WHERE DOCUMENT_ID = #{documentId}
+  	</update>
+  	
+  	<delete id="deleteApprovalLine" parameterType="DocumentVO">
+  		DELETE FROM APPROVAL_LINES
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</delete>
+  	
+  	<delete id="deleteReferenceLine" parameterType="DocumentVO">
+  		DELETE FROM REFERENCE_LINES
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</delete>
+  	
+  	
+  	<!-- 구분선 -->
+  	
   	<select id="getFileDetail" parameterType="AttachmentVO" resultType="AttachmentVO">
   		SELECT * FROM ATTACHMENTS WHERE FILE_NUM=#{fileNum}
   	</select>

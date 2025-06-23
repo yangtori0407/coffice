@@ -128,7 +128,7 @@ public class DocumentController {
 	}
 
 	//
-	@GetMapping("detail") // 임시저장 문서로 넘어갈 때는 수정 가능하도록 조건을 나누어야한다.
+	@GetMapping("detail") 
 	public String getDetail(DocumentVO documentVO, Model model, HttpSession session) throws Exception {
 
 		//
@@ -146,6 +146,10 @@ public class DocumentController {
 		List<SignVO> signList = documentService.getSignList(session);
 		model.addAttribute("signList", signList);
 
+		// 임시저장 페이지에 보여줄 표시용 시간도 보낸다
+		LocalDate fakeToday = LocalDate.now();
+		model.addAttribute("fakeToday", fakeToday);
+		
 		return "document/form/variableForm";
 	}
 
@@ -168,14 +172,9 @@ public class DocumentController {
 		formVO = documentService.formDetail(formVO);		
 		model.addAttribute("formVO",formVO);
 		
-		int isWritePage = 1;
-		model.addAttribute("isWritePage", isWritePage);
+		LocalDate fakeToday = LocalDate.now();
+		model.addAttribute("fakeToday", fakeToday);
 		
-		LocalDateTime time = LocalDateTime.now();		 
-		model.addAttribute("timeNow", time);
-		
-		
-
 		
 		return "document/form/variableForm";
 	}
@@ -184,18 +183,46 @@ public class DocumentController {
 	//
 	@PostMapping("write")
 	public String add(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
-			HttpSession session, MultipartFile[] files) throws Exception {
+			MultipartFile[] files) throws Exception {
 		
-
+		// Json 형식으로 받아온 결재선, 참조선 데이터를 각 타입에 맞게 넣어준다
 		ObjectMapper mapper = new ObjectMapper();
 	    List<ApprovalLineVO> approverList = mapper.readValue(approversJson, new TypeReference<List<ApprovalLineVO>>() {});
 	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
 	    
 
 		// 서비스 메서드 실행
-		int result = documentService.add(documentVO, approverList, referrerList, files, session);
-
-		return "redirect:./list/online";
+		int result = documentService.add(documentVO, approverList, referrerList, files);
+		
+		// "완료" 또는 "임시저장"에 따라 리스트 페이지 리턴 경로를 다르게 준다		
+		if(documentVO.getStatus().equals("임시저장")) {
+			return "redirect:./list/ontemporary";
+			
+		} else {
+			return "redirect:./list/online";
+			
+		}
+	}
+	
+	
+	//
+	@PostMapping("updatetemp")
+	public String updateTemp(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
+			MultipartFile[] files) throws Exception {
+		
+		//Json 형식으로 받아온 결재선, 참조선 데이터를 각 타입에 맞게 넣어준다
+		ObjectMapper mapper = new ObjectMapper();
+	    List<ApprovalLineVO> approverList = mapper.readValue(approversJson, new TypeReference<List<ApprovalLineVO>>() {});
+	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
+	    
+	    // 서비스 메서드 실행
+	    int result = documentService.updateTemp(documentVO, approverList, referrerList, files);
+		
+	    if(documentVO.getStatus().equals("임시저장")) {
+	    	return "redirect:./list/ontemporary";
+	    } else {
+	    	return "redirect:./list/online";
+	    }
 	}
 	
 
@@ -214,7 +241,7 @@ public class DocumentController {
 		return resultList;
 	}
 
-	//
+	// 미구현
 	public String getFileDetail(AttachmentVO attachmentVO, Model model) throws Exception {
 
 		attachmentVO = documentService.getFileDetail(attachmentVO);
