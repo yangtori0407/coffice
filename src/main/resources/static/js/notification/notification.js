@@ -2,6 +2,7 @@ const notificationArea = document.getElementById("notificationArea");
 const userIdNotification = getUserIdCookie("userId");
 //const chatAlert = document.getElementById("chatAlert");
 const notificationModal = document.getElementById("notificationModal");
+const totalArea = document.getElementById("totalArea");
 
 function getUserIdCookie(name) {
     return document.cookie
@@ -10,11 +11,13 @@ function getUserIdCookie(name) {
         ?.split("=")[1] ?? null;
 }
 
+//페이지가 로드될 때마다 알림을 미리 가지고 와서 뿌리기
 window.addEventListener("load", ()=>{
     fetch("/notification/getNotification")
     .then(r => r.json())
     .then(r => {
-        for(j of r){
+        totalArea.innerText = r.total;
+        for(j of r.list){
             notificationArea.append(createAlert(j, 0));
         }
     })
@@ -42,6 +45,7 @@ stompClientNotification.connect({}, function (frame) {
         console.log(msg);
         // msg.notiContents = "공지사항 " + msg.notiContents;
         notificationArea.prepend(createAlert(msg, 0));
+        totalArea.innerText = Number(totalArea.innerText) + 1;
         notificationArea.lastElementChild.remove();
     })
     //채팅방 알림

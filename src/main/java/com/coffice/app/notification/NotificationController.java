@@ -1,7 +1,7 @@
 package com.coffice.app.notification;
 
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -41,7 +41,7 @@ public class NotificationController {
 	
 	@GetMapping("getNotification")
 	@ResponseBody
-	public List<NotificationVO> getAlert(Authentication authentication) throws Exception{
+	public Map<String, Object> getNotification(Authentication authentication) throws Exception{
 		String userId = authentication.getName();
 		return notificationService.getNotification(userId);
 	}

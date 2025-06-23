@@ -49,9 +49,14 @@ public class NotificationService {
 		template.convertAndSend("/sub/notice", notificationVO);
 	}
 
-	public List<NotificationVO> getNotification(String userId) throws Exception{
-		return notificationDAO.getNotification(userId);
+	public Map<String, Object> getNotification(String userId) throws Exception{
+		Map<String, Object> result = new HashMap<>();
+		int total = notificationDAO.getNonReadNotification(userId);
+		List<NotificationVO> list = notificationDAO.getNotification(userId);
+		result.put("total", total);
+		result.put("list", list);
 		
+		return result;
 	}
 
 	public int updateNotiStatus(Long notiNum, String name) throws Exception{

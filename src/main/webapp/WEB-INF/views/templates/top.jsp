@@ -53,7 +53,7 @@
 				role="button" data-toggle="dropdown" aria-haspopup="true"
 				aria-expanded="false"> <ion-icon name="notifications-outline"></ion-icon>
 					<!-- Counter - Alerts --> <span
-					class="badge badge-danger badge-counter">3+</span>
+					class="badge badge-danger badge-counter" id="totalArea"></span>
 			</a> <!-- Dropdown - Alerts -->
 				<div
 					class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
