@@ -41,7 +41,8 @@ stompClientNotification.connect({}, function (frame) {
         const msg = JSON.parse(message.body); //서버에서 json으로 보낸걸 json 객체로 받음
         console.log(msg);
         // msg.notiContents = "공지사항 " + msg.notiContents;
-        notificationArea.append(createAlert(msg, 0));
+        notificationArea.prepend(createAlert(msg, 0));
+        notificationArea.lastElementChild.remove();
     })
     //채팅방 알림
     stompClientNotification.subscribe(`/sub/chat/user.${userIdNotification}`, function (message) {
