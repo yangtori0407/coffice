@@ -78,15 +78,20 @@ public class BranchController {
 	}
 	
 	@GetMapping("add")
-	public void add(Model model) throws Exception {
-		model.addAttribute("kind", "지점 > 지점추가");
+	public void add(Model model,  @ModelAttribute BranchVO branchVO) throws Exception {
+		model.addAttribute("kind", "지점 > 지점등록");
 		model.addAttribute("branch", "add");
 	}
 	
 	@PostMapping("add")
-	public String add(BranchVO branchVO, RedirectAttributes redirectAttributes) throws Exception {
-		int result = branchService.add(branchVO);
+	public String add(@Validated(RegisterGroup.class) @ModelAttribute BranchVO branchVO,
+						BindingResult bindingResult,
+						RedirectAttributes redirectAttributes) throws Exception {
+		if(branchService.branchNameCheck(branchVO, bindingResult)) {
+			return "branch/add";
+		}
 		
+		int result = branchService.add(branchVO);
 		
 		if(result > 0) {
 			redirectAttributes.addFlashAttribute("msg", "지점등록이 완료되었습니다!");

@@ -39,6 +39,9 @@
   		USING(USER_ID)
   	</select>
   	
+  	<select id="branchName" resultType="BranchVO" parameterType="BranchVO">
+  		SELECT * FROM BRANCH WHERE BRANCH_NAME =#{branchName}
+  	</select>
   	
   	<select id="notAddBranchList" resultType="BranchVO">
   		SELECT * FROM BRANCH WHERE USER_ID IS NULL

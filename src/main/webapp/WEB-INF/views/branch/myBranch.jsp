@@ -31,7 +31,7 @@
 								${l.branchName}(${l.branchAddress})매출:
 							</c:if>
 						</c:forEach>	
-							${total}	
+							₩${total}	
 					</div>
 					<button class="btn btn-light shadow-sm rounded-circle" 
 							type="button" data-toggle="collapse" data-target="#sideMenu" 
@@ -54,7 +54,7 @@
 								<c:forEach items="${h.salesVO}" var="item">
 									<tr>
 										<td style="color:${item.salesType?'blue':'red'};">${item.salesType?"수입":"지출"}</td>
-										<td>${item.salesProfit}</td>
+										<td>₩${item.salesProfit}</td>
 										<td>${item.salesQuantity}</td>			
 										<td>${item.salesType ? item.menuVO.menuName:item.ingredientsVO.ingredientsName}</td>
 										<td>${item.salesDate}</td>

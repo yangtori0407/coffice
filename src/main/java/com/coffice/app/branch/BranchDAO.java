@@ -30,4 +30,5 @@ public interface BranchDAO {
 	public List<BranchMasterVO> notRegisterBranchMaster() throws Exception;
 	public List<SalesVO> getChartList(BranchVO branchVO) throws Exception;
 	public List<BranchVO> getTotalChart() throws Exception;
+	public BranchVO branchName(BranchVO branchVO) throws Exception;
 }

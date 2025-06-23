@@ -25,7 +25,7 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-					<div id="map" style="width:500px;height:400px;min-height: 50vh; margin: 0 auto">
+					<div id="map">
 					<div class="custom_zoomcontrol radius_border">
 						<span id="reloadMap">
 							<ion-icon name="refresh-outline"></ion-icon>
@@ -35,24 +35,24 @@
 					<div class="card-body">
 					<div class="input-group" style="margin:20px auto;width: 600px; display: flex; align-items: center;">
 						<div style="display: inline-block; padding: 10px 20px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-							총매출:${total}
+							총매출:₩${total}
 						</div>
 					</div>
 					<form method="get">
-					<div class="input-group" style="margin:20px auto;width: 600px;">
-							 <select name="kind" class="form-control col-3" id="exampleFormControlSelect1">
+					<div class="search-box">
+							 <select name="kind" id="exampleFormControlSelect1">
 								<option value="k1">지점이름</option>
 								<option value="k2">운영상태</option>
 								<option value="k3">주소</option>
 							  </select>
 											 
-								<input type="text" name="search" id="keyword" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
-								<div class="input-group-append">
-							<button class="btn btn-secondary" type="submit" id="button-addon2">찾기</button>
-						</div>
+								<input type="text" name="search" id="keyword" placeholder="검색어 입력">
+								
+							<button type="submit" id="button-addon2">찾기</button>
+						
 					</div>
 					</form>
-					<table class="table table-striped" style="margin:20px auto;width: 600px;">
+					<table class="table-custom">
 						<thead>
 							<tr>
 								<th>지점번호</th>
