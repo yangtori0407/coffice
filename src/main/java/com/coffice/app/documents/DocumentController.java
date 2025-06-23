@@ -206,6 +206,17 @@ public class DocumentController {
 	
 	
 	//
+	@PostMapping("updateonlystatus")
+	public String updateOnlyStatus(DocumentVO documentVO) throws Exception {
+		
+		int result = documentService.updateOnlyStatus(documentVO);
+		
+		
+		return "redirect:./list/ontemporary";
+	}
+	
+	
+	//
 	@PostMapping("updatetemp")
 	public String updateTemp(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
 			MultipartFile[] files) throws Exception {

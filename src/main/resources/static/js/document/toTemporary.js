@@ -122,3 +122,41 @@ input_referrers.value = JSON.stringify(referrerList);
 
 
 })
+
+
+
+//------------------------------------------------
+
+const btn_getBack = document.getElementById("btn_getBack");
+
+btn_getBack.addEventListener("click", function(){
+	
+	const documentId = btn_getBack.dataset.documentId;
+	
+	// form 요소 생성
+    const form = document.createElement("form");
+    form.method = "post";
+    form.action = "/document/updateonlystatus";
+
+    // hidden input 추가
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "documentId";
+    input.value = documentId;
+    form.appendChild(input);
+	
+	// body에 form 추가 후 submit
+    document.body.appendChild(form);
+    form.submit();
+	
+})
+
+
+
+
+
+
+
+
+
+

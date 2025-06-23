@@ -343,6 +343,15 @@
 		WHERE DOCUMENT_ID = #{documentId}
   	</update>
   	
+  	<update id="updateOnlyStatus" parameterType="DocumentVO">
+  		UPDATE DOCUMENTS
+  		
+  		SET
+  		STATUS = #{status}
+  		
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</update>
+  	
   	<delete id="deleteApprovalLine" parameterType="DocumentVO">
   		DELETE FROM APPROVAL_LINES
   		WHERE DOCUMENT_ID = #{documentId}

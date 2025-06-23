@@ -253,6 +253,16 @@ public class DocumentService {
 	
 	
 	//
+	public int updateOnlyStatus(DocumentVO documentVO) throws Exception {
+		
+		documentVO.setStatus("임시저장");
+		
+		return documentDAO.updateOnlyStatus(documentVO);
+	}
+	
+	
+	
+	//
 	public int updateTemp(DocumentVO documentVO, List<ApprovalLineVO> approverList, List<ReferenceLineVO> referrerList,
 			MultipartFile [] multipartFiles) throws Exception {
 		

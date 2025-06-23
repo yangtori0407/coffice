@@ -88,6 +88,7 @@ public interface DocumentDAO {
 	
 	public int deleteReferenceLine(DocumentVO documentVO) throws Exception;
 	
+	public int updateOnlyStatus(DocumentVO documentVO) throws Exception;
 	
 	// 개별 파일 다운로드 및 삭제 ----------------------------------
 	public AttachmentVO getFileDetail(AttachmentVO attachmentVO)throws Exception;

@@ -260,6 +260,12 @@
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 반려하기
             </a>
+            
+            <!-- 접속한 사람이 작성자 본인이고, 문서가 진행중이고, 스텝이 1이어야한다(미처리 상태) -->
+            <c:if test="${sessionScope.userVO.userId eq docuVO.writerId && docuVO.status eq '진행중' && docuVO.currentStep eq '1'}">
+            	<button id="btn_getBack" class="btn btn-outline-secondary me-2 mr-3" 
+            	data-document-id="${docuVO.documentId}">문서 회수</button>
+            </c:if>
 			<button id="btn_temporary" class="btn btn-outline-secondary me-2 mr-3">임시 저장</button>
 	        <button id="btn_complete" class="btn btn-outline-secondary me-2 mr-3">작성 완료</button>
 	        <button id="btn_cancle" class="btn btn-outline-secondary mr-3">나가기</button>
