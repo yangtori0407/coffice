@@ -235,33 +235,38 @@ function clickNotification(notiNum){
 
 //=====알림 더보기 눌렀을 때 내용 더 가지고 오는 로직
 
-const moreNotiBtn = document.getElementById("moreNotiBtn");
-const moreNotiModalBtn = document.getElementById("moreNotiModalBtn");
+const moreNotiBtn = document.querySelector("#moreNotiBtn");
+const moreNotiModalBtn = document.querySelector("#moreNotiModalBtn");
 
-moreNotiBtn.addEventListener("click", () => {
-   const lastNotiCheckNum = notificationArea.lastElementChild.getAttribute("data-check-num");
+if(moreNotiBtn){
+    moreNotiBtn.addEventListener("click", () => {
+       const lastNotiCheckNum = notificationArea.lastElementChild.getAttribute("data-check-num");
+    
+       fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
+       .then(r=>r.json())
+       .then(r => {
+        notificationModal.innerText = "";
+        for(j of r){
+            notificationModal.appendChild(createAlert(j, 1));
+        }
+       })
+    })
+}
 
-   fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
-   .then(r=>r.json())
-   .then(r => {
-    notificationModal.innerText = "";
-    for(j of r){
-        notificationModal.appendChild(createAlert(j, 1));
-    }
-   })
-})
+if(moreNotiModalBtn){
 
-moreNotiModalBtn.addEventListener("click", ()=>{
-    const lastNotiCheckNum = notificationModal.lastElementChild.getAttribute("data-check-num");
-
-    fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
-   .then(r=>r.json())
-   .then(r => {
-    if(r.length === 0){
-     alert("더 이상 불러올 알림이 없습니다.");
-    }
-    for(j of r){
-        notificationModal.appendChild(createAlert(j, 1));
-    }
-   })
-})
+    moreNotiModalBtn.addEventListener("click", ()=>{
+        const lastNotiCheckNum = notificationModal.lastElementChild.getAttribute("data-check-num");
+    
+        fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
+       .then(r=>r.json())
+       .then(r => {
+        if(r.length === 0){
+         alert("더 이상 불러올 알림이 없습니다.");
+        }
+        for(j of r){
+            notificationModal.appendChild(createAlert(j, 1));
+        }
+       })
+    })
+}
