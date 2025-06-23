@@ -308,7 +308,13 @@
 							</button>
 						</div>
 						<div class="modal-body" style="height: 500px;">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="chooseOne">detail</button>
+							<div style="min-height: 250px; overflow: auto;" id="applyList">
+								
+							</div>
+							<hr>
+							<div style="min-height: 200px; overflow: auto;" id="acceptList">
+
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>

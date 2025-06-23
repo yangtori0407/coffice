@@ -1,7 +1,5 @@
 const kind = document.getElementById("kind")
 let flag = true;
-let cookie = document.cookie
-let userId = cookie.substring(cookie.indexOf("=")+1)
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -10,16 +8,11 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     customButtons: {
         addButton: {
             text: '휴가 신청',
-            click:  function() {
-                $("#exampleModal").modal("show")
-                
-            }
+            click: apply
         },
         listButton: {
             text: '신청 목록',
-            click: function() {
-                $("#listModal").modal("show")
-            }
+            click: accept
         }
     },
     nowIndicator: true,
@@ -39,53 +32,18 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     },
     dateClick: function(e) {
         sDate.value = e.dateStr
-        show()
+        apply()
     },
     eventClick: function(e) {
         console.log(e.event)
-    },
-    eventDrop: function(e) {
-        console.log("EventDrop", e.event.start)
-        let t = new Date(e.event.start)
-        console.log(t.getHours())
-    },
-    eventResize: function(e) {
-        console.log("EventResize", e.event.start)
-        let t = new Date(e.event.start)
-        console.log(t.getHours())
     }
 });
 
-const send = document.getElementById("send")
-send.addEventListener("click", ()=>{
-    let vType = document.getElementById("vType")
-    let sDate = document.getElementById("sDate")
-    let sTime = document.getElementById("sTime")
-    let eDate = document.getElementById("eDate")
-    let eTime = document.getElementById("eTime")
-    let accept = document.getElementById("accept")
-    
-    let params = new FormData
-    params.append("userId", userId)
-    params.append("type", vType.value)
-    params.append("startTime", sDate.value+sTime.value)
-    params.append("endTime", eDate.value+eTime.value)
-    params.append("approvalAuthority", accept.value)
-    
-    fetch("http://localhost/events/vacation/apply", {
-        method: "post",
-        body: params
-    })
-    .then(r=>r.text)
-    .then(r=>{
-        console.log(r)
-    })
-})
 
-const chooseOne = document.getElementById("chooseOne")
-chooseOne.addEventListener("click", ()=>{
-    $("#vacationDetailModal").modal("show")
-})
+// const chooseOne = document.getElementById("chooseOne")
+// chooseOne.addEventListener("click", ()=>{
+//     $("#vacationDetailModal").modal("show")
+// })
 
 const undo = document.getElementById("undo")
 undo.addEventListener("click", ()=>{
@@ -107,26 +65,53 @@ fetch("http://localhost/events/getHolidays")
     }
 })
 
-fetch("http://localhost/events/getDepsUsers", {
-    method: "post",
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        "userId" : userId
+
+function apply() {
+    
+    fetch("http://localhost/events/getDepsUsers")
+    .then(r=>r.json())
+    .then(r=>{
+        let accept = document.getElementById("accept")
+        for(a of r) {
+            let opt = document.createElement("option")
+            opt.value = a.userId
+            opt.innerText = a.position + " " + a.name
+            accept.appendChild(opt)
+        }
     })
-})
-.then(r=>r.json())
-.then(r=>{
-    console.log(r)
-    let accept = document.getElementById("accept")
-    for(a of r) {
-        let opt = document.createElement("option")
-        opt.value = a.userId
-        opt.innerText = a.position + " " + a.name
-        accept.appendChild(opt)
-    }
-})
+    
+    const send = document.getElementById("send")
+    send.addEventListener("click", ()=>{
+        let vType = document.getElementById("vType")
+        let sDate = document.getElementById("sDate")
+        let sTime = document.getElementById("sTime")
+        let eDate = document.getElementById("eDate")
+        let eTime = document.getElementById("eTime")
+        let accept = document.getElementById("accept")
+        
+        let params = new FormData
+        params.append("userId", userId)
+        params.append("type", vType.value)
+        params.append("startTime", sDate.value+sTime.value)
+        params.append("endTime", eDate.value+eTime.value)
+        params.append("approvalAuthority", accept.value)
+        
+        fetch("http://localhost/events/vacation/apply", {
+            method: "post",
+            body: params
+        })
+        .then(r=>r.text)
+        .then(r=>{
+            console.log(r)
+        })
+    })
+
+    $("#exampleModal").modal("show")
+}
+
+function accept() {
+    $("#listModal").modal("show")
+}
 
 calendar.render();
 

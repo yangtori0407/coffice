@@ -3,6 +3,7 @@ package com.coffice.app.events;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,7 +63,7 @@ public class EventController {
 	}
 	
 	@GetMapping("vacation")
-	public String vacation(Model model) {
+	public String vacation(Model model) throws Exception {
 		model.addAttribute("kind", "휴가");
 		model.addAttribute("events", "vacation");
 		return "events/schedule";
@@ -70,17 +71,19 @@ public class EventController {
 	
 	
 	@PostMapping("schedule/add")
-	public String addSchedule(ScheduleVO scheduleVO) throws Exception {
-		scheduleVO.setUserId("scheduleTest");
+	public String addSchedule(ScheduleVO scheduleVO, Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		scheduleVO.setUserId(userVO.getUserId());
 		int result =  scheduleService.addSchedule(scheduleVO);			
 		log.info("{}, {}", result, scheduleVO);
 		return "events/schedule";
 	}
 	
 	@PostMapping("schedule/update")
-	public String updateSchedule(@ModelAttribute ScheduleVO scheduleVO) throws Exception {
-		scheduleVO.setEditor("scheduleTest");
-		scheduleVO.setUserId("scheduleTest");
+	public String updateSchedule(@ModelAttribute ScheduleVO scheduleVO, Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		scheduleVO.setEditor(userVO.getUserId());
+		scheduleVO.setUserId(userVO.getUserId());
 		int result = scheduleService.updateSchedule(scheduleVO);
 		log.info("{}, {}", result, scheduleVO);
 //		log.info("{}", scheduleVO.getExceptions().get(0));
@@ -102,10 +105,10 @@ public class EventController {
 		return holidayService.getHolidays();
 	}
 	
-	@PostMapping("getDepsUsers")
+	@GetMapping("getDepsUsers")
 	@ResponseBody
-	public List<UserVO> getDepsUsers(@RequestBody UserVO userVO) throws Exception {
-		log.info("{}", userVO.getUserId());
+	public List<UserVO> getDepsUsers(Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
 		return vacationService.getDepsUsers(userVO);
 	}
 	

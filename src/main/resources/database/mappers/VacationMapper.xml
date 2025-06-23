@@ -9,8 +9,8 @@
   			select USER_ID, NAME, POSITION, DEPT_ID
   			from USERS
   			where DEPT_ID = (select DEPT_ID
-  								from USERS
-  								where USER_ID = #{userId}
+							 from USERS
+							 where USER_ID = #{userId}
   							)
   			and USER_ID != #{userId}
   	</select>
@@ -19,5 +19,22 @@
   			insert into VACATION (START_TIME, END_TIME, USER_ID, INSERT_TIME, EDITOR, EDIT_TIME, TYPE, APPROVAL_AUTHORITY)
   			values (#{startTime}, #{endTime}, #{userId}, now(), #{editor}, now(), #{type}, #{approvalAuthority})
   	</insert>
+  	
+  	<select id="getApplyList" parameterType="UserVO" resultType="VacationVO">
+  			select VACATION_ID, START_TIME, END_TIME, STATUS, USER_ID, TYPE, APPROVAL_AUTHORITY
+			from VACATION
+			where DELETE_STATUS = 0
+			and USER_ID = #{userId}
+			order by INSERT_TIME DESC
+  	</select>
+  	
+  	<select id="getAcceptList" parameterType="UserVO" resultType="VacationVO">
+  			select VACATION_ID, START_TIME, END_TIME, STATUS, USER_ID, TYPE, APPROVAL_AUTHORITY
+			from VACATION
+			where DELETE_STATUS = 0
+			and APPROVAL_AUTHORITY = #{userId}
+			and STATUS = 0
+			ORDER by INSERT_TIME DESC
+  	</select>
   	
   </mapper>

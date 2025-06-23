@@ -20,5 +20,13 @@ public class VacationService {
 	public int applyForLeave(VacationVO vacationVO) throws Exception {
 		return vacationDAO.applyForLeave(vacationVO);
 	}
+	
+	public List<VacationVO> getApplyList(UserVO userVO) throws Exception {
+		return vacationDAO.getApplyList(userVO);
+	}
+	
+	public List<VacationVO> getAcceptList(UserVO userVO) throws Exception {
+		return vacationDAO.getAcceptList(userVO);
+	}
 
 }
