@@ -37,4 +37,11 @@
 			ORDER by INSERT_TIME DESC
   	</select>
   	
+  	<select id="getOne" parameterType="VacationVO" resultType="VacationVO">
+  			select VACATION_ID, START_TIME, END_TIME, STATUS, USER_ID, TYPE, APPROVAL_AUTHORITY
+			from VACATION
+			where DELETE_STATUS = 0
+			and VACATION_ID = #{vacationId}
+  	</select>
+  	
   </mapper>

@@ -28,5 +28,9 @@ public class VacationService {
 	public List<VacationVO> getAcceptList(UserVO userVO) throws Exception {
 		return vacationDAO.getAcceptList(userVO);
 	}
+	
+	public VacationVO getOne(VacationVO vacationVO) throws Exception {
+		return vacationDAO.getOne(vacationVO);
+	}
 
 }

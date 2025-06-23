@@ -90,7 +90,6 @@ function apply() {
         let accept = document.getElementById("accept")
         
         let params = new FormData
-        params.append("userId", userId)
         params.append("type", vType.value)
         params.append("startTime", sDate.value+sTime.value)
         params.append("endTime", eDate.value+eTime.value)
@@ -102,7 +101,8 @@ function apply() {
         })
         .then(r=>r.text)
         .then(r=>{
-            console.log(r)
+            // console.log(r)
+            location.reload()
         })
     })
 
@@ -110,6 +110,100 @@ function apply() {
 }
 
 function accept() {
+
+    let applyList = document.getElementById("applyList")
+    let acceptList = document.getElementById("acceptList")
+    applyList.innerText = ""
+    acceptList.innerText = ""
+
+    fetch("http://localhost/events/vacation/applyList")
+    .then(r=>r.json())
+    .then(r=>{
+        console.log(r)
+        let ul = document.createElement("ul")
+        ul.classList.add("list-group")
+        for( a of r ) {
+            let stat;
+            if(a.status) {
+                stat = "승인 대기 \t <ion-icon name='ellipse' style='color:yellow;'></ion-icon>"
+            }else {
+                stat = "승인 완료 \t <ion-icon name='radio-button-on-outline' style='color:green;'></ion-icon>"
+            }
+            let li = document.createElement("li")
+            li.classList.add("list-group-item")
+            li.setAttribute("data-vacid", a.vacationId)
+            let row = document.createElement("div")
+            row.classList.add("row")
+            let div = document.createElement("div")
+            let div2 = document.createElement("div")
+            let div3 = document.createElement("div")
+            div.classList.add("col-6")
+            div2.classList.add("col-3")
+            div3.classList.add("col-3")
+            div.innerText = a.startTime.slice(2, 10) + " " + a.startTime.slice(11, 16)
+                            + " ~ " + a.endTime.slice(2, 10) + " " + a.endTime.slice(11, 16)
+            div2.innerText = "승인자 : " + a.approvalAuthority
+            div3.innerHTML = stat
+            li.appendChild(row)
+            row.appendChild(div)
+            row.appendChild(div2)
+            row.appendChild(div3)
+            li.addEventListener("click", ()=>{
+                fetch(`http://localhost/events/vacation/getOne?vacationId=${li.dataset.vacid}`)
+                .then(r=>r.json())
+                .then(r=>{
+                    console.log(r)
+                })
+                $("#listModal").modal("hide")
+                $("#vacationDetailModal").modal("show")
+            })
+            ul.appendChild(li)
+        }
+        applyList.appendChild(ul)
+
+    })
+
+    fetch("http://localhost/events/vacation/acceptList")
+    .then(r=>r.json())
+    .then(r=>{
+        console.log(r)
+        let ul = document.createElement("ul")
+        ul.classList.add("list-group")
+        for( a of r ) {
+            let stat;
+            if(a.status) {
+                stat = "승인 대기 \t <ion-icon name='ellipse' style='color:yellow;'></ion-icon>"
+            }else {
+                stat = "승인 완료 \t <ion-icon name='radio-button-on-outline' style='color:green;'></ion-icon>"
+            }
+            let li = document.createElement("li")
+            li.classList.add("list-group-item")
+            li.setAttribute("data-vac-id", a.vacationId)
+            let row = document.createElement("div")
+            row.classList.add("row")
+            let div = document.createElement("div")
+            let div2 = document.createElement("div")
+            let div3 = document.createElement("div")
+            div.classList.add("col-6")
+            div2.classList.add("col-3")
+            div3.classList.add("col-3")
+            div.innerText = a.startTime.slice(2, 10) + " " + a.startTime.slice(11, 16)
+                            + " ~ " + a.endTime.slice(2, 10) + " " + a.endTime.slice(11, 16)
+            div2.innerText = "신청자 : " + a.userId
+            div3.innerHTML = stat
+            li.appendChild(row)
+            row.appendChild(div)
+            row.appendChild(div2)
+            row.appendChild(div3)
+            li.addEventListener("click", ()=>{
+                $("#listModal").modal("hide")
+                $("#vacationDetailModal").modal("show")
+            })
+            ul.appendChild(li)
+        }
+        acceptList.appendChild(ul)
+    })
+
     $("#listModal").modal("show")
 }
 

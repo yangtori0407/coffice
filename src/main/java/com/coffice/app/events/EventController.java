@@ -113,9 +113,31 @@ public class EventController {
 	}
 	
 	@PostMapping("vacation/apply")
-	public String applyForLeave(VacationVO vacationVO) throws Exception {
+	public String applyForLeave(VacationVO vacationVO, Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setUserId(userVO.getUserId());
 		vacationService.applyForLeave(vacationVO);
 		return "events/vacation";
+	}
+	
+	@GetMapping("vacation/applyList")
+	@ResponseBody
+	public List<VacationVO> getApplyList(Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		return vacationService.getApplyList(userVO);
+	}
+	
+	@GetMapping("vacation/acceptList")
+	@ResponseBody
+	public List<VacationVO> getAcceptList(Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		return vacationService.getAcceptList(userVO);
+	}
+	
+	@GetMapping("vacation/getOne")
+	@ResponseBody
+	public VacationVO getOne(VacationVO vacationVO) throws Exception {
+		return vacationService.getOne(vacationVO);
 	}
 
 }
