@@ -81,6 +81,8 @@ public interface DocumentDAO {
 
 	
 	// 임시문서 업데이트 ----------------------------------
+	public int deleteTemp(DocumentVO documentVO) throws Exception;
+	
 	public int updateTemp(DocumentVO documentVO) throws Exception;
 	
 	public int deleteApprovalLine(DocumentVO documentVO) throws Exception;

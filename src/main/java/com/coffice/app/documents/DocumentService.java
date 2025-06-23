@@ -253,6 +253,13 @@ public class DocumentService {
 	
 	
 	//
+	public int deleteTemp(DocumentVO documentVO) throws Exception {
+		
+		return documentDAO.deleteTemp(documentVO);
+	}
+	
+	
+	//
 	public int updateOnlyStatus(DocumentVO documentVO) throws Exception {
 		
 		documentVO.setStatus("임시저장");

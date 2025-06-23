@@ -266,6 +266,10 @@
             	<button id="btn_getBack" class="btn btn-outline-secondary me-2 mr-3" 
             	data-document-id="${docuVO.documentId}">문서 회수</button>
             </c:if>
+            <c:if test="${docuVO.status eq '임시저장' }">
+            	<button id="btn_deletetemp" class="btn btn-outline-secondary me-2 mr-3"
+            	data-document-id="${docuVO.documentId}">작성 취소</button>
+            </c:if>
 			<button id="btn_temporary" class="btn btn-outline-secondary me-2 mr-3">임시 저장</button>
 	        <button id="btn_complete" class="btn btn-outline-secondary me-2 mr-3">작성 완료</button>
 	        <button id="btn_cancle" class="btn btn-outline-secondary mr-3">나가기</button>

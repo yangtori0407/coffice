@@ -206,6 +206,16 @@ public class DocumentController {
 	
 	
 	//
+	@PostMapping("deletetemp")
+	public String deleteTemp(DocumentVO documentVO) throws Exception {
+		
+		int result = documentService.deleteTemp(documentVO);
+		
+		return "redirect:./list/ontemporary";
+	}
+	
+	
+	//
 	@PostMapping("updateonlystatus")
 	public String updateOnlyStatus(DocumentVO documentVO) throws Exception {
 		
