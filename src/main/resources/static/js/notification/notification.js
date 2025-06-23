@@ -12,15 +12,15 @@ function getUserIdCookie(name) {
 }
 
 //페이지가 로드될 때마다 알림을 미리 가지고 와서 뿌리기
-window.addEventListener("load", ()=>{
+window.addEventListener("load", () => {
     fetch("/notification/getNotification")
-    .then(r => r.json())
-    .then(r => {
-        totalArea.innerText = r.total;
-        for(j of r.list){
-            notificationArea.append(createAlert(j, 0));
-        }
-    })
+        .then(r => r.json())
+        .then(r => {
+            totalArea.innerText = r.total;
+            for (j of r.list) {
+                notificationArea.append(createAlert(j, 0));
+            }
+        })
 })
 
 const socketNotification = new SockJS("/ws-stomp");
@@ -47,33 +47,37 @@ stompClientNotification.connect({}, function (frame) {
         notificationArea.prepend(createAlert(msg, 0));
         totalArea.innerText = Number(totalArea.innerText) + 1;
         notificationArea.lastElementChild.remove();
+        showAlarmTooltip();
+        //createToast(msg);
     })
     //채팅방 알림
     stompClientNotification.subscribe(`/sub/chat/user.${userIdNotification}`, function (message) {
         const msg = JSON.parse(message.body);
         const chatInfo = document.querySelector("#chatInfo");
         //만약 채팅 번호가 존재한다면
-        if(chatInfo){
+        if (chatInfo) {
             //그리고 그 채팅번호가 지금 알림 받은 방 번호랑 같다면 알림을 띄우지 않음
-            if(chatInfo.getAttribute("data-chat-num") == msg.chatContentsVO.chatRoomNum){
+            if (chatInfo.getAttribute("data-chat-num") == msg.chatContentsVO.chatRoomNum) {
                 return;
             }
         }
         const chatAmount = document.querySelector("#chatAmount");
-        if(chatAmount){
+        if (chatAmount) {
             let chatAmountNum = Number(chatAmount.innerText);
             chatAmountNum++;
             chatAmount.innerText = chatAmountNum;
         }
         console.log(msg);
-        createToast(msg);
+        createChatToast(msg);
     })
-
-    stompClientNotification.subscribe(`/sub/board/user.${userIdNotification}`, function(message){
+    //댓글
+    stompClientNotification.subscribe(`/sub/board/user.${userIdNotification}`, function (message) {
         const msg = JSON.parse(message.body);
         notificationArea.prepend(createAlert(msg, 2));
         totalArea.innerText = Number(totalArea.innerText) + 1;
         notificationArea.lastElementChild.remove();
+        showAlarmTooltip();
+        createToast(msg);
     })
 
 }, function (error) {
@@ -84,15 +88,15 @@ stompClientNotification.connect({}, function (frame) {
 function createAlert(msg, num) {
 
     const a = document.createElement("a");
-    
+
     //알림 더보기 모달
-    if(num == 1){
+    if (num == 1) {
         a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification", "modalCss");
-    }else{ //알림창
+    } else { //알림창
         a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification");
     }
 
-    if(msg.notiCheckStatus == 0){
+    if (msg.notiCheckStatus == 0) {
         a.classList.add("nonRead");
         a.style.backgroundColor = "lightgoldenrodyellow";
         // a.style.color = "gray"
@@ -100,9 +104,9 @@ function createAlert(msg, num) {
 
     if (msg.notiKind == "NOTICE") {
         a.href = `/notice/detail?noticeNum=${msg.relateId}`
-    }else if(msg.notiKind == "BOARD"){
+    } else if (msg.notiKind == "BOARD") {
         a.href = `/board/detail?boardNum=${msg.relateId}`
-    }else {
+    } else {
         a.href = "#";
     }
     a.setAttribute("data-check-num", msg.notiCheckNum);
@@ -112,18 +116,18 @@ function createAlert(msg, num) {
     iconWrapper.classList.add("mr-3");
 
     const iconCircle = document.createElement("div");
-    if(msg.notiKind == "NOTICE"){
+    if (msg.notiKind == "NOTICE") {
 
         iconCircle.classList.add("icon-circle", "bg-info");
-    }else if(msg.notiKind == "BOARD"){
+    } else if (msg.notiKind == "BOARD") {
         iconCircle.classList.add("icon-circle", "bg-success");
     }
 
     const icon = document.createElement("ion-icon");
     icon.setAttribute("size", "large");
-    if(msg.notiKind == "NOTICE"){
+    if (msg.notiKind == "NOTICE") {
         icon.setAttribute("name", "information-circle-outline");
-    } else if(msg.notiKind == "BOARD"){
+    } else if (msg.notiKind == "BOARD") {
         icon.setAttribute("name", "return-down-forward-outline");
     }
 
@@ -139,18 +143,18 @@ function createAlert(msg, num) {
 
     const kindDiv = document.createElement("div");
     kindDiv.classList.add("small", "font-weight-bold")
-    if(msg.notiKind == "NOTICE"){
+    if (msg.notiKind == "NOTICE") {
         kindDiv.innerText = "[공지사항]"
-    } else if(msg.notiKind == "BOARD"){
+    } else if (msg.notiKind == "BOARD") {
         kindDiv.innerText = `[${msg.notiContents}]`
     }
 
     const contentSpan = document.createElement("span");
     contentSpan.classList.add("font-weight-bold");
     //익명게시판 댓글
-    if(num == 2){
+    if (num == 2) {
         contentSpan.innerText = "댓글이 달렸습니다."
-    } else{
+    } else {
         contentSpan.innerText = msg.notiContents;
 
     }
@@ -163,13 +167,13 @@ function createAlert(msg, num) {
     a.appendChild(iconWrapper);
     a.appendChild(textWrapper);
 
-    a.addEventListener("click", ()=>{
+    a.addEventListener("click", () => {
         console.log("!!!!a태그!!!!")
         clickNotification(msg.notiNum);
     })
 
     return a;
-    notificationArea.append(a);
+    
 }
 
 
@@ -188,9 +192,8 @@ function formatDate(r) {
     return `${yy}-${mm}-${dd} ${hh}:${min}`
 }
 
-//chatStomp에서도 같이 수정하기
-function createToast(msg) {
-    const container = document.getElementById("chatAlert");
+function createChatToast(msg) {
+    const container = document.getElementById("ToastAlert");
 
     const toast = document.createElement("div");
     toast.className = "toast fade show"; // Bootstrap 스타일 수동 적용
@@ -206,7 +209,7 @@ function createToast(msg) {
 
     toast.innerHTML = `
         <div class="toast-header d-flex align-items-center">
-    <ion-icon name="chatbubble-ellipses-outline" class="mr-2"></ion-icon>
+    <div style="width: 13px;height: 13px;background-color: blue;border-radius: 3px;margin-right: 4px;"></div>
     <strong class="mr-auto">${msg.chatRoomName}</strong>
     <small class="text-muted">${msg.chatContentsVO.formatted}</small>
     <button type="button" class="ml-2 mb-1 close" aria-label="Close">
@@ -234,7 +237,7 @@ function createToast(msg) {
     toast.querySelector(".close").addEventListener("click", () => {
         toast.remove();
     });
-    
+
     //container.innerHTML = "";
     container.appendChild(toast);
 
@@ -245,9 +248,112 @@ function createToast(msg) {
     }, 1500);
 }
 
+function createToast(msg) {
+    const container = document.getElementById("ToastAlert");
+
+    const toast = document.createElement("div");
+    toast.className = "toast fade show";
+    toast.setAttribute("role", "alert");
+    toast.setAttribute("aria-live", "assertive");
+    toast.setAttribute("aria-atomic", "true");
+    toast.style.minWidth = "250px";
+    toast.style.marginBottom = "10px";
+    toast.style.backgroundColor = "#fff";
+    toast.style.boxShadow = "0 0 10px rgba(0,0,0,0.1)";
+    toast.style.borderRadius = "5px";
+    toast.style.border = "1px solid #ccc";
+
+    // ===== HEADER =====
+    const header = document.createElement("div");
+    header.classList.add("toast-header", "d-flex", "align-items-center");
+
+    const div = document.createElement("div");
+    div.style.width = "13px";
+    div.style.height = "13px";
+    div.style.backgroundColor = "red";
+    div.style.marginRight = "4px"
+    div.style.borderRadius = "3px";
+
+    const icon = document.createElement("ion-icon");
+
+    if (msg.notiKind == "NOTICE") {
+        icon.setAttribute("name", "information-circle-outline");
+    } else if (msg.notiKind == "BOARD") {
+        icon.setAttribute("name", "return-down-forward-outline");
+    }
+    icon.classList.add("mr-2");
+
+    const roomName = document.createElement("strong");
+    roomName.classList.add("mr-auto");
+    if (msg.notiKind == "NOTICE") {
+        roomName.textContent = "[공지사항]"
+    } else if (msg.notiKind == "BOARD") {
+        roomName.textContent = `[${msg.notiContents}]`
+    }
+
+    const closeBtn = document.createElement("button");
+    closeBtn.setAttribute("type", "button");
+    closeBtn.classList.add("ml-2", "mb-1", "close");
+    closeBtn.setAttribute("aria-label", "Close");
+
+    const closeIcon = document.createElement("span");
+    closeIcon.setAttribute("aria-hidden", "true");
+    closeIcon.innerHTML = "&times;";
+    closeBtn.appendChild(closeIcon);
+
+    header.appendChild(div);
+    //header.appendChild(icon);
+    header.appendChild(roomName);
+    header.appendChild(closeBtn);
+
+    // ===== BODY =====
+    const body = document.createElement("div");
+    body.classList.add("toast-body", "p-2");
+
+    const bodyInner = document.createElement("div");
+    bodyInner.classList.add("d-flex", "flex-column");
+
+    const content = document.createElement("div");
+    content.classList.add("chat-preview");
+
+    if(msg.notiKind == "NOTICE"){
+
+        content.textContent = msg.notiContents;
+    }else if(msg.notiKind == "BOARD"){
+        content.textContent = "댓글이 달렸습니다."
+    }
+    bodyInner.appendChild(content);
+    body.appendChild(bodyInner);
+
+    // ===== 이벤트 및 조립 =====
+    toast.appendChild(header);
+    toast.appendChild(body);
+
+    toast.addEventListener("click", () => {
+        if (msg.notiKind == "NOTICE") {
+
+            location.href = `/notice/detail?noticeNum=${msg.relateId}`;
+        } else if (msg.notiKind == "BOARD") {
+            location.href = `/board/detail?boardNum=${msg.relateId}`;
+        }
+    });
+
+    closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // 링크로 가는 기본 동작 막기
+        toast.remove();
+    });
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add("hide");
+        setTimeout(() => toast.remove(), 1000);
+    }, 3000);
+}
+
 //============알람 클릭했을 때 status 값 변경하는 로직
 
-function clickNotification(notiNum){
+function clickNotification(notiNum) {
     const p = new URLSearchParams();
     p.append("notiNum", notiNum);
 
@@ -264,44 +370,44 @@ function clickNotification(notiNum){
 const moreNotiBtn = document.querySelector("#moreNotiBtn");
 const moreNotiModalBtn = document.querySelector("#moreNotiModalBtn");
 
-if(moreNotiBtn){
+if (moreNotiBtn) {
     moreNotiBtn.addEventListener("click", () => {
-       const lastNotiCheckNum = notificationArea.lastElementChild.getAttribute("data-check-num");
-    
-       fetch(`/notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
-       .then(r=>r.json())
-       .then(r => {
-        notificationModal.innerText = "";
-        for(j of r){
-            notificationModal.appendChild(createAlert(j, 1));
-        }
-       })
-    })
-}
+        const lastNotiCheckNum = notificationArea.lastElementChild.getAttribute("data-check-num");
 
-if(moreNotiModalBtn){
-
-    moreNotiModalBtn.addEventListener("click", ()=>{
-        const lastNotiCheckNum = notificationModal.lastElementChild.getAttribute("data-check-num");
-    
         fetch(`/notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
-       .then(r=>r.json())
-       .then(r => {
-        if(r.length === 0){
-         alert("더 이상 불러올 알림이 없습니다.");
-        }
-        for(j of r){
-            notificationModal.appendChild(createAlert(j, 1));
-        }
-       })
+            .then(r => r.json())
+            .then(r => {
+                notificationModal.innerText = "";
+                for (j of r) {
+                    notificationModal.appendChild(createAlert(j, 1));
+                }
+            })
     })
 }
 
-//=========익명게시판 댓글
-// const notiComBtn = document.querySelector("comBtn");
-// const notiBoard = document.getElementById("board");
-// const notiBoardNum = board.getAttribute("data-board-num");
+if (moreNotiModalBtn) {
 
-// if(notiComBtn){
+    moreNotiModalBtn.addEventListener("click", () => {
+        const lastNotiCheckNum = notificationModal.lastElementChild.getAttribute("data-check-num");
 
-// }
+        fetch(`/notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
+            .then(r => r.json())
+            .then(r => {
+                if (r.length === 0) {
+                    alert("더 이상 불러올 알림이 없습니다.");
+                }
+                for (j of r) {
+                    notificationModal.appendChild(createAlert(j, 1));
+                }
+            })
+    })
+}
+
+function showAlarmTooltip() {
+    const tooltip = document.getElementById("alarmTooltip");
+    tooltip.classList.add("show");
+
+    setTimeout(() => {
+        tooltip.classList.remove("show");
+    }, 5000); // 3초 후 숨김
+}

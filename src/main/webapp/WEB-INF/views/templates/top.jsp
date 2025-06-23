@@ -47,14 +47,14 @@
 		<sec:authorize access="isAuthenticated()">
 			<sec:authentication property="principal" var="user" />
 
-
-			<li class="nav-item dropdown no-arrow mx-1" id="alert"><a
+			<li class="nav-item dropdown no-arrow mx-1 position-relative" id="alert"><a
 				class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"
 				aria-expanded="false"> <ion-icon name="notifications-outline"></ion-icon>
 					<!-- Counter - Alerts --> <span
 					class="badge badge-danger badge-counter" id="totalArea"></span>
 			</a> <!-- Dropdown - Alerts -->
+				<div id="alarmTooltip" class="alarm-tooltip">🔔 알림!</div>
 				<div
 					class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
 					aria-labelledby="alertsDropdown">
@@ -94,7 +94,7 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body p-0" id="notificationModal" >
+					<div class="modal-body p-0" id="notificationModal">
 						<!-- <a class="d-flex align-items-center" id="" href="#">
 							<div class="mr-3">
 								<div class="icon-circle bg-info">
@@ -108,7 +108,9 @@
 							</div>
 						</a> -->
 					</div>
-						<button type="button" id="moreNotiModalBtn" class="dropdown-item text-center small text-gray-500">알림 더보기</button>
+					<button type="button" id="moreNotiModalBtn"
+						class="dropdown-item text-center small text-gray-500">알림
+						더보기</button>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal">닫기</button>
@@ -118,9 +120,10 @@
 		</div>
 
 		<!-- Nav Item - Messages -->
-		<li class="nav-item"><a class="nav-link no-arrow mx-1" href="/user/mypage"
-			id="messagesDropdown" role="button" aria-expanded="false"> <ion-icon
-					name="person-outline"></ion-icon> <!-- Counter - Messages -->
+		<li class="nav-item"><a class="nav-link no-arrow mx-1"
+			href="/user/mypage" id="messagesDropdown" role="button"
+			aria-expanded="false"> <ion-icon name="person-outline"></ion-icon>
+				<!-- Counter - Messages -->
 		</a></li>
 		<li class="nav-item"><a class="nav-link no-arrow mx-1"
 			onclick="confirmLogout()" id="messagesDropdown" role="button"
