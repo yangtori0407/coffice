@@ -26,3 +26,7 @@
   overflow: hidden; /*넘친 내용 숨김*/
   text-overflow: ellipsis; /* 말 줄임표(...) 표시 */
 }
+
+.modalCss{
+  border-bottom: 1px solid rgb(233, 233, 233);
+}

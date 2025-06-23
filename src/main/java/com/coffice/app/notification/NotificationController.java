@@ -54,5 +54,14 @@ public class NotificationController {
 		
 		return "commons/ajaxResult";
 	}
+	@GetMapping("moreNotification")
+	@ResponseBody
+	public List<NotificationVO> moreNotification(Long notiCheckNum, Authentication authentication) throws Exception{
+		//log.info("notiCheckNum: {}", notiCheckNum);
+		List<NotificationVO> list = notificationService.moreNotification(notiCheckNum, authentication.getName());
+		
+		
+		return list;
+	}
 	
 }

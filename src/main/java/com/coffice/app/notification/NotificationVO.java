@@ -22,4 +22,5 @@ public class NotificationVO {
 	
 	//DB 컬럼에는 없음! select 할 때 사용하는 용도
 	private int notiCheckStatus;
+	private int notiCheckNum;
 }

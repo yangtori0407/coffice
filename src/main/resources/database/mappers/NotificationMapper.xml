@@ -19,13 +19,23 @@
   	</select>
   	
   	<select id="getNotification" parameterType="java.lang.String" resultType="NotificationVO">
-  		SELECT N.NOTI_NUM, N.NOTI_KIND, N.NOTI_CONTENTS, N.NOTI_DATE, N.RELATE_ENTITY, N.RELATE_ID, NC.NOTICHECK_STATUS 
+  		SELECT N.NOTI_NUM, N.NOTI_KIND, N.NOTI_CONTENTS, N.NOTI_DATE, N.RELATE_ENTITY, N.RELATE_ID, NC.NOTICHECK_STATUS, NC.NOTICHECK_NUM 
   		FROM NOTIFICATION_CHECK NC
   		JOIN NOTIFICATION N
   		ON NC.NOTI_NUM = N.NOTI_NUM
   		WHERE NC.USER_ID = #{userId}
   		ORDER BY N.NOTI_DATE DESC
   		LIMIT 5
+  	</select>
+  	
+  	<select id="moreNotification" parameterType="java.util.HashMap" resultType="NotificationVO">
+  		SELECT N.NOTI_NUM, N.NOTI_KIND, N.NOTI_CONTENTS, N.NOTI_DATE, N.RELATE_ENTITY, N.RELATE_ID, NC.NOTICHECK_STATUS, NC.NOTICHECK_NUM 
+  		FROM NOTIFICATION_CHECK NC
+  		JOIN NOTIFICATION N
+  		ON NC.NOTI_NUM = N.NOTI_NUM
+  		WHERE NC.USER_ID = #{userId} AND #{notiCheckNum} > NOTICHECK_NUM
+  		ORDER BY N.NOTI_DATE DESC
+  		LIMIT 7
   	</select>
   	
   	<update id="updateNotiStatus" parameterType="java.util.HashMap">

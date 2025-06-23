@@ -61,4 +61,13 @@ public class NotificationService {
 		return notificationDAO.updateNotiStatus(info);
 		
 	}
+
+	public List<NotificationVO> moreNotification(Long notiCheckNum, String name) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("notiCheckNum", notiCheckNum);
+		info.put("userId", name);
+		//log.info("notiCheckNum: {}", notiCheckNum);
+		//log.info("userId : {}", name);
+		return notificationDAO.moreNotification(info);
+	}
 }

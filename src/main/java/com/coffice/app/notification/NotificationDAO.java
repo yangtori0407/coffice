@@ -21,4 +21,6 @@ public interface NotificationDAO {
 
 	int updateNotiStatus(Map<String, Object> info) throws Exception;
 
+	List<NotificationVO> moreNotification(Map<String, Object> info) throws Exception;
+
 }

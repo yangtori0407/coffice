@@ -74,17 +74,18 @@
 					</div>
 				</a>-->
 
-					<button type="button"
+					<button type="button" id="moreNotiBtn"
 						class="btn btn-primary dropdown-item text-center small text-gray-500"
-						data-toggle="modal" data-target="#notification">알림 더보기</button>
+						data-toggle="modal" data-target="#moreNotification">알림
+						더보기</button>
 				</div></li>
 		</sec:authorize>
 
 		<!-- Modal -->
-		<div class="modal fade" id="notification" data-backdrop="static"
+		<div class="modal fade" id="moreNotification" data-backdrop="static"
 			data-keyboard="false" tabindex="-1"
 			aria-labelledby="staticBackdropLabel" aria-hidden="true">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="staticBackdropLabel">알림</h5>
@@ -93,11 +94,24 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body">...</div>
+					<div class="modal-body p-0" id="notificationModal" >
+						<!-- <a class="d-flex align-items-center" id="" href="#">
+							<div class="mr-3">
+								<div class="icon-circle bg-info">
+									<ion-icon size="large" name="information-circle-outline"></ion-icon>
+								</div>
+							</div>
+							<div>
+								<div class="small text-gray-500">December 12, 2019</div>
+								<span class="font-weight-bold">A new monthly report is
+									ready to download!</span>
+							</div>
+						</a> -->
+					</div>
+						<button type="button" id="moreNotiModalBtn" class="dropdown-item text-center small text-gray-500">알림 더보기</button>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Understood</button>
+							data-dismiss="modal">닫기</button>
 					</div>
 				</div>
 			</div>

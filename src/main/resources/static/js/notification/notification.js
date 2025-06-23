@@ -1,6 +1,7 @@
 const notificationArea = document.getElementById("notificationArea");
 const userIdNotification = getUserIdCookie("userId");
 //const chatAlert = document.getElementById("chatAlert");
+const notificationModal = document.getElementById("notificationModal");
 
 function getUserIdCookie(name) {
     return document.cookie
@@ -14,7 +15,7 @@ window.addEventListener("load", ()=>{
     .then(r => r.json())
     .then(r => {
         for(j of r){
-            createAlert(j);
+            notificationArea.append(createAlert(j, 0));
         }
     })
 })
@@ -40,7 +41,7 @@ stompClientNotification.connect({}, function (frame) {
         const msg = JSON.parse(message.body); //서버에서 json으로 보낸걸 json 객체로 받음
         console.log(msg);
         // msg.notiContents = "공지사항 " + msg.notiContents;
-        createAlert(msg);
+        notificationArea.append(createAlert(msg, 0));
     })
     //채팅방 알림
     stompClientNotification.subscribe(`/sub/chat/user.${userIdNotification}`, function (message) {
@@ -67,10 +68,18 @@ stompClientNotification.connect({}, function (frame) {
     console.error("stomp 연결 실패: ", error);
 })
 
-function createAlert(msg) {
+//헤더 알림 클릭 시 알림 넣기
+function createAlert(msg, num) {
 
     const a = document.createElement("a");
-    a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification");
+    
+    if(num == 1){
+        a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification", "modalCss");
+    }else{
+        a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification");
+
+    }
+
     if(msg.notiCheckStatus == 0){
         a.classList.add("nonRead");
         a.style.backgroundColor = "lightgoldenrodyellow";
@@ -82,6 +91,7 @@ function createAlert(msg) {
 
         a.href = "#";
     }
+    a.setAttribute("data-check-num", msg.notiCheckNum);
 
     // 왼쪽 아이콘 영역
     const iconWrapper = document.createElement("div");
@@ -127,6 +137,7 @@ function createAlert(msg) {
         clickNotification(msg.notiNum);
     })
 
+    return a;
     notificationArea.append(a);
 }
 
@@ -216,3 +227,36 @@ function clickNotification(notiNum){
     })
 
 }
+
+//=====알림 더보기 눌렀을 때 내용 더 가지고 오는 로직
+
+const moreNotiBtn = document.getElementById("moreNotiBtn");
+const moreNotiModalBtn = document.getElementById("moreNotiModalBtn");
+
+moreNotiBtn.addEventListener("click", () => {
+   const lastNotiCheckNum = notificationArea.lastElementChild.getAttribute("data-check-num");
+
+   fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
+   .then(r=>r.json())
+   .then(r => {
+    notificationModal.innerText = "";
+    for(j of r){
+        notificationModal.appendChild(createAlert(j, 1));
+    }
+   })
+})
+
+moreNotiModalBtn.addEventListener("click", ()=>{
+    const lastNotiCheckNum = notificationModal.lastElementChild.getAttribute("data-check-num");
+
+    fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
+   .then(r=>r.json())
+   .then(r => {
+    if(r.length === 0){
+     alert("더 이상 불러올 알림이 없습니다.");
+    }
+    for(j of r){
+        notificationModal.appendChild(createAlert(j, 1));
+    }
+   })
+})
