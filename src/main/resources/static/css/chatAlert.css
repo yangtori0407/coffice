@@ -16,3 +16,7 @@
   opacity: 0 !important;
   display: block !important; /* ← Bootstrap의 display:none을 무력화 */
 }
+
+.nonRead:hover{
+ background-color: rgb(242, 242, 200) !important;
+}

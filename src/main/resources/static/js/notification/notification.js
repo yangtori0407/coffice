@@ -72,7 +72,7 @@ function createAlert(msg) {
     const a = document.createElement("a");
     a.classList.add("dropdown-item", "d-flex", "align-items-center");
     if(msg.notiCheckStatus == 0){
-
+        a.classList.add("nonRead");
         a.style.backgroundColor = "lightgoldenrodyellow";
         // a.style.color = "gray"
     }
