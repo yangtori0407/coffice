@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.coffice.app.notification.NotificationService;
 import com.coffice.app.page.Pager;
 import com.coffice.app.users.UserVO;
 
@@ -108,8 +109,11 @@ public class BoardController {
 	public CommentVO addComment(CommentVO commentVO, Authentication authentication) throws Exception{
 		UserVO userVO = (UserVO)authentication.getPrincipal();
 		//log.info("addCommentVO : {}", commentVO);
+		
 		commentVO.setUserId(userVO.getUserId());
-		return boardService.addComment(commentVO);
+		commentVO = boardService.addComment(commentVO);
+		
+		return commentVO;
 	}
 	
 	@PostMapping("reply")

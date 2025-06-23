@@ -1,4 +1,4 @@
-const delBtn = document.getElementById("delBtn");
+const delBtn = document.querySelector("#delBtn");
 const comBtn = document.getElementById("comBtn");
 const board = document.getElementById("board");
 const boardNum = board.getAttribute("data-board-num");
@@ -7,7 +7,7 @@ const inputContents = document.getElementById("contents");
 const comArea = document.getElementById("comArea");
 
 //원글 삭제 버튼
-try {
+if(delBtn){
 	
 	delBtn.addEventListener("click", () => {
 		console.log("click")
@@ -31,9 +31,8 @@ try {
 	
 			})
 	})
-} catch (error) {
-	
 }
+
 
 //==============댓글=================================
 

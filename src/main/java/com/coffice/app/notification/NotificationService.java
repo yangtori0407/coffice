@@ -9,6 +9,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coffice.app.posts.board.BoardVO;
+import com.coffice.app.posts.board.CommentVO;
 import com.coffice.app.posts.notice.NoticeVO;
 import com.coffice.app.users.UserVO;
 
@@ -48,6 +50,27 @@ public class NotificationService {
 		
 		template.convertAndSend("/sub/notice", notificationVO);
 	}
+	
+	public void sendComment(CommentVO commentVO, BoardVO boardVO) throws Exception{
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setNotiContents(boardVO.getBoardTitle());
+		notificationVO.setNotiDate(commentVO.getCommentDate());
+		notificationVO.setNotiKind("BOARD");
+		notificationVO.setRelateEntity("BOARD");
+		notificationVO.setRelateId(commentVO.getBoardNum());
+		
+		notificationDAO.add(notificationVO);
+		
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", boardVO.getUserId());
+		info.put("notiNum", notificationVO.getNotiNum());
+		notificationDAO.addNoticeCheck(info);
+		
+		info.clear();
+		
+		
+		template.convertAndSend("/sub/board/user."+ boardVO.getUserId(), notificationVO);
+	}
 
 	public Map<String, Object> getNotification(String userId) throws Exception{
 		Map<String, Object> result = new HashMap<>();
@@ -75,4 +98,7 @@ public class NotificationService {
 		//log.info("userId : {}", name);
 		return notificationDAO.moreNotification(info);
 	}
+
+
+	
 }

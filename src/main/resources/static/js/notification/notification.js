@@ -69,6 +69,13 @@ stompClientNotification.connect({}, function (frame) {
         createToast(msg);
     })
 
+    stompClientNotification.subscribe(`/sub/board/user.${userIdNotification}`, function(message){
+        const msg = JSON.parse(message.body);
+        notificationArea.prepend(createAlert(msg, 2));
+        totalArea.innerText = Number(totalArea.innerText) + 1;
+        notificationArea.lastElementChild.remove();
+    })
+
 }, function (error) {
     console.error("stomp 연결 실패: ", error);
 })
@@ -78,11 +85,11 @@ function createAlert(msg, num) {
 
     const a = document.createElement("a");
     
+    //알림 더보기 모달
     if(num == 1){
         a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification", "modalCss");
-    }else{
+    }else{ //알림창
         a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification");
-
     }
 
     if(msg.notiCheckStatus == 0){
@@ -90,10 +97,12 @@ function createAlert(msg, num) {
         a.style.backgroundColor = "lightgoldenrodyellow";
         // a.style.color = "gray"
     }
+
     if (msg.notiKind == "NOTICE") {
         a.href = `/notice/detail?noticeNum=${msg.relateId}`
-    } else {
-
+    }else if(msg.notiKind == "BOARD"){
+        a.href = `/board/detail?boardNum=${msg.relateId}`
+    }else {
         a.href = "#";
     }
     a.setAttribute("data-check-num", msg.notiCheckNum);
@@ -103,11 +112,20 @@ function createAlert(msg, num) {
     iconWrapper.classList.add("mr-3");
 
     const iconCircle = document.createElement("div");
-    iconCircle.classList.add("icon-circle", "bg-info");
+    if(msg.notiKind == "NOTICE"){
+
+        iconCircle.classList.add("icon-circle", "bg-info");
+    }else if(msg.notiKind == "BOARD"){
+        iconCircle.classList.add("icon-circle", "bg-success");
+    }
 
     const icon = document.createElement("ion-icon");
     icon.setAttribute("size", "large");
-    icon.setAttribute("name", "information-circle-outline");
+    if(msg.notiKind == "NOTICE"){
+        icon.setAttribute("name", "information-circle-outline");
+    } else if(msg.notiKind == "BOARD"){
+        icon.setAttribute("name", "return-down-forward-outline");
+    }
 
     iconCircle.appendChild(icon);
     iconWrapper.appendChild(iconCircle);
@@ -123,11 +141,19 @@ function createAlert(msg, num) {
     kindDiv.classList.add("small", "font-weight-bold")
     if(msg.notiKind == "NOTICE"){
         kindDiv.innerText = "[공지사항]"
+    } else if(msg.notiKind == "BOARD"){
+        kindDiv.innerText = `[${msg.notiContents}]`
     }
 
     const contentSpan = document.createElement("span");
     contentSpan.classList.add("font-weight-bold");
-    contentSpan.innerText = msg.notiContents;
+    //익명게시판 댓글
+    if(num == 2){
+        contentSpan.innerText = "댓글이 달렸습니다."
+    } else{
+        contentSpan.innerText = msg.notiContents;
+
+    }
 
     textWrapper.appendChild(dateDiv);
     textWrapper.appendChild(kindDiv);
@@ -225,7 +251,7 @@ function clickNotification(notiNum){
     const p = new URLSearchParams();
     p.append("notiNum", notiNum);
 
-    fetch("notification/updateNotiStatus", {
+    fetch("/notification/updateNotiStatus", {
         method: "POST",
         body: p,
         keepalive: true
@@ -242,7 +268,7 @@ if(moreNotiBtn){
     moreNotiBtn.addEventListener("click", () => {
        const lastNotiCheckNum = notificationArea.lastElementChild.getAttribute("data-check-num");
     
-       fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
+       fetch(`/notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
        .then(r=>r.json())
        .then(r => {
         notificationModal.innerText = "";
@@ -258,7 +284,7 @@ if(moreNotiModalBtn){
     moreNotiModalBtn.addEventListener("click", ()=>{
         const lastNotiCheckNum = notificationModal.lastElementChild.getAttribute("data-check-num");
     
-        fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
+        fetch(`/notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
        .then(r=>r.json())
        .then(r => {
         if(r.length === 0){
@@ -270,3 +296,12 @@ if(moreNotiModalBtn){
        })
     })
 }
+
+//=========익명게시판 댓글
+// const notiComBtn = document.querySelector("comBtn");
+// const notiBoard = document.getElementById("board");
+// const notiBoardNum = board.getAttribute("data-board-num");
+
+// if(notiComBtn){
+
+// }
