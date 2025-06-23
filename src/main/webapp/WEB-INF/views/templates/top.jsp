@@ -73,8 +73,35 @@
 							ready to download!</span>
 					</div>
 				</a>-->
+
+					<button type="button"
+						class="btn btn-primary dropdown-item text-center small text-gray-500"
+						data-toggle="modal" data-target="#notification">알림 더보기</button>
 				</div></li>
 		</sec:authorize>
+
+		<!-- Modal -->
+		<div class="modal fade" id="notification" data-backdrop="static"
+			data-keyboard="false" tabindex="-1"
+			aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="staticBackdropLabel">알림</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">...</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Understood</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<!-- Nav Item - Messages -->
 		<li class="nav-item"><a class="nav-link no-arrow mx-1" href="#"

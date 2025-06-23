@@ -53,4 +53,12 @@ public class NotificationService {
 		return notificationDAO.getNotification(userId);
 		
 	}
+
+	public int updateNotiStatus(Long notiNum, String name) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("notiNum", notiNum);
+		info.put("userId", name);
+		return notificationDAO.updateNotiStatus(info);
+		
+	}
 }

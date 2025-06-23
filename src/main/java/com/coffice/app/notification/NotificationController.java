@@ -8,6 +8,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,15 @@ public class NotificationController {
 	public List<NotificationVO> getAlert(Authentication authentication) throws Exception{
 		String userId = authentication.getName();
 		return notificationService.getNotification(userId);
+	}
+	
+	@PostMapping("updateNotiStatus")
+	public String updateNotiStatus(Long notiNum, Authentication authentication, Model model) throws Exception{
+		int result = notificationService.updateNotiStatus(notiNum, authentication.getName());
+		
+		model.addAttribute("result", result);
+		
+		return "commons/ajaxResult";
 	}
 	
 }

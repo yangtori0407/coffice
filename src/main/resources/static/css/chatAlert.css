@@ -20,3 +20,9 @@
 .nonRead:hover{
  background-color: rgb(242, 242, 200) !important;
 }
+
+.notification{
+  white-space: nowrap; /*줄바꿈 없이 한 줄만*/ 
+  overflow: hidden; /*넘친 내용 숨김*/
+  text-overflow: ellipsis; /* 말 줄임표(...) 표시 */
+}

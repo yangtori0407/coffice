@@ -19,4 +19,6 @@ public interface NotificationDAO {
 
 	List<NotificationVO> getNotification(String userId) throws Exception;
 
+	int updateNotiStatus(Map<String, Object> info) throws Exception;
+
 }

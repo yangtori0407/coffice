@@ -39,7 +39,7 @@ stompClientNotification.connect({}, function (frame) {
         console.log("받음")
         const msg = JSON.parse(message.body); //서버에서 json으로 보낸걸 json 객체로 받음
         console.log(msg);
-        msg.notiContents = "공지사항 " + msg.notiContents;
+        // msg.notiContents = "공지사항 " + msg.notiContents;
         createAlert(msg);
     })
     //채팅방 알림
@@ -70,7 +70,7 @@ stompClientNotification.connect({}, function (frame) {
 function createAlert(msg) {
 
     const a = document.createElement("a");
-    a.classList.add("dropdown-item", "d-flex", "align-items-center");
+    a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification");
     if(msg.notiCheckStatus == 0){
         a.classList.add("nonRead");
         a.style.backgroundColor = "lightgoldenrodyellow";
@@ -104,17 +104,28 @@ function createAlert(msg) {
     dateDiv.classList.add("small", "text-gray-500");
     dateDiv.innerText = formatDate(msg.notiDate);
 
+    const kindDiv = document.createElement("div");
+    kindDiv.classList.add("small", "font-weight-bold")
+    if(msg.notiKind == "NOTICE"){
+        kindDiv.innerText = "[공지사항]"
+    }
+
     const contentSpan = document.createElement("span");
     contentSpan.classList.add("font-weight-bold");
     contentSpan.innerText = msg.notiContents;
 
     textWrapper.appendChild(dateDiv);
+    textWrapper.appendChild(kindDiv);
     textWrapper.appendChild(contentSpan);
 
     // 전체 구성
     a.appendChild(iconWrapper);
     a.appendChild(textWrapper);
 
+    a.addEventListener("click", ()=>{
+        console.log("!!!!a태그!!!!")
+        clickNotification(msg.notiNum);
+    })
 
     notificationArea.append(a);
 }
@@ -190,4 +201,18 @@ function createToast(msg) {
         toast.classList.add("hide"); // fade-out 시작
         setTimeout(() => toast.remove(), 1000); // transition 시간과 맞추기
     }, 1500);
+}
+
+//============알람 클릭했을 때 status 값 변경하는 로직
+
+function clickNotification(notiNum){
+    const p = new URLSearchParams();
+    p.append("notiNum", notiNum);
+
+    fetch("notification/updateNotiStatus", {
+        method: "POST",
+        body: p,
+        keepalive: true
+    })
+
 }
