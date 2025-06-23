@@ -19,6 +19,10 @@
   		</choose>
   		LIKE CONCAT('%',#{search},'%')
   	</sql>
+  	
+  	<select id="registerBranch" resultType="Long">
+  		SELECT COUNT(*) FROM BRANCH WHERE BRANCH_STATUS = 1
+  	</select>
   
   	<select id="getList" resultType="BranchVO" parameterType="Pager">
   		SELECT * FROM BRANCH
@@ -41,6 +45,10 @@
   	
   	<select id="branchName" resultType="BranchVO" parameterType="BranchVO">
   		SELECT * FROM BRANCH WHERE BRANCH_NAME =#{branchName}
+  	</select>
+  	
+  	<select id="branchAddress" resultType="BranchVO" parameterType="BranchVO">
+  		SELECT * FROM BRANCH WHERE BRANCH_ADDRESS=#{branchAddress}
   	</select>
   	
   	<select id="notAddBranchList" resultType="BranchVO">

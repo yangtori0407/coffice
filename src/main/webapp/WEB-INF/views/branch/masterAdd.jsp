@@ -117,8 +117,8 @@
 					<div class="form-container">
 					    <h2>점주 등록</h2>
 						<form:form modelAttribute="branchMasterVO" cssClass="branchMaster" action="./masterAdd" method="post">
-							<select class="form-select" id="selectUser" name="userId.userId">
-								<option selected>추가할 점주를 선택하세요</option>
+							<select class="form-select" id="selectUser" name="userId.userId" required>
+								<option value="" selected>추가할 점주를 선택하세요</option>
 								<c:forEach items="${notRegisterBranchMaster}" var="m">
 								<option value="${m.userId.userId}">${m.userId.name},${m.userId.userId}</option>
 								</c:forEach>						

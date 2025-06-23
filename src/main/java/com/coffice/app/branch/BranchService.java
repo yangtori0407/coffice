@@ -83,6 +83,20 @@ public class BranchService {
 		return check;
 	}
 	
+	public boolean branchAddressCheck(BranchVO branchVO, BindingResult bindingResult) throws Exception {
+		boolean check = false;
+		
+		check = bindingResult.hasErrors();
+		
+		BranchVO checkVO = branchDAO.branchAddress(branchVO);
+		if(checkVO != null) {
+			check = true;
+			bindingResult.rejectValue("branchAddress", "branchVO.branchAddress.equal");
+		}
+		
+		return check;
+	}
+	
 	public List<BranchVO> myBranch(BranchVO branchVO,Pager pager) throws Exception {
 		pager.make();
 		pager.makeNum(branchDAO.totalmyBranchCount(branchVO, pager));
@@ -111,5 +125,9 @@ public class BranchService {
 	
 	public List<BranchVO> getTotalChart() throws Exception {
 		return branchDAO.getTotalChart();
+	}
+	
+	public Long registerBranch() throws Exception {
+		return branchDAO.registerBranch();
 	}
 }

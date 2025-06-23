@@ -91,6 +91,10 @@ public class BranchController {
 			return "branch/add";
 		}
 		
+		if(branchService.branchAddressCheck(branchVO, bindingResult)) {
+			return "branch/add";
+		}
+		
 		int result = branchService.add(branchVO);
 		
 		if(result > 0) {

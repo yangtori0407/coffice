@@ -89,6 +89,17 @@
     button[type="submit"]:hover {
         background-color: #218838;
     }
+    
+    .error-box {
+	    width: 100%;
+	    margin-top: -5px;
+	}
+
+	.error-message {
+	    color: red;
+	    font-size: 12px;
+	    margin-left: 5px;
+	}
 </style>
 </head>
 <body id="page-top">
@@ -108,12 +119,15 @@
 							    <form:errors path="branchName" cssClass="error-message"/>
 							  </div>
 							       <div class="input-box postcode-box">
-							           <form:input type="text" path="branchPostcode" placeholder="지점 우편번호" required="true" readonly="true"/>
+							           <form:input type="text" path="branchPostcode" placeholder="지점 우편번호" required="true" onfocus="this.blur()"/>
 							           <input type="button" onclick="daumPostcode()" value="우편번호 찾기">
 							       </div>
 							       <div class="input-box">
 							           <form:input type="text" path="branchAddress" placeholder="지점 주소" readonly="true"/>
 							       </div>
+							       <div class="error-box">
+								    <form:errors path="branchAddress" cssClass="error-message"/>
+								  </div>
 							<button type="submit" class="btn btn-primary">지점등록</button>
 						</form:form>
 					</div>
