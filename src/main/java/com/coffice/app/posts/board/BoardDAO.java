@@ -39,4 +39,6 @@ public interface BoardDAO {
 
 	public int commentUpdate(CommentVO commentVO) throws Exception;
 
+	public BoardVO getBoardInfoByBoardNum(Long boardNum) throws Exception;
+
 }
