@@ -53,7 +53,7 @@
 				role="button" data-toggle="dropdown" aria-haspopup="true"
 				aria-expanded="false"> <ion-icon name="notifications-outline"></ion-icon>
 					<!-- Counter - Alerts --> <span
-					class="badge badge-danger badge-counter">3+</span>
+					class="badge badge-danger badge-counter" id="totalArea"></span>
 			</a> <!-- Dropdown - Alerts -->
 				<div
 					class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -72,31 +72,50 @@
 						<span class="font-weight-bold">A new monthly report is
 							ready to download!</span>
 					</div>
-				</a> <a class="dropdown-item d-flex align-items-center" href="#">
-					<div class="mr-3">
-						<div class="icon-circle bg-success">
-							<i class="fas fa-donate text-white"></i>
-						</div>
-					</div>
-					<div>
-						<div class="small text-gray-500">December 7, 2019</div>
-						$290.29 has been deposited into your account!
-					</div>
-				</a> <a class="dropdown-item d-flex align-items-center" href="#">
-					<div class="mr-3">
-						<div class="icon-circle bg-warning">
-							<i class="fas fa-exclamation-triangle text-white"></i>
-						</div>
-					</div>
-					<div>
-						<div class="small text-gray-500">December 2, 2019</div>
-						Spending Alert: We've noticed unusually high spending for your
-						account.
-					</div>
-				</a> <a class="dropdown-item text-center small text-gray-500" href="#">Show
-					All Alerts</a> -->
+				</a>-->
+
+					<button type="button" id="moreNotiBtn"
+						class="btn btn-primary dropdown-item text-center small text-gray-500"
+						data-toggle="modal" data-target="#moreNotification">알림
+						더보기</button>
 				</div></li>
 		</sec:authorize>
+
+		<!-- Modal -->
+		<div class="modal fade" id="moreNotification" data-backdrop="static"
+			data-keyboard="false" tabindex="-1"
+			aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="staticBackdropLabel">알림</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body p-0" id="notificationModal" >
+						<!-- <a class="d-flex align-items-center" id="" href="#">
+							<div class="mr-3">
+								<div class="icon-circle bg-info">
+									<ion-icon size="large" name="information-circle-outline"></ion-icon>
+								</div>
+							</div>
+							<div>
+								<div class="small text-gray-500">December 12, 2019</div>
+								<span class="font-weight-bold">A new monthly report is
+									ready to download!</span>
+							</div>
+						</a> -->
+					</div>
+						<button type="button" id="moreNotiModalBtn" class="dropdown-item text-center small text-gray-500">알림 더보기</button>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">닫기</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<!-- Nav Item - Messages -->
 		<li class="nav-item"><a class="nav-link no-arrow mx-1" href="/user/mypage"

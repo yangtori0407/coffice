@@ -1,6 +1,8 @@
 const notificationArea = document.getElementById("notificationArea");
 const userIdNotification = getUserIdCookie("userId");
 //const chatAlert = document.getElementById("chatAlert");
+const notificationModal = document.getElementById("notificationModal");
+const totalArea = document.getElementById("totalArea");
 
 function getUserIdCookie(name) {
     return document.cookie
@@ -8,6 +10,18 @@ function getUserIdCookie(name) {
         .find(cookie => cookie.startsWith(name + "="))
         ?.split("=")[1] ?? null;
 }
+
+//페이지가 로드될 때마다 알림을 미리 가지고 와서 뿌리기
+window.addEventListener("load", ()=>{
+    fetch("/notification/getNotification")
+    .then(r => r.json())
+    .then(r => {
+        totalArea.innerText = r.total;
+        for(j of r.list){
+            notificationArea.append(createAlert(j, 0));
+        }
+    })
+})
 
 const socketNotification = new SockJS("/ws-stomp");
 const stompClientNotification = Stomp.over(socketNotification);
@@ -29,8 +43,10 @@ stompClientNotification.connect({}, function (frame) {
         console.log("받음")
         const msg = JSON.parse(message.body); //서버에서 json으로 보낸걸 json 객체로 받음
         console.log(msg);
-        msg.notiContents = "공지사항 " + msg.notiContents;
-        createAlert(msg);
+        // msg.notiContents = "공지사항 " + msg.notiContents;
+        notificationArea.prepend(createAlert(msg, 0));
+        totalArea.innerText = Number(totalArea.innerText) + 1;
+        notificationArea.lastElementChild.remove();
     })
     //채팅방 알림
     stompClientNotification.subscribe(`/sub/chat/user.${userIdNotification}`, function (message) {
@@ -57,16 +73,30 @@ stompClientNotification.connect({}, function (frame) {
     console.error("stomp 연결 실패: ", error);
 })
 
-function createAlert(msg) {
+//헤더 알림 클릭 시 알림 넣기
+function createAlert(msg, num) {
 
     const a = document.createElement("a");
-    a.classList.add("dropdown-item", "d-flex", "align-items-center");
+    
+    if(num == 1){
+        a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification", "modalCss");
+    }else{
+        a.classList.add("dropdown-item", "d-flex", "align-items-center", "notification");
+
+    }
+
+    if(msg.notiCheckStatus == 0){
+        a.classList.add("nonRead");
+        a.style.backgroundColor = "lightgoldenrodyellow";
+        // a.style.color = "gray"
+    }
     if (msg.notiKind == "NOTICE") {
         a.href = `/notice/detail?noticeNum=${msg.relateId}`
     } else {
 
         a.href = "#";
     }
+    a.setAttribute("data-check-num", msg.notiCheckNum);
 
     // 왼쪽 아이콘 영역
     const iconWrapper = document.createElement("div");
@@ -89,18 +119,30 @@ function createAlert(msg) {
     dateDiv.classList.add("small", "text-gray-500");
     dateDiv.innerText = formatDate(msg.notiDate);
 
+    const kindDiv = document.createElement("div");
+    kindDiv.classList.add("small", "font-weight-bold")
+    if(msg.notiKind == "NOTICE"){
+        kindDiv.innerText = "[공지사항]"
+    }
+
     const contentSpan = document.createElement("span");
     contentSpan.classList.add("font-weight-bold");
     contentSpan.innerText = msg.notiContents;
 
     textWrapper.appendChild(dateDiv);
+    textWrapper.appendChild(kindDiv);
     textWrapper.appendChild(contentSpan);
 
     // 전체 구성
     a.appendChild(iconWrapper);
     a.appendChild(textWrapper);
 
+    a.addEventListener("click", ()=>{
+        console.log("!!!!a태그!!!!")
+        clickNotification(msg.notiNum);
+    })
 
+    return a;
     notificationArea.append(a);
 }
 
@@ -176,3 +218,50 @@ function createToast(msg) {
         setTimeout(() => toast.remove(), 1000); // transition 시간과 맞추기
     }, 1500);
 }
+
+//============알람 클릭했을 때 status 값 변경하는 로직
+
+function clickNotification(notiNum){
+    const p = new URLSearchParams();
+    p.append("notiNum", notiNum);
+
+    fetch("notification/updateNotiStatus", {
+        method: "POST",
+        body: p,
+        keepalive: true
+    })
+
+}
+
+//=====알림 더보기 눌렀을 때 내용 더 가지고 오는 로직
+
+const moreNotiBtn = document.getElementById("moreNotiBtn");
+const moreNotiModalBtn = document.getElementById("moreNotiModalBtn");
+
+moreNotiBtn.addEventListener("click", () => {
+   const lastNotiCheckNum = notificationArea.lastElementChild.getAttribute("data-check-num");
+
+   fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
+   .then(r=>r.json())
+   .then(r => {
+    notificationModal.innerText = "";
+    for(j of r){
+        notificationModal.appendChild(createAlert(j, 1));
+    }
+   })
+})
+
+moreNotiModalBtn.addEventListener("click", ()=>{
+    const lastNotiCheckNum = notificationModal.lastElementChild.getAttribute("data-check-num");
+
+    fetch(`notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
+   .then(r=>r.json())
+   .then(r => {
+    if(r.length === 0){
+     alert("더 이상 불러올 알림이 없습니다.");
+    }
+    for(j of r){
+        notificationModal.appendChild(createAlert(j, 1));
+    }
+   })
+})

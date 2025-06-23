@@ -16,3 +16,17 @@
   opacity: 0 !important;
   display: block !important; /* ← Bootstrap의 display:none을 무력화 */
 }
+
+.nonRead:hover{
+ background-color: rgb(242, 242, 200) !important;
+}
+
+.notification{
+  white-space: nowrap; /*줄바꿈 없이 한 줄만*/ 
+  overflow: hidden; /*넘친 내용 숨김*/
+  text-overflow: ellipsis; /* 말 줄임표(...) 표시 */
+}
+
+.modalCss{
+  border-bottom: 1px solid rgb(233, 233, 233);
+}
