@@ -71,7 +71,7 @@
           </c:if>
           
           <c:if test="${isWritePage ne 1}">
-            <button type="button" class="btn btn-primary" id="choose">선택 완료</button>
+            <button type="button" class="btn btn-primary" id="choose" data-dismiss="modal">선택 완료</button>
           </c:if>
           
           <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>          
@@ -299,12 +299,10 @@
 
         // 2. span 요소 생성
         let nameSpan = document.createElement("span");
-        let nameString = a.dataset.selectedName;
-        let split = nameString.split(" ");
-        nameSpan.textContent = split[0]; // 사용자 이름
+        nameSpan.textContent = a.dataset.selectedPosition;
         div.appendChild(nameSpan);
         nameSpan = document.createElement("span");
-        nameSpan.textContent = split[1];
+        nameSpan.textContent = a.dataset.selectedName;
         div.appendChild(nameSpan);
 
         // 3. button 요소 생성
