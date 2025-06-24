@@ -119,7 +119,9 @@
 		DELETE_STATUS =
 		0
 	</select>
-
+	<select id="getBoardInfoByBoardNum" parameterType="Long" resultType="BoardVO">
+		SELECT USER_ID, BOARD_TITLE FROM BOARD WHERE BOARD_NUM = #{boardNum}
+	</select>
 	<select id="replyList" parameterType="CommentVO"
 		resultType="CommentVO">
 		SELECT * FROM COMMENT WHERE COMMENT_P = #{commentNum} AND

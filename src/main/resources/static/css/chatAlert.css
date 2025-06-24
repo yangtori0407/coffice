@@ -16,3 +16,38 @@
   opacity: 0 !important;
   display: block !important; /* ← Bootstrap의 display:none을 무력화 */
 }
+
+.nonRead:hover{
+ background-color: rgb(242, 242, 200) !important;
+}
+
+.notification{
+  white-space: nowrap; /*줄바꿈 없이 한 줄만*/ 
+  overflow: hidden; /*넘친 내용 숨김*/
+  text-overflow: ellipsis; /* 말 줄임표(...) 표시 */
+}
+
+.modalCss{
+  border-bottom: 1px solid rgb(233, 233, 233);
+}
+
+.alarm-tooltip {
+  position: absolute;
+  top: 50%;
+  left: -55px; /* 왼쪽으로 약간 빼냄 */
+  transform: translateY(-50%); /* 세로 중앙 정렬 */
+  background-color: gold;
+  color: black;
+  padding: 2px 6px;
+  font-size: 13px;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.2);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 1051;
+}
+.alarm-tooltip.show {
+  opacity: 1;
+}
