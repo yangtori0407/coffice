@@ -4,9 +4,11 @@ addIngredientsBtn.addEventListener("click",()=>{
 
     const ingredientsName = document.getElementById("ingredientsName").value;
     const ingredientsPrice = document.getElementById("ingredientsPrice").value;
+    const ingredientsFile = document.getElementById("ingredientsFile").files[0];
 
     console.log(ingredientsName);
     console.log(ingredientsPrice);
+    console.log(ingredientsFile.name);
 
         let c = confirm("정말 입력하시겠습니까?")
         if(!c){
@@ -26,16 +28,14 @@ addIngredientsBtn.addEventListener("click",()=>{
             return;
         }
 
-    const params = new URLSearchParams();
-        params.append("ingredientsName", ingredientsName);
-        params.append("ingredientsPrice", ingredientsPrice);
+    const formData = new FormData();
+    formData.append("ingredientsName", ingredientsName);
+    formData.append("ingredientsPrice", ingredientsPrice);
+    formData.append("ingredientsFile", ingredientsFile);
 
         fetch('/ingredients/add', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: params
+            body: formData
         })
         .then(r=>r.json())
         .then(r=>{

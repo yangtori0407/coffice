@@ -114,9 +114,16 @@
 	      <c:forEach items="${menuList}" var="m">
 	        <div style="background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 10px; display: flex; flex-direction: column; align-items: center;">
 	          <!-- 이미지 자리 -->
-	          <img src="/img/커피지도마커3.png" alt="${m.menuName}" 
-	               style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 8px;">
-	          
+	          <c:choose>
+				<c:when test="${not empty m.saveName}">
+					<img src="/coffice/upload/menu/${m.saveName}"  alt="${m.menuName}" 
+	               		style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 8px;" >
+				</c:when>
+				<c:otherwise>
+					<img src="/images/noImage.jpg" alt="${m.menuName}" 
+	              	 style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 8px;">
+				</c:otherwise>
+				</c:choose>
 	          <!-- 메뉴명 + 가격 -->
 	          <div style="display: flex; justify-content: space-between; width: 100%;">
 	            <span style="font-size: 14px; font-weight: 500;">${m.menuName}</span>

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.branch.BranchVO;
 import com.coffice.app.page.Pager;
@@ -76,9 +78,10 @@ public class IngredientsController {
 	
 	@PostMapping("add")
 	@ResponseBody
-	public HashMap<String, Object> add(@Validated @ModelAttribute IngredientsVO ingredientsVO, BindingResult bindingResult) throws Exception {
-		  log.info("ingredientsName = {}", ingredientsVO.getIngredientsName());
-		  log.info("bindingResult.hasErrors() = {}", bindingResult.hasErrors());
+	public HashMap<String, Object> add(@Validated @ModelAttribute IngredientsVO ingredientsVO, 
+										BindingResult bindingResult,
+										@RequestParam("ingredientsFile") MultipartFile multipartFile) throws Exception {
+		  log.info("ingredientVO {}", ingredientsVO);
 		    
 		   HashMap<String, Object> map = new HashMap<>();
 		   
@@ -95,7 +98,7 @@ public class IngredientsController {
 	        return map;
 		}
 	    
-		ingredientsService.add(ingredientsVO);
+		ingredientsService.add(ingredientsVO, multipartFile);
 		map.put("status", "success");
 		map.put("message", "추가되었습니다.");
 	    return map;

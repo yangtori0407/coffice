@@ -81,7 +81,17 @@
 							<c:forEach items="${list}" var="vo">
 								<tr>
 									<td>${vo.ingredientsID}</td>
-									<td><a href="./detail?ingredientsID=${vo.ingredientsID}">${vo.ingredientsName}</a></td>
+									<td>
+									<c:choose>
+											<c:when test="${not empty vo.saveName}">
+												<img src="/coffice/upload/ingredients/${vo.saveName}" class="rounded-circle mr-2" style="width: 30px; height: 30px; object-fit: cover;" >
+											</c:when>
+											<c:otherwise>
+												<img src="/images/noImage.jpg" class="rounded-circle mr-2" style="width: 30px; height: 30px; object-fit: cover;" >
+											</c:otherwise>
+										</c:choose>
+									<a href="./detail?ingredientsID=${vo.ingredientsID}">${vo.ingredientsName}</a>
+									</td>
 									<td>${vo.ingredientsStock}</td>
 									<td>${vo.ingredientsDate}</td>
 								</tr>
@@ -184,7 +194,7 @@
 		            </button>
 		      </div>
 		      <div class="modal-body p-4">
-					<form:form modelAttribute="ingredientsVO" action="./add" method="post">
+					<form:form modelAttribute="ingredientsVO" action="./add" method="post" enctype="multipart/form-data">
 					<div class="form-group mb-3">
 						<label for="ingredientsName" class="font-weight-bold">상품 이름</label>
 						<form:input path="ingredientsName" class="form-control" id="ingredientsName" placeholder="ex)고구마" required="true"/>
@@ -193,6 +203,11 @@
 						<div class="form-group mb-3">
 							<label for="ingredientsPrice" class="font-weight-bold">상품 가격</label>
 							<form:input path="ingredientsPrice" class="form-control" id="ingredientsPrice" placeholder="ex)1000" required="true"/>					
+						</div>
+						
+						<div class="form-group mb-3">
+							<label for="ingredientsFile" class="font-weight-bold">상품 이미지</label>
+							<input type="file" id="ingredientsFile" class="form-control" name="ingredientsFile" >
 						</div>
 						<div class="text-right">
 							<button type="button" class="btn btn-success" id="addIngredientsBtn"><i class="fas fa-check"></i> 상품등록</button>

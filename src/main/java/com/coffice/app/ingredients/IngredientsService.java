@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.coffice.app.files.FileManager;
 import com.coffice.app.page.Pager;
 
 @Service
@@ -14,6 +17,10 @@ public class IngredientsService {
 
 	@Autowired
 	private IngredientsDAO ingredeintsDAO;
+	@Autowired
+	private FileManager fileManager;
+	@Value("D:/workspace2/coffice/upload/ingredients/")
+	private String path;
 	
 	public List<IngredientsVO> getList(Pager pager) throws Exception {
 		pager.make();
@@ -29,7 +36,12 @@ public class IngredientsService {
 		return ingredeintsDAO.getDetail(ingredientsVO);
 	}
 	
-	public int add(IngredientsVO ingredientsVO) throws Exception {
+	public int add(IngredientsVO ingredientsVO, MultipartFile multipartFile) throws Exception {
+		if(!multipartFile.isEmpty()) {
+			String filename = fileManager.fileSave(path, multipartFile);
+			ingredientsVO.setSaveName(filename);
+			ingredientsVO.setOriginName(multipartFile.getOriginalFilename());
+		}
 		return ingredeintsDAO.add(ingredientsVO);
 	}
 	
