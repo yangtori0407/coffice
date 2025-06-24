@@ -64,7 +64,7 @@ btn_temporary.addEventListener("click", function() {
   input_content.value = insert_content.innerHTML;
 
   //
-  const input_files = document.getElementById("input_files");
+  
 
 
   // 결재자 정보 추출 → JSON 문자열로 변환하여 hidden input에 삽입
@@ -107,19 +107,18 @@ input_referrers.value = JSON.stringify(referrerList);
   const input_docuStatus = document.getElementById("input_docuStatus");
   input_docuStatus.value = "임시저장";
 
-  const form_document = document.getElementById("form_document");
 
-
+  
   // 문서가 최초 임시저장이냐 기존 임시저장이 있냐에 따라 컨트롤러 경로를 바꿔준다
-  if(insert_content.dataset.voCheck =="임시저장"){
-    form_document.action="/document/updatetemp"
-	form_document.submit(); // 경로를 바꿔서 컨트롤러로 보낸다
-
-  } else if (insert_content.dataset.voCheck == ""){
-    form_document.submit(); //기존 write경로를 컨트롤러로 보낸다
-
-  }
-
+  	  if(insert_content.dataset.voCheck =="임시저장"){
+  		  let formPath = "/document/updatetemp";
+  		  submitForm(formPath);
+  	
+  	  } else if (insert_content.dataset.voCheck == ""){
+  	    let formPath = "/document/write";
+  		submitForm(formPath);
+  	
+  	  }
 
 })
 

@@ -50,6 +50,15 @@
     width: 130px;
   }
 
+  .file-wrapper {
+	display: flex;
+	gap: 10px;
+	alignItems: center;
+	border: 1px solid black;
+	padding: 5px;
+	marginBottom: 5px;
+  }
+	
 </style>
 
 </head>
@@ -227,25 +236,24 @@
 		
 	
 	    <!-- 첨부파일 -->
-	    	<div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 30px;">	
-	    		붙임	
-	    	</div>
+	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 30px;">	
+	    		붙임
+	    		<button id="uploadBtn">내 PC</button>
+	    		<input type="file" id="fake_input_files" style="display: none;" multiple>
+	    </div>
 	    	
-	      <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 100px;">
-			  <c:forEach items="${docuVO.attachmentVOs}" var="i" varStatus="status">
-			    <div class="col-3 p-1" style="border-right: 1px solid #000;">
-			    	<div class="file-wrapper h-100" style="border: 1px solid #000;">
-				      	${i.originName}			    	
-			    	</div>
-			    </div>
-			  </c:forEach>
-			
-			  <!-- 빈 칸 채우기 (4개 미만일 경우) -->
-			  <c:forEach begin="${fn:length(docuVO.attachmentVOs)+1}" end="4">
-			    <div class="col-3 p-1">
-			      <div class="file-wrapper h-100" style="border: 1px solid #000;"></div>
-			    </div>
-			  </c:forEach>
+	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; min-height: 100px;">
+			  
+		    <div id="fileList" class="col-12 p-1" style="border-right: 1px solid #000;">
+		    	<c:forEach items="${docuVO.attachmentVOs}" var="i">
+		    		<div class="file-wrapper">
+		    			<button>X</button>
+		    			<div class="exist-files" data-file-num="${i.fileNum}">파일명: ${i.originName}</div>
+		    			
+		    		</div>
+		    	</c:forEach>
+		    </div>
+			  
 		</div>
 	
 	
@@ -333,7 +341,7 @@
 				<input id="input_title" name="title" type="hidden" value="">
 				<input id="input_content" name="content" type="hidden" value="">
 				
-				<input id="input_files" name="files" type="hidden">
+				
 				
 				<input id="input_approvers" name="approvers" type="hidden">
 				
@@ -373,6 +381,7 @@
 	<script src="/js/document/signTool.js"></script>
 	<script src="/js/document/toReject.js"></script>
 	<script src="/js/document/toTemporary.js"></script>
+	
 	
 </body>
 </html>

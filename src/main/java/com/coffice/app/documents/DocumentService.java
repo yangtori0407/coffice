@@ -22,8 +22,7 @@ import com.coffice.app.page.Pager;
 import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-import jakarta.servlet.ServletContext;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -224,23 +223,29 @@ public class DocumentService {
 		}
 		
 		
-		// 파일 세이브
+		
+		
+		// 파일 세이브		
+		result = 0;
+		String folderName = "docuFiles";
+		
 		if (multipartFiles != null) {
 			for(MultipartFile f : multipartFiles) {
+				System.out.println("f.oriName : " + f.getOriginalFilename());
 				
 				if(f.isEmpty()) {
 					continue;
 				}
 				
-				String fileName = fileManager.fileSave("패스 넣어야함", f);
+				String fileName = this.fileSave(f, folderName);
 				
 				// 파일명 DB추가
-				AttachmentVO vo = new AttachmentVO();
-				vo.setDocumentId(documentVO.getDocumentId());
-				vo.setOriginName(f.getOriginalFilename());
-				vo.setSaveName(fileName);
+				AttachmentVO fileVO = new AttachmentVO();
+				fileVO.setDocumentId(documentVO.getDocumentId());
+				fileVO.setOriginName(f.getOriginalFilename());
+				fileVO.setSaveName(fileName);
 				
-				result = documentDAO.addFile(vo);
+				result += documentDAO.addFile(fileVO);
 				
 			}
 			
@@ -271,7 +276,7 @@ public class DocumentService {
 	
 	//
 	public int updateTemp(DocumentVO documentVO, List<ApprovalLineVO> approverList, List<ReferenceLineVO> referrerList,
-			MultipartFile [] multipartFiles) throws Exception {
+			MultipartFile [] multipartFiles, List<Long> existFileNums) throws Exception {
 		
 		// documentVO에 새로 작성 시간 넣기
 		documentVO.setWriterTime(Timestamp.valueOf(LocalDateTime.now()));
@@ -322,23 +327,31 @@ public class DocumentService {
 		}
 		
 		
-		// 파일 세이브
+
+		
+		
+		
+		// 파일 세이브		
+		result = 0;
+		String folderName = "docuFiles";
+		
 		if (multipartFiles != null) {
 			for(MultipartFile f : multipartFiles) {
+				System.out.println("f.oriName : " + f.getOriginalFilename());
 				
 				if(f.isEmpty()) {
 					continue;
 				}
 				
-				String fileName = fileManager.fileSave("패스 넣어야함", f);
+				String fileName = this.fileSave(f, folderName);
 				
 				// 파일명 DB추가
-				AttachmentVO vo = new AttachmentVO();
-				vo.setDocumentId(documentVO.getDocumentId());
-				vo.setOriginName(f.getOriginalFilename());
-				vo.setSaveName(fileName);
+				AttachmentVO fileVO = new AttachmentVO();
+				fileVO.setDocumentId(documentVO.getDocumentId());
+				fileVO.setOriginName(f.getOriginalFilename());
+				fileVO.setSaveName(fileName);
 				
-				result = documentDAO.addFile(vo);
+				result += documentDAO.addFile(fileVO);
 				
 			}
 			
@@ -383,13 +396,14 @@ public class DocumentService {
 		signVO.setUserId(userVO.getUserId());
 		
 		int result = 0;
+		String folderName = "signs";
 		
 		for (MultipartFile attach : attaches) {
 			if(attach.isEmpty()) {
 				continue;
 			}
 			
-			String fileName = this.fileSave(attach);
+			String fileName = this.fileSave(attach, folderName);
 			signVO.setSaveName(fileName);
 			signVO.setOriginName(attach.getOriginalFilename());
 			
@@ -401,9 +415,9 @@ public class DocumentService {
 	
 	
 	//
-	public String fileSave(MultipartFile attach) throws Exception{
+	public String fileSave(MultipartFile attach, String folderName) throws Exception{
 		
-		String fileName = fileManager.fileSave(path.concat("signs"), attach);
+		String fileName = fileManager.fileSave(path.concat(folderName), attach);
 		
 		
 		return fileName;

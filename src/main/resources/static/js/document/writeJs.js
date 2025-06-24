@@ -190,9 +190,6 @@ btn_complete.addEventListener("click", function() {
     
     input_content.value = insert_content.innerHTML;
 	
-    // 문서 첨부 파일
-	const input_files = document.getElementById("input_files");
-	
 
     // 결재자 정보 추출 → JSON 문자열로 변환하여 hidden input에 삽입
     const approvers = document.querySelectorAll(".employee_approval");
@@ -234,16 +231,15 @@ btn_complete.addEventListener("click", function() {
     const input_docuStatus = document.getElementById("input_docuStatus");
     input_docuStatus.value = "진행중";
 	
-	const form_document = document.getElementById("form_document");	
-	
 	
 	// 문서가 최초 작성완료이냐 임시저장 문서를 작성완료이냐에 따라 컨트롤러 경로를 바꿔준다
 	  if(insert_content.dataset.voCheck =="임시저장"){
-	    form_document.action="/document/updatetemp"
-		form_document.submit(); // 경로를 바꿔서 컨트롤러로 보낸다
+		  let formPath = "/document/updatetemp";
+		  submitForm(formPath);
 	
 	  } else if (insert_content.dataset.voCheck == ""){
-	    form_document.submit(); //기존 write경로를 컨트롤러로 보낸다
+	    let formPath = "/document/write";
+		submitForm(formPath);
 	
 	  }
 	  
@@ -349,6 +345,114 @@ remove_row.addEventListener("click", function () {
 });
 
 
+
+// 첨부 파일 관련 기능 ////////////////////////////////////////////
+var uploadBtn = document.getElementById("uploadBtn");
+var fakeInput = document.getElementById("fake_input_files");
+var fileListDiv = document.getElementById("fileList");
+var form = document.getElementById("form_document");
+var selectedFiles = [];
+
+// 파일 선택 버튼 클릭 → input 클릭
+uploadBtn.addEventListener("click", function () {
+  fakeInput.click();
+});
+
+// 파일 선택 시 → 누적 리스트에 추가
+fakeInput.addEventListener("change", function (event) {
+  var files = Array.from(event.target.files);
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    selectedFiles.push(file);
+	console.log(selectedFiles.length);
+    addFileToView(file);
+  }
+
+  // 같은 파일 다시 선택할 수 있도록 초기화
+  fakeInput.value = "";
+});
+
+// 파일 미리보기용 wrapper 생성
+function addFileToView(file) {
+  var wrapper = document.createElement("div");
+  wrapper.className = "file-wrapper";
+ 
+
+  var nameDiv = document.createElement("div");
+  nameDiv.textContent = "파일명: " + file.name;
+
+  var sizeDiv = document.createElement("div");
+  sizeDiv.textContent = "크기: " + (file.size / 1024).toFixed(1) + " KB";
+
+  var deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "X";
+  deleteBtn.type = "button";
+  deleteBtn.onclick = function () {
+    wrapper.remove();
+    var newList = [];
+    for (var i = 0; i < selectedFiles.length; i++) {
+      if (selectedFiles[i] !== file) {
+        newList.push(selectedFiles[i]);
+      }
+    }
+    selectedFiles = newList;
+  };
+
+  wrapper.appendChild(deleteBtn);
+  wrapper.appendChild(nameDiv);
+  wrapper.appendChild(sizeDiv);
+  fileListDiv.appendChild(wrapper);
+}
+
+// 전체 input + 파일 포함해서 FormData로 전송하는 함수
+let submitForm = function submitForm(formPath) {  
+
+  var formData = new FormData();
+
+  // form 안의 input 요소들을 전부 formData에 추가
+  var inputs = form.querySelectorAll("input[name]");
+  for (var i = 0; i < inputs.length; i++) {
+    var input = inputs[i];
+
+    // type이 file인 input은 건너뜀
+    if (input.type === "file") continue;
+
+    formData.append(input.name, input.value);
+  }
+
+  // 신규 파일 추가 (같은 name으로 여러 개 append → 다중 파일 처리됨)
+  for (var j = 0; j < selectedFiles.length; j++) {
+    formData.append("attaches", selectedFiles[j]);
+  }
+  
+  
+
+  
+  // fetch API로 ajax 전송
+    fetch(formPath, {
+      method: "POST",
+      body: formData
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("서버 오류 발생");
+        }
+        return response.text(); // 혹은 .json() (컨트롤러 응답 타입에 따라)
+      })
+      .then(data => {
+        console.log("성공:", data);
+        alert("문서가 성공적으로 저장되었습니다");
+        // 페이지 리다이렉트 또는 초기화 등 후속 처리
+        location.href = data;
+      })
+      .catch(error => {
+        console.error("에러:", error);
+        alert("저장 중 오류가 발생했습니다");
+      });
+  
+  
+  
+}
 
 
 
