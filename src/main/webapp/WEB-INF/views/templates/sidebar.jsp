@@ -103,17 +103,9 @@
 			</div>
 		</li>
 
-	<li class="nav-item"><a class="nav-link collapsed" href="#"
-		data-toggle="collapse" data-target="#collapseIngredients"
-		aria-expanded="true" aria-controls="collapseCalendar"> <ion-icon
-				name="cube-outline"></ion-icon> <span>물류</span>
-	</a>
-		<div id="collapseIngredients" class="collapse ${ingredients == ('list') ? 'show' :''}"
-			aria-labelledby="headingCalendar" data-parent="#accordionSidebar">
-			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item ${ingredients == ('list') ? 'active' :''}" href="/ingredients/list">물류관리</a>
-			</div>
-		</div></li>
+	<li class="nav-item"><a class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}" href="/ingredients/list">
+		<ion-icon name="cube-outline"></ion-icon> <span>물류</span>
+	</a></li>
 
 	<!-- Nav Item - Charts -->
 	<li class="nav-item"><a id="message" class="nav-link ${chat == 'chat' ? 'chat-active' : '' }" href="/chat/main">

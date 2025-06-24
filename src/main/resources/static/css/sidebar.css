@@ -1,4 +1,4 @@
-.chat-active {
+.chat-active, .ingredients-active {
     background-color: rgb(17, 106, 207);
     color: white;
     font-weight: bolder;

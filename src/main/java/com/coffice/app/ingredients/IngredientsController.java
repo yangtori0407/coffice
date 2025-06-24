@@ -44,7 +44,7 @@ public class IngredientsController {
 	
 	@ModelAttribute("ingredients")
 	public String posts() {
-		return "list";
+		return "ingredients";
 	}
 
 	@GetMapping("list")
