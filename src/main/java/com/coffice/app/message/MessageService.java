@@ -1,0 +1,49 @@
+package com.coffice.app.message;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+
+import jakarta.mail.internet.MimeMessage;
+
+@Service
+public class MessageService {
+	
+	@Autowired
+	private MessageDAO messageDAO;
+	
+	private final JavaMailSender messageMailSender;
+	
+	public MessageService(JavaMailSender messageMailSender) {
+		this.messageMailSender = messageMailSender;
+	}
+	
+	
+	public void sendMessage(MessageVO messageVO, int kind, String userId) throws Exception{
+		messageVO.setSender(userId);
+		messageDAO.add(messageVO);
+		
+		//사내
+		if(kind == 1) {
+			
+		} else {
+			sendMessageMail(messageVO, "heyang236@gmail.com");			
+		}
+		
+	}
+	
+	private void sendMessageMail(MessageVO messageVO, String email) throws Exception{
+		MimeMessage mimeMessage = messageMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+		
+		helper.setTo(messageVO.getReceiver());
+		helper.setSubject(messageVO.getMessageTitle());
+		helper.setText(messageVO.getMessageContents(), true);
+		helper.setFrom(email, messageVO.getSender());
+		
+		helper.setReplyTo(email);
+		
+		messageMailSender.send(mimeMessage);
+	}
+}

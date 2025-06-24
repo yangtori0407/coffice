@@ -121,7 +121,7 @@
 	</a></li>
 
 	<!-- Nav Item - Tables -->
-	<li class="nav-item"><a class="nav-link " href="tables.html"> <ion-icon
+	<li class="nav-item"><a class="nav-link " href="/message/main" class="nav-link ${message == 'message' ? 'chat-active' : '' }"> <ion-icon
 				name="mail-outline"></ion-icon> <span>사내 이메일</span></a></li>
 
 	<!-- Divider -->
