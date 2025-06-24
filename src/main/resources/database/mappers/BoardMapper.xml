@@ -128,6 +128,11 @@
 		IS_REPLY = 1 AND DELETE_STATUS = 0
 		ORDER BY COMMENT_DATE DESC
 	</select>
+	<select id="getParentComment" parameterType="Long" resultType="CommentVO">
+		SELECT COMMENT_NUM, BOARD_NUM, USER_ID, DELETE_STATUS, COMMENT_DATE, COMMENT_CONTENTS
+		FROM COMMENT
+		WHERE COMMENT_NUM = #{commentP}
+	</select>
 
 	<update id="delete" parameterType="BoardVO">
 		UPDATE BOARD SET DELETE_STATUS
