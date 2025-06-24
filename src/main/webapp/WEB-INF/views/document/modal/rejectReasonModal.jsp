@@ -15,7 +15,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">반려 사유</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">반려 사유를 입력해주세요</h5>
                     <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button> -->

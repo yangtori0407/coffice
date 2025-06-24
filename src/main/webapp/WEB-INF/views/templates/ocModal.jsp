@@ -65,7 +65,7 @@
 
         <div class="modal-footer">
           
-          <c:if test="${isWritePage eq 1}">
+          <c:if test="${empty docuVO || docuVO.status eq '임시저장'}">
             <button id="btn_toApprovers" type="button" class="btn btn-info" id="choose">결재선 넣기</button>
             <button id="btn_toReferrers" type="button" class="btn btn-primary" id="choose">참조선 넣기</button>
           </c:if>

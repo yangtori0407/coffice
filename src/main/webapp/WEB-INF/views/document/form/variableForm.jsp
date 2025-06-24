@@ -150,20 +150,20 @@
 	    <!-- 부서/기안자/직책/작성일 -->
 	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000;">
 	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">기안자</div>
-	      <div id="insert_writerName" class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000; height: 35px;" >
+	      <div id="insert_writerName" class="col-2 d-flex align-items-center justify-content-center informations" style="border-right: 1px solid #000; height: 35px;" contenteditable="">
 		        ${docuVO.writerName }
 		        <c:if test="${empty docuVO}">
 		        ${sessionScope.userVO.name}
 		        </c:if>
 	      </div>
-	      <div id="insert_writerPosition" class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000; height: 35px;" >
+	      <div id="insert_writerPosition" class="col-2 d-flex align-items-center justify-content-center informations" style="border-right: 1px solid #000; height: 35px;" contenteditable="">
 		        ${docuVO.writerPosition }
 		        <c:if test="${empty docuVO}">
 		        ${sessionScope.userVO.position}
 		        </c:if>
 	      </div>
 	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">부서</div>
-	      <div id="insert_dept" class="col-4 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000; height: 35px;">
+	      <div id="insert_writerDept" class="col-4 d-flex align-items-center justify-content-center informations" style="border-right: 1px solid #000; height: 35px;" contenteditable="">
 		        ${docuVO.writerDept }
 		        <c:if test="${empty docuVO}">
 		        ${sessionScope.userVO.deptName}
@@ -174,19 +174,22 @@
 	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none;">
 	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">작성일</div>
 	      <div id="insert_writeTime" class="col-4 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000; height: 35px;">
-		        ${docuVO.writerTime }
-		        <c:if test="${empty docuVO}">
-		        ---
+		        <c:if test="${not empty docuVO && docuVO.status ne '임시저장'}">
+		        	${docuVO.writerTime}
+		        </c:if>
+		        
+		        <c:if test="${empty docuVO || docuVO.status eq '임시저장'}">
+		        	${fakeToday}
 		        </c:if>
 	      </div>
 	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">처리일</div>
 	      <div id="insert_handleTime" class="col-4 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000; height: 35px;">
 		        
-		        <c:if test="${not empty docuVO}">
-		        	(${docuVO.status}) ${docuVO.modifierTime}
+		        <c:if test="${not empty docuVO && docuVO.status ne '임시저장'}">
+		        	${docuVO.modifierTime}
 		        </c:if>
 		        
-		        <c:if test="${empty docuVO}">
+		        <c:if test="${empty docuVO || docuVO.status eq '임시저장' }">
 		        	---
 		        </c:if>
 	      </div>
@@ -196,21 +199,20 @@
 	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none;">
 	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">제목</div>
 	      
-	      <c:if test="${empty docuVO}">
-		      	<div id="insert_title" class="col-10 d-flex align-items-center justify-content-center" style="height: 35px;" contenteditable="true">
-		        
+		      	<div id="insert_title" class="col-10 d-flex align-items-center justify-content-center informations" style="height: 35px;" contenteditable="">
+			      <c:if test="${empty docuVO}">
+				        
+			      </c:if>
+			      
+			      <c:if test="${not empty docuVO}">
+				        ${docuVO.title}	      
+			      </c:if>
 		      	</div>
-	      </c:if>
-	      
-	      <c:if test="${not empty docuVO}">
-		      <div id="insert_title" class="col-10 d-flex align-items-center justify-content-center" style="height: 35px;">
-		        ${docuVO.title}
-		      </div>	      
-	      </c:if>
+	          	      
 	    </div>
 	
 	    <!-- 본문 내용, 스크립트 째로 content 프로퍼티에 집어 넣을 영역 -->	    
-	    <div id="insert_content" data-vo-check="${docuVO.documentId}" class="m-0 p-0" style="min-height: 400px; border: 1px solid #000; border-top: none;">
+	    <div id="insert_content" data-vo-check="${docuVO.status}" class="m-0 p-0" style="min-height: 400px; border: 1px solid #000; border-top: none;">
 	      	
  	      	<c:if test="${empty docuVO}">
 	      		${formVO.formFrame}
@@ -258,6 +260,17 @@
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 반려하기
             </a>
+            
+            <!-- 접속한 사람이 작성자 본인이고, 문서가 진행중이고, 스텝이 1이어야한다(미처리 상태) -->
+            <c:if test="${sessionScope.userVO.userId eq docuVO.writerId && docuVO.status eq '진행중' && docuVO.currentStep eq '1'}">
+            	<button id="btn_getBack" class="btn btn-outline-secondary me-2 mr-3" 
+            	data-document-id="${docuVO.documentId}">문서 회수</button>
+            </c:if>
+            <c:if test="${docuVO.status eq '임시저장' }">
+            	<button id="btn_deletetemp" class="btn btn-outline-secondary me-2 mr-3"
+            	data-document-id="${docuVO.documentId}">작성 취소</button>
+            </c:if>
+			<button id="btn_temporary" class="btn btn-outline-secondary me-2 mr-3">임시 저장</button>
 	        <button id="btn_complete" class="btn btn-outline-secondary me-2 mr-3">작성 완료</button>
 	        <button id="btn_cancle" class="btn btn-outline-secondary mr-3">나가기</button>
 	      </div>
@@ -281,7 +294,9 @@
 			<div id="box_approvers" class="mb-5" style="border: 1px solid black; min-height: 100px;"> 결재자 목록
 								
 				<c:forEach var="i" items="${docuVO.approvalLineVOs}">
-					<div class="employee_approval">${i.userName} ${i.userPosition}</div>
+					<div class="employee_approval" data-selected-id="${i.userId}" data-selected-name="${i.userName}" data-selected-position="${i.userPosition}">
+						${i.userName} ${i.userPosition}
+					</div>
 				</c:forEach>
 							
 			</div>
@@ -291,7 +306,9 @@
 			<div id="box_referrers" class="mb-5" style="border: 1px solid black; min-height: 100px;"> 참조자 목록
 								
 				<c:forEach var="i" items="${docuVO.referenceLineVOs}">
-					<div class="employee_reference">${i.userName} ${i.userPosition}</div>
+					<div class="employee_reference" data-selected-id="${i.userId}" data-selected-name="${i.userName}" data-selected-position="${i.userPosition}">
+						${i.userName} ${i.userPosition}
+					</div>
 				</c:forEach>
 				
 			</div>
@@ -304,13 +321,14 @@
 			
 			
 			<!-- Controller로 데이터 날릴 폼 -->
-			<form id="form_document" method="post">
+			<form id="form_document" method="post" action="/document/write" enctype="multipart/form-data">
+				<input id="input_documentId" name="documentId" type="hidden" value="${docuVO.documentId}">
 				<input id="input_formId" name="formId" type="hidden" value="${formVO.formId}">
 				
 				<input id="input_writerId" name="writerId" type="hidden" value="${sessionScope.userVO.userId}">
-				<input id="input_writerName" name="writerName" type="hidden" value="${sessionScope.userVO.name}">
-				<input id="input_writerPosition" name="writerPosition" type="hidden" value="${sessionScope.userVO.position}">
-				<input id="input_writerDept" name="writerDept" type="hidden" value="${sessionScope.userVO.deptName}">
+				<input id="input_writerName" name="writerName" type="hidden" value="">
+				<input id="input_writerPosition" name="writerPosition" type="hidden" value="">
+				<input id="input_writerDept" name="writerDept" type="hidden" value="">
 								
 				<input id="input_title" name="title" type="hidden" value="">
 				<input id="input_content" name="content" type="hidden" value="">
@@ -321,6 +339,7 @@
 				
 				<input id="input_referrers" name="referrers" type="hidden">
 				
+				<input id="input_docuStatus" name="status" type="hidden">
  
 				
 			</form>
@@ -353,6 +372,7 @@
 	<script src="/js/document/writeJs.js"></script>
 	<script src="/js/document/signTool.js"></script>
 	<script src="/js/document/toReject.js"></script>
+	<script src="/js/document/toTemporary.js"></script>
 	
 </body>
 </html>
