@@ -20,9 +20,9 @@ public class MessageService {
 	}
 	
 	
-	public void sendMessage(MessageVO messageVO, int kind, String userId) throws Exception{
+	public int sendMessage(MessageVO messageVO, int kind, String userId) throws Exception{
 		messageVO.setSender(userId);
-		messageDAO.add(messageVO);
+		int result = messageDAO.add(messageVO);
 		
 		//사내
 		if(kind == 1) {
@@ -30,7 +30,7 @@ public class MessageService {
 		} else {
 			sendMessageMail(messageVO, "heyang236@gmail.com");			
 		}
-		
+		return result;
 	}
 	
 	private void sendMessageMail(MessageVO messageVO, String email) throws Exception{

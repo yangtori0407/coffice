@@ -1,6 +1,7 @@
 package com.coffice.app.message;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,9 +34,9 @@ public class MessageController {
 	}
 	
 	@PostMapping("add")
-	public String add(MessageVO messageVO, int kind) throws Exception{
+	public String add(MessageVO messageVO, int kind, Authentication authentication) throws Exception{
 		log.info("messageVO : {}", messageVO);
-		messageService.sendMessage(messageVO, kind);
+		messageService.sendMessage(messageVO, 2, authentication.getName());
 		
 		return "redirect:./main";
 	}

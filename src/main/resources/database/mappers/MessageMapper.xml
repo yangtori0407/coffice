@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.message.MessageDAO">
+  	<insert id="add">
+  		INSERT INTO MESSAGE(MESSAGE_NUM, MESSAGE_CONTENTS, RECEIVER, SENDER, SEND_DATE, CHECK_STATUS, DELETE_SEND, DELETE_RECEIVER, MESSAGE_TITLE)
+  		VALUES(NULL, #{messageContents}, #{receiver}, #{sender}, NOW(), 0, 0, 0, #{messageTitle})
+  	</insert>
+  </mapper>

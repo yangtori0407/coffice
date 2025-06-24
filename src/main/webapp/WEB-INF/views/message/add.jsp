@@ -28,10 +28,26 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					<form action="./add" method="post" class="d-flex flex-column">
-					<label>받는 사람</label> <input type="text"
-							class="card mb-4 py-2 border-primary" name="sender"
-							style="width: 100%;">
+					<!-- <form action="./add" method="post" class="d-flex flex-column"> -->
+					<div class="d-flex flex-column">
+						<span>받는 사람</span>
+						<div id="receiverArea" class="d-flex" >
+							<input type="email" class="card mb-2 py-1 border-primary p-0"
+								name="sender" style="width: 100%;" id="emailInput">
+							
+
+						</div>
+						<div class="mb-3">
+							<button type="button" class="btn btn-primary"
+								data-toggle="modal" data-target="#exampleModal" id="diagram">조직도</button>
+							<button class="btn btn-info" type="button"
+								data-toggle="collapse" data-target="#replyTo"
+								aria-expanded="false" aria-controls="collapseExample">
+								답장받을 이메일</button>
+						</div>
+						<div class="collapse mb-2" id="replyTo">
+							<div class="card card-body p-0"><input type="email" name="replyEmail"></div>
+						</div>
 						<label>제목</label> <input type="text"
 							class="card mb-4 py-3 border-left-info" name="messageTitle"
 							style="width: 100%;"> <label>내용</label>
@@ -43,7 +59,8 @@
 							<button id="submitBtn" class="btn btn-primary mb-3" type="submit">글
 								작성하기</button>
 						</div>
-					</form>
+					<!-- </form> -->
+					</div>
 				</div>
 			</div>
 			<!-- end Content -->
@@ -53,116 +70,9 @@
 	</div>
 	<!-- End Wrapper -->
 	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-	<script>
-			let quill = new Quill('#editor', {
-				modules: {
-					toolbar: [['bold', 'italic', 'underline', 'strike'], // 굵게, 기울임, 밑줄, 취소선
-					['blockquote', 'code-block'], // 인용 블록, 코드 블록
-
-					[{
-						'header': 1
-					}, {
-						'header': 2
-					}], // 제목 크기
-					[{
-						'list': 'ordered'
-					}, {
-						'list': 'bullet'
-					}], // 순서 있는 목록, 순서 없는 목록
-					[{
-						'script': 'sub'
-					}, {
-						'script': 'super'
-					}], // 위첨자, 아래첨자
-					[{
-						'indent': '-1'
-					}, {
-						'indent': '+1'
-					}], // 들여쓰기, 내어쓰기
-					[{
-						'direction': 'rtl'
-					}], // 텍스트 방향
-
-					[{
-						'size': ['small', false, 'large', 'huge']
-					}], // 폰트 크기
-					[{
-						'header': [1, 2, 3, 4, 5, 6, false]
-					}], // 제목 레벨
-
-					[{
-						'color': []
-					}, {
-						'background': []
-					}], // 폰트 색, 배경 색
-					[{
-						'font': []
-					}], // 폰트 종류
-					[{
-						'align': []
-					}], // 텍스트 정렬
-
-					['image'], // 링크, 이미지, 비디오 삽입
-
-					['clean'] // 포맷 지우기
-					]
-				},
-				placeholder: '내용을 입력하세요...', // placeholder 텍스트
-				theme: 'snow'
-			});
-
-			quill.on("text-change", function() {
-				document.getElementById("quill_html").value = quill.root.innerHTML;
-			})
-
-			quill.getModule('toolbar').addHandler("image", function() {
-				selectLocalImage();
-			})
-
-			function selectLocalImage() {
-				const fileInput = document.createElement("input");
-				fileInput.setAttribute("type", "file");
-
-				fileInput.click();
-
-				fileInput.addEventListener("change", function() {
-					const formData = new FormData();
-					const file = fileInput.files[0];
-					formData.append("uploadFile", file); //스프링에서 @RequestParam("uploadFile") 로 받아야한다.
-					fetch("/board/quillUpload", {
-						method: "POST",
-						body: formData
-					}).then(r => r.text())
-						.then(r => {
-							console.log(r);
-							const range = quill.getSelection();
-							quill.insertEmbed(range.index, 'image', "/files/" + r);
-
-						})
-
-				})
-
-			}
-			
-			let isSubmitting = false;
-			
-			document.getElementById("submitBtn").addEventListener("click", () =>{
-				isSubmitting = true;
-			})
-			
-			window.addEventListener('beforeunload', (event) => {  
-				// 표준에 따라 기본 동작 방지  
-				if(!isSubmitting){
-					event.preventDefault();  // Chrome에서는 returnValue 설정이 필요함  
-					event.returnValue = '';
-				}
-			});
-			
-			
-				
-			</script>
+	<script src="/js/message/messageAdd.js"></script>
+	<c:import url="/WEB-INF/views/templates/ocModal.jsp"></c:import>
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
-
 
 </body>
 
