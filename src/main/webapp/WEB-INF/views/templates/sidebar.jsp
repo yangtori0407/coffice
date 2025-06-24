@@ -116,12 +116,12 @@
 		</div></li>
 
 	<!-- Nav Item - Charts -->
-	<li class="nav-item"><a id="message" class="nav-link ${chat == 'chat' ? 'chat-active' : '' }" href="/chat/main">
+	<li class="nav-item"><a id="chatSideBar" class="nav-link ${chat == 'chat' ? 'chat-active' : '' }" href="/chat/main">
 			<ion-icon name="chatbubbles-outline"></ion-icon> <span>메신저</span>
 	</a></li>
 
 	<!-- Nav Item - Tables -->
-	<li class="nav-item"><a class="nav-link " href="/message/main" class="nav-link ${message == 'message' ? 'chat-active' : '' }"> <ion-icon
+	<li class="nav-item"><a class="nav-link ${message == 'message' ? 'chat-active' : '' }" href="/message/main"> <ion-icon
 				name="mail-outline"></ion-icon> <span>사내 이메일</span></a></li>
 
 	<!-- Divider -->
