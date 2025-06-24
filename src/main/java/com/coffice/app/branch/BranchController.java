@@ -188,7 +188,10 @@ public class BranchController {
 	}
 	
 	@GetMapping("myBranch")
-	public void myBranch(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Model model, Pager pager) throws Exception {
+	public void myBranch(@AuthenticationPrincipal UserVO userVO, 
+						BranchVO branchVO, 
+						Model model, Pager pager, 
+						@ModelAttribute MenuVO menuVO) throws Exception {
 		String userId = userVO.getUserId();
 		userVO.setUserId(userId);
 		
