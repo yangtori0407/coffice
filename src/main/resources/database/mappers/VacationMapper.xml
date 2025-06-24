@@ -59,4 +59,20 @@
   			and APPROVAL_AUTHORITY = #{approvalAuthority}
   	</update>
   	
+  	<select id="getList" resultType="VacationVO" parameterType="UserVO">
+  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
+			from VACATION v
+			join USERS u
+			on v.USER_ID = u.USER_ID
+			join USERS u2 
+			on v.APPROVAL_AUTHORITY = u2.USER_ID
+			where u.DEPT_ID = (
+							   select DEPT_ID
+							   from USERS
+							   where USER_ID = #{userId}
+							  )
+			and v.STATUS = 1
+			and v.DELETE_STATUS = 0
+  	</select>
+  	
   </mapper>

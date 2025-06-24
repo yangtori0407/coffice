@@ -8,7 +8,7 @@ import lombok.Data;
 public class VacationVO extends EventVO {
 	
 	private Long vacationId;
-	private String status;
+	private boolean status;
 	private String type;
 	private String approvalAuthority;
 	private String aposition;

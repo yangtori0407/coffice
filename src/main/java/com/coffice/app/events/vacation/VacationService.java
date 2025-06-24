@@ -52,5 +52,9 @@ public class VacationService {
 	public int approve(VacationVO vacationVO) throws Exception {
 		return vacationDAO.approve(vacationVO);
 	}
+	
+	public List<VacationVO> getList(UserVO userVO) throws Exception {
+		return vacationDAO.getList(userVO);
+	}
 
 }

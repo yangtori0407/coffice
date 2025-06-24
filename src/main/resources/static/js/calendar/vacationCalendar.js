@@ -35,7 +35,50 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         apply()
     },
     eventClick: function(e) {
-        console.log(e.event)
+        if (e.event.extendedProps.preventClick) {
+            console.log("이 이벤트는 클릭 비활성화됨");
+            return;
+        }
+        console.log(e.event.id)
+        fetch(`http://localhost/events/vacation/getOne?vacationId=${e.event.id}`)
+        .then(r=>r.json())
+        .then(r=>{
+            console.log(r)
+            let st;
+            let et;
+            if(r.vacationVO.status == 0) {
+                st = "승인 대기"
+                et = ""
+                updateVacation.setAttribute("style", "display: block;")
+            }else {
+                st = "승인 완료"
+                et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
+                updateVacation.setAttribute("style", "display: none;")
+            }
+            let vid = document.getElementById("vid")
+            let t = document.getElementById("vacationType")
+            let a = document.getElementById("applier")
+            let it = document.getElementById("insertTime")
+            let p = document.getElementById("period")
+            let s = document.getElementById("status")
+            let ac = document.getElementById("accepter")
+            let at = document.getElementById("acceptTime")
+            vid.value = r.vacationVO.vacationId
+            t.innerHTML = "<strong>종류 : </strong>"+r.vacationVO.type
+            a.innerHTML = "<strong>신청자 : </strong>"+r.applier.position + " " + r.applier.name
+            it.innerHTML = "<strong>신청일 : </strong>"+r.vacationVO.insertTime.slice(0, 10) + " " + r.vacationVO.insertTime.slice(11, 16)
+            p.innerHTML = "<strong>신청 기간 : </strong>"+r.vacationVO.startTime.slice(2, 10) + " " + r.vacationVO.startTime.slice(11, 16) + " ~ " + r.vacationVO.endTime.slice(2, 10) + " " + r.vacationVO.endTime.slice(11, 16)
+            s.innerHTML = "<strong>처리 상태 : </strong>"+st
+            ac.innerHTML = "<strong>승인자 : </strong>"+r.accepter.position + " " + r.accepter.name
+            at.innerHTML = "<strong>승인일 : </strong>"+et
+            let userId = document.getElementById("userId")
+            if(userId.value == r.vacationVO.userId) {
+                updateVacation.innerText = "수정"
+            }else {
+                updateVacation.innerText = "승인"
+            }
+        })
+        $("#vacationDetailModal").modal("show")
     }
 });
 
@@ -47,7 +90,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 
 const undo = document.getElementById("undo")
 undo.addEventListener("click", ()=>{
-    $("#listModal").modal("show")
+    accept()
 })
 
 fetch("http://localhost/events/getHolidays")
@@ -59,6 +102,25 @@ fetch("http://localhost/events/getHolidays")
             start: a.locdate.toString(),
             allDay: true,
             color: '#ee0000',
+            editable: false,
+            extendedProps: {
+                preventClick: true
+            }
+        }
+        calendar.addEvent(event);
+    }
+})
+
+fetch("http://localhost/events/vacation/getList")
+.then(r=>r.json())
+.then(r=>{
+    for(a of r) {
+        let event = {
+            id: a.vacationId,
+            title: a.aposition + " " + a.aname,
+            start: a.startTime,
+            end: a.endTime,
+            color: '#378006',
             editable: false
         }
         calendar.addEvent(event);
@@ -164,7 +226,7 @@ function accept() {
                     }else {
                         st = "승인 완료"
                         et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
-                        updateVacation.setAttribute("style", "display: block;")
+                        updateVacation.setAttribute("style", "display: none;")
                     }
                     let vid = document.getElementById("vid")
                     let t = document.getElementById("vacationType")
@@ -204,7 +266,7 @@ function accept() {
             if(a.status == 0) {
                 stat = "승인 대기 \t <ion-icon name='ellipse' style='color:yellow;'></ion-icon>"
             }else {
-                stat = "승인 완료 \t <ion-icon name='radio-button-on-outline' style='color:green;'></ion-icon>"
+                stat = "승인 완료 \t <ion-icon name='ellipse' style='color:green;'></ion-icon>"
             }
             let li = document.createElement("li")
             li.classList.add("list-group-item")

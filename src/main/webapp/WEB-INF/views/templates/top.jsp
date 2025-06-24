@@ -46,6 +46,7 @@
 		<!-- Nav Item - Alerts -->
 		<sec:authorize access="isAuthenticated()">
 			<sec:authentication property="principal" var="user" />
+			<input type="hidden" id="userId" value="${user.userId}">
 
 
 			<li class="nav-item dropdown no-arrow mx-1" id="alert"><a

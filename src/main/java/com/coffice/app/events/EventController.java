@@ -149,5 +149,12 @@ public class EventController {
 		int result = vacationService.approve(vacationVO);
 		log.info("approve : {}", result);
 	}
+	
+	@GetMapping("vacation/getList")
+	@ResponseBody
+	public List<VacationVO> getList(Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		return vacationService.getList(userVO);
+	}
 
 }
