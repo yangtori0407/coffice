@@ -37,11 +37,12 @@ public class IngredientsService {
 	}
 	
 	public int add(IngredientsVO ingredientsVO, MultipartFile multipartFile) throws Exception {
-		if(!multipartFile.isEmpty()) {
+		if( multipartFile!=null && !multipartFile.isEmpty()) {
 			String filename = fileManager.fileSave(path, multipartFile);
 			ingredientsVO.setSaveName(filename);
 			ingredientsVO.setOriginName(multipartFile.getOriginalFilename());
-		}
+		} 
+		
 		return ingredeintsDAO.add(ingredientsVO);
 	}
 	

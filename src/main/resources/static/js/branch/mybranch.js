@@ -146,3 +146,55 @@ let expenditureOptions =[];
         modalFooter[0].appendChild(button);
     });
   });
+
+// 메뉴추가
+const addMenuBtn = document.getElementById("addMenuBtn")
+
+addMenuBtn.addEventListener("click",()=>{
+
+    const menuName = document.getElementById("menuName").value;
+    const menuPrice = document.getElementById("menuPrice").value;
+    const menuFile = document.getElementById("menuFile").files[0];
+
+        let c = confirm("정말 입력하시겠습니까?")
+        if(!c){
+            return;
+        }
+
+        if(menuName==""){
+            alert("메뉴을 입력하셔야합니다.")
+            return;
+        }
+
+        if(menuPrice==""){
+            alert("수량을 입력하세요.")
+            return;
+        } else if(menuPrice<=0){
+            alert("0보다 작은수는 안됩니다.")
+            return;
+        }
+
+    const formData = new FormData();
+    formData.append("menuName", menuName);
+    formData.append("menuPrice", menuPrice);
+    formData.append("menuFile", menuFile);
+
+        fetch('/branch/addMenu', {
+            method: 'POST',
+            body: formData
+        })
+        .then(r=>r.json())
+        .then(r=>{
+            console.log(r)
+            if(r.status === 'success'){
+                alert(r.message)
+                location.reload();
+            } else {
+                alert(r.message)
+            }
+        })
+        .catch(e=> {
+            console.log(e)
+            alert("오류");
+        });
+    });

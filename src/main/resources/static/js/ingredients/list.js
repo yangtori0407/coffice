@@ -6,10 +6,6 @@ addIngredientsBtn.addEventListener("click",()=>{
     const ingredientsPrice = document.getElementById("ingredientsPrice").value;
     const ingredientsFile = document.getElementById("ingredientsFile").files[0];
 
-    console.log(ingredientsName);
-    console.log(ingredientsPrice);
-    console.log(ingredientsFile.name);
-
         let c = confirm("정말 입력하시겠습니까?")
         if(!c){
             return;
@@ -31,7 +27,9 @@ addIngredientsBtn.addEventListener("click",()=>{
     const formData = new FormData();
     formData.append("ingredientsName", ingredientsName);
     formData.append("ingredientsPrice", ingredientsPrice);
-    formData.append("ingredientsFile", ingredientsFile);
+    if(ingredientsFile!==undefined){
+        formData.append("ingredientsFile", ingredientsFile);
+    }
 
         fetch('/ingredients/add', {
             method: 'POST',

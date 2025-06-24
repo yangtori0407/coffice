@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.*;
@@ -22,9 +23,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.coffice.app.ingredients.IngredientsVO;
 import com.coffice.app.page.Pager;
 import com.coffice.app.sales.MenuVO;
 import com.coffice.app.sales.SalesService;
@@ -154,6 +158,33 @@ public class BranchController {
 		branchService.masterAdd(branchMasterVO);
 		redirectAttributes.addFlashAttribute("msg", "점주등록이 완료되었습니다!");
 		return "redirect:./map";
+	}
+	
+	@PostMapping("addMenu")
+	@ResponseBody
+	public HashMap<String, Object> addMenu(@Validated @ModelAttribute MenuVO menuVO, 
+										BindingResult bindingResult,
+										@RequestParam(value="menuFile",required = false) MultipartFile multipartFile) throws Exception {
+		    
+		   HashMap<String, Object> map = new HashMap<>();
+		   
+		if(bindingResult.hasErrors()) {
+			map.put("status", "fail");
+			map.put("message", "이름이 필요합니다.");
+		    return map;
+		}
+		
+		// 이름 중복 검사
+		if (salesService.nameErrorCheck(menuVO, bindingResult)) {
+			map.put("status", "fail");
+			map.put("message", "이미 존재하는 메뉴입니다.");
+	        return map;
+		}
+	    
+		salesService.addMenu(menuVO, multipartFile);
+		map.put("status", "success");
+		map.put("message", "추가되었습니다.");
+	    return map;
 	}
 	
 	@GetMapping("myBranch")

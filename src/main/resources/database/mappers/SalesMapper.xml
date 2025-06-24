@@ -44,4 +44,12 @@
 				null,
 				#{ingredientsId})
   	</insert>
+  	<insert id="addMenu" parameterType="MenuVO">
+  		INSERT INTO MENU
+  		VALUES (null,#{menuName},#{menuPrice},#{saveName},#{originName})
+  	</insert>
+  	<select id="nameCheck" resultType="MenuVO" parameterType="MenuVO">
+	    SELECT * FROM MENU
+	    WHERE MENU_NAME = #{menuName}
+	</select>
   </mapper>

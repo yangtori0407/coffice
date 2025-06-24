@@ -80,7 +80,7 @@ public class IngredientsController {
 	@ResponseBody
 	public HashMap<String, Object> add(@Validated @ModelAttribute IngredientsVO ingredientsVO, 
 										BindingResult bindingResult,
-										@RequestParam("ingredientsFile") MultipartFile multipartFile) throws Exception {
+										@RequestParam(value="ingredientsFile", required = false) MultipartFile multipartFile) throws Exception {
 		  log.info("ingredientVO {}", ingredientsVO);
 		    
 		   HashMap<String, Object> map = new HashMap<>();
@@ -98,10 +98,13 @@ public class IngredientsController {
 	        return map;
 		}
 	    
-		ingredientsService.add(ingredientsVO, multipartFile);
+
+		ingredientsService.add(ingredientsVO, multipartFile);	
+
 		map.put("status", "success");
-		map.put("message", "추가되었습니다.");
-	    return map;
+		map.put("message", "추가되었습니다.");				
+
+		return map;
 	}
 	
 	@PostMapping("addHistory")

@@ -202,7 +202,7 @@
 
 						<div class="form-group mb-3">
 							<label for="ingredientsPrice" class="font-weight-bold">상품 가격</label>
-							<form:input path="ingredientsPrice" class="form-control" id="ingredientsPrice" placeholder="ex)1000" required="true"/>					
+							<input type="number" name="ingredientsPrice" class="form-control" id="ingredientsPrice" placeholder="ex)1000" required="true"/>					
 						</div>
 						
 						<div class="form-group mb-3">
