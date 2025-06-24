@@ -19,6 +19,10 @@
   		</choose>
   		LIKE CONCAT('%',#{search},'%')
   	</sql>
+  	
+  	<select id="registerBranch" resultType="Long">
+  		SELECT COUNT(*) FROM BRANCH WHERE BRANCH_STATUS = 1
+  	</select>
   
   	<select id="getList" resultType="BranchVO" parameterType="Pager">
   		SELECT * FROM BRANCH
@@ -39,6 +43,13 @@
   		USING(USER_ID)
   	</select>
   	
+  	<select id="branchName" resultType="BranchVO" parameterType="BranchVO">
+  		SELECT * FROM BRANCH WHERE BRANCH_NAME =#{branchName}
+  	</select>
+  	
+  	<select id="branchAddress" resultType="BranchVO" parameterType="BranchVO">
+  		SELECT * FROM BRANCH WHERE BRANCH_ADDRESS=#{branchAddress}
+  	</select>
   	
   	<select id="notAddBranchList" resultType="BranchVO">
   		SELECT * FROM BRANCH WHERE USER_ID IS NULL
@@ -73,6 +84,11 @@
   		INSERT INTO BRANCHMASTER
 		VALUES (#{userId.userId},#{contactNumber},#{contactDate},0);
   	</insert>
+  	
+  	 <select id="nameCheck" resultType="BranchMasterVO" parameterType="BranchMasterVO">
+	    SELECT * FROM BRANCHMASTER
+	    WHERE CONTACT_NUMBER = #{contactNumber}
+	</select>
   	
   	<select id="myBranch" parameterType="map" resultMap="getMyBranch" >
   	  	SELECT * FROM BRANCH b
@@ -141,7 +157,7 @@
   	  	JOIN BRANCH 
   	  	USING(BRANCH_ID)
   	  	WHERE USER_ID = #{userVO.userId}
-  	  	AND SALES_DATE BETWEEN now()-INTERVAL 2 DAY AND now()+INTERVAL 5 DAY
+  	  	AND SALES_DATE BETWEEN now()-INTERVAL 6 DAY AND now()+INTERVAL 2 DAY
   	  	GROUP BY SALES_DATE
   		ORDER BY SALES_DATE ASC
   	</select>

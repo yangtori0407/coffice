@@ -3,6 +3,8 @@ package com.coffice.app.branch;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.*;
@@ -15,16 +17,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.coffice.app.ingredients.IngredientsVO;
 import com.coffice.app.page.Pager;
 import com.coffice.app.sales.MenuVO;
 import com.coffice.app.sales.SalesService;
 import com.coffice.app.sales.SalesVO;
+import com.coffice.app.users.RegisterGroup;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,19 +45,25 @@ public class BranchController {
 	
 	@Value("${kakao.map.appkey}")
 	private String appkey;
+	@Value("${business.service.key}")
+	private String servicekey;
 	@Autowired
 	private BranchService branchService;
 	@Autowired
 	private SalesService salesService;
 	
 	@ModelAttribute("appkey")
-	public String getAppkey() {
-		
+	public String getAppkey() {	
 		return this.appkey;
+	}
+	
+	@ModelAttribute("servicekey")
+	public String getServicekey() {	
+		return this.servicekey;
 	}
 
 	@GetMapping("map")
-	public String map(Model model, Pager pager) throws Exception {
+	public void map(Model model, Pager pager) throws Exception {
 		List<BranchVO> list = branchService.getList(pager);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
@@ -63,22 +78,32 @@ public class BranchController {
 		model.addAttribute("total", total);
 		
 		model.addAttribute("kind", "지점 > 지점지도");
-		
-		return "branch/map";
+		model.addAttribute("branch", "map");
 	}
 	
 	@GetMapping("add")
-	public String add(Model model) throws Exception {
-		model.addAttribute("kind", "지점 > 지점추가");
-		return "branch/add";
+	public void add(Model model,  @ModelAttribute BranchVO branchVO) throws Exception {
+		model.addAttribute("kind", "지점 > 지점등록");
+		model.addAttribute("branch", "add");
 	}
+	
 	@PostMapping("add")
-	public String add(BranchVO branchVO) throws Exception {
+	public String add(@Validated(RegisterGroup.class) @ModelAttribute BranchVO branchVO,
+						BindingResult bindingResult,
+						RedirectAttributes redirectAttributes) throws Exception {
+		if(branchService.branchNameCheck(branchVO, bindingResult)) {
+			return "branch/add";
+		}
+		
+		if(branchService.branchAddressCheck(branchVO, bindingResult)) {
+			return "branch/add";
+		}
+		
 		int result = branchService.add(branchVO);
 		
-		
 		if(result > 0) {
-			return "redirect:/";
+			redirectAttributes.addFlashAttribute("msg", "지점등록이 완료되었습니다!");
+			return "redirect:./map";
 		}
 		return "branch/add";
 	}
@@ -102,22 +127,68 @@ public class BranchController {
 	}
 	
 	@GetMapping("masterAdd")
-	public String masterAdd(Model model) throws Exception {
+	public String masterAdd(Model model, @ModelAttribute BranchMasterVO branchMasterVO) throws Exception {
 		List<BranchMasterVO> notRegisterBranchMaster = branchService.notRegisterBranchMaster();
 		model.addAttribute("notRegisterBranchMaster", notRegisterBranchMaster);
 		model.addAttribute("kind", "지점 > 점주등록");
+		model.addAttribute("branch", "masterAdd");
+		model.addAttribute("today", LocalDate.now());
 		return "branch/masterAdd";
 	}
 	
 	@PostMapping("masterAdd")
-	public String masterAdd(BranchMasterVO branchMasterVO) throws Exception {
+	public String masterAdd(@Validated(RegisterGroup.class) @ModelAttribute BranchMasterVO branchMasterVO,
+							RedirectAttributes redirectAttributes, 
+							BindingResult bindingResult,
+							Model model) throws Exception {
+		
 		log.info("bm:{}",branchMasterVO);
+		
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("branchMasterVO", branchMasterVO);
+			model.addAttribute("notRegisterBranchMaster", branchService.notRegisterBranchMaster());
+			return "branch/masterAdd";
+		}
+		
+		if(branchService.nameErrorCheck(branchMasterVO, bindingResult)) {
+			model.addAttribute("notRegisterBranchMaster", branchService.notRegisterBranchMaster());
+			return "branch/masterAdd";
+		}
+		
 		branchService.masterAdd(branchMasterVO);
-		return "redirect:/";
+		redirectAttributes.addFlashAttribute("msg", "점주등록이 완료되었습니다!");
+		return "redirect:./map";
+	}
+	
+	@PostMapping("addMenu")
+	@ResponseBody
+	public HashMap<String, Object> addMenu(@Validated @ModelAttribute MenuVO menuVO, 
+										BindingResult bindingResult,
+										@RequestParam(value="menuFile",required = false) MultipartFile multipartFile) throws Exception {
+		    
+		   HashMap<String, Object> map = new HashMap<>();
+		   
+		if(bindingResult.hasErrors()) {
+			map.put("status", "fail");
+			map.put("message", "이름이 필요합니다.");
+		    return map;
+		}
+		
+		// 이름 중복 검사
+		if (salesService.nameErrorCheck(menuVO, bindingResult)) {
+			map.put("status", "fail");
+			map.put("message", "이미 존재하는 메뉴입니다.");
+	        return map;
+		}
+	    
+		salesService.addMenu(menuVO, multipartFile);
+		map.put("status", "success");
+		map.put("message", "추가되었습니다.");
+	    return map;
 	}
 	
 	@GetMapping("myBranch")
-	public String myBranch(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Model model, Pager pager) throws Exception {
+	public void myBranch(@AuthenticationPrincipal UserVO userVO, BranchVO branchVO, Model model, Pager pager) throws Exception {
 		String userId = userVO.getUserId();
 		userVO.setUserId(userId);
 		
@@ -137,8 +208,7 @@ public class BranchController {
 		model.addAttribute("menuList", menuList);
 		
 		model.addAttribute("kind", "지점 > my지점");
-		
-		return "branch/myBranch";
+		model.addAttribute("branch", "myBranch");
 	}
 	
 	@GetMapping("/api/excel/download/branch")
@@ -263,7 +333,11 @@ public class BranchController {
 					dateCell.setCellValue(saleDate);
 					dateCell.setCellStyle(dataCellStyle);
 					dataRow.createCell(4).setCellValue(branch.getSalesVO().get(i).getSalesQuantity());
-					dataRow.createCell(5).setCellValue(branch.getSalesVO().get(i).getMenuVO().getMenuName());
+					if(branch.getSalesVO().get(i).getMenuVO() != null) {
+						dataRow.createCell(5).setCellValue(branch.getSalesVO().get(i).getMenuVO().getMenuName());
+					}else {
+						dataRow.createCell(5).setCellValue(branch.getSalesVO().get(i).getIngredientsVO().getIngredientsName());
+					}
 				}
 
 				

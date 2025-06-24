@@ -17,4 +17,6 @@ public class IngredientsVO {
 	private Integer ingredientsPrice;
 	private Date ingredientsDate;
 	private List<History> history;
+	private String saveName;
+	private String originName;
 }
