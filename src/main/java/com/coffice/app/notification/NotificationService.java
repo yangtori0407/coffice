@@ -65,11 +65,32 @@ public class NotificationService {
 		info.put("userId", boardVO.getUserId());
 		info.put("notiNum", notificationVO.getNotiNum());
 		notificationDAO.addNoticeCheck(info);
-		
-		info.clear();
-		
+	
 		
 		template.convertAndSend("/sub/board/user."+ boardVO.getUserId(), notificationVO);
+	}
+	
+	public void sendReply(CommentVO commentVO, CommentVO p) throws Exception{
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setNotiContents(p.getCommentContents());
+		notificationVO.setNotiDate(commentVO.getCommentDate());
+		notificationVO.setNotiKind("REPLY");
+		notificationVO.setRelateEntity("BOARD");
+		notificationVO.setRelateId(p.getBoardNum());
+		
+		notificationDAO.add(notificationVO);
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", p.getUserId());
+		info.put("notiNum", notificationVO.getNotiNum());
+		notificationDAO.addNoticeCheck(info);
+		//댓글이 삭제되지 않고, 해당 댓글 사람이 답글을 다는 경우는 안보냄
+		log.info("commentVO userId : {}", commentVO.getUserId());
+		log.info("PVO userId : {}", p.getUserId());
+		
+		if(p.getDeleteStatus() != 1 && !commentVO.getUserId().equals(p.getUserId())){
+			log.info("대댓글 대댓글");
+			template.convertAndSend("/sub/reply/user."+ p.getUserId(), notificationVO);
+		}
 	}
 
 	public Map<String, Object> getNotification(String userId) throws Exception{
@@ -98,6 +119,8 @@ public class NotificationService {
 		//log.info("userId : {}", name);
 		return notificationDAO.moreNotification(info);
 	}
+
+	
 
 
 	

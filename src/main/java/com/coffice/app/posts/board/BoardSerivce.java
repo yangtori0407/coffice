@@ -80,7 +80,11 @@ public class BoardSerivce {
 	public CommentVO reply(CommentVO commentVO) throws Exception{
 		int result = boardDAO.addReply(commentVO);
 		
-		return boardDAO.replyDetail(commentVO);
+		commentVO = boardDAO.replyDetail(commentVO);
+		CommentVO p = boardDAO.getParentComment(commentVO.getCommentP());
+		notificationService.sendReply(commentVO, p);
+		
+		return commentVO;
 	}
 
 	public List<CommentVO> replyList(CommentVO commentVO) throws Exception{
