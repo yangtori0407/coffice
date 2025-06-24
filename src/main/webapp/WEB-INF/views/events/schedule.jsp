@@ -156,7 +156,16 @@
 										</div>
 									</div>
 								</c:if>
-								<c:if test="${kind eq '휴가' }"></c:if>
+								<c:if test="${kind eq '휴가' }">
+									<div class="form-group">
+										<label for="accept">승인자 지정</label>
+										<div class="input-group">
+											<select name="accept" id="accept" class="form-control">
+												<option value="" selected>선택</option>
+											</select>
+										</div>
+									</div>
+								</c:if>
 							</form>
 						</div>
 						<div class="modal-footer">
@@ -283,6 +292,72 @@
 						<div class="modal-footer">
 							<button type="button" class="btn btn-primary" id="change">change</button>
 							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="saveChange">Save Changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- listModal -->
+			<div class="modal fade" id="listModal" tabindex="-1" aria-labelledby="listModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="listModalLabel">신청 목록</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true"><ion-icon name="open-outline"></ion-icon></span>
+							</button>
+						</div>
+						<div class="modal-body" style="height: 500px;">
+							<span>나의 신청 내역</span>
+							<div style="min-height: 200px; max-height: 200px; overflow: auto;" id="applyList">
+							</div>
+							<hr>
+							<span>나의 승인 내역</span>
+							<div style="min-height: 200px; max-height: 200px; overflow: auto;" id="acceptList">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- vacationDetailModal -->
+			<div class="modal fade" id="vacationDetailModal" tabindex="-1" aria-labelledby="vacationDetailModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true"><ion-icon name="open-outline"></ion-icon></span>
+							</button>
+						</div>
+						<div class="modal-body" style="height: 500px;">
+
+							<div class="card mb-3">
+								<div class="card-header">기본 정보</div>
+								<input type="hidden" id="vid">
+								<div class="card-body">
+									<p id="vacationType"></p>
+									<p id="applier"></p>
+									<p id="insertTime"></p>
+									<p id="period"></p>
+								</div>
+							</div>
+
+							<hr>
+
+							<div class="card">
+								<div class="card-body">
+									<p id="status"></p>
+									<p id="accepter"></p>
+									<p id="acceptTime"></p>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="undo">목록으로</button>
+							<button type="button" class="btn btn-primary" id="updateVacation" data-dismiss="modal"></button>
 						</div>
 					</div>
 				</div>

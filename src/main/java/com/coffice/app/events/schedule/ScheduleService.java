@@ -15,9 +15,9 @@ public class ScheduleService {
 	public int addSchedule(ScheduleVO scheduleVO) throws Exception {
 		int result = 0;
 		if(scheduleVO.getRepeatType() == null) {
-			scheduleDAO.addSchedule(scheduleVO);
+			result = scheduleDAO.addSchedule(scheduleVO);
 		}else {
-			scheduleDAO.addRepeatSchedule(scheduleVO);
+			result = scheduleDAO.addRepeatSchedule(scheduleVO);
 		}
 		return result; 
 	}

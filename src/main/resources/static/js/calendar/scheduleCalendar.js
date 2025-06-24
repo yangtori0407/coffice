@@ -41,6 +41,10 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         show()
     },
     eventClick: function(e) {
+        if (e.event.extendedProps.preventClick) {
+            console.log("이 이벤트는 클릭 비활성화됨");
+            return;
+        }
         let repeatScheduleDiv = document.getElementById("repeatScheduleDiv")
         // console.log(e.event.id)
         // console.log(e.event.groupId)
@@ -207,7 +211,10 @@ fetch("http://localhost/events/getHolidays")
             start: a.locdate.toString(),
             allDay: true,
             color: '#ee0000',
-            editable: false
+            editable: false,
+            extendedProps: {
+                preventClick: true
+            }
         }
         calendar.addEvent(event);
     }
@@ -328,7 +335,6 @@ send.addEventListener("click", ()=>{
         body: params
     })
     .then(r=>{
-        console.log(r)
         location.reload()
     })
 
