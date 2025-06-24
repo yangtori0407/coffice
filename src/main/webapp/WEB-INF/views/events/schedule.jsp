@@ -309,11 +309,11 @@
 						</div>
 						<div class="modal-body" style="height: 500px;">
 							<span>나의 신청 내역</span>
-							<div style="min-height: 200px; overflow: auto;" id="applyList">
+							<div style="min-height: 200px; max-height: 200px; overflow: auto;" id="applyList">
 							</div>
 							<hr>
 							<span>나의 승인 내역</span>
-							<div style="min-height: 200px; overflow: auto;" id="acceptList">
+							<div style="min-height: 200px; max-height: 200px; overflow: auto;" id="acceptList">
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -328,80 +328,36 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="vacationDetailModalLabel">상세</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true"><ion-icon name="open-outline"></ion-icon></span>
 							</button>
 						</div>
 						<div class="modal-body" style="height: 500px;">
 
-							<div class="form-group">
-								<label for="vType">종류</label>
-								<div class="input-group">
-									<select name="vType" id="vType" class="form-control" disabled>
-										<option value="연차">연차</option>
-										<option value="병가">병가</option>
-										<option value="경조사">경조사</option>
-										<option value="보상">보상 휴가</option>
-									</select>
-								</div>
-							</div>
-					
-							<hr>
-
-							<div class="form-group">
-								<label for="sDate">시작일</label>
-								<div class="input-group">
-									<input type="date" class="form-control" id="sDate" disabled>
-									<select name="sTime" id="sTime" class="form-control" disabled>
-										<option value="" selected>선택</option>
-										<option value="09:00">09:00</option>
-										<option value="10:00">10:00</option>
-										<option value="11:00">11:00</option>
-										<option value="12:00">12:00</option>
-										<option value="13:00">13:00</option>
-										<option value="14:00">14:00</option>
-										<option value="15:00">15:00</option>
-										<option value="16:00">16:00</option>
-										<option value="17:00">17:00</option>
-										<option value="18:00">18:00</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="eDate">종료일</label>
-								<div class="input-group">
-									<input type="date" class="form-control" id="eDate" disabled>
-									<select name="eTime" id="eTime" class="form-control" disabled>
-										<option value="" selected>선택</option>
-										<option value="09:00">09:00</option>
-										<option value="10:00">10:00</option>
-										<option value="11:00">11:00</option>
-										<option value="12:00">12:00</option>
-										<option value="13:00">13:00</option>
-										<option value="14:00">14:00</option>
-										<option value="15:00">15:00</option>
-										<option value="16:00">16:00</option>
-										<option value="17:00">17:00</option>
-										<option value="18:00">18:00</option>
-									</select>
+							<div class="card mb-3">
+								<div class="card-header">기본 정보</div>
+								<input type="hidden" id="vid">
+								<div class="card-body">
+									<p id="vacationType"></p>
+									<p id="applier"></p>
+									<p id="insertTime"></p>
+									<p id="period"></p>
 								</div>
 							</div>
 
 							<hr>
 
-							<div class="form-group">
-								<label for="accept">승인자 지정</label>
-								<div class="input-group">
-									<select name="accept" id="accept" class="form-control" disabled>
-										<option value="" selected>선택</option>
-									</select>
+							<div class="card">
+								<div class="card-body">
+									<p id="status"></p>
+									<p id="accepter"></p>
+									<p id="acceptTime"></p>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="undo">목록으로</button>
-							<button type="button" class="btn btn-primary" id="updateVacation" data-dismiss="modal">수정하기</button>
+							<button type="button" class="btn btn-primary" id="updateVacation" data-dismiss="modal"></button>
 						</div>
 					</div>
 				</div>

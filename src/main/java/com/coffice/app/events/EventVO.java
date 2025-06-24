@@ -20,8 +20,10 @@ public class EventVO {
 	@DateTimeFormat(pattern = "yyyy-MM-ddHH:mm")
 	private Date endTime;
 	private String userId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul")
 	private Date insertTime;
 	private String editor;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul")
 	private Date editTime;
 	private boolean deleteStatus;
 

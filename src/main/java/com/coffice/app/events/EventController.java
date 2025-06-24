@@ -2,6 +2,8 @@ package com.coffice.app.events;
 
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -136,8 +138,16 @@ public class EventController {
 	
 	@GetMapping("vacation/getOne")
 	@ResponseBody
-	public VacationVO getOne(VacationVO vacationVO) throws Exception {
+	public Map<String, Object> getOne(VacationVO vacationVO) throws Exception {
 		return vacationService.getOne(vacationVO);
+	}
+	
+	@PostMapping("vacation/approve")
+	public void approve(VacationVO vacationVO, Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setApprovalAuthority(userVO.getUserId());
+		int result = vacationService.approve(vacationVO);
+		log.info("approve : {}", result);
 	}
 
 }

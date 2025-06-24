@@ -11,5 +11,9 @@ public class VacationVO extends EventVO {
 	private String status;
 	private String type;
 	private String approvalAuthority;
+	private String aposition;
+	private String aname;
+	private String bposition;
+	private String bname;
 
 }

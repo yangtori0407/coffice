@@ -21,27 +21,42 @@
   	</insert>
   	
   	<select id="getApplyList" parameterType="UserVO" resultType="VacationVO">
-  			select VACATION_ID, START_TIME, END_TIME, STATUS, USER_ID, TYPE, APPROVAL_AUTHORITY
-			from VACATION
-			where DELETE_STATUS = 0
-			and USER_ID = #{userId}
-			order by INSERT_TIME DESC
+  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
+			from VACATION v
+			join USERS u
+			on v.USER_ID = u.USER_ID
+			join USERS u2 
+			on v.APPROVAL_AUTHORITY = u2.USER_ID
+			where v.DELETE_STATUS = 0
+			and v.USER_ID = #{userId}
+			ORDER by v.INSERT_TIME DESC
   	</select>
   	
   	<select id="getAcceptList" parameterType="UserVO" resultType="VacationVO">
-  			select VACATION_ID, START_TIME, END_TIME, STATUS, USER_ID, TYPE, APPROVAL_AUTHORITY
-			from VACATION
-			where DELETE_STATUS = 0
-			and APPROVAL_AUTHORITY = #{userId}
-			and STATUS = 0
-			ORDER by INSERT_TIME DESC
+  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
+			from VACATION v
+			join USERS u
+			on v.USER_ID = u.USER_ID
+			join USERS u2 
+			on v.APPROVAL_AUTHORITY = u2.USER_ID
+			where v.DELETE_STATUS = 0
+			and v.APPROVAL_AUTHORITY = #{userId}
+			ORDER by v.INSERT_TIME DESC
   	</select>
   	
   	<select id="getOne" parameterType="VacationVO" resultType="VacationVO">
-  			select VACATION_ID, START_TIME, END_TIME, STATUS, USER_ID, TYPE, APPROVAL_AUTHORITY
+  			select VACATION_ID, START_TIME, END_TIME, STATUS, USER_ID, TYPE, APPROVAL_AUTHORITY, INSERT_TIME, EDIT_TIME
 			from VACATION
 			where DELETE_STATUS = 0
 			and VACATION_ID = #{vacationId}
   	</select>
+  	
+  	<update id="approve" parameterType="VacationVO">
+  			update VACATION
+  			set STATUS = 1, EDITOR = #{approvalAuthority}, EDIT_TIME = now()
+  			where DELETE_STATUS = 0
+  			and VACATION_ID = #{vacationId}
+  			and APPROVAL_AUTHORITY = #{approvalAuthority}
+  	</update>
   	
   </mapper>

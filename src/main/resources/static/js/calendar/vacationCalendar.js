@@ -72,6 +72,7 @@ function apply() {
     .then(r=>r.json())
     .then(r=>{
         let accept = document.getElementById("accept")
+        accept.innerHTML = "<option value='' selected>선택</option>"
         for(a of r) {
             let opt = document.createElement("option")
             opt.value = a.userId
@@ -79,36 +80,37 @@ function apply() {
             accept.appendChild(opt)
         }
     })
-    
-    const send = document.getElementById("send")
-    send.addEventListener("click", ()=>{
-        let vType = document.getElementById("vType")
-        let sDate = document.getElementById("sDate")
-        let sTime = document.getElementById("sTime")
-        let eDate = document.getElementById("eDate")
-        let eTime = document.getElementById("eTime")
-        let accept = document.getElementById("accept")
-        
-        let params = new FormData
-        params.append("type", vType.value)
-        params.append("startTime", sDate.value+sTime.value)
-        params.append("endTime", eDate.value+eTime.value)
-        params.append("approvalAuthority", accept.value)
-        
-        fetch("http://localhost/events/vacation/apply", {
-            method: "post",
-            body: params
-        })
-        .then(r=>r.text)
-        .then(r=>{
-            // console.log(r)
-            location.reload()
-        })
-    })
-
     $("#exampleModal").modal("show")
 }
 
+
+const send = document.getElementById("send")
+send.addEventListener("click", ()=>{
+    let vType = document.getElementById("vType")
+    let sDate = document.getElementById("sDate")
+    let sTime = document.getElementById("sTime")
+    let eDate = document.getElementById("eDate")
+    let eTime = document.getElementById("eTime")
+    let accept = document.getElementById("accept")
+    
+    let params = new FormData
+    params.append("type", vType.value)
+    params.append("startTime", sDate.value+sTime.value)
+    params.append("endTime", eDate.value+eTime.value)
+    params.append("approvalAuthority", accept.value)
+    
+    fetch("http://localhost/events/vacation/apply", {
+        method: "post",
+        body: params
+    })
+    .then(r=>r.text)
+    .then(r=>{
+        // console.log(r)
+        location.reload()
+    })
+})
+
+const updateVacation = document.getElementById("updateVacation")
 function accept() {
 
     let applyList = document.getElementById("applyList")
@@ -119,15 +121,15 @@ function accept() {
     fetch("http://localhost/events/vacation/applyList")
     .then(r=>r.json())
     .then(r=>{
-        console.log(r)
         let ul = document.createElement("ul")
         ul.classList.add("list-group")
         for( a of r ) {
+            console.log(a.status)
             let stat;
-            if(a.status) {
+            if(a.status == 0) {
                 stat = "승인 대기 \t <ion-icon name='ellipse' style='color:yellow;'></ion-icon>"
             }else {
-                stat = "승인 완료 \t <ion-icon name='radio-button-on-outline' style='color:green;'></ion-icon>"
+                stat = "승인 완료 \t <ion-icon name='ellipse' style='color:green;'></ion-icon>"
             }
             let li = document.createElement("li")
             li.classList.add("list-group-item")
@@ -137,12 +139,12 @@ function accept() {
             let div = document.createElement("div")
             let div2 = document.createElement("div")
             let div3 = document.createElement("div")
-            div.classList.add("col-6")
-            div2.classList.add("col-3")
+            div.classList.add("col-5")
+            div2.classList.add("col-4")
             div3.classList.add("col-3")
             div.innerText = a.startTime.slice(2, 10) + " " + a.startTime.slice(11, 16)
                             + " ~ " + a.endTime.slice(2, 10) + " " + a.endTime.slice(11, 16)
-            div2.innerText = "승인자 : " + a.approvalAuthority
+            div2.innerText = "승인자 : " + a.bposition + " " + a.bname
             div3.innerHTML = stat
             li.appendChild(row)
             row.appendChild(div)
@@ -153,7 +155,35 @@ function accept() {
                 .then(r=>r.json())
                 .then(r=>{
                     console.log(r)
+                    let st;
+                    let et;
+                    if(r.vacationVO.status == 0) {
+                        st = "승인 대기"
+                        et = ""
+                        updateVacation.setAttribute("style", "display: block;")
+                    }else {
+                        st = "승인 완료"
+                        et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
+                        updateVacation.setAttribute("style", "display: block;")
+                    }
+                    let vid = document.getElementById("vid")
+                    let t = document.getElementById("vacationType")
+                    let a = document.getElementById("applier")
+                    let it = document.getElementById("insertTime")
+                    let p = document.getElementById("period")
+                    let s = document.getElementById("status")
+                    let ac = document.getElementById("accepter")
+                    let at = document.getElementById("acceptTime")
+                    vid.value = r.vacationVO.vacationId
+                    t.innerHTML = "<strong>종류 : </strong>"+r.vacationVO.type
+                    a.innerHTML = "<strong>신청자 : </strong>"+r.applier.position + " " + r.applier.name
+                    it.innerHTML = "<strong>신청일 : </strong>"+r.vacationVO.insertTime.slice(0, 10) + " " + r.vacationVO.insertTime.slice(11, 16)
+                    p.innerHTML = "<strong>신청 기간 : </strong>"+r.vacationVO.startTime.slice(2, 10) + " " + r.vacationVO.startTime.slice(11, 16) + " ~ " + r.vacationVO.endTime.slice(2, 10) + " " + r.vacationVO.endTime.slice(11, 16)
+                    s.innerHTML = "<strong>처리 상태 : </strong>"+st
+                    ac.innerHTML = "<strong>승인자 : </strong>"+r.accepter.position + " " + r.accepter.name
+                    at.innerHTML = "<strong>승인일 : </strong>"+et
                 })
+                updateVacation.innerText = "수정"
                 $("#listModal").modal("hide")
                 $("#vacationDetailModal").modal("show")
             })
@@ -166,36 +196,69 @@ function accept() {
     fetch("http://localhost/events/vacation/acceptList")
     .then(r=>r.json())
     .then(r=>{
-        console.log(r)
         let ul = document.createElement("ul")
         ul.classList.add("list-group")
         for( a of r ) {
+            console.log(a.status)
             let stat;
-            if(a.status) {
+            if(a.status == 0) {
                 stat = "승인 대기 \t <ion-icon name='ellipse' style='color:yellow;'></ion-icon>"
             }else {
                 stat = "승인 완료 \t <ion-icon name='radio-button-on-outline' style='color:green;'></ion-icon>"
             }
             let li = document.createElement("li")
             li.classList.add("list-group-item")
-            li.setAttribute("data-vac-id", a.vacationId)
+            li.setAttribute("data-vacid", a.vacationId)
             let row = document.createElement("div")
             row.classList.add("row")
             let div = document.createElement("div")
             let div2 = document.createElement("div")
             let div3 = document.createElement("div")
-            div.classList.add("col-6")
-            div2.classList.add("col-3")
+            div.classList.add("col-5")
+            div2.classList.add("col-4")
             div3.classList.add("col-3")
             div.innerText = a.startTime.slice(2, 10) + " " + a.startTime.slice(11, 16)
                             + " ~ " + a.endTime.slice(2, 10) + " " + a.endTime.slice(11, 16)
-            div2.innerText = "신청자 : " + a.userId
+            div2.innerText = "신청자 : " + a.aposition + " " + a.aname
             div3.innerHTML = stat
             li.appendChild(row)
             row.appendChild(div)
             row.appendChild(div2)
             row.appendChild(div3)
             li.addEventListener("click", ()=>{
+                fetch(`http://localhost/events/vacation/getOne?vacationId=${li.dataset.vacid}`)
+                .then(r=>r.json())
+                .then(r=>{
+                    console.log(r)
+                    let st;
+                    let et;
+                    if(r.vacationVO.status == 0) {
+                        st = "승인 대기"
+                        et = ""
+                        updateVacation.setAttribute("style", "display: block;")
+                    }else {
+                        st = "승인 완료"
+                        et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
+                        updateVacation.setAttribute("style", "display: none;")
+                    }
+                    let vid = document.getElementById("vid")
+                    let t = document.getElementById("vacationType")
+                    let a = document.getElementById("applier")
+                    let it = document.getElementById("insertTime")
+                    let p = document.getElementById("period")
+                    let s = document.getElementById("status")
+                    let ac = document.getElementById("accepter")
+                    let at = document.getElementById("acceptTime")
+                    vid.value = r.vacationVO.vacationId
+                    t.innerHTML = "<strong>종류 : </strong>"+r.vacationVO.type
+                    a.innerHTML = "<strong>신청자 : </strong>"+r.applier.position + " " + r.applier.name
+                    it.innerHTML = "<strong>신청일 : </strong>"+r.vacationVO.insertTime.slice(0, 10) + " " + r.vacationVO.insertTime.slice(11, 16)
+                    p.innerHTML = "<strong>신청 기간 : </strong>"+r.vacationVO.startTime.slice(2, 10) + " " + r.vacationVO.startTime.slice(11, 16) + " ~ " + r.vacationVO.endTime.slice(2, 10) + " " + r.vacationVO.endTime.slice(11, 16)
+                    s.innerHTML = "<strong>처리 상태 : </strong>"+st
+                    ac.innerHTML = "<strong>승인자 : </strong>"+r.accepter.position + " " + r.accepter.name
+                    at.innerHTML = "<strong>승인일 : </strong>"+et
+                })
+                updateVacation.innerText = "승인"
                 $("#listModal").modal("hide")
                 $("#vacationDetailModal").modal("show")
             })
@@ -206,6 +269,29 @@ function accept() {
 
     $("#listModal").modal("show")
 }
+
+updateVacation.addEventListener("click", ()=>{
+    let vid = document.getElementById("vid")
+    let params = new FormData
+    params.append("vacationId", vid.value)
+    if(updateVacation.innerText == "수정") {
+        console.log("수정")
+    }else if(updateVacation.innerText == "승인") {
+        if(confirm("승인 처리하시겠습니까?")) {
+            fetch("http://localhost/events/vacation/approve", {
+                method: "post",
+                body: params
+            })
+            .then(r=>r.text())
+            .then(r=>{
+                console.log(r)
+                accept()
+            })
+        }else {
+            console.log("no")
+        }
+    }
+})
 
 calendar.render();
 
