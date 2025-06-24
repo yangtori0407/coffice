@@ -15,10 +15,23 @@
   			values (#{detail}, #{startTime}, #{endTime}, #{repeatCount}, #{repeatEnd}, #{repeatType}, #{scheduleType}, #{editor}, now(), #{userId}, now())
   	</insert>
   	
-  	<select id="getAll" resultType="ScheduleVO">
+  	<select id="getAll" resultType="ScheduleVO" parameterType="UserVO">
   			select SCHEDULE_ID, DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE
   			from SCHEDULE
-  			where DELETE_STATUS = 0
+  			where (
+  				  USER_ID in (
+				  select USER_ID
+				  from USERS
+				  where DEPT_ID = (
+				  				   select DEPT_ID
+				  				   from USERS
+				  				   where USER_ID = #{userId}
+				  				  )
+				 			 )
+				  and SCHEDULE_TYPE in ('public', 'group')
+				  )
+			or (SCHEDULE_TYPE = 'private' and USER_ID = #{userId})
+  			and DELETE_STATUS = 0
   	</select>
   	
   	<select id="getSchedule" resultType="ScheduleVO" parameterType="ScheduleVO">
@@ -28,12 +41,25 @@
   			and DELETE_STATUS = 0
   	</select>
   	
-  	<select id="getRepeatSchedules" resultMap="ScheduleResultMap">
+  	<select id="getRepeatSchedules" resultMap="ScheduleResultMap" parameterType="UserVO">
 			select sr.REPEAT_ID, DETAIL, START_TIME, END_TIME, REPEAT_COUNT, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE, sre.REPEAT_ID, sre.EXCEPTION_DATE
 			from SCHEDULE_REPEAT sr
 			left outer join SCHEDULE_REPEAT_EXCEPTION sre 
 			on sr.REPEAT_ID = sre.REPEAT_ID
-			where DELETE_STATUS = 0
+  			where (
+  				  USER_ID in (
+				  select USER_ID
+				  from USERS
+				  where DEPT_ID = (
+				  				   select DEPT_ID
+				  				   from USERS
+				  				   where USER_ID = #{userId}
+				  				  )
+				 			 )
+				  and SCHEDULE_TYPE in ('public', 'group')
+				  )
+			or (SCHEDULE_TYPE = 'private' and USER_ID = #{userId})
+			and DELETE_STATUS = 0
   	</select>
   	
   	<resultMap type="ScheduleVO" id="ScheduleResultMap">
@@ -92,5 +118,12 @@
 			update SCHEDULE_REPEAT
 			set DELETE_STATUS = 1, EDITOR = #{editor}, EDIT_TIME = now()
 			where REPEAT_ID = #{repeatId}
+	</update>
+	
+	<update id="dragDrop" parameterType="ScheduleVO">
+			update SCHEDULE
+  			set START_TIME = #{startTime}, END_TIME = #{endTime}, EDITOR = #{editor}, EDIT_TIME = now()
+  			where SCHEDULE_ID = #{scheduleId}
+  			and DELETE_STATUS = 0
 	</update>
   </mapper>

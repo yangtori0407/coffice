@@ -13,10 +13,12 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     }
         },
         수정: {
-            text: 'editable',
+            text: '간편 수정',
             click: function() {
                 calendar.setOption('editable', flag)
-
+                if(flag){
+                    alert("간편 수정 기능입니다. 일정을 선택 후 원하는 날짜로 옮겨주세요.   -- (반복 일정 제외) --")
+                }
                 flag = !flag
             }
         }
@@ -191,14 +193,18 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         })
     },
     eventDrop: function(e) {
-        console.log("EventDrop", e.event.start)
-        let t = new Date(e.event.start)
-        console.log(t.getHours())
-    },
-    eventResize: function(e) {
-        console.log("EventResize", e.event.start)
-        let t = new Date(e.event.start)
-        console.log(t.getHours())
+        let params = new FormData
+        params.append("scheduleId", e.event.id)
+        params.append("startTime", e.event.startStr.slice(0, 10)+e.event.startStr.slice(11, 16))
+        params.append("endTime", e.event.endStr.slice(0, 10)+e.event.endStr.slice(11, 16))
+        fetch("http://localhost/events/schedule/dragDrop", {
+            method: "post",
+            body: params
+        })
+        .then(r=>r.text())
+        .then(r=>{
+            console.log(r)
+        })
     }
 });
 
@@ -234,13 +240,15 @@ fetch("http://localhost/events/getRepeatSchedules")
             groupId: a.repeatId,
             title: a.detail,
             color: '#378006',
+            editable: false,
             extendedProps: {
                 startDate: a.startTime,
                 endDate: a.endTime,
                 type: a.scheduleType,
                 repeatType: a.repeatType,
                 repeatEnd: a.repeatEnd,
-                repeatCount: a.repeatCount
+                repeatCount: a.repeatCount,
+                preventClick: true
             },
             rrule: {
                 freq: a.repeatType,
