@@ -38,14 +38,12 @@
 						<div class="mb-3">
 							<button type="button" class="btn btn-primary"
 								data-toggle="modal" data-target="#exampleModal" id="diagram">조직도</button>
-							<button class="btn btn-info" type="button"
+							<!-- <button class="btn btn-info" type="button"
 								data-toggle="collapse" data-target="#replyTo"
 								aria-expanded="false" aria-controls="collapseExample">
-								답장받을 이메일</button>
+								답장받을 이메일</button> -->
 						</div>
-						<div class="collapse mb-2" id="replyTo">
-							<div class="card card-body p-0"><input type="email" name="replyEmail" id="replyEmail"></div>
-						</div>
+						
 						<label>제목</label> <input type="text"
 							class="card mb-4 py-3 border-left-info" name="messageTitle"
 							style="width: 100%;" id="messageTitle"> <label>내용</label>
