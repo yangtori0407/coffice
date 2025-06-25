@@ -149,7 +149,7 @@ public class IngredientsController {
 	@PostMapping("profit")
 	@ResponseBody
 	public int profit(@AuthenticationPrincipal UserVO userVO, SalesVO salesVO) throws Exception {
-		log.info("p:{}",salesVO);
+		
 		salesVO.setUserId(userVO.getUserId());
 		int result = salesService.profit(salesVO);
 		return result;
@@ -158,7 +158,7 @@ public class IngredientsController {
 	@PostMapping("expenditure")
 	@ResponseBody
 	public int expenditure(@AuthenticationPrincipal UserVO userVO,SalesVO salesVO) throws Exception {
-		log.info("e:{}",salesVO);
+		
 		salesVO.setUserId(userVO.getUserId());
 		int result = salesService.expenditure(salesVO);
 		return result;

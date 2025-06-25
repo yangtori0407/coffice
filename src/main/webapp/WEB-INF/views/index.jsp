@@ -311,7 +311,7 @@
 			    <div id="chatBox" style="max-height:300px; overflow-y:auto; background:#252525; padding:10px; border-radius:10px;">
 			      <!-- 대화 내용 쌓임 -->
 			    </div>
-			    <textarea id="gptInput" class="form-control gpt-textarea mt-2" rows="2" placeholder="coffice정보는 coffice를 붙여주세요 예)coffice메뉴"></textarea>
+			    <textarea id="gptInput" class="form-control gpt-textarea mt-2" rows="2" placeholder="coffice정보는 coffice를 붙여주세요 &#10;ex)coffice메뉴"></textarea>
 			    <button id="sendGptBtn" class="btn btn-primary btn-block mt-2">전송</button>
 			  </div>
 		    </div>

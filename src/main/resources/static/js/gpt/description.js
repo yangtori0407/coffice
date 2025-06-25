@@ -29,6 +29,7 @@ sendGptBtn.addEventListener("click",()=>{
     })
     .then(r=>r.text())
     .then(r=>{
+        console.log(r)
         let d;
         try{
             d = JSON.parse(r)
@@ -36,12 +37,29 @@ sendGptBtn.addEventListener("click",()=>{
             d = null;
         }
         if(Array.isArray(d)){
-            const menuName = d.map(m=>m.menuName);
-            console.log(menuName);
-            gptLoading.innerText = menuName.join(',');
-        }else {
+            if(d[0].menuName){
+                const menuName = d.map(m=>`${m.menuName}(₩${m.menuPrice})`);
+                console.log(menuName);
+                gptLoading.innerText = menuName.join(',\n')+'가 있습니다.';
+            } else if(d[0].branchName){
+                const branchName = d.map(b=>`${b.branchName}, ₩${b.totalSale}`);
+                gptLoading.innerText = '지점별매출현황입니다.\n'+branchName.join('\n')
+            } else if(d[0].ingredientsName) {
+                const ingredientsName = d.map(i=>`${i.ingredientsName}(₩${i.ingredientsPrice},재고:${i.ingredientsStock})`);
+                gptLoading.innerText = ingredientsName.join(',\n')+'가 있습니다'
+            }
+        }else if(typeof d === 'number'){
+            gptLoading.innerText = `총 매출은 ₩${d}입니다.`
+        } else {
             gptLoading.innerText=r
         }
     })
     document.getElementById("gptInput").value="";
+})
+
+document.getElementById("gptInput").addEventListener("keydown",(e)=>{
+    if(e.key==="Enter"){
+        e.preventDefault();
+        sendGptBtn.click();
+    }
 })

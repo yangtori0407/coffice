@@ -130,4 +130,8 @@ public class BranchService {
 	public Long registerBranch() throws Exception {
 		return branchDAO.registerBranch();
 	}
+	
+	public List<BranchVO> getTotalBranchSaleList() throws Exception {
+		return branchDAO.getTotalBranchSaleList();
+	}
 }
