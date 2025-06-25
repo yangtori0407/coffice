@@ -84,13 +84,13 @@ public class NoticeController {
 	}
 	
 	@GetMapping("fileDown")
-	public String fileDown(NoticeFilesVO filesVO,Model model) throws Exception{
+	public FileDownView fileDown(NoticeFilesVO filesVO,Model model) throws Exception{
 		FileVO fileVO = (FileVO)noticeService.fileDown(filesVO);
 		log.info("파일 다운로드 : {}", fileVO.getOriginName());
 		model.addAttribute("fileVO", fileVO);
 		model.addAttribute("kind", "notice");
 		
-		return "fileDownView";
+		return fileDownView;
 	}
 	
 	@PostMapping("delete")

@@ -88,22 +88,6 @@
 
 		</div></li>
 
-		
-		
-		<li class="nav-item">
-			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBranch" aria-expanded="true" aria-controls="collapseCalendar">
-			<ion-icon name="map-outline"></ion-icon>
-				<span>지점</span>
-			</a>
-			<div id="collapseBranch" class="collapse  ${branch == ('map' or 'add' or 'masterAdd' or 'myBranch') ? 'show' :''}" aria-labelledby="headingCalendar"
-				data-parent="#accordionSidebar">
-				<div class="bg-white py-2 collapse-inner rounded">
-					<a class="collapse-item ${branch == ('map') ? 'active' :''}" href="/branch/map">지점지도</a>
-					<a class="collapse-item ${branch == ('add') ? 'active' :''}" href="/branch/add">지점등록</a>
-					<a class="collapse-item ${branch == ('masterAdd') ? 'active' :''}" href="/branch/masterAdd">점주등록</a>
-					<a class="collapse-item ${branch == ('myBranch') ? 'active' :''}" href="/branch/myBranch">my지점</a>
-				</div>
-
 
 
 	<li class="nav-item"><a class="nav-link collapsed" href="#"
@@ -111,19 +95,25 @@
 		aria-expanded="true" aria-controls="collapseCalendar"> <ion-icon
 				name="map-outline"></ion-icon> <span>지점</span>
 	</a>
-		<div id="collapseBranch" class="collapse"
+		<div id="collapseBranch"
+			class="collapse  ${branch == ('map' or 'add' or 'masterAdd' or 'myBranch') ? 'show' :''}"
 			aria-labelledby="headingCalendar" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item" href="/branch/map">지점지도</a> <a
-					class="collapse-item" href="/branch/add">지점추가</a> <a
-					class="collapse-item" href="/branch/masterAdd">점주등록</a> <a
-					class="collapse-item" href="/branch/myBranch">my지점</a>
+				<a class="collapse-item ${branch == ('map') ? 'active' :''}"
+					href="/branch/map">지점지도</a> <a
+					class="collapse-item ${branch == ('add') ? 'active' :''}"
+					href="/branch/add">지점등록</a> <a
+					class="collapse-item ${branch == ('masterAdd') ? 'active' :''}"
+					href="/branch/masterAdd">점주등록</a> <a
+					class="collapse-item ${branch == ('myBranch') ? 'active' :''}"
+					href="/branch/myBranch">my지점</a>
 			</div>
-
 		</div></li>
 
-	<li class="nav-item"><a class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}" href="/ingredients/list">
-		<ion-icon name="cube-outline"></ion-icon> <span>물류</span>
+	<li class="nav-item"><a
+		class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}"
+		href="/ingredients/list"> <ion-icon name="cube-outline"></ion-icon>
+			<span>물류</span>
 	</a></li>
 
 	<!-- Nav Item - Charts -->
@@ -140,8 +130,9 @@
 				이메일</span></a></li> --%>
 
 	<li class="nav-item"><a class="nav-link collapsed" href="#"
-		data-toggle="collapse" data-target="#collapse"
-		aria-expanded="true" aria-controls="collapseUtilities"><ion-icon name="mail-outline"></ion-icon><span> 이메일</span> </a>
+		data-toggle="collapse" data-target="#collapse" aria-expanded="true"
+		aria-controls="collapseUtilities"><ion-icon name="mail-outline"></ion-icon><span>
+				이메일</span> </a>
 		<div id="collapse"
 			class="collapse ${message == ('sender' or 'receiver') ? 'show' :''}"
 			aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
