@@ -81,11 +81,21 @@
 												<tbody>
 													<c:forEach items="${list }" var="m">
 														<tr>
-															<td>${m.deptName} ${m.name }</td>
+															<td>
+															 	<c:choose>
+															 		<c:when test="${m.name eq null }">
+															 			${m.userId }
+															 		</c:when>
+															 		<c:otherwise>
+															 			${m.deptName } ${m.name }
+															 		</c:otherwise>
+															 	</c:choose>
+															</td>
 															<td><a class="boardA" href="./detail?messageNum=${m.messageNum }">${m.messageTitle}</a></td>
 															<td>${m.formatted}</td>
 															<td>
 															<c:choose>
+																<c:when test="${m.name eq null }">외부 메일</c:when>
 																<c:when test="${m.checkStatus eq false }">읽지 않음</c:when>
 																<c:otherwise>읽음</c:otherwise>
 															</c:choose>

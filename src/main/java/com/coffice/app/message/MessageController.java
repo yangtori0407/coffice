@@ -49,13 +49,14 @@ public class MessageController {
 	}
 	
 	@PostMapping("add")
-	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers,  Authentication authentication) throws Exception{
+	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers,  Authentication authentication, Model model) throws Exception{
 		log.info("messageVO : {}", messageVO);
 		for(String s : receivers) {
 			log.info("receiver: {}", s);
 		}
-		messageService.sendMessage(messageVO, receivers, authentication.getName());
+		int result = messageService.sendMessage(messageVO, receivers, authentication.getName());
+		model.addAttribute("result", result);
 		
-		return "message/success";
+		return "commons/ajaxResult";
 	}
 }

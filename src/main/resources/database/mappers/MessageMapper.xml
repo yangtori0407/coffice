@@ -4,60 +4,69 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.coffice.app.message.MessageDAO">
-	<select id="getSendMessage" parameterType="java.lang.String" resultType="MessageVO">
-		SELECT 
-			M.MESSAGE_NUM, 
-			M.MESSAGE_CONTENTS, 
-			M.SEND_DATE, 
-			M.MESSAGE_TITLE, 
-			MC.MESSAGECHECK_NUM, 
-			MC.CHECK_STATUS, 
-			MC.MESSAGE_STATUS, 
-			MC.SENDER_DELETE, 
+	<select id="getSendMessage" parameterType="java.lang.String"
+		resultType="MessageVO">
+		SELECT
+			M.MESSAGE_NUM,
+			M.MESSAGE_CONTENTS,
+			M.SEND_DATE,
+			M.MESSAGE_TITLE,
+			MC.MESSAGECHECK_NUM,
+			MC.CHECK_STATUS,
+			MC.MESSAGE_STATUS,
+			MC.SENDER_DELETE,
+			MC.USER_ID,
 			U.NAME,
 			DP.DEPT_NAME
 		FROM MESSAGE M
 		JOIN MESSAGE_CHECK MC
 		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
-		JOIN USERS U
+		LEFT OUTER JOIN USERS U
 		ON MC.USER_ID = U.USER_ID
-		JOIN DEPARTMENT DP
+		LEFT OUTER JOIN
+		DEPARTMENT DP
 		ON DP.DEPT_ID = U.DEPT_ID
 		WHERE M.SENDER = #{userId}
-		
+
 	</select>
-	
-	
-	
-	<select id="getReceiveMessage" parameterType="java.lang.String" resultType="MessageVO">
-		SELECT 
-			M.MESSAGE_NUM,M.SENDER, 
-			M.MESSAGE_CONTENTS, 
-			M.SEND_DATE, 
-			M.MESSAGE_TITLE, 
-			MC.CHECK_STATUS, 
-			MC.MESSAGE_STATUS, 
-			U.NAME,
-			DP.DEPT_NAME
+
+
+
+	<select id="getReceiveMessage" parameterType="java.lang.String"
+		resultType="MessageVO">
+		SELECT
+		M.MESSAGE_NUM,M.SENDER,
+		M.MESSAGE_CONTENTS,
+		M.SEND_DATE,
+		M.MESSAGE_TITLE,
+		MC.CHECK_STATUS,
+		MC.MESSAGE_STATUS,
+		U.NAME,
+		DP.DEPT_NAME
 		FROM MESSAGE M
 		JOIN MESSAGE_CHECK MC
 		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
 		JOIN USERS U
 		ON U.USER_ID = M.SENDER
 		JOIN DEPARTMENT DP
-		ON DP.DEPT_ID = U.DEPT_ID
+		ON DP.DEPT_ID =
+		U.DEPT_ID
 		WHERE MC.USER_ID = #{userId}
 	</select>
 
 	<insert id="add" parameterType="MessageVO"
 		useGeneratedKeys="true" keyProperty="messageNum">
-		INSERT INTO MESSAGE(MESSAGE_NUM, MESSAGE_CONTENTS, SEND_DATE, MESSAGE_TITLE, SENDER)
-		VALUES(NULL, #{messageContents}, NOW(), #{messageTitle}, #{sender})
+		INSERT INTO MESSAGE(MESSAGE_NUM,
+		MESSAGE_CONTENTS, SEND_DATE, MESSAGE_TITLE, SENDER)
+		VALUES(NULL,
+		#{messageContents}, NOW(), #{messageTitle}, #{sender})
 	</insert>
 
 	<insert id="addEmailUser" parameterType="java.util.HashMap">
-		INSERT INTO MESSAGE_CHECK(MESSAGECHECK_NUM, MESSAGE_NUM, CHECK_STATUS,
+		INSERT INTO
+		MESSAGE_CHECK(MESSAGECHECK_NUM, MESSAGE_NUM, CHECK_STATUS,
 		MESSAGE_STATUS, USER_ID, RECEIVER_DELETE, SENDER_DELETE)
-		VALUES(NULL, #{messageNum}, 0, #{kind}, #{userId}, 0 , 0)
+		VALUES(NULL,
+		#{messageNum}, 0, #{kind}, #{userId}, 0 , 0)
 	</insert>
 </mapper>

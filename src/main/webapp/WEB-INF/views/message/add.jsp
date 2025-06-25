@@ -32,10 +32,10 @@
 					<div class="d-flex flex-column">
 						<span>받는 사람</span>
 						<div id="receiverArea" class="d-flex" >
-							<input type="email" class="card mb-2 py-1 border-primary p-0"
+							<input type="email" class="card mb-2 py-2 border-primary p-0"
 								name="sender" style="width: 100%;" id="emailInput">
 						</div>
-						<div class="mb-3">
+						<div class="mb-3 mt-2">
 							<button type="button" class="btn btn-primary"
 								data-toggle="modal" data-target="#exampleModal" id="diagram">조직도</button>
 							<!-- <button class="btn btn-info" type="button"

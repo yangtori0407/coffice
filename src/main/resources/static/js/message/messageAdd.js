@@ -112,7 +112,10 @@ document.getElementById("submitBtn").addEventListener("click", () => {
     })
     .then(r => r.text())
     .then(r => {
-
+        if(r > 0){
+            alert("이메일 전송 했습니다.")
+            location.href = "./send";
+        }
     })
 })
 
@@ -135,6 +138,15 @@ emailInput.addEventListener("keydown", (e) => {
         emailInput.value = "";
     }
 })
+emailInput.addEventListener("blur", (e)=>{
+    if(emailInput.value != ""){
+
+        receiverArea.insertBefore(createReceiver(emailInput.value), emailInput); //insertBefore(삽입할_노드, 기준_노드) 기준 노드 위에 삽입할 노드 넣는 방법
+        emailInput.value = "";
+    }else{
+        return;
+    }
+})
 
 function createReceiver(s) {
     const div = document.createElement("div")
@@ -143,7 +155,8 @@ function createReceiver(s) {
     div.style.backgroundColor = "rgb(180, 182, 184)";
     div.style.color = "white";
     div.style.padding = "5px 10px";
-    div.style.width = "250px";
+    //div.style.width = "250px";
+    div.style.display = "inline-block";
     div.style.fontSize = "14px";
     div.style.height = "30px";
 

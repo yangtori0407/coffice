@@ -73,7 +73,7 @@ public class MessageService {
 		helper.setTo(receiverEmail);
 		helper.setSubject(messageVO.getMessageTitle());
 		helper.setText(messageVO.getMessageContents(), true);
-		String personal = userVO.getDeptName() + " " + userVO.getName(); // 예: "영업팀 홍길동"
+		String personal ="Coffice " + userVO.getDeptName() + " " + userVO.getName(); // 예: "영업팀 홍길동"
 		InternetAddress from = new InternetAddress("cofficehr@gmail.com", personal, "UTF-8");
 		helper.setFrom(from);
 

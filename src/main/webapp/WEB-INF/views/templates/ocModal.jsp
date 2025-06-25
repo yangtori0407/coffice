@@ -342,9 +342,10 @@
         div.style.backgroundColor = "rgb(180, 182, 184)";
         div.style.color = "white";
         div.style.padding = "5px 10px";
-        div.style.width = "250px";
+        div.style.width = "340px";
         div.style.fontSize = "14px";
         div.style.height = "30px";
+        div.style.whiteSpace = "nowrap";
 
         const span = document.createElement("span");
         span.classList.add("receiverPerson");
