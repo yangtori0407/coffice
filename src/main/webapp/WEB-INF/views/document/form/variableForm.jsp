@@ -247,18 +247,42 @@
 		
 	
 	    <!-- 첨부파일 -->
-	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 30px;">	
-	    		붙임
-	    		<button id="uploadBtn">내 PC</button>
-	    		<input type="file" id="fake_input_files" style="display: none;" multiple>
-	    </div>
+	    <div class="row m-0 p-0 align-items-center" style="border: 1px solid #000; border-top: none; height: 40px;">
+		  <div class="col-auto d-flex align-items-center ps-2">
+		    <span class="me-3" style="margin-right: 10px;">첨부 목록</span>
+		    
+		    <c:choose>
+				<c:when test="${(empty docuVO && isWritePage eq 1) || docuVO.status eq '임시저장' }">
+					<button id="uploadBtn" class="btn btn-sm btn-outline-secondary">내 PC</button>
+				</c:when>
+				
+				<c:otherwise>
+					
+				</c:otherwise>
+			</c:choose>		    
+		    
+		    
+		    
+		    <input type="file" id="fake_input_files" style="display: none;" multiple>
+		  </div>
+		</div>
 	    	
 	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; min-height: 100px;">
 			  
 		    <div id="fileList" class="col-12 p-1" style="border-right: 1px solid #000;">
 		    	<c:forEach items="${docuVO.attachmentVOs}" var="i">
 		    		<div class="file-wrapper">
-		    			<button class="exist-remover">X</button>
+		    		
+		    			<c:choose>
+							<c:when test="${(empty docuVO && isWritePage eq 1) || docuVO.status eq '임시저장' }">
+								<button class="exist-remover">X</button>
+							</c:when>
+							
+							<c:otherwise>
+								
+							</c:otherwise>
+						</c:choose>	
+		    			
 		    			<div class="exist-files" data-file-num="${i.fileNum}">
 		    				${i.originName} [다운로드]
 		    			</div>
@@ -306,10 +330,21 @@
 	  <div class="right-content" style="width: 150px; border: 1px solid #000;">
 	  
 	  		
-			
-			<button type="button" class="btn btn-primary mt-5 mb-5" data-toggle="modal" data-target="#exampleModal" id="diagram">
-				사원 불러오기    
-    		</button>
+			<c:choose>
+				<c:when test="${(empty docuVO && isWritePage eq 1) || docuVO.status eq '임시저장' }">
+					<div class="mt-5 mb-5" style=" min-height: 50px;">
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="diagram">
+							사원 불러오기    
+			    		</button>
+					</div>
+				</c:when>
+				
+				<c:otherwise>
+					<div class="mt-5 mb-5" style=" min-height: 50px;">
+					
+					</div>
+				</c:otherwise>
+			</c:choose>
 			
 			<button id="btn_resetApprovaers">결재선 초기화</button>
 			<div id="box_approvers" class="mb-5" style="border: 1px solid black; min-height: 100px;"> 결재자 목록
@@ -335,11 +370,12 @@
 			</div>
 					
 			
-			<div id="id_reject_wrapper">				
-				<button class="btn btn-info" type="button" id="id_view_reject" 
-				data-toggle="modal" data-target="#rejectReasonModal">반려 사유 보기</button>
-			</div>
-			
+			<c:if test="${docuVO.status eq '반려'}">
+				<div id="id_reject_wrapper">
+					<button class="btn btn-info" type="button" id="id_view_reject" 
+					data-toggle="modal" data-target="#rejectReasonModal">반려 사유 보기</button>
+				</div>
+			</c:if>
 			
 			<!-- Controller로 데이터 날릴 폼 -->
 			<form id="form_document" method="post" action="/document/write" enctype="multipart/form-data">
