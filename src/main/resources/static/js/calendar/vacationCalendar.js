@@ -43,7 +43,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             return;
         }
         console.log(e.event.id)
-        fetch(`http://localhost/events/vacation/getOne?vacationId=${e.event.id}`)
+        fetch(`vacation/getOne?vacationId=${e.event.id}`)
         .then(r=>r.json())
         .then(r=>{
             console.log(r)
@@ -96,7 +96,7 @@ undo.addEventListener("click", ()=>{
     accept()
 })
 
-fetch("http://localhost/events/getHolidays")
+fetch("/events/getHolidays")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
@@ -114,7 +114,7 @@ fetch("http://localhost/events/getHolidays")
     }
 })
 
-fetch("http://localhost/events/vacation/getList")
+fetch("/events/vacation/getList")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
@@ -139,7 +139,7 @@ fetch("http://localhost/events/vacation/getList")
 
 function apply() {
     
-    fetch("http://localhost/events/getDepsUsers")
+    fetch("/events/getDepsUsers")
     .then(r=>r.json())
     .then(r=>{
         let accept = document.getElementById("accept")
@@ -170,7 +170,7 @@ send.addEventListener("click", ()=>{
     params.append("endTime", eDate.value+eTime.value)
     params.append("approvalAuthority", accept.value)
     
-    fetch("http://localhost/events/vacation/apply", {
+    fetch("/events/vacation/apply", {
         method: "post",
         body: params
     })
@@ -189,7 +189,7 @@ function accept() {
     applyList.innerText = ""
     acceptList.innerText = ""
 
-    fetch("http://localhost/events/vacation/applyList")
+    fetch("/events/vacation/applyList")
     .then(r=>r.json())
     .then(r=>{
         let ul = document.createElement("ul")
@@ -222,7 +222,7 @@ function accept() {
             row.appendChild(div2)
             row.appendChild(div3)
             li.addEventListener("click", ()=>{
-                fetch(`http://localhost/events/vacation/getOne?vacationId=${li.dataset.vacid}`)
+                fetch(`vacation/getOne?vacationId=${li.dataset.vacid}`)
                 .then(r=>r.json())
                 .then(r=>{
                     console.log(r)
@@ -264,7 +264,7 @@ function accept() {
 
     })
 
-    fetch("http://localhost/events/vacation/acceptList")
+    fetch("/events/vacation/acceptList")
     .then(r=>r.json())
     .then(r=>{
         let ul = document.createElement("ul")
@@ -296,7 +296,7 @@ function accept() {
             row.appendChild(div2)
             row.appendChild(div3)
             li.addEventListener("click", ()=>{
-                fetch(`http://localhost/events/vacation/getOne?vacationId=${li.dataset.vacid}`)
+                fetch(`vacation/getOne?vacationId=${li.dataset.vacid}`)
                 .then(r=>r.json())
                 .then(r=>{
                     console.log(r)
@@ -348,7 +348,7 @@ updateVacation.addEventListener("click", ()=>{
         console.log("수정")
     }else if(updateVacation.innerText == "승인") {
         if(confirm("승인 처리하시겠습니까?")) {
-            fetch("http://localhost/events/vacation/approve", {
+            fetch("/events/vacation/approve", {
                 method: "post",
                 body: params
             })
