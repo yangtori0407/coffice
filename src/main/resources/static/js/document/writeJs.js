@@ -116,6 +116,12 @@ const btn_resetReferrers = document.getElementById("btn_resetReferrers");
 btn_resetApprovaers.addEventListener("click", function(){
 	const box_approvers = document.getElementById("box_approvers");
 	box_approvers.innerHTML='';
+	
+	const wrappers = document.getElementsByClassName("approver-wrapper");
+	for(let wrapper of wrappers){
+		wrapper.style.visibility = 'hidden';
+	}
+	
 })
 
 

@@ -175,6 +175,8 @@ public class DocumentController {
 		LocalDate fakeToday = LocalDate.now();
 		model.addAttribute("fakeToday", fakeToday);
 		
+		model.addAttribute("isWritePage", 1);
+		
 		
 		return "document/form/variableForm";
 	}

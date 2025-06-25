@@ -26,7 +26,7 @@
 					</c:forEach>
 					
 					<br>
-					<div>${sessionScope.userVO.name}님 접속 중</div>
+					<div>${sessionScope.user.name}님 접속 중</div>
 					<br>
 					<div>
 						<a href="./tempLogin1"><button>브라움 사원 로그인</button></a>

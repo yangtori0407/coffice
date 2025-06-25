@@ -162,20 +162,20 @@
 	      <div id="insert_writerName" class="col-2 d-flex align-items-center justify-content-center informations" style="border-right: 1px solid #000; height: 35px;" contenteditable="">
 		        ${docuVO.writerName }
 		        <c:if test="${empty docuVO}">
-		        ${sessionScope.userVO.name}
+		        ${sessionScope.user.name}
 		        </c:if>
 	      </div>
 	      <div id="insert_writerPosition" class="col-2 d-flex align-items-center justify-content-center informations" style="border-right: 1px solid #000; height: 35px;" contenteditable="">
 		        ${docuVO.writerPosition }
 		        <c:if test="${empty docuVO}">
-		        ${sessionScope.userVO.position}
+		        ${sessionScope.user.position}
 		        </c:if>
 	      </div>
 	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">부서</div>
 	      <div id="insert_writerDept" class="col-4 d-flex align-items-center justify-content-center informations" style="border-right: 1px solid #000; height: 35px;" contenteditable="">
 		        ${docuVO.writerDept }
 		        <c:if test="${empty docuVO}">
-		        ${sessionScope.userVO.deptName}
+		        ${sessionScope.user.deptName}
 		        </c:if>
 	      </div>
 	    </div>
@@ -270,7 +270,7 @@
             </a>
             
             <!-- 접속한 사람이 작성자 본인이고, 문서가 진행중이고, 스텝이 1이어야한다(미처리 상태) -->
-            <c:if test="${sessionScope.userVO.userId eq docuVO.writerId && docuVO.status eq '진행중' && docuVO.currentStep eq '1'}">
+            <c:if test="${sessionScope.user.userId eq docuVO.writerId && docuVO.status eq '진행중' && docuVO.currentStep eq '1'}">
             	<button id="btn_getBack" class="btn btn-outline-secondary me-2 mr-3" 
             	data-document-id="${docuVO.documentId}">문서 회수</button>
             </c:if>
@@ -333,7 +333,7 @@
 				<input id="input_documentId" name="documentId" type="hidden" value="${docuVO.documentId}">
 				<input id="input_formId" name="formId" type="hidden" value="${formVO.formId}">
 				
-				<input id="input_writerId" name="writerId" type="hidden" value="${sessionScope.userVO.userId}">
+				<input id="input_writerId" name="writerId" type="hidden" value="${sessionScope.user.userId}">
 				<input id="input_writerName" name="writerName" type="hidden" value="">
 				<input id="input_writerPosition" name="writerPosition" type="hidden" value="">
 				<input id="input_writerDept" name="writerDept" type="hidden" value="">
