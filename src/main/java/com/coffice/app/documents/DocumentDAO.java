@@ -90,6 +90,9 @@ public interface DocumentDAO {
 	
 	public int deleteReferenceLine(DocumentVO documentVO) throws Exception;
 	
+	// 문서 업데이트 시 기존 파일이 front에서 제외됐다면, 해당 파일을 삭제한다
+	public int deleteAttachment(AttachmentVO attachmentVO) throws Exception;
+	
 	public int updateOnlyStatus(DocumentVO documentVO) throws Exception;
 	
 	// 개별 파일 다운로드 및 삭제 ----------------------------------

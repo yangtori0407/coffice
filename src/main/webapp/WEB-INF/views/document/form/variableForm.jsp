@@ -50,6 +50,26 @@
     width: 130px;
   }
 
+  .file-wrapper {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	border: 1px solid black;
+	padding: 5px;
+	margin-bottom: 5px;
+  }
+
+
+  .exist-files:hover {
+  	cursor: pointer;
+	background-color: rgb(188, 218, 230);
+  }	
+  
+  .exist-files:active {
+  	
+	background-color: rgb(170, 176, 179);
+  }	
+
 </style>
 
 </head>
@@ -153,20 +173,20 @@
 	      <div id="insert_writerName" class="col-2 d-flex align-items-center justify-content-center informations" style="border-right: 1px solid #000; height: 35px;" contenteditable="">
 		        ${docuVO.writerName }
 		        <c:if test="${empty docuVO}">
-		        ${sessionScope.userVO.name}
+		        ${sessionScope.user.name}
 		        </c:if>
 	      </div>
 	      <div id="insert_writerPosition" class="col-2 d-flex align-items-center justify-content-center informations" style="border-right: 1px solid #000; height: 35px;" contenteditable="">
 		        ${docuVO.writerPosition }
 		        <c:if test="${empty docuVO}">
-		        ${sessionScope.userVO.position}
+		        ${sessionScope.user.position}
 		        </c:if>
 	      </div>
 	      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid #000;">부서</div>
 	      <div id="insert_writerDept" class="col-4 d-flex align-items-center justify-content-center informations" style="border-right: 1px solid #000; height: 35px;" contenteditable="">
 		        ${docuVO.writerDept }
 		        <c:if test="${empty docuVO}">
-		        ${sessionScope.userVO.deptName}
+		        ${sessionScope.user.deptName}
 		        </c:if>
 	      </div>
 	    </div>
@@ -227,25 +247,26 @@
 		
 	
 	    <!-- 첨부파일 -->
-	    	<div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 30px;">	
-	    		붙임	
-	    	</div>
+	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 30px;">	
+	    		붙임
+	    		<button id="uploadBtn">내 PC</button>
+	    		<input type="file" id="fake_input_files" style="display: none;" multiple>
+	    </div>
 	    	
-	      <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 100px;">
-			  <c:forEach items="${docuVO.attachmentVOs}" var="i" varStatus="status">
-			    <div class="col-3 p-1" style="border-right: 1px solid #000;">
-			    	<div class="file-wrapper h-100" style="border: 1px solid #000;">
-				      	${i.originName}			    	
-			    	</div>
-			    </div>
-			  </c:forEach>
-			
-			  <!-- 빈 칸 채우기 (4개 미만일 경우) -->
-			  <c:forEach begin="${fn:length(docuVO.attachmentVOs)+1}" end="4">
-			    <div class="col-3 p-1">
-			      <div class="file-wrapper h-100" style="border: 1px solid #000;"></div>
-			    </div>
-			  </c:forEach>
+	    <div class="row m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; min-height: 100px;">
+			  
+		    <div id="fileList" class="col-12 p-1" style="border-right: 1px solid #000;">
+		    	<c:forEach items="${docuVO.attachmentVOs}" var="i">
+		    		<div class="file-wrapper">
+		    			<button class="exist-remover">X</button>
+		    			<div class="exist-files" data-file-num="${i.fileNum}">
+		    				${i.originName} [다운로드]
+		    			</div>
+		    			
+		    		</div>
+		    	</c:forEach>
+		    </div>
+			  
 		</div>
 	
 	
@@ -262,7 +283,7 @@
             </a>
             
             <!-- 접속한 사람이 작성자 본인이고, 문서가 진행중이고, 스텝이 1이어야한다(미처리 상태) -->
-            <c:if test="${sessionScope.userVO.userId eq docuVO.writerId && docuVO.status eq '진행중' && docuVO.currentStep eq '1'}">
+            <c:if test="${sessionScope.user.userId eq docuVO.writerId && docuVO.status eq '진행중' && docuVO.currentStep eq '1'}">
             	<button id="btn_getBack" class="btn btn-outline-secondary me-2 mr-3" 
             	data-document-id="${docuVO.documentId}">문서 회수</button>
             </c:if>
@@ -325,7 +346,7 @@
 				<input id="input_documentId" name="documentId" type="hidden" value="${docuVO.documentId}">
 				<input id="input_formId" name="formId" type="hidden" value="${formVO.formId}">
 				
-				<input id="input_writerId" name="writerId" type="hidden" value="${sessionScope.userVO.userId}">
+				<input id="input_writerId" name="writerId" type="hidden" value="${sessionScope.user.userId}">
 				<input id="input_writerName" name="writerName" type="hidden" value="">
 				<input id="input_writerPosition" name="writerPosition" type="hidden" value="">
 				<input id="input_writerDept" name="writerDept" type="hidden" value="">
@@ -333,7 +354,7 @@
 				<input id="input_title" name="title" type="hidden" value="">
 				<input id="input_content" name="content" type="hidden" value="">
 				
-				<input id="input_files" name="files" type="hidden">
+				
 				
 				<input id="input_approvers" name="approvers" type="hidden">
 				
@@ -373,6 +394,7 @@
 	<script src="/js/document/signTool.js"></script>
 	<script src="/js/document/toReject.js"></script>
 	<script src="/js/document/toTemporary.js"></script>
+	
 	
 </body>
 </html>

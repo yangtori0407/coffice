@@ -22,6 +22,7 @@ import com.coffice.app.documents.attachments.AttachmentVO;
 import com.coffice.app.documents.forms.FormVO;
 import com.coffice.app.documents.lines.ApprovalLineVO;
 import com.coffice.app.documents.lines.ReferenceLineVO;
+import com.coffice.app.files.FileDownView;
 import com.coffice.app.page.Pager;
 import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
@@ -37,6 +38,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/document/*")
 public class DocumentController {
 
+	@Autowired
+	FileDownView fileDownView;
+	
 	@Autowired
 	private DocumentService documentService;
 
@@ -121,7 +125,7 @@ public class DocumentController {
 
 		List<DocumentVO> docuList = documentService.getList(pager, request, session);
 		model.addAttribute("docuList", docuList);
-		System.out.println("list size : " + docuList.size());
+		System.out.println("list 컨트롤러 docuList size : " + docuList.size());
 		model.addAttribute("pager", pager);
 
 		return "document/list";
@@ -175,6 +179,8 @@ public class DocumentController {
 		LocalDate fakeToday = LocalDate.now();
 		model.addAttribute("fakeToday", fakeToday);
 		
+		model.addAttribute("isWritePage", 1);
+		
 		
 		return "document/form/variableForm";
 	}
@@ -182,24 +188,29 @@ public class DocumentController {
 	
 	//
 	@PostMapping("write")
+	@ResponseBody
 	public String add(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
-			MultipartFile[] files) throws Exception {
+			MultipartFile[] attaches) throws Exception {
 		
 		// Json 형식으로 받아온 결재선, 참조선 데이터를 각 타입에 맞게 넣어준다
 		ObjectMapper mapper = new ObjectMapper();
 	    List<ApprovalLineVO> approverList = mapper.readValue(approversJson, new TypeReference<List<ApprovalLineVO>>() {});
 	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
 	    
+	    if(attaches != null) {
+	    	System.out.println("attaches size : " + attaches.length);
+	    	
+	    }
 
 		// 서비스 메서드 실행
-		int result = documentService.add(documentVO, approverList, referrerList, files);
+		int result = documentService.add(documentVO, approverList, referrerList, attaches);
 		
 		// "완료" 또는 "임시저장"에 따라 리스트 페이지 리턴 경로를 다르게 준다		
 		if(documentVO.getStatus().equals("임시저장")) {
-			return "redirect:./list/ontemporary";
+			return "./list/ontemporary";
 			
 		} else {
-			return "redirect:./list/online";
+			return "./list/online";
 			
 		}
 	}
@@ -228,8 +239,21 @@ public class DocumentController {
 	
 	//
 	@PostMapping("updatetemp")
+	@ResponseBody
 	public String updateTemp(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
-			MultipartFile[] files) throws Exception {
+			MultipartFile[] attaches, Long[] exists) throws Exception {
+		
+		if(attaches != null) {
+	    	System.out.println("attaches size : " + attaches.length);	    	
+	    } else {
+	    	System.out.println("attaches null입니다 ");
+	    }
+		
+		if(exists != null) {
+	    	System.out.println("exists size : " + exists.length);	    	
+	    } else {
+	    	System.out.println("exists null입니다 ");
+	    }
 		
 		//Json 형식으로 받아온 결재선, 참조선 데이터를 각 타입에 맞게 넣어준다
 		ObjectMapper mapper = new ObjectMapper();
@@ -237,12 +261,12 @@ public class DocumentController {
 	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
 	    
 	    // 서비스 메서드 실행
-	    int result = documentService.updateTemp(documentVO, approverList, referrerList, files);
+	    int result = documentService.updateTemp(documentVO, approverList, referrerList, attaches, exists);
 		
 	    if(documentVO.getStatus().equals("임시저장")) {
-	    	return "redirect:./list/ontemporary";
+	    	return "./list/ontemporary";
 	    } else {
-	    	return "redirect:./list/online";
+	    	return "./list/online";
 	    }
 	}
 	
@@ -262,14 +286,16 @@ public class DocumentController {
 		return resultList;
 	}
 
-	// 미구현
-	public String getFileDetail(AttachmentVO attachmentVO, Model model) throws Exception {
-
+	//
+	@PostMapping("filedown")
+	public FileDownView getFileDetail(AttachmentVO attachmentVO, Model model) throws Exception {
+		System.out.println("filedown 컨트롤러 fileNum : " + attachmentVO.getFileNum());
 		attachmentVO = documentService.getFileDetail(attachmentVO);
 
-		model.addAttribute("attachmentVO", attachmentVO);
+		model.addAttribute("fileVO", attachmentVO);
+		model.addAttribute("kind", "docuFiles");
 
-		return "fileDownView";
+		return fileDownView;
 	}
 
 	//

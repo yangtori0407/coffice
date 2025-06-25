@@ -14,11 +14,13 @@ import org.springframework.web.servlet.view.AbstractView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@Component
-public class FileDownView extends AbstractView{
+@Component("fileDownView")
+public class FileDownView extends AbstractView {
 	
 	@Value("${app.files.base}")
 	private String path;
+	
+	
 	
 	@Override
 	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
@@ -26,6 +28,7 @@ public class FileDownView extends AbstractView{
 		FileVO fileVO = (FileVO)model.get("fileVO");
 		String kind = (String)model.get("kind");
 		
+		System.out.println(path.concat(kind) + " : : " + fileVO.getSaveName());
 		File file = new File(path.concat(kind), fileVO.getSaveName());
 		
 		response.setContentLengthLong(file.length());
