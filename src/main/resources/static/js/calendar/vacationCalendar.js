@@ -1,5 +1,8 @@
 const kind = document.getElementById("kind")
 let flag = true;
+const uid = document.getElementById("userId")
+const gcolor = "#fb6544"
+const pcolor = "#378006"
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -115,12 +118,18 @@ fetch("http://localhost/events/vacation/getList")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
+        let clr;
+        if(uid.value == a.userId) {
+            clr = pcolor
+        }else {
+            clr = gcolor
+        }
         let event = {
             id: a.vacationId,
             title: a.aposition + " " + a.aname,
             start: a.startTime,
             end: a.endTime,
-            color: '#378006',
+            color: clr,
             editable: false
         }
         calendar.addEvent(event);
@@ -261,7 +270,6 @@ function accept() {
         let ul = document.createElement("ul")
         ul.classList.add("list-group")
         for( a of r ) {
-            console.log(a.status)
             let stat;
             if(a.status == 0) {
                 stat = "승인 대기 \t <ion-icon name='ellipse' style='color:yellow;'></ion-icon>"
