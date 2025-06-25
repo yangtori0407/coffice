@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <ul
 	class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
@@ -76,45 +76,73 @@
 		aria-expanded="true" aria-controls="collapseCalendar"> <ion-icon
 				name="calendar-outline"></ion-icon> <span>일정</span>
 	</a>
-		<div id="collapseCalendar" class="collapse ${events == ('schedule' or 'vacation') ? 'show' :''}"
+		<div id="collapseCalendar"
+			class="collapse ${events == ('schedule' or 'vacation') ? 'show' :''}"
 			aria-labelledby="headingCalendar" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item ${events == 'schedule' ? 'active' : ''}" href="/events/schedule">일정 관리</a> <a
-					class="collapse-item ${events == 'vacation' ? 'active' : ''}" href="/events/vacation">휴가 관리</a>
+				<a class="collapse-item ${events == 'schedule' ? 'active' : ''}"
+					href="/events/schedule">일정 관리</a> <a
+					class="collapse-item ${events == 'vacation' ? 'active' : ''}"
+					href="/events/vacation">휴가 관리</a>
 			</div>
 
 		</div></li>
-		
-		
-		<li class="nav-item">
-			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBranch" aria-expanded="true" aria-controls="collapseCalendar">
-			<ion-icon name="map-outline"></ion-icon>
-				<span>지점</span>
-			</a>
-			<div id="collapseBranch" class="collapse  ${branch == ('map' or 'add' or 'masterAdd' or 'myBranch') ? 'show' :''}" aria-labelledby="headingCalendar"
-				data-parent="#accordionSidebar">
-				<div class="bg-white py-2 collapse-inner rounded">
-					<a class="collapse-item ${branch == ('map') ? 'active' :''}" href="/branch/map">지점지도</a>
-					<a class="collapse-item ${branch == ('add') ? 'active' :''}" href="/branch/add">지점등록</a>
-					<a class="collapse-item ${branch == ('masterAdd') ? 'active' :''}" href="/branch/masterAdd">점주등록</a>
-					<a class="collapse-item ${branch == ('myBranch') ? 'active' :''}" href="/branch/myBranch">my지점</a>
-				</div>
 
+
+
+	<li class="nav-item"><a class="nav-link collapsed" href="#"
+		data-toggle="collapse" data-target="#collapseBranch"
+		aria-expanded="true" aria-controls="collapseCalendar"> <ion-icon
+				name="map-outline"></ion-icon> <span>지점</span>
+	</a>
+		<div id="collapseBranch"
+			class="collapse  ${branch == ('map' or 'add' or 'masterAdd' or 'myBranch') ? 'show' :''}"
+			aria-labelledby="headingCalendar" data-parent="#accordionSidebar">
+			<div class="bg-white py-2 collapse-inner rounded">
+				<a class="collapse-item ${branch == ('map') ? 'active' :''}"
+					href="/branch/map">지점지도</a> <a
+					class="collapse-item ${branch == ('add') ? 'active' :''}"
+					href="/branch/add">지점등록</a> <a
+					class="collapse-item ${branch == ('masterAdd') ? 'active' :''}"
+					href="/branch/masterAdd">점주등록</a> <a
+					class="collapse-item ${branch == ('myBranch') ? 'active' :''}"
+					href="/branch/myBranch">my지점</a>
 			</div>
-		</li>
+		</div></li>
 
-	<li class="nav-item"><a class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}" href="/ingredients/list">
-		<ion-icon name="cube-outline"></ion-icon> <span>물류</span>
+	<li class="nav-item"><a
+		class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}"
+		href="/ingredients/list"> <ion-icon name="cube-outline"></ion-icon>
+			<span>물류</span>
 	</a></li>
 
 	<!-- Nav Item - Charts -->
-	<li class="nav-item"><a id="message" class="nav-link ${chat == 'chat' ? 'chat-active' : '' }" href="/chat/main">
-			<ion-icon name="chatbubbles-outline"></ion-icon> <span>메신저</span>
+	<li class="nav-item"><a id="chatSideBar"
+		class="nav-link ${chat == 'chat' ? 'chat-active' : '' }"
+		href="/chat/main"> <ion-icon name="chatbubbles-outline"></ion-icon>
+			<span>메신저</span>
 	</a></li>
 
-	<!-- Nav Item - Tables -->
-	<li class="nav-item"><a class="nav-link " href="tables.html"> <ion-icon
-				name="mail-outline"></ion-icon> <span>사내 이메일</span></a></li>
+	<%-- <!-- Nav Item - Tables -->
+	<li class="nav-item"><a
+		class="nav-link ${message == 'message' ? 'chat-active' : '' }"
+		href="/message/main"> <ion-icon name="mail-outline"></ion-icon> <span>사내
+				이메일</span></a></li> --%>
+
+	<li class="nav-item"><a class="nav-link collapsed" href="#"
+		data-toggle="collapse" data-target="#collapse" aria-expanded="true"
+		aria-controls="collapseUtilities"><ion-icon name="mail-outline"></ion-icon><span>
+				이메일</span> </a>
+		<div id="collapse"
+			class="collapse ${message == ('sender' or 'receiver') ? 'show' :''}"
+			aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+			<div class="bg-white py-2 collapse-inner rounded">
+				<a class="collapse-item ${message == 'receive' ? 'active' : '' }"
+					href="/message/receive">받은 이메일</a> <a
+					class="collapse-item ${message == 'send' ? 'active' : ''}"
+					href="/message/send">보낸 이메일</a>
+			</div>
+		</div></li>
 
 	<!-- Divider -->
 	<hr class="sidebar-divider d-none d-md-block">
@@ -127,9 +155,9 @@
 	<!-- <div class="sidebar-card d-none d-lg-flex">
 			날씨?
 		</div> -->
-	
-	
-	
+
+
+
 </ul>
 
-	
+
