@@ -103,6 +103,8 @@ btn_temporary.addEventListener("click", function() {
 const input_referrers = document.getElementById("input_referrers");
 input_referrers.value = JSON.stringify(referrerList);
 
+console.log(input_referrers.value);
+
   // 문서 status 데이터 삽입
   const input_docuStatus = document.getElementById("input_docuStatus");
   input_docuStatus.value = "임시저장";
@@ -112,15 +114,79 @@ input_referrers.value = JSON.stringify(referrerList);
   // 문서가 최초 임시저장이냐 기존 임시저장이 있냐에 따라 컨트롤러 경로를 바꿔준다
   	  if(insert_content.dataset.voCheck =="임시저장"){
   		  let formPath = "/document/updatetemp";
-  		  submitForm(formPath);
+  		  submitForm2(formPath);
   	
   	  } else if (insert_content.dataset.voCheck == ""){
   	    let formPath = "/document/write";
-  		submitForm(formPath);
+  		submitForm2(formPath);
   	
   	  }
 
 })
+
+
+/////////////////////////////////////////////////
+// 전체 input + 파일 포함해서 FormData로 전송하는 함수
+let submitForm2 = function submitForm(formPath) {
+	console.log("submitForm2 진입");  
+
+  var formData = new FormData();
+
+  // form 안의 input 요소들을 전부 formData에 추가
+  var inputs = form.querySelectorAll("input[name]");
+  for (var i = 0; i < inputs.length; i++) {
+    var input = inputs[i];
+
+    // type이 file인 input은 건너뜀
+    if (input.type === "file") continue;
+
+    formData.append(input.name, input.value);
+  }
+
+  // 신규 파일 추가 (같은 name으로 여러 개 append → 다중 파일 처리됨)  
+  console.log("tempJS selectedFiles : " + selectedFiles.length);
+  
+  for (var j = 0; j < selectedFiles.length; j++) {
+    formData.append("attaches", selectedFiles[j]);
+  }
+  
+  // 기존 문서가 있는 경우 화면에 출력된 파일 num 배열도 보내기  
+  let files = document.getElementsByClassName("exist-files");
+  if(files) {
+	
+	  for (let file of files){
+		formData.append("exists", file.dataset.fileNum);
+	  }
+	
+  }
+
+  
+  // fetch API로 ajax 전송
+    fetch(formPath, {
+      method: "POST",
+      body: formData
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("서버 오류 발생");
+        }
+        return response.text(); // 혹은 .json() (컨트롤러 응답 타입에 따라)
+      })
+      .then(data => {
+        console.log("성공:", data);
+        alert("문서가 성공적으로 저장되었습니다");
+        // 페이지 리다이렉트 또는 초기화 등 후속 처리
+        location.href = data;
+      })
+      .catch(error => {
+        console.error("에러:", error);
+        alert("저장 중 오류가 발생했습니다");
+      });
+  
+  
+  
+}
+
 
 
 
@@ -185,6 +251,14 @@ if(btn_deletetemp){
 }
 
 
+//------------------------------------------------
+// 기존 파일 프론트에서 지우기
+const removers = document.getElementsByClassName("exist-remover");
 
+for(let remover of removers){
+	remover.addEventListener("click", function(){
+		remover.parentElement.remove();
+	})
+}
 
 

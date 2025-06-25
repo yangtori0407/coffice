@@ -121,7 +121,7 @@ public class DocumentController {
 
 		List<DocumentVO> docuList = documentService.getList(pager, request, session);
 		model.addAttribute("docuList", docuList);
-		System.out.println("list size : " + docuList.size());
+		System.out.println("list 컨트롤러 docuList size : " + docuList.size());
 		model.addAttribute("pager", pager);
 
 		return "document/list";
@@ -184,14 +184,17 @@ public class DocumentController {
 	@PostMapping("write")
 	@ResponseBody
 	public String add(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
-			@RequestParam("attaches") MultipartFile[] attaches) throws Exception {
+			MultipartFile[] attaches) throws Exception {
 		
 		// Json 형식으로 받아온 결재선, 참조선 데이터를 각 타입에 맞게 넣어준다
 		ObjectMapper mapper = new ObjectMapper();
 	    List<ApprovalLineVO> approverList = mapper.readValue(approversJson, new TypeReference<List<ApprovalLineVO>>() {});
 	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
 	    
-	    System.out.println("attaches size : " + attaches.length);
+	    if(attaches != null) {
+	    	System.out.println("attaches size : " + attaches.length);
+	    	
+	    }
 
 		// 서비스 메서드 실행
 		int result = documentService.add(documentVO, approverList, referrerList, attaches);
@@ -230,8 +233,21 @@ public class DocumentController {
 	
 	//
 	@PostMapping("updatetemp")
+	@ResponseBody
 	public String updateTemp(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
-			@RequestParam("attaches") MultipartFile[] attaches, @RequestParam("existFileNums") List<Long> existFileNums) throws Exception {
+			MultipartFile[] attaches, Long[] exists) throws Exception {
+		
+		if(attaches != null) {
+	    	System.out.println("attaches size : " + attaches.length);	    	
+	    } else {
+	    	System.out.println("attaches null입니다 ");
+	    }
+		
+		if(exists != null) {
+	    	System.out.println("exists size : " + exists.length);	    	
+	    } else {
+	    	System.out.println("exists null입니다 ");
+	    }
 		
 		//Json 형식으로 받아온 결재선, 참조선 데이터를 각 타입에 맞게 넣어준다
 		ObjectMapper mapper = new ObjectMapper();
@@ -239,7 +255,7 @@ public class DocumentController {
 	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
 	    
 	    // 서비스 메서드 실행
-	    int result = documentService.updateTemp(documentVO, approverList, referrerList, attaches, existFileNums);
+	    int result = documentService.updateTemp(documentVO, approverList, referrerList, attaches, exists);
 		
 	    if(documentVO.getStatus().equals("임시저장")) {
 	    	return "./list/ontemporary";

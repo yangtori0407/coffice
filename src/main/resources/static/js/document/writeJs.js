@@ -226,15 +226,19 @@ btn_complete.addEventListener("click", function() {
 	
 	const input_referrers = document.getElementById("input_referrers");
 	input_referrers.value = JSON.stringify(referrerList);
+	
+	console.log(input_referrers.value);
 		
     // 문서 status 데이터 삽입
     const input_docuStatus = document.getElementById("input_docuStatus");
     input_docuStatus.value = "진행중";
 	
+	console.log(insert_content.dataset.voCheck);
 	
 	// 문서가 최초 작성완료이냐 임시저장 문서를 작성완료이냐에 따라 컨트롤러 경로를 바꿔준다
-	  if(insert_content.dataset.voCheck =="임시저장"){
+	  if(insert_content.dataset.voCheck === "임시저장"){
 		  let formPath = "/document/updatetemp";
+		  console.log(formPath);
 		  submitForm(formPath);
 	
 	  } else if (insert_content.dataset.voCheck == ""){
@@ -364,7 +368,9 @@ fakeInput.addEventListener("change", function (event) {
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
     selectedFiles.push(file);
+	
 	console.log(selectedFiles.length);
+	
     addFileToView(file);
   }
 
@@ -425,7 +431,15 @@ let submitForm = function submitForm(formPath) {
     formData.append("attaches", selectedFiles[j]);
   }
   
-  
+  // 기존 문서가 있는 경우 화면에 출력된 파일 num 배열도 보내기  
+  var files = document.getElementsByClassName("exist-files");
+  if(files) {
+	  for (var file of files){
+		console.log("exFileNum : " + file.dataset.fileNum);
+		formData.append("exists", file.dataset.fileNum);
+	  }
+	
+  }
 
   
   // fetch API로 ajax 전송

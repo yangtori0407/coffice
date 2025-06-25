@@ -247,7 +247,7 @@
 		    <div id="fileList" class="col-12 p-1" style="border-right: 1px solid #000;">
 		    	<c:forEach items="${docuVO.attachmentVOs}" var="i">
 		    		<div class="file-wrapper">
-		    			<button>X</button>
+		    			<button class="exist-remover">X</button>
 		    			<div class="exist-files" data-file-num="${i.fileNum}">파일명: ${i.originName}</div>
 		    			
 		    		</div>
