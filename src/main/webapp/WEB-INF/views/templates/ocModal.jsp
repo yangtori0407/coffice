@@ -89,16 +89,7 @@
         </div>
 
 
-            <c:if test="${empty docuVO || docuVO.status eq '임시저장'}">
-              <button id="btn_toApprovers" type="button" class="btn btn-info" id="choose">결재선 넣기</button>
-              <button id="btn_toReferrers" type="button" class="btn btn-primary" id="choose">참조선 넣기</button>
-            </c:if>
-
-            <c:if test="${isWritePage ne 1}">
-              <button type="button" class="btn btn-primary" id="choose" data-dismiss="modal">선택 완료</button>
-            </c:if>
-
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            
 
           </div>
 
