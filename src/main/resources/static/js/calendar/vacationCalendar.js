@@ -11,7 +11,10 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     customButtons: {
         addButton: {
             text: '휴가 신청',
-            click: apply
+            click: function() {
+                apply()
+                $("#exampleModal").modal("show")
+            }
         },
         listButton: {
             text: '신청 목록',
@@ -36,6 +39,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     dateClick: function(e) {
         sDate.value = e.dateStr
         apply()
+        $("#exampleModal").modal("show")
     },
     eventClick: function(e) {
         if (e.event.extendedProps.preventClick) {
@@ -143,15 +147,21 @@ function apply() {
     .then(r=>r.json())
     .then(r=>{
         let accept = document.getElementById("accept")
+        let resultAccept = document.getElementById("resultAccept")
         accept.innerHTML = "<option value='' selected>선택</option>"
+        resultAccept.innerHTML = "<option value='' selected>선택</option>"
         for(a of r) {
             let opt = document.createElement("option")
+            let opt2 = document.createElement("option")
             opt.value = a.userId
+            opt2.value = a.userId
             opt.innerText = a.position + " " + a.name
+            opt2.innerText = a.position + " " + a.name
             accept.appendChild(opt)
+            resultAccept.appendChild(opt2)
         }
     })
-    $("#exampleModal").modal("show")
+    
 }
 
 
@@ -340,12 +350,60 @@ function accept() {
     $("#listModal").modal("show")
 }
 
+let change = document.getElementById("change")
+let saveChange = document.getElementById("saveChange")
+change.innerText = "저장"
+saveChange.innerText = "닫기"
+
 updateVacation.addEventListener("click", ()=>{
     let vid = document.getElementById("vid")
     let params = new FormData
     params.append("vacationId", vid.value)
     if(updateVacation.innerText == "수정") {
-        console.log("수정")
+        apply()
+        let dis = document.querySelectorAll("input[disabled], select[disabled]");
+        let rsDate = document.getElementById("rsDate")
+        let rsTime = document.getElementById("rsTime")
+        let reDate = document.getElementById("reDate")
+        let reTime = document.getElementById("reTime")
+        let rvType = document.getElementById("rvType")
+        
+        for(a of dis) {
+            a.disabled = false;
+        }
+
+        fetch(`vacation/getOne?vacationId=${vid.value}`)
+        .then(r=>r.json())
+        .then(r=>{
+            rsDate.value = r.vacationVO.startTime.slice(0, 10)
+            rsTime.value = r.vacationVO.startTime.slice(11, 16)
+            reDate.value = r.vacationVO.endTime.slice(0, 10)
+            reTime.value = r.vacationVO.endTime.slice(11, 16)
+            rvType.value = r.vacationVO.type
+            let selected = document.querySelectorAll(`option[value='${r.vacationVO.approvalAuthority}']`)
+            for(a of selected) {
+                a.setAttribute("selected", true)
+            }
+        })
+
+        change.addEventListener("click", ()=>{
+            let resultAccept = document.getElementById("resultAccept")
+            params.append("type", rvType.value)
+            params.append("startTime", rsDate.value+rsTime.value)
+            params.append("endTime", reDate.value+reTime.value)
+            params.append("approvalAuthority", resultAccept.value)
+            fetch("vacation/update", {
+                method: "post",
+                body: params
+            })
+            .then(r=>r.text())
+            .then(r=>{
+                // console.log(r)
+                location.reload()
+            })
+        })
+
+        $("#detailModal").modal("show")
     }else if(updateVacation.innerText == "승인") {
         if(confirm("승인 처리하시겠습니까?")) {
             fetch("http://localhost/events/vacation/approve", {
@@ -362,6 +420,8 @@ updateVacation.addEventListener("click", ()=>{
         }
     }
 })
+
+
 
 calendar.render();
 

@@ -167,5 +167,14 @@ public class EventController {
 		model.addAttribute("result", result);
 		return "commons/ajaxResult";
 	}
+	
+	@PostMapping("vacation/update")
+	public String updateApply(VacationVO vacationVO, Authentication authentication, Model model) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setEditor(userVO.getUserId());
+		int result = vacationService.updateApply(vacationVO);
+		model.addAttribute("result", result);
+		return "commons/ajaxResult";
+	}
 
 }
