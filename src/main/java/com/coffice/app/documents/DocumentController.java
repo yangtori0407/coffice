@@ -44,70 +44,7 @@ public class DocumentController {
 	@Autowired
 	private DocumentService documentService;
 
-	//
-	@GetMapping("tempLogin1")
-	public String tempLogin1(HttpSession session) {
-		// 테스트용 임시 유저
-		UserVO userVO = new UserVO();
-		userVO.setUserId("아디1");
-		userVO.setName("브라움");
-		userVO.setDeptName("인사팀");
-		userVO.setPosition("사원");
-		session.setAttribute("userVO", userVO);
-
-		return "redirect:./selectform";
-	}
-
-	//
-	@GetMapping("tempLogin2")
-	public String tempLogin2(HttpSession session) {
-		// 테스트용 임시 유저
-		UserVO userVO = new UserVO();
-		userVO.setUserId("아디3");
-		userVO.setName("소라카");
-		userVO.setDeptName("인사팀");
-		userVO.setPosition("대리");
-		session.setAttribute("userVO", userVO);
-
-		return "redirect:./selectform";
-	}
-
-	//
-	@GetMapping("tempLogin3")
-	public String tempLogin3(HttpSession session) {
-		// 테스트용 임시 유저
-		UserVO userVO = new UserVO();
-		userVO.setUserId("아디4");
-		userVO.setName("소나");
-		userVO.setDeptName("인사팀");
-		userVO.setPosition("과장");
-		session.setAttribute("userVO", userVO);
-
-		return "redirect:./selectform";
-	}
-
-	//
-	@GetMapping("tempLogin4")
-	public String tempLogin4(HttpSession session) {
-		// 테스트용 임시 유저
-		UserVO userVO = new UserVO();
-		userVO.setUserId("아디6");
-		userVO.setName("쓰레쉬");
-		userVO.setDeptName("인사팀");
-		userVO.setPosition("부장");
-		session.setAttribute("userVO", userVO);
-
-		return "redirect:./selectform";
-	}
-
-	//
-	@GetMapping("tempLogout")
-	public String tempLogout(HttpSession session) {
-
-		session.invalidate();
-
-		return "redirect:./selectform";
-	}
+	
 
 	//
 	@PostMapping("form")

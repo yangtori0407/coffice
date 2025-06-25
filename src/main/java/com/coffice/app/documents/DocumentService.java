@@ -83,7 +83,7 @@ public class DocumentService {
 		Map<String, Object> map = new HashMap<>();
 		
 		// 접속 중인 session의 유저 정보 가져오기
-		UserVO user = (UserVO)session.getAttribute("userVO");
+		UserVO user = (UserVO)session.getAttribute("user");
 		map.put("userId", user.getUserId());
 		
 		List<DocumentVO> list = null;
@@ -422,7 +422,7 @@ public class DocumentService {
 	//
 	public int addSign(HttpSession session, MultipartFile[] attaches) throws Exception {
 		
-		UserVO userVO = (UserVO)session.getAttribute("userVO");
+		UserVO userVO = (UserVO)session.getAttribute("user");
 		SignVO signVO = new SignVO();
 		signVO.setUserId(userVO.getUserId());
 		
@@ -459,7 +459,7 @@ public class DocumentService {
 	// 직인 목록 조회
 	public List<SignVO> getSignList (HttpSession session) throws Exception {
 		
-		UserVO userVO = (UserVO)session.getAttribute("userVO");
+		UserVO userVO = (UserVO)session.getAttribute("user");
 		
 		List<SignVO> list = documentDAO.getSignList(userVO);
 		
@@ -495,7 +495,7 @@ public class DocumentService {
 		
 		
 		//------------------------------------------------------------
-		UserVO user = (UserVO)session.getAttribute("userVO"); // 접속자의 정보를 가져왔다 
+		UserVO user = (UserVO)session.getAttribute("user"); // 접속자의 정보를 가져왔다 
 		user = documentDAO.getUserDetail(user); // 접속자의 userId를 이용해 DB로부터 user에 데이터를 담아온다
 		
 		//
@@ -553,7 +553,7 @@ public class DocumentService {
 		
 		
 		//------------------------------------------------------------
-		UserVO user = (UserVO)session.getAttribute("userVO"); // 접속자의 정보를 가져왔다 
+		UserVO user = (UserVO)session.getAttribute("user"); // 접속자의 정보를 가져왔다 
 		user = documentDAO.getUserDetail(user); // 접속자의 userId를 이용해 DB로부터 user에 데이터를 담아온다
 		
 		//

@@ -25,19 +25,7 @@
 						data-form-id="${i.formId}" >${i.name}</div>
 					</c:forEach>
 					
-					<br>
-					<div>${sessionScope.user.name}님 접속 중</div>
-					<br>
-					<div>
-						<a href="./tempLogin1"><button>브라움 사원 로그인</button></a>
-						<a href="./tempLogin2"><button>소라카 대리 로그인</button></a>
-						<a href="./tempLogin3"><button>소나 과장 로그인</button></a>
-						<a href="./tempLogin4"><button>쓰레쉬 부장 로그인</button></a>
-						<a href="./tempLogout"><button>로그아웃</button></a>
-					</div>
 					
-
-
 				</div>
 			</div>
 			<!-- end Content -->

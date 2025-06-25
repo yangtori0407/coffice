@@ -7,7 +7,7 @@
 	<form id="proceedForm" action="/document/proceed" method="post">
 		<input type="hidden" name="documentId" id="documentId" value="${docuVO.documentId}">
 		<input type="hidden" name="signId" id="signId">
-		<input type="hidden" name="userId" id="userId" value="${sessionScope.userVO.userId}">
+		<input type="hidden" name="userId" id="userId" value="${sessionScope.user.userId}">
 	</form>
 
 
