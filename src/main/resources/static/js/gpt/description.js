@@ -29,7 +29,19 @@ sendGptBtn.addEventListener("click",()=>{
     })
     .then(r=>r.text())
     .then(r=>{
-        
-        gptLoading.innerText=r
+        let d;
+        try{
+            d = JSON.parse(r)
+        }catch{
+            d = null;
+        }
+        if(Array.isArray(d)){
+            const menuName = d.map(m=>m.menuName);
+            console.log(menuName);
+            gptLoading.innerText = menuName.join(',');
+        }else {
+            gptLoading.innerText=r
+        }
     })
+    document.getElementById("gptInput").value="";
 })

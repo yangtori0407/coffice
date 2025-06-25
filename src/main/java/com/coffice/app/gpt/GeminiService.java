@@ -25,7 +25,7 @@ public class GeminiService {
 	public String getDescription(String prompt) {
 		String api = geminiurl+geminikey;
 		
-		String text = prompt+"50자내로 알려줘";
+		String text = prompt+"100자내로 알려줘";
 		
 		GeminiReqVO request = new GeminiReqVO();
 		request.createGeminiReqDto(text);
