@@ -53,12 +53,23 @@
   .file-wrapper {
 	display: flex;
 	gap: 10px;
-	alignItems: center;
+	align-items: center;
 	border: 1px solid black;
 	padding: 5px;
-	marginBottom: 5px;
+	margin-bottom: 5px;
   }
-	
+
+
+  .exist-files:hover {
+  	cursor: pointer;
+	background-color: rgb(188, 218, 230);
+  }	
+  
+  .exist-files:active {
+  	
+	background-color: rgb(170, 176, 179);
+  }	
+
 </style>
 
 </head>
@@ -248,7 +259,9 @@
 		    	<c:forEach items="${docuVO.attachmentVOs}" var="i">
 		    		<div class="file-wrapper">
 		    			<button class="exist-remover">X</button>
-		    			<div class="exist-files" data-file-num="${i.fileNum}">파일명: ${i.originName}</div>
+		    			<div class="exist-files" data-file-num="${i.fileNum}">
+		    				${i.originName} [다운로드]
+		    			</div>
 		    			
 		    		</div>
 		    	</c:forEach>

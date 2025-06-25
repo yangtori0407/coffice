@@ -371,6 +371,17 @@ uploadBtn.addEventListener("click", function () {
 // 파일 선택 시 → 누적 리스트에 추가
 fakeInput.addEventListener("change", function (event) {
   var files = Array.from(event.target.files);
+  
+  // 현재 화면에 렌더링된 파일 수 확인
+  var currentWrapperCount = document.querySelectorAll(".file-wrapper").length;
+  
+  // 새로 추가할 파일 수가 제한을 넘는지 확인
+  if (currentWrapperCount + files.length > 5) {
+    alert("첨부파일은 최대 5개까지 가능합니다.");
+    fakeInput.value = "";
+    return;
+  }
+  
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
     selectedFiles.push(file);
@@ -391,11 +402,11 @@ function addFileToView(file) {
  
 
   var nameDiv = document.createElement("div");
-  nameDiv.textContent = "파일명: " + file.name;
+  nameDiv.textContent = file.name;
 
   var sizeDiv = document.createElement("div");
   sizeDiv.textContent = "크기: " + (file.size / 1024).toFixed(1) + " KB";
-
+  
   var deleteBtn = document.createElement("button");
   deleteBtn.textContent = "X";
   deleteBtn.type = "button";
@@ -416,6 +427,8 @@ function addFileToView(file) {
   fileListDiv.appendChild(wrapper);
 }
 
+
+////////////////////////////////////////
 // 전체 input + 파일 포함해서 FormData로 전송하는 함수
 let submitForm = function submitForm(formPath) {  
 
@@ -474,5 +487,31 @@ let submitForm = function submitForm(formPath) {
   
 }
 
+////////////////////////////////////////
+// 첨부 파일 다운로드
 
+const exist_files = document.getElementsByClassName("exist-files");
 
+for (let link of exist_files) {
+  link.addEventListener("click", function() {
+    let fileNum = link.dataset.fileNum;
+
+	// form 요소 생성
+    const form = document.createElement("form");
+    form.method = "post";
+    form.action = "/document/filedown";
+
+    // hidden input 추가
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "fileNum";
+    input.value = fileNum;
+    form.appendChild(input);
+	
+	// body에 form 추가 후 submit
+    document.body.appendChild(form);
+    form.submit();
+    
+
+  })
+}

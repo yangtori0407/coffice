@@ -22,6 +22,7 @@ import com.coffice.app.documents.attachments.AttachmentVO;
 import com.coffice.app.documents.forms.FormVO;
 import com.coffice.app.documents.lines.ApprovalLineVO;
 import com.coffice.app.documents.lines.ReferenceLineVO;
+import com.coffice.app.files.FileDownView;
 import com.coffice.app.page.Pager;
 import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
@@ -37,6 +38,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/document/*")
 public class DocumentController {
 
+	@Autowired
+	FileDownView fileDownView;
+	
 	@Autowired
 	private DocumentService documentService;
 
@@ -282,14 +286,16 @@ public class DocumentController {
 		return resultList;
 	}
 
-	// 미구현
-	public String getFileDetail(AttachmentVO attachmentVO, Model model) throws Exception {
-
+	//
+	@PostMapping("filedown")
+	public FileDownView getFileDetail(AttachmentVO attachmentVO, Model model) throws Exception {
+		System.out.println("filedown 컨트롤러 fileNum : " + attachmentVO.getFileNum());
 		attachmentVO = documentService.getFileDetail(attachmentVO);
 
-		model.addAttribute("attachmentVO", attachmentVO);
+		model.addAttribute("fileVO", attachmentVO);
+		model.addAttribute("kind", "docuFiles");
 
-		return "fileDownView";
+		return fileDownView;
 	}
 
 	//
