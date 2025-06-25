@@ -34,8 +34,6 @@
 						<div id="receiverArea" class="d-flex" >
 							<input type="email" class="card mb-2 py-1 border-primary p-0"
 								name="sender" style="width: 100%;" id="emailInput">
-							
-
 						</div>
 						<div class="mb-3">
 							<button type="button" class="btn btn-primary"
@@ -46,17 +44,17 @@
 								답장받을 이메일</button>
 						</div>
 						<div class="collapse mb-2" id="replyTo">
-							<div class="card card-body p-0"><input type="email" name="replyEmail"></div>
+							<div class="card card-body p-0"><input type="email" name="replyEmail" id="replyEmail"></div>
 						</div>
 						<label>제목</label> <input type="text"
 							class="card mb-4 py-3 border-left-info" name="messageTitle"
-							style="width: 100%;"> <label>내용</label>
+							style="width: 100%;" id="messageTitle"> <label>내용</label>
 						<div class="card" style="margin-bottom: 20px;">
 							<div id="editor" style="height: 550px;"></div>
 							<input type="hidden" id="quill_html" name="messageContents">
 						</div>
 						<div class="ml-auto">
-							<button id="submitBtn" class="btn btn-primary mb-3" type="submit">글
+							<button id="submitBtn" class="btn btn-primary mb-3" type="button">글
 								작성하기</button>
 						</div>
 					<!-- </form> -->

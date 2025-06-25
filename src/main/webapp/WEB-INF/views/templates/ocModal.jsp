@@ -342,13 +342,14 @@
         div.style.backgroundColor = "rgb(180, 182, 184)";
         div.style.color = "white";
         div.style.padding = "5px 10px";
-        div.style.width = "230px";
+        div.style.width = "250px";
         div.style.fontSize = "14px";
         div.style.height = "30px";
 
         const span = document.createElement("span");
-
-          span.innerText = s.dataset.selectedDepartment + " " + s.dataset.selectedName + " " + s.dataset.selectedPosition
+        span.classList.add("receiverPerson");
+        span.dataset.userId = s.dataset.selectedId;
+        span.innerText = s.dataset.selectedDepartment + " " + s.dataset.selectedName + " " + s.dataset.selectedPosition
         
 
         const button = document.createElement("button")

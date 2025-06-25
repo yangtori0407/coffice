@@ -3,10 +3,12 @@ package com.coffice.app.message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,9 +25,13 @@ public class MessageController {
 	@Autowired
 	private MessageService messageService;
 	
-	@GetMapping("main")
-	public void main() throws Exception{
-		
+	@GetMapping("send")
+	public void send(Model model) throws Exception{
+		model.addAttribute("message", "send");
+	}
+	@GetMapping("receive")
+	public void receive(Model model) throws Exception{
+		model.addAttribute("message", "receive");
 	}
 	
 	@GetMapping("add")
@@ -34,9 +40,13 @@ public class MessageController {
 	}
 	
 	@PostMapping("add")
-	public String add(MessageVO messageVO, int kind, Authentication authentication) throws Exception{
+	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers, String replyEmail, Authentication authentication) throws Exception{
 		log.info("messageVO : {}", messageVO);
-		messageService.sendMessage(messageVO, 2, authentication.getName());
+		log.info("replyEmail : {}", replyEmail);
+		for(String s : receivers) {
+			log.info("receiver: {}", s);
+		}
+		messageService.sendMessage(messageVO, receivers, replyEmail, authentication.getName());
 		
 		return "redirect:./main";
 	}

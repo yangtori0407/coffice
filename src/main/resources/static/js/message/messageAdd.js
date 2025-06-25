@@ -92,6 +92,28 @@ let isSubmitting = false;
 
 document.getElementById("submitBtn").addEventListener("click", () => {
     isSubmitting = true;
+    const messageTitle = document.getElementById("messageTitle");
+    const quill = document.getElementById("quill_html");
+    const replyEmail = document.getElementById("replyEmail");
+    const receivers = document.querySelectorAll(".receiverPerson");
+
+    const p = new URLSearchParams();
+    p.append("messageContents",quill.value);
+    p.append("messageTitle", messageTitle.value);
+    p.append("replyEmail", replyEmail.value);
+
+    receivers.forEach(e => {
+        p.append("receivers", e.getAttribute("data-user-id"));
+    })
+
+    fetch("./add",{
+        method: "POST",
+        body: p
+    })
+    .then(r => r.text())
+    .then(r => {
+
+    })
 })
 
 window.addEventListener('beforeunload', (event) => {
@@ -121,12 +143,13 @@ function createReceiver(s) {
     div.style.backgroundColor = "rgb(180, 182, 184)";
     div.style.color = "white";
     div.style.padding = "5px 10px";
-    div.style.width = "230px";
+    div.style.width = "250px";
     div.style.fontSize = "14px";
     div.style.height = "30px";
 
     const span = document.createElement("span");
-
+    span.classList.add("receiverPerson");
+    span.dataset.userId = s;
     span.innerText = s
 
 
@@ -143,5 +166,4 @@ function createReceiver(s) {
 
     return div;
 }
-
 
