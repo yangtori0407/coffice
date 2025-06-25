@@ -368,6 +368,10 @@
   		WHERE DOCUMENT_ID = #{documentId}
   	</delete>
   	
+  	<delete id="deleteAttachment" parameterType="AttachmentVO">
+  		DELETE FROM ATTACHMENTS
+  		WHERE FILE_NUM = #{fileNum}
+  	</delete>
   	
   	<!-- 구분선 -->
   	

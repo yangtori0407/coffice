@@ -15,4 +15,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			from HOLIDAY
 	</select>
 	
+	<delete id="deleteAll">
+			DELETE FROM HOLIDAY
+	</delete>
+	
 </mapper>
