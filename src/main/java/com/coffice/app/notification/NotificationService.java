@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coffice.app.events.vacation.VacationVO;
 import com.coffice.app.posts.board.BoardVO;
 import com.coffice.app.posts.board.CommentVO;
 import com.coffice.app.posts.notice.NoticeVO;
@@ -67,7 +68,7 @@ public class NotificationService {
 		notificationDAO.addNoticeCheck(info);
 	
 		
-		template.convertAndSend("/sub/board/user."+ boardVO.getUserId(), notificationVO);
+		template.convertAndSend("/sub/notification/user."+ boardVO.getUserId(), notificationVO);
 	}
 	
 	public void sendReply(CommentVO commentVO, CommentVO p) throws Exception{
@@ -89,8 +90,14 @@ public class NotificationService {
 		
 		if(p.getDeleteStatus() != 1 && !commentVO.getUserId().equals(p.getUserId())){
 			log.info("대댓글 대댓글");
-			template.convertAndSend("/sub/reply/user."+ p.getUserId(), notificationVO);
+			template.convertAndSend("/sub/notification/user."+ p.getUserId(), notificationVO);
 		}
+	}
+	
+	public void sendVaction(VacationVO vacationVO) throws Exception{
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setNotiContents("휴가 신청");
+//		notificationVO.setNotiDate();
 	}
 
 	public Map<String, Object> getNotification(String userId) throws Exception{

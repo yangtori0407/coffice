@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.coffice.app.files.FileDownView;
 import com.coffice.app.files.FileVO;
 import com.coffice.app.notification.NotificationController;
 import com.coffice.app.notification.NotificationService;
@@ -28,6 +29,8 @@ public class NoticeController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	@Autowired
+	private FileDownView fileDownView;
 	
 	
 	@ModelAttribute("posts")
@@ -83,7 +86,7 @@ public class NoticeController {
 	@GetMapping("fileDown")
 	public String fileDown(NoticeFilesVO filesVO,Model model) throws Exception{
 		FileVO fileVO = (FileVO)noticeService.fileDown(filesVO);
-		
+		log.info("파일 다운로드 : {}", fileVO.getOriginName());
 		model.addAttribute("fileVO", fileVO);
 		model.addAttribute("kind", "notice");
 		
