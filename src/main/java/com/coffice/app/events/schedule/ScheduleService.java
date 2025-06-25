@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coffice.app.users.UserVO;
+
 @Service
 public class ScheduleService {
 
@@ -15,23 +17,23 @@ public class ScheduleService {
 	public int addSchedule(ScheduleVO scheduleVO) throws Exception {
 		int result = 0;
 		if(scheduleVO.getRepeatType() == null) {
-			scheduleDAO.addSchedule(scheduleVO);
+			result = scheduleDAO.addSchedule(scheduleVO);
 		}else {
-			scheduleDAO.addRepeatSchedule(scheduleVO);
+			result = scheduleDAO.addRepeatSchedule(scheduleVO);
 		}
 		return result; 
 	}
 	
-	public List<ScheduleVO> getAll() throws Exception {
-		return scheduleDAO.getAll();
+	public List<ScheduleVO> getAll(UserVO userVO) throws Exception {
+		return scheduleDAO.getAll(userVO);
 	}
 	
 	public ScheduleVO getSchedule(ScheduleVO scheduleVO) throws Exception {
 		return scheduleDAO.getSchedule(scheduleVO);
 	}
 	
-	public List<ScheduleVO> getRepeatSchedules() throws Exception {
-		return scheduleDAO.getRepeatSchedules();
+	public List<ScheduleVO> getRepeatSchedules(UserVO userVO) throws Exception {
+		return scheduleDAO.getRepeatSchedules(userVO);
 	}
 	
 	public int updateSchedule(ScheduleVO scheduleVO) throws Exception {
@@ -60,6 +62,10 @@ public class ScheduleService {
 		}
 		
 		return result;
+	}
+	
+	public int dragDrop(ScheduleVO scheduleVO) throws Exception {
+		return scheduleDAO.dragDrop(scheduleVO);
 	}
 
 }

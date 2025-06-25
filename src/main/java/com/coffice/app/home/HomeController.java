@@ -27,6 +27,7 @@ public class HomeController {
 		
 		model.addAttribute("list", noticeService.getMainList()) ;
 		model.addAttribute("chart", branchService.getTotalChart());
+		model.addAttribute("registerBranch", branchService.registerBranch());
 		model.addAttribute("kind", "홈");
 
 		return "index";

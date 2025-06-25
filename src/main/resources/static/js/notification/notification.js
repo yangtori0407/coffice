@@ -79,6 +79,15 @@ stompClientNotification.connect({}, function (frame) {
         showAlarmTooltip();
         createToast(msg);
     })
+    //대댓글
+    stompClientNotification.subscribe(`/sub/reply/user.${userIdNotification}`, function (message) {
+        const msg = JSON.parse(message.body);
+        notificationArea.prepend(createAlert(msg, 3));
+        totalArea.innerText = Number(totalArea.innerText) + 1;
+        notificationArea.lastElementChild.remove();
+        showAlarmTooltip();
+        createToast(msg);
+    })
 
 }, function (error) {
     console.error("stomp 연결 실패: ", error);
@@ -104,7 +113,7 @@ function createAlert(msg, num) {
 
     if (msg.notiKind == "NOTICE") {
         a.href = `/notice/detail?noticeNum=${msg.relateId}`
-    } else if (msg.notiKind == "BOARD") {
+    } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
         a.href = `/board/detail?boardNum=${msg.relateId}`
     } else {
         a.href = "#";
@@ -121,6 +130,8 @@ function createAlert(msg, num) {
         iconCircle.classList.add("icon-circle", "bg-info");
     } else if (msg.notiKind == "BOARD") {
         iconCircle.classList.add("icon-circle", "bg-success");
+    }else if (msg.notiKind == "REPLY") {
+        iconCircle.classList.add("icon-circle", "bg-primary");
     }
 
     const icon = document.createElement("ion-icon");
@@ -129,8 +140,9 @@ function createAlert(msg, num) {
         icon.setAttribute("name", "information-circle-outline");
     } else if (msg.notiKind == "BOARD") {
         icon.setAttribute("name", "return-down-forward-outline");
+    }else if (msg.notiKind == "REPLY") {
+        icon.setAttribute("name", "return-down-forward-outline");
     }
-
     iconCircle.appendChild(icon);
     iconWrapper.appendChild(iconCircle);
 
@@ -145,7 +157,7 @@ function createAlert(msg, num) {
     kindDiv.classList.add("small", "font-weight-bold")
     if (msg.notiKind == "NOTICE") {
         kindDiv.innerText = "[공지사항]"
-    } else if (msg.notiKind == "BOARD") {
+    } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
         kindDiv.innerText = `[${msg.notiContents}]`
     }
 
@@ -154,9 +166,10 @@ function createAlert(msg, num) {
     //익명게시판 댓글
     if (num == 2) {
         contentSpan.innerText = "댓글이 달렸습니다."
+    } else if (num == 3) {
+        contentSpan.innerText = "대댓글이 달렸습니다."
     } else {
         contentSpan.innerText = msg.notiContents;
-
     }
 
     textWrapper.appendChild(dateDiv);
@@ -173,7 +186,7 @@ function createAlert(msg, num) {
     })
 
     return a;
-    
+
 }
 
 
@@ -278,7 +291,7 @@ function createToast(msg) {
 
     if (msg.notiKind == "NOTICE") {
         icon.setAttribute("name", "information-circle-outline");
-    } else if (msg.notiKind == "BOARD") {
+    } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
         icon.setAttribute("name", "return-down-forward-outline");
     }
     icon.classList.add("mr-2");
@@ -287,7 +300,7 @@ function createToast(msg) {
     roomName.classList.add("mr-auto");
     if (msg.notiKind == "NOTICE") {
         roomName.textContent = "[공지사항]"
-    } else if (msg.notiKind == "BOARD") {
+    } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
         roomName.textContent = `[${msg.notiContents}]`
     }
 
@@ -316,12 +329,15 @@ function createToast(msg) {
     const content = document.createElement("div");
     content.classList.add("chat-preview");
 
-    if(msg.notiKind == "NOTICE"){
+    if (msg.notiKind == "NOTICE") {
 
         content.textContent = msg.notiContents;
-    }else if(msg.notiKind == "BOARD"){
+    } else if (msg.notiKind == "BOARD") {
         content.textContent = "댓글이 달렸습니다."
+    } else if (msg.notiKind == "REPLY") {
+        content.textContent = "대댓글이 달렸습니다."
     }
+    
     bodyInner.appendChild(content);
     body.appendChild(bodyInner);
 
@@ -333,7 +349,7 @@ function createToast(msg) {
         if (msg.notiKind == "NOTICE") {
 
             location.href = `/notice/detail?noticeNum=${msg.relateId}`;
-        } else if (msg.notiKind == "BOARD") {
+        } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
             location.href = `/board/detail?boardNum=${msg.relateId}`;
         }
     });
