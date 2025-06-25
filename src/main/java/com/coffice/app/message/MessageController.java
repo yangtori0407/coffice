@@ -1,5 +1,7 @@
 package com.coffice.app.message;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MessageController {
 	
+	
 	@ModelAttribute("message")
 	public String kind() {
 		return "message";
@@ -26,28 +29,33 @@ public class MessageController {
 	private MessageService messageService;
 	
 	@GetMapping("send")
-	public void send(Model model) throws Exception{
+	public void send(Model model, Authentication authentication) throws Exception{
+		model.addAttribute("kind", "이메일 > 보낸 이메일");
+		List<MessageVO> list = messageService.getSendMessage(authentication.getName());
 		model.addAttribute("message", "send");
+		model.addAttribute("list", list);
 	}
 	@GetMapping("receive")
-	public void receive(Model model) throws Exception{
+	public void receive(Model model, Authentication authentication) throws Exception{
+		model.addAttribute("kind", "이메일 > 받은 이메일");
+		List<MessageVO> list = messageService.getReceiveMessage(authentication.getName());
 		model.addAttribute("message", "receive");
+		model.addAttribute("list", list);
 	}
 	
 	@GetMapping("add")
-	public void add() throws Exception{
-		
+	public void add(Model model) throws Exception{
+		model.addAttribute("kind", "이메일 > 작성하기");
 	}
 	
 	@PostMapping("add")
-	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers, String replyEmail, Authentication authentication) throws Exception{
+	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers,  Authentication authentication) throws Exception{
 		log.info("messageVO : {}", messageVO);
-		log.info("replyEmail : {}", replyEmail);
 		for(String s : receivers) {
 			log.info("receiver: {}", s);
 		}
-		messageService.sendMessage(messageVO, receivers, replyEmail, authentication.getName());
+		messageService.sendMessage(messageVO, receivers, authentication.getName());
 		
-		return "redirect:./main";
+		return "message/success";
 	}
 }
