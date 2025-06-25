@@ -21,7 +21,8 @@
   				DETAIL,
   				START_TIME,
   				END_TIME,
-  				SCHEDULE_TYPE
+  				SCHEDULE_TYPE,
+  				USER_ID
   			from
   				SCHEDULE
   			where
@@ -63,6 +64,7 @@
 			    REPEAT_END,
 			    REPEAT_TYPE,
 			    SCHEDULE_TYPE,
+			    USER_ID,
 			    sre.REPEAT_ID,
 			    sre.EXCEPTION_DATE,
 			    sr.DELETE_STATUS 
@@ -81,14 +83,14 @@
 			                WHERE DEPT_ID = (
 			                    SELECT DEPT_ID
 			                    FROM USERS
-			                    WHERE USER_ID = 'test1'
+			                    WHERE USER_ID = #{userId}
 			                )
 			            )
 			            AND SCHEDULE_TYPE IN ('public', 'group')
 			        )
 			        OR (
 			            SCHEDULE_TYPE = 'private'
-			            AND USER_ID = 'test1'
+			            AND USER_ID = #{userId}
 			        )
 			    )
 			    AND DELETE_STATUS = 0
