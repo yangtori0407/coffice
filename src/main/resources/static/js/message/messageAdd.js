@@ -94,13 +94,13 @@ document.getElementById("submitBtn").addEventListener("click", () => {
     isSubmitting = true;
     const messageTitle = document.getElementById("messageTitle");
     const quill = document.getElementById("quill_html");
-    const replyEmail = document.getElementById("replyEmail");
+    
     const receivers = document.querySelectorAll(".receiverPerson");
 
     const p = new URLSearchParams();
     p.append("messageContents",quill.value);
     p.append("messageTitle", messageTitle.value);
-    p.append("replyEmail", replyEmail.value);
+   
 
     receivers.forEach(e => {
         p.append("receivers", e.getAttribute("data-user-id"));
