@@ -63,7 +63,7 @@
 															aria-controls="dataTable" rowspan="1" colspan="1"
 															aria-sort="ascending"
 															aria-label="Name: activate to sort column descending"
-															style="width: 100.788px;">보낸사람</th>
+															style="width: 100.788px;">보낸 사람</th>
 														<th class="sorting" tabindex="0" aria-controls="dataTable"
 															rowspan="1" colspan="1"
 															aria-label="Position: activate to sort column ascending"
@@ -71,19 +71,17 @@
 														<th class="sorting" tabindex="0" aria-controls="dataTable"
 															rowspan="1" colspan="1"
 															aria-label="Office: activate to sort column ascending"
-															style="width: 116.788px;">수신 날짜</th>
+															style="width: 116.788px;">날짜</th>
 													</tr>
 												</thead>
 												<tbody>
-													<%-- <c:forEach items="${list }" var="l">
+													<c:forEach items="${list }" var="l">
 														<tr>
-															<td><a class="boardA" href="./detail?boardNum=${l.boardNum }">${l.boardNum }</a></td>
-															<td><a class="boardA" href="./detail?boardNum=${l.boardNum }">${l.boardTitle }</a></td>
-															<td>0</td>
-															<td>${l.boardHit }</td>
-															<td>${l.boardDate }</td>
+															<td>${l.deptName } ${l.name }</td>
+															<td><a class="boardA" href="./detail?messageNum=${l.messageNum }">${l.messageTitle }</a></td>
+															<td>${l.formatted }</td>
 														</tr>
-													</c:forEach> --%>
+													</c:forEach>
 												</tbody>
 											</table>
 										</div>
