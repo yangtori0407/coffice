@@ -169,7 +169,7 @@
 					<div class="form-group">
 				        <input type="number" class="form-control" name="salesQuantity" id="salesQuantity" placeholder="수량을 입력하세요" min="0">
 					</div>
-			      <div class="modal-footer">
+			      <div class="modal-footer" id="orderFooter">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
 			      </div>
 			  </div>
