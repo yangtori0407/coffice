@@ -32,16 +32,17 @@ public class HolidayService {
 		return holidayDAO.getHolidays();
 	}
 	
-	@Scheduled(cron = "0 0 12 * * *")
+//	@Scheduled(cron = "0 0 12 * * *")
 	public void updateHoliday() throws Exception {
 		Calendar calendar = Calendar.getInstance();
-		int c = calendar.get(Calendar.YEAR)-2;
+		int c = calendar.get(Calendar.YEAR)-1;
+		log.info("{}", c);
 		int result = 0;
 		result = holidayDAO.deleteAll();
 		log.info("deleteHolidays : {}", result);
 		result = 0;
-		for(int i = 0; i < 5; i++) {
-			result = result + this.addHoliday(i);
+		for(int i = 0; i < 3; i++) {
+			result = result + this.addHoliday(c+i);
 		}
 		log.info("updateHolidays : {}", result);
 	}
