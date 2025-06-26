@@ -40,15 +40,12 @@ stompClientNotification.connect({}, function (frame) {
 
     //공지사항 알림
     stompClientNotification.subscribe(`/sub/notice`, function (message) {
-        console.log("받음")
         const msg = JSON.parse(message.body); //서버에서 json으로 보낸걸 json 객체로 받음
-        console.log(msg);
-        // msg.notiContents = "공지사항 " + msg.notiContents;
         notificationArea.prepend(createAlert(msg, 0));
         totalArea.innerText = Number(totalArea.innerText) + 1;
         notificationArea.lastElementChild.remove();
         showAlarmTooltip();
-        //createToast(msg);
+        createToast(msg);
     })
     //채팅방 알림
     stompClientNotification.subscribe(`/sub/chat/user.${userIdNotification}`, function (message) {
@@ -70,24 +67,24 @@ stompClientNotification.connect({}, function (frame) {
         console.log(msg);
         createChatToast(msg);
     })
-    //댓글
-    stompClientNotification.subscribe(`/sub/board/user.${userIdNotification}`, function (message) {
+    //모든 알림
+    stompClientNotification.subscribe(`/sub/notification/user.${userIdNotification}`, function (message) {
         const msg = JSON.parse(message.body);
-        notificationArea.prepend(createAlert(msg, 2));
+        notificationArea.prepend(createAlert(msg, 0));
         totalArea.innerText = Number(totalArea.innerText) + 1;
         notificationArea.lastElementChild.remove();
         showAlarmTooltip();
         createToast(msg);
     })
-    //대댓글
-    stompClientNotification.subscribe(`/sub/reply/user.${userIdNotification}`, function (message) {
-        const msg = JSON.parse(message.body);
-        notificationArea.prepend(createAlert(msg, 3));
-        totalArea.innerText = Number(totalArea.innerText) + 1;
-        notificationArea.lastElementChild.remove();
-        showAlarmTooltip();
-        createToast(msg);
-    })
+    // //대댓글
+    // stompClientNotification.subscribe(`/sub/nof/user.${userIdNotification}`, function (message) {
+    //     const msg = JSON.parse(message.body);
+        
+    //     totalArea.innerText = Number(totalArea.innerText) + 1;
+    //     notificationArea.lastElementChild.remove();
+    //     showAlarmTooltip();
+    //     createToast(msg);
+    // })
 
 }, function (error) {
     console.error("stomp 연결 실패: ", error);
@@ -164,9 +161,9 @@ function createAlert(msg, num) {
     const contentSpan = document.createElement("span");
     contentSpan.classList.add("font-weight-bold");
     //익명게시판 댓글
-    if (num == 2) {
+    if (msg.notiKind == "BOARD") {
         contentSpan.innerText = "댓글이 달렸습니다."
-    } else if (num == 3) {
+    } else if (msg.notiKind == "REPLY") {
         contentSpan.innerText = "대댓글이 달렸습니다."
     } else {
         contentSpan.innerText = msg.notiContents;
@@ -329,14 +326,13 @@ function createToast(msg) {
     const content = document.createElement("div");
     content.classList.add("chat-preview");
 
-    if (msg.notiKind == "NOTICE") {
-
-        content.textContent = msg.notiContents;
-    } else if (msg.notiKind == "BOARD") {
+    if (msg.notiKind == "BOARD") {
         content.textContent = "댓글이 달렸습니다."
     } else if (msg.notiKind == "REPLY") {
         content.textContent = "대댓글이 달렸습니다."
-    }
+    } else{
+        content.textContent = msg.notiContents;
+    } 
     
     bodyInner.appendChild(content);
     body.appendChild(bodyInner);

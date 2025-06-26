@@ -1,7 +1,7 @@
 const kind = document.getElementById("kind")
 let flag = true;
-const uid = document.getElementById("userId")
 const authority = true;
+const uid = document.getElementById("userId")
 const gcolor = "#fb6544"
 const pcolor = "#378006"
 
@@ -208,7 +208,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         params.append("scheduleId", e.event.id)
         params.append("startTime", e.event.startStr.slice(0, 10)+e.event.startStr.slice(11, 16))
         params.append("endTime", e.event.endStr.slice(0, 10)+e.event.endStr.slice(11, 16))
-        fetch("http://localhost/events/schedule/dragDrop", {
+        fetch("schedule/dragDrop", {
             method: "post",
             body: params
         })
@@ -219,7 +219,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     }
 });
 
-fetch("http://localhost/events/getHolidays")
+fetch("/events/getHolidays")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
@@ -237,7 +237,7 @@ fetch("http://localhost/events/getHolidays")
     }
 })
 
-fetch("http://localhost/events/getRepeatSchedules")
+fetch("/events/getRepeatSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
@@ -280,7 +280,7 @@ fetch("http://localhost/events/getRepeatSchedules")
     }
 })
 
-fetch("http://localhost/events/getSchedules")
+fetch("/events/getSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {

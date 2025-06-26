@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -99,13 +100,45 @@
 					      </div>
 					    </div>
 					    
+					    
+					    <%! 
+						public String timeFormat(long totalSeconds) {
+						    long h = totalSeconds / 3600;
+						    long m = (totalSeconds % 3600) / 60;
+						    long s = totalSeconds % 60;
+						    return h + "H " + m + "M " + s + "S";
+						}
+						%>
+						
+						<c:set var="worked" value="${timeMap.workedSeconds}" />
+						<c:set var="remaining" value="${timeMap.remainingSeconds}" />
+						<c:set var="overtime" value="${timeMap.overtimeSeconds}" />
+						
+						<%
+						    Map<String, Long> timeMap = (Map<String, Long>) request.getAttribute("timeMap");
+						
+						    long worked = timeMap != null && timeMap.get("workedSeconds") != null ? timeMap.get("workedSeconds") : 0L;
+						    long remaining = timeMap != null && timeMap.get("remainingSeconds") != null ? timeMap.get("remainingSeconds") : 0L;
+						    long overtime = timeMap != null && timeMap.get("overtimeSeconds") != null ? timeMap.get("overtimeSeconds") : 0L;
+						%>
+					    
 					    <!-- 오른쪽 아래 박스 -->
 					    <div class="card mb-3" style="flex: 1;">
 					      <div class="card-header py-3">
-					        <h6 class="m-0 font-weight-bold text-primary">나의 근태현황</h6>
+					        <h6 class="m-0 font-weight-bold text-primary">나의 이번 주 근태현황</h6>
 					      </div>
-					      <div class="card-body">
-					        <!-- 오른쪽 아래 내용 -->
+				
+					      <div class="card-body" style="display: flex; flex-direction: column; justify-content: center; min-height: 200px; padding-bottom: 100px;">
+					        <div style="display: flex; justify-content: space-around;  border-bottom: 1px solid black; padding-bottom: 10px;">
+							    <div>근무한 시간</div>
+							    <div>잔여 시간</div>
+							    <div>초과 시간</div>
+							</div>
+							<div style="display: flex; justify-content: space-around; margin-top: 10px; font-weight: bold;">
+							     <div><%= timeFormat(worked) %></div>
+							      <div><%= timeFormat(remaining) %></div>
+							      <div><%= timeFormat(overtime) %></div>
+							</div>
 					      </div>
 					    </div>
 					

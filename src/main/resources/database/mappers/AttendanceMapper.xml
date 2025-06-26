@@ -12,7 +12,7 @@
   	</insert>
   	
   	<update id="checkOut" parameterType="AttendanceVO">
-  		UPDATE ATTENDANCE SET END_TIME = #{endTime}, STATUS= #{status}
+  		UPDATE ATTENDANCE SET END_TIME = #{endTime}, STATUS= #{status}, duration_time = #{durationTime}
   		WHERE USER_ID = #{userId} AND ATTENDANCE_DATE = #{attendanceDate}
   	</update>
   	
@@ -23,10 +23,60 @@
   		AND DATE(`ATTENDANCE_DATE`) = #{attendanceDate}
   	</select>
   
+  	<select id="getWeeklyWorkDuration" parameterType="String" resultType="Long">
+	  SELECT
+	    COALESCE(SUM(duration_time), 0)
+	  FROM ATTENDANCE
+	  WHERE USER_ID = #{userId}
+	    AND attendance_date BETWEEN
+	      DATE_SUB(CURDATE(), INTERVAL (WEEKDAY(CURDATE())) DAY)
+	      AND DATE_ADD(CURDATE(), INTERVAL (6 - WEEKDAY(CURDATE())) DAY)
+	    AND DURATION_TIME IS NOT NULL
+	</select>
+  	
+  	<select id="getAttendanceForMonth" parameterType="map" resultType="int">
+	  SELECT COUNT(DISTINCT DATE(START_TIME))
+	  FROM ATTENDANCE
+	  WHERE USER_ID = #{userId}
+	    AND START_TIME BETWEEN #{startDate} AND #{endDate}
+	</select>
   
+  	<select id="getAbsentUserIds" resultType="String">
+		SELECT U.USER_ID
+		FROM USERS U
+		WHERE U.STATUS = 1 -- 재직 중인 사원
+		AND U.USER_ID NOT IN (
+		SELECT A.USER_ID
+		FROM ATTENDANCE A
+		WHERE DATE(a.start_time) = CURDATE()
+		)
+	</select>
   
-  
-  
+  	<insert id="insertAbsence" parameterType="AttendanceVO">
+		INSERT INTO ATTENDANCE (USER_ID, START_TIME, END_TIME, STATUS, ATTENDANCE_DATE)
+		VALUES (#{userId}, NULL, NULL, #{status}, #{attendanceDate})
+	</insert>
+	
+	<select id="getTodayUnfinishedAttendances" resultType="AttendanceVO">
+	    SELECT *
+	    FROM ATTENDANCE
+	    WHERE START_TIME IS NOT NULL
+	      AND END_TIME IS NULL
+	      AND DATE(start_time) = CURDATE()
+	</select>
+	
+	<update id="updateStatus" parameterType="AttendanceVO">
+	    UPDATE ATTENDANCE
+	    SET STATUS = #{status}
+	    WHERE USER_ID = #{userId}
+	      AND DATE(START_TIME) = CURDATE()
+	      AND END_TIME IS NULL
+	</update>
+	
+	
+	
+	
+	
   
   
   	
