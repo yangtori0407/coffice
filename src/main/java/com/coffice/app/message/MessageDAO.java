@@ -26,4 +26,8 @@ public interface MessageDAO {
 
 	UserVO getUserInfo(String userId) throws Exception;
 
+	long getSendTotal(String userId) throws Exception;
+
+	long getReceiveTotal(String userId) throws Exception;
+
 }

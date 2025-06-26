@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coffice.app.page.Pager;
 import com.coffice.app.users.UserDAO;
 import com.coffice.app.users.UserVO;
 
@@ -83,14 +84,18 @@ public class MessageService {
 		messageMailSender.send(mimeMessage);
 	}
 
-	public List<MessageVO> getSendMessage(String userId) throws Exception {
+	public List<MessageVO> getSendMessage(String userId, Pager pager) throws Exception {
+		pager.make();
+		Long total = messageDAO.getSendTotal(userId);
+		pager.makeNum(total);
 		return messageDAO.getSendMessage(userId);
 	}
 
-	public List<MessageVO> getReceiveMessage(String userId) throws Exception{
-
+	public List<MessageVO> getReceiveMessage(String userId, Pager pager) throws Exception{
+		pager.make();
+		Long total = messageDAO.getReceiveTotal(userId);
+		pager.makeNum(total);
 		return messageDAO.getReceiveMessage(userId);
-		
 	}
 
 	public MessageVO detail(MessageVO messageVO) throws Exception{

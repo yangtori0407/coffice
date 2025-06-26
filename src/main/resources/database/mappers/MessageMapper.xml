@@ -28,6 +28,21 @@
 		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0
 		ORDER BY M.SEND_DATE DESC
 	</select>
+	
+	<select id="getSendTotal" parameterType="java.lang.String">
+		SELECT
+			COUNT(*)
+		FROM MESSAGE M
+		JOIN MESSAGE_CHECK MC
+		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
+		LEFT OUTER JOIN USERS U
+		ON MC.USER_ID = U.USER_ID
+		LEFT OUTER JOIN
+		DEPARTMENT DP
+		ON DP.DEPT_ID = U.DEPT_ID
+		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0
+		ORDER BY M.SEND_DATE DESC
+	</select>
 	<resultMap type="MessageVO" id="receiveMessage">
 		<id column="MESSAGE_NUM" property="messageNum"/>
 		<result column="MESSAGE_CONTENTS" property="messageContents"/>
@@ -56,6 +71,20 @@
 			MC.MESSAGE_STATUS,
 			U.NAME,
 			DP.DEPT_NAME
+		FROM MESSAGE M
+		JOIN MESSAGE_CHECK MC
+		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
+		JOIN USERS U
+		ON U.USER_ID = M.SENDER
+		JOIN DEPARTMENT DP
+		ON DP.DEPT_ID =
+		U.DEPT_ID
+		WHERE MC.USER_ID = #{userId} AND MC.RECEIVER_DELETE = 0
+		ORDER BY SEND_DATE DESC
+	</select>
+	<select id="getReceiveTotal" parameterType="java.lang.String">
+		SELECT
+			COUNT(*)
 		FROM MESSAGE M
 		JOIN MESSAGE_CHECK MC
 		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
