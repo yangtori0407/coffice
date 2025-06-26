@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.coffice.app.gpt.GeminiService;
 import com.coffice.app.mail.MailService;
 
 import jakarta.servlet.http.HttpSession;
@@ -43,6 +44,8 @@ public class UserController {
 	private MailService mailService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private GeminiService geminiService;
 
     UserController(WebSecurityCustomizer customizer) {
         this.customizer = customizer;
@@ -186,8 +189,8 @@ public class UserController {
 	}
 	
 	@GetMapping("mypage")
-	public void mypage() throws Exception{
-		
+	public void mypage(@AuthenticationPrincipal UserVO userVO, Model model) throws Exception{
+		model.addAttribute("quote", geminiService.getQuote(userVO.getName()));
 	}
 	
 	@PostMapping("mypage/checkPassword")

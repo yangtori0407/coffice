@@ -307,8 +307,11 @@
 				  			name="information-circle-outline"
 				  			data-container="body" 
 				  			data-toggle="popover" 
-				  			data-placement="top" 
-				  			data-content="메뉴&#10;식자재&#10;총매출지점별매출&#10;"></ion-icon>
+				  			data-placement="top"
+				  			 data-html="true"
+				  			data-content="키워드: 메뉴,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;식자재,
+							  			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;총매출,
+							  			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;지점별매출"></ion-icon>
 		        <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>

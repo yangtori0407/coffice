@@ -41,4 +41,24 @@ public class GeminiService {
 								
 		return response.getCandidates().get(0).getContent().getParts().get(0).getText();
 	}
+	
+	public String getQuote(String prompt) {
+		String api = geminiurl+geminikey;
+		
+		String text = prompt+"님에게 맞는 명언을 한줄로 남겨줘";
+		
+		GeminiReqVO request = new GeminiReqVO();
+		request.createGeminiReqDto(text);
+		
+		GeminiResVO response = webclient.post()
+								.uri(api)
+								.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+								.bodyValue(request)
+								.retrieve()
+								.bodyToMono(GeminiResVO.class)
+								.block()
+								;
+								
+		return response.getCandidates().get(0).getContent().getParts().get(0).getText();
+	}
 }

@@ -43,10 +43,17 @@ class UserTest {
 		log.info("fi:{}",filename);
 	}
 	
-	@Test
+//	@Test
 	void test3() throws Exception {
 		String a = "안녕";
 		String b = productService.getDescription(a);
+		log.info("g:{}",b);
+	}
+	
+	@Test
+	void test4() throws Exception {
+		String a = "배수지";
+		String b = productService.getQuote(a);
 		log.info("g:{}",b);
 	}
 
