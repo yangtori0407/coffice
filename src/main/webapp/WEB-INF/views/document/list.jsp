@@ -63,9 +63,9 @@
 							<c:forEach items="${docuList}" var="i">
 								<tr>
 									<td>${i.documentId }</td>
-									<td>${i.formId}/${i.formName }</td>
+									<td>${i.formName }</td>
 									<td><a href="../detail?documentId=${i.documentId}">${i.title}</a></td>
-									<td>${i.writerId } / ${i.writerName } / ${i.writerPosition }</td>
+									<td>${i.writerName } ${i.writerPosition }</td>
 									<td>${i.writerTime }</td>
 									
 									<c:if test="${i.status eq '반려' || i.status eq '결재완료' }">

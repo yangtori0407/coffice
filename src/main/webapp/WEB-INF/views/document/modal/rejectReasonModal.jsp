@@ -6,7 +6,7 @@
 	<form id="rejectForm" action="/document/reject" method="post">
 		<input type="hidden" name="documentId" id="reject_documentId" value="${docuVO.documentId}">
 		<input type="hidden" name="rejectReason" id="reject_reason">
-		<input type="hidden" name="userId" id="reject_userId" value="${sessionScope.userVO.userId}">
+		<input type="hidden" name="userId" id="reject_userId" value="${sessionScope.user.userId}">
 	</form>
     
 	<!-- 반려 사유 쓰기 Modal-->

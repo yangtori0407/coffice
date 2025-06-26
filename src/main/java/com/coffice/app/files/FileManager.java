@@ -35,6 +35,19 @@ public class FileManager {
 	}
 
 	
+	
+	// 파일 삭제
+	public void fileDelete(String path, String fileName) throws Exception {
+		
+		File file = new File(path, fileName);
+		
+		if(file.exists()) {
+			boolean check = file.delete();
+		}
+		
+	}
+	
+	
 //	public void quillFileDelete(String path, List<String> files) throws Exception{
 //		for(String f : files) {
 //			File file = new File(path, f);

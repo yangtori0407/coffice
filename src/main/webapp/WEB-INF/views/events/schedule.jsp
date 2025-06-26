@@ -10,6 +10,7 @@
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/mainSchedule.css">
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -22,7 +23,9 @@
 					<!-- contents 내용 -->
 					
 					<input type="hidden" id="kind" value="${kind}">
-					<div id="calendar"></div>
+					<div class="card shadow mb-4">
+						<div id="calendar" class="card-body"></div>
+					</div>
 
 				</div>
 			</div>
@@ -188,7 +191,7 @@
 						</div>
 						<div class="modal-body">
 							<form action="#">
-
+								<c:if test="${kind eq '일정' }">
 									<div class="form-check form-check-inline">
 										<input class="form-check-input" type="radio" name="detailResultOptions" id="inlineRadio1" value="private" disabled>
 										<label class="form-check-label" for="inlineRadio1">Private</label>
@@ -201,13 +204,27 @@
 										<input class="form-check-input" type="radio" name="detailResultOptions" id="inlineRadio3" value="group" disabled>
 										<label class="form-check-label" for="inlineRadio3">Group</label>
 									</div>
-	
+								
 									<hr>
 									
 									<div class="form-group">
 										<label for="details">Details</label>
 										<textarea class="form-control" id="detailResult" rows="3" disabled></textarea>
 									</div>
+								</c:if>
+								<c:if test="${kind eq '휴가' }">
+									<div class="form-group">
+										<label for="vType">종류</label>
+										<div class="input-group">
+											<select name="rvType" id="rvType" class="form-control">
+												<option value="연차">연차</option>
+												<option value="병가">병가</option>
+												<option value="경조사">경조사</option>
+												<option value="보상">보상 휴가</option>
+											</select>
+										</div>
+									</div>
+								</c:if>
 
 								<hr>
 
@@ -248,45 +265,56 @@
 									</div>
 								</div>
 								<hr>
-								<div id="repeatScheduleDiv" style="display: none;">
-									<div class="form-check">
-										<div class="">
-											<input class="form-check-input" type="checkbox" id="repeatCheck">
-											<label class="form-check-label" for="repeatCheck">
-												반복 일정 일괄 변경
-											</label>
-										</div>
-									</div>
-									<hr>
-									<div class="form-group" id="changeAll" style="display: none;">
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="radioOptionsResult" id="radio1" value="weekly" disabled>
-											<label class="form-check-label" for="radio1">Weekly</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="radioOptionsResult" id="radio2" value="monthly" disabled>
-											<label class="form-check-label" for="radio2">Monthly</label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="radioOptionsResult" id="radio3" value="yearly" disabled>
-											<label class="form-check-label" for="radio3">Yearly</label>
+								<c:if test="${kind eq '일정' }">
+									<div id="repeatScheduleDiv" style="display: none;">
+										<div class="form-check">
+											<div class="">
+												<input class="form-check-input" type="checkbox" id="repeatCheck">
+												<label class="form-check-label" for="repeatCheck">
+													반복 일정 일괄 변경
+												</label>
+											</div>
 										</div>
 										<hr>
-										<div class="form-group">
-											<label for="repeat">반복 종료</label>
-											<div class="input-group" id="repeat">
-												<input type="date" class="form-control" id="reRepeat" disabled>
+										<div class="form-group" id="changeAll" style="display: none;">
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="radioOptionsResult" id="radio1" value="weekly" disabled>
+												<label class="form-check-label" for="radio1">Weekly</label>
 											</div>
-										</div>
-										<div class="form-group">
-											<label for="repeat">반복 횟수</label>
-											<div class="input-group" id="repeat">
-												<input type="number" class="form-control" id="resultCount" disabled>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="radioOptionsResult" id="radio2" value="monthly" disabled>
+												<label class="form-check-label" for="radio2">Monthly</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="radioOptionsResult" id="radio3" value="yearly" disabled>
+												<label class="form-check-label" for="radio3">Yearly</label>
+											</div>
+											<hr>
+											<div class="form-group">
+												<label for="repeat">반복 종료</label>
+												<div class="input-group" id="repeat">
+													<input type="date" class="form-control" id="reRepeat" disabled>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="repeat">반복 횟수</label>
+												<div class="input-group" id="repeat">
+													<input type="number" class="form-control" id="resultCount" disabled>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-
+								</c:if>
+								<c:if test="${kind eq '휴가' }">
+									<div class="form-group">
+										<label for="accept">승인자 지정</label>
+										<div class="input-group">
+											<select name="resultAccept" id="resultAccept" class="form-control">
+												
+											</select>
+										</div>
+									</div>
+								</c:if>
 							</form>
 						</div>
 						<div class="modal-footer">
@@ -303,7 +331,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 class="modal-title" id="listModalLabel">신청 목록</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" name="goMypage">
 								<span aria-hidden="true"><ion-icon name="open-outline"></ion-icon></span>
 							</button>
 						</div>
@@ -328,7 +356,7 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" name="goMypage">
 								<span aria-hidden="true"><ion-icon name="open-outline"></ion-icon></span>
 							</button>
 						</div>

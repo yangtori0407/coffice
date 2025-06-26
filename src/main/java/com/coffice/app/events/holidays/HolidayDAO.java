@@ -9,5 +9,6 @@ public interface HolidayDAO {
 	
 	public int addHoliday(HolidayVO holidayVO) throws Exception;
 	public List<HolidayVO> getHolidays() throws Exception;
+	public int deleteAll() throws Exception;
 
 }

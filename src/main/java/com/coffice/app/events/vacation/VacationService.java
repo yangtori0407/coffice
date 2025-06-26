@@ -56,5 +56,9 @@ public class VacationService {
 	public List<VacationVO> getList(UserVO userVO) throws Exception {
 		return vacationDAO.getList(userVO);
 	}
+	
+	public int updateApply(VacationVO vacationVO) throws Exception {
+		return vacationDAO.updateApply(vacationVO);
+	}
 
 }

@@ -1,5 +1,8 @@
 const kind = document.getElementById("kind")
 let flag = true;
+const uid = document.getElementById("userId")
+const gcolor = "#fb6544"
+const pcolor = "#378006"
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -8,7 +11,10 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     customButtons: {
         addButton: {
             text: '휴가 신청',
-            click: apply
+            click: function() {
+                apply()
+                $("#exampleModal").modal("show")
+            }
         },
         listButton: {
             text: '신청 목록',
@@ -33,6 +39,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     dateClick: function(e) {
         sDate.value = e.dateStr
         apply()
+        $("#exampleModal").modal("show")
     },
     eventClick: function(e) {
         if (e.event.extendedProps.preventClick) {
@@ -40,7 +47,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             return;
         }
         console.log(e.event.id)
-        fetch(`http://localhost/events/vacation/getOne?vacationId=${e.event.id}`)
+        fetch(`vacation/getOne?vacationId=${e.event.id}`)
         .then(r=>r.json())
         .then(r=>{
             console.log(r)
@@ -93,7 +100,7 @@ undo.addEventListener("click", ()=>{
     accept()
 })
 
-fetch("http://localhost/events/getHolidays")
+fetch("/events/getHolidays")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
@@ -111,16 +118,22 @@ fetch("http://localhost/events/getHolidays")
     }
 })
 
-fetch("http://localhost/events/vacation/getList")
+fetch("/events/vacation/getList")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
+        let clr;
+        if(uid.value == a.userId) {
+            clr = pcolor
+        }else {
+            clr = gcolor
+        }
         let event = {
             id: a.vacationId,
             title: a.aposition + " " + a.aname,
             start: a.startTime,
             end: a.endTime,
-            color: '#378006',
+            color: clr,
             editable: false
         }
         calendar.addEvent(event);
@@ -130,19 +143,25 @@ fetch("http://localhost/events/vacation/getList")
 
 function apply() {
     
-    fetch("http://localhost/events/getDepsUsers")
+    fetch("/events/getDepsUsers")
     .then(r=>r.json())
     .then(r=>{
         let accept = document.getElementById("accept")
+        let resultAccept = document.getElementById("resultAccept")
         accept.innerHTML = "<option value='' selected>선택</option>"
+        resultAccept.innerHTML = "<option value='' selected>선택</option>"
         for(a of r) {
             let opt = document.createElement("option")
+            let opt2 = document.createElement("option")
             opt.value = a.userId
+            opt2.value = a.userId
             opt.innerText = a.position + " " + a.name
+            opt2.innerText = a.position + " " + a.name
             accept.appendChild(opt)
+            resultAccept.appendChild(opt2)
         }
     })
-    $("#exampleModal").modal("show")
+    
 }
 
 
@@ -161,7 +180,7 @@ send.addEventListener("click", ()=>{
     params.append("endTime", eDate.value+eTime.value)
     params.append("approvalAuthority", accept.value)
     
-    fetch("http://localhost/events/vacation/apply", {
+    fetch("/events/vacation/apply", {
         method: "post",
         body: params
     })
@@ -180,7 +199,7 @@ function accept() {
     applyList.innerText = ""
     acceptList.innerText = ""
 
-    fetch("http://localhost/events/vacation/applyList")
+    fetch("/events/vacation/applyList")
     .then(r=>r.json())
     .then(r=>{
         let ul = document.createElement("ul")
@@ -213,7 +232,7 @@ function accept() {
             row.appendChild(div2)
             row.appendChild(div3)
             li.addEventListener("click", ()=>{
-                fetch(`http://localhost/events/vacation/getOne?vacationId=${li.dataset.vacid}`)
+                fetch(`vacation/getOne?vacationId=${li.dataset.vacid}`)
                 .then(r=>r.json())
                 .then(r=>{
                     console.log(r)
@@ -255,13 +274,12 @@ function accept() {
 
     })
 
-    fetch("http://localhost/events/vacation/acceptList")
+    fetch("/events/vacation/acceptList")
     .then(r=>r.json())
     .then(r=>{
         let ul = document.createElement("ul")
         ul.classList.add("list-group")
         for( a of r ) {
-            console.log(a.status)
             let stat;
             if(a.status == 0) {
                 stat = "승인 대기 \t <ion-icon name='ellipse' style='color:yellow;'></ion-icon>"
@@ -288,7 +306,7 @@ function accept() {
             row.appendChild(div2)
             row.appendChild(div3)
             li.addEventListener("click", ()=>{
-                fetch(`http://localhost/events/vacation/getOne?vacationId=${li.dataset.vacid}`)
+                fetch(`vacation/getOne?vacationId=${li.dataset.vacid}`)
                 .then(r=>r.json())
                 .then(r=>{
                     console.log(r)
@@ -332,15 +350,63 @@ function accept() {
     $("#listModal").modal("show")
 }
 
+let change = document.getElementById("change")
+let saveChange = document.getElementById("saveChange")
+change.innerText = "저장"
+saveChange.innerText = "닫기"
+
 updateVacation.addEventListener("click", ()=>{
     let vid = document.getElementById("vid")
     let params = new FormData
     params.append("vacationId", vid.value)
     if(updateVacation.innerText == "수정") {
-        console.log("수정")
+        apply()
+        let dis = document.querySelectorAll("input[disabled], select[disabled]");
+        let rsDate = document.getElementById("rsDate")
+        let rsTime = document.getElementById("rsTime")
+        let reDate = document.getElementById("reDate")
+        let reTime = document.getElementById("reTime")
+        let rvType = document.getElementById("rvType")
+        
+        for(a of dis) {
+            a.disabled = false;
+        }
+
+        fetch(`vacation/getOne?vacationId=${vid.value}`)
+        .then(r=>r.json())
+        .then(r=>{
+            rsDate.value = r.vacationVO.startTime.slice(0, 10)
+            rsTime.value = r.vacationVO.startTime.slice(11, 16)
+            reDate.value = r.vacationVO.endTime.slice(0, 10)
+            reTime.value = r.vacationVO.endTime.slice(11, 16)
+            rvType.value = r.vacationVO.type
+            let selected = document.querySelectorAll(`option[value='${r.vacationVO.approvalAuthority}']`)
+            for(a of selected) {
+                a.setAttribute("selected", true)
+            }
+        })
+
+        change.addEventListener("click", ()=>{
+            let resultAccept = document.getElementById("resultAccept")
+            params.append("type", rvType.value)
+            params.append("startTime", rsDate.value+rsTime.value)
+            params.append("endTime", reDate.value+reTime.value)
+            params.append("approvalAuthority", resultAccept.value)
+            fetch("vacation/update", {
+                method: "post",
+                body: params
+            })
+            .then(r=>r.text())
+            .then(r=>{
+                // console.log(r)
+                location.reload()
+            })
+        })
+
+        $("#detailModal").modal("show")
     }else if(updateVacation.innerText == "승인") {
         if(confirm("승인 처리하시겠습니까?")) {
-            fetch("http://localhost/events/vacation/approve", {
+            fetch("/events/vacation/approve", {
                 method: "post",
                 body: params
             })
@@ -354,6 +420,13 @@ updateVacation.addEventListener("click", ()=>{
         }
     }
 })
+
+let goes = document.getElementsByName("goMypage")
+for(a of goes) {
+    a.addEventListener("click", ()=>{
+        location.href = "/user/mypage"
+    })
+}
 
 calendar.render();
 

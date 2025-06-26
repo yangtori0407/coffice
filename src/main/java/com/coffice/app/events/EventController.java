@@ -48,14 +48,16 @@ public class EventController {
 	
 	@GetMapping("getSchedules")
 	@ResponseBody
-	public List<ScheduleVO> getAll() throws Exception {
-		return scheduleService.getAll();
+	public List<ScheduleVO> getAll(Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		return scheduleService.getAll(userVO);
 	}
 	
 	@GetMapping("getRepeatSchedules")
 	@ResponseBody
-	public List<ScheduleVO> getRepeatSchedules() throws Exception {
-		return scheduleService.getRepeatSchedules();
+	public List<ScheduleVO> getRepeatSchedules(Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		return scheduleService.getRepeatSchedules(userVO);
 	}
 	
 	@GetMapping("getSchedule")
@@ -155,6 +157,24 @@ public class EventController {
 	public List<VacationVO> getList(Authentication authentication) throws Exception {
 		UserVO userVO = (UserVO)authentication.getPrincipal();
 		return vacationService.getList(userVO);
+	}
+	
+	@PostMapping("schedule/dragDrop")
+	public String dragDrop(ScheduleVO scheduleVO, Authentication authentication, Model model) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		scheduleVO.setEditor(userVO.getUserId());
+		int result = scheduleService.dragDrop(scheduleVO);
+		model.addAttribute("result", result);
+		return "commons/ajaxResult";
+	}
+	
+	@PostMapping("vacation/update")
+	public String updateApply(VacationVO vacationVO, Authentication authentication, Model model) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setEditor(userVO.getUserId());
+		int result = vacationService.updateApply(vacationVO);
+		model.addAttribute("result", result);
+		return "commons/ajaxResult";
 	}
 
 }

@@ -2,10 +2,13 @@ package com.coffice.app.users;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +19,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +31,8 @@ import lombok.ToString;
 public class UserVO implements UserDetails{
 	
 	private String userId;
-	@Size(min=8, message = "비밀번호 8자리 이상 필수사항입니다", groups= UpdateGroup.class)
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+            message = "비밀번호는 8자리 이상이며, 영문자와 숫자를 포함해야 합니다.")
 	@NotBlank(message = "필수사항입니다",groups = RegisterGroup.class)
 	private String password;
 	//db 저장 x
@@ -56,11 +61,22 @@ public class UserVO implements UserDetails{
 	private String deptName;
 	private MultipartFile file;
 	
+	private List<RoleVO> roles;
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
-		return null;
+		List<GrantedAuthority> ar = new ArrayList<>();
+		 if (this.roles != null) {
+			for(RoleVO roleVO: this.roles) {
+				GrantedAuthority authority = new SimpleGrantedAuthority(roleVO.getRoleName());
+				ar.add(authority);
+			}
+		 }
+		
+		return ar;
 	}
+	
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub

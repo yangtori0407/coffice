@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coffice.app.message.MessageDAO">
+	<select id="getSendMessage" parameterType="java.lang.String"
+		resultMap="receiveMessage">
+		SELECT
+			M.MESSAGE_NUM,
+			M.MESSAGE_CONTENTS,
+			M.SEND_DATE,
+			M.MESSAGE_TITLE,
+			MC.MESSAGECHECK_NUM,
+			MC.CHECK_STATUS,
+			MC.MESSAGE_STATUS,
+			MC.USER_ID,
+			U.NAME,
+			DP.DEPT_NAME
+		FROM MESSAGE M
+		JOIN MESSAGE_CHECK MC
+		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
+		LEFT OUTER JOIN USERS U
+		ON MC.USER_ID = U.USER_ID
+		LEFT OUTER JOIN
+		DEPARTMENT DP
+		ON DP.DEPT_ID = U.DEPT_ID
+		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0
+
+	</select>
+	<resultMap type="MessageVO" id="receiveMessage">
+		<id column="MESSAGE_NUM" property="messageNum"/>
+		<result column="MESSAGE_CONTENTS" property="messageContents"/>
+		<result column="SEND_DATE" property="sendDate"/>
+		<result column="MESSAGE_TITLE" property="messageTitle"/>
+		
+		<collection property="receiveUsers" javaType="java.util.List" ofType="MessageCheckVO">
+			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
+			<result column="CHECK_STATUS" property="checkStatus"/>
+			<result column="MESSAGE_STATUS" property="messageStatus"/>
+			<result column="USER_ID" property="userId"/>
+			<result column="NAME" property="name"/>
+			<result column="DEPT_NAME" property="deptName"/>
+		</collection>
+	</resultMap>
+
+
+	<select id="getReceiveMessage" parameterType="java.lang.String"
+		resultMap="sendMessage">
+		SELECT
+			M.MESSAGE_NUM,M.SENDER,
+			M.MESSAGE_CONTENTS,
+			M.SEND_DATE,
+			M.MESSAGE_TITLE,
+			MC.CHECK_STATUS,
+			MC.MESSAGE_STATUS,
+			U.NAME,
+			DP.DEPT_NAME
+		FROM MESSAGE M
+		JOIN MESSAGE_CHECK MC
+		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
+		JOIN USERS U
+		ON U.USER_ID = M.SENDER
+		JOIN DEPARTMENT DP
+		ON DP.DEPT_ID =
+		U.DEPT_ID
+		WHERE MC.USER_ID = #{userId} AND MC.RECEIVER_DELETE = 0
+	</select>
+	
+	<resultMap type="MessageVO" id="sendMessage">
+		<id column="MESSAGE_NUM" property="messageNum"/>
+		<result column="MESSAGE_CONTENTS" property="messageContents"/>
+		<result column="SEND_DATE" property="sendDate"/>
+		<result column="MESSAGE_TITLE" property="messageTitle"/>
+		
+		<association property="sendUser" javaType="MessageCheckVO">
+			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
+			<result column="CHECK_STATUS" property="checkStatus"/>
+			<result column="MESSAGE_STATUS" property="messageStatus"/>
+			<result column="USER_ID" property="userId"/>
+			<result column="NAME" property="name"/>
+			<result column="DEPT_NAME" property="deptName"/>
+		</association>
+	</resultMap>
+	
+	<select id="detail" parameterType="MessageVO" resultMap="getDetail">
+		SELECT
+			M.MESSAGE_NUM,
+			M.MESSAGE_CONTENTS,
+			M.SEND_DATE,
+			M.MESSAGE_TITLE,
+			M.SENDER_DELETE,
+			US.NAME AS SENDER_NAME,
+			US.EMAIL,
+			MC.MESSAGECHECK_NUM,
+			MC.CHECK_STATUS,
+			MC.MESSAGE_STATUS,
+			MC.USER_ID,
+			UR.NAME AS RECEIVER_NAME,
+			DP.DEPT_NAME
+		FROM MESSAGE M
+		JOIN MESSAGE_CHECK MC
+		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
+		JOIN USERS US
+		ON M.SENDER = US.USER_ID
+		LEFT OUTER JOIN USERS UR
+		ON MC.USER_ID = UR.USER_ID
+		LEFT OUTER JOIN
+		DEPARTMENT DP
+		ON DP.DEPT_ID = UR.DEPT_ID
+		WHERE M.MESSAGE_NUM = #{messageNum}
+	</select>
+	
+	<resultMap type="MessageVO" id="getDetail">
+		<id column="MESSAGE_NUM" property="messageNum"/>
+		<result column="MESSAGE_CONTENTS" property="messageContents"/>
+		<result column="SEND_DATE" property="sendDate"/>
+		<result column="MESSAGE_TITLE" property="messageTitle"/>
+		<result column="SENDER_NAME" property="senderName"/>
+		<result column="SENDER_DELETE" property="senderDelete"/>
+		<result column="EMAIL" property="email"/>
+		
+		<collection property="receiveUsers" javaType="java.util.List" ofType="MessageCheckVO">
+			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
+			<result column="CHECK_STATUS" property="checkStatus"/>
+			<result column="MESSAGE_STATUS" property="messageStatus"/>
+			
+			<result column="USER_ID" property="userId"/>
+			<result column="RECEIVER_NAME" property="name"/>
+			<result column="DEPT_NAME" property="deptName"/>
+		</collection>
+	</resultMap>
+
+	<insert id="add" parameterType="MessageVO"
+		useGeneratedKeys="true" keyProperty="messageNum">
+		INSERT INTO MESSAGE(MESSAGE_NUM, MESSAGE_CONTENTS, SEND_DATE, MESSAGE_TITLE, SENDER, SENDER_DELETE)
+		VALUES(NULL, #{messageContents}, NOW(), #{messageTitle}, #{sender}, 0)
+	</insert>
+
+	<insert id="addEmailUser" parameterType="java.util.HashMap">
+		INSERT INTO
+		MESSAGE_CHECK(MESSAGECHECK_NUM, MESSAGE_NUM, CHECK_STATUS, MESSAGE_STATUS, USER_ID, RECEIVER_DELETE)
+		VALUES(NULL, #{messageNum}, 0, #{kind}, #{userId}, 0)
+	</insert>
+	
+	<update id="receiveDelete" parameterType="java.util.HashMap">
+		UPDATE MESSAGE_CHECK SET RECEIVER_DELETE = 1 WHERE MESSAGE_NUM = #{messageNum} AND USER_ID = #{userId}
+	</update>
+	
+	<update id="sendDelete" parameterType="java.util.HashMap">
+		UPDATE MESSAGE SET SENDER_DELETE = 1 WHERE MESSAGE_NUM = #{messageNum} AND SENDER = #{userId}
+	</update>
+</mapper>

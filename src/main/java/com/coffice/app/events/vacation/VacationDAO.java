@@ -16,5 +16,6 @@ public interface VacationDAO {
 	public VacationVO getOne(VacationVO vacationVO) throws Exception;
 	public int approve(VacationVO vacationVO) throws Exception;
 	public List<VacationVO> getList(UserVO userVO) throws Exception;
+	public int updateApply(VacationVO vacationVO) throws Exception;
 
 }

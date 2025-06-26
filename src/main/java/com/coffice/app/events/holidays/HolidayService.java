@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@EnableScheduling
 public class HolidayService {
 	
 	@Value("${calendar.api.key}")
@@ -27,6 +30,21 @@ public class HolidayService {
 	
 	public List<HolidayVO> getHolidays() throws Exception {
 		return holidayDAO.getHolidays();
+	}
+	
+//	@Scheduled(cron = "0 0 12 * * *")
+	public void updateHoliday() throws Exception {
+		Calendar calendar = Calendar.getInstance();
+		int c = calendar.get(Calendar.YEAR)-1;
+		log.info("{}", c);
+		int result = 0;
+		result = holidayDAO.deleteAll();
+		log.info("deleteHolidays : {}", result);
+		result = 0;
+		for(int i = 0; i < 3; i++) {
+			result = result + this.addHoliday(c+i);
+		}
+		log.info("updateHolidays : {}", result);
 	}
 	
 	public int addHoliday(int year) throws Exception {

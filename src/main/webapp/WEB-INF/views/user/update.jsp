@@ -34,18 +34,14 @@
 					  <input type="hidden" name="userId" value="${user.userId}" />
 					  
 					  <div class="input-wrap">
-					    <input type="password" id="password" name="password" placeholder="비밀번호">
-					    <div>
-			               <form:errors path="password" cssClass="error-message"/>
-                        </div>   
-					  </div>
-					  
-					  <div class="input-wrap">
-					    <input type="password" id="passwordCheck" name="passwordCheck" placeholder="비밀번호 확인">
-					    <div>
-			               <form:errors path="passwordCheck" cssClass="error-message"/>
-                        </div>   
-					  </div>
+				        <form:password path="password" id="password" placeholder="비밀번호" cssClass="input-field"/>
+				        <form:errors path="password" cssClass="error-message"/>
+				    </div>
+				
+				    <div class="input-wrap">
+				        <form:password path="passwordCheck" id="passwordCheck" placeholder="비밀번호 확인" cssClass="input-field"/>
+				        <form:errors path="passwordCheck" cssClass="error-message"/>
+				    </div>
 
 					  <div class="input-wrap">
 					    <input type="text" id="phone" name="phone" placeholder="전화번호" value="${user.phone}">
