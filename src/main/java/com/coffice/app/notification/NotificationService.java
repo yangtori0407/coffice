@@ -66,9 +66,12 @@ public class NotificationService {
 		info.put("userId", boardVO.getUserId());
 		info.put("notiNum", notificationVO.getNotiNum());
 		notificationDAO.addNoticeCheck(info);
-	
 		
-		template.convertAndSend("/sub/notification/user."+ boardVO.getUserId(), notificationVO);
+		if(!boardVO.getUserId().equals(commentVO.getUserId())) {
+			
+			template.convertAndSend("/sub/notification/user."+ boardVO.getUserId(), notificationVO);
+		}
+		
 	}
 	
 	public void sendReply(CommentVO commentVO, CommentVO p) throws Exception{
