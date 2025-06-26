@@ -117,7 +117,7 @@
 		  AND D.STATUS != '임시저장'
   	</select>
   	
-  	<!-- 자신이 작성자이고 문서가 임시 상태인 문서를 볼 수 있는 리스트 -->  	
+  	<!-- 자신이 작성자이고 문서가 임시 상태인 문서를 볼 수 있는 리스트 -->
   	<select id="getListTemporary" resultType="DocumentVO" parameterType="map">
 	    SELECT
 	    <include refid="selectDocument_Form" />
@@ -324,6 +324,56 @@
   		VALUES
   		(#{documentId}, #{originName}, #{saveName})
   	</insert>
+  	
+  	<!-- 구분선 -->
+  	
+  	<!-- 참조선, 결재선, 첨부파일은 DB에서 ON DELETE CASCADE로 묶어 삭제 처리한다 -->
+  	<delete id="deleteTemp" parameterType="DocumentVO">
+  		DELETE FROM DOCUMENTS
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</delete>
+  	
+  	<!-- 업데이트 대상 컬럼 : 제목, 내용, 작성자 이름, 작성자 직급, 작성자 부서, 작성 시간 -->
+  	<update id="updateTemp" parameterType="DocumentVO">  		
+		UPDATE DOCUMENTS 
+		
+		SET 
+		TITLE = #{title}, 
+		CONTENT = #{content},
+		STATUS = #{status},
+		WRITER_NAME = #{writerName}, 
+		WRITER_POSITION = #{writerPosition}, 
+		WRITER_DEPT = #{writerDept}, 
+		WRITER_TIME = #{writerTime}
+		
+		WHERE DOCUMENT_ID = #{documentId}
+  	</update>
+  	
+  	<update id="updateOnlyStatus" parameterType="DocumentVO">
+  		UPDATE DOCUMENTS
+  		
+  		SET
+  		STATUS = #{status}
+  		
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</update>
+  	
+  	<delete id="deleteApprovalLine" parameterType="DocumentVO">
+  		DELETE FROM APPROVAL_LINES
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</delete>
+  	
+  	<delete id="deleteReferenceLine" parameterType="DocumentVO">
+  		DELETE FROM REFERENCE_LINES
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</delete>
+  	
+  	<delete id="deleteAttachment" parameterType="AttachmentVO">
+  		DELETE FROM ATTACHMENTS
+  		WHERE FILE_NUM = #{fileNum}
+  	</delete>
+  	
+  	<!-- 구분선 -->
   	
   	<select id="getFileDetail" parameterType="AttachmentVO" resultType="AttachmentVO">
   		SELECT * FROM ATTACHMENTS WHERE FILE_NUM=#{fileNum}

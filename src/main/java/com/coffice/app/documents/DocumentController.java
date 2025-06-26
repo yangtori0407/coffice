@@ -22,6 +22,7 @@ import com.coffice.app.documents.attachments.AttachmentVO;
 import com.coffice.app.documents.forms.FormVO;
 import com.coffice.app.documents.lines.ApprovalLineVO;
 import com.coffice.app.documents.lines.ReferenceLineVO;
+import com.coffice.app.files.FileDownView;
 import com.coffice.app.page.Pager;
 import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
@@ -38,72 +39,12 @@ import lombok.extern.slf4j.Slf4j;
 public class DocumentController {
 
 	@Autowired
+	FileDownView fileDownView;
+	
+	@Autowired
 	private DocumentService documentService;
 
-	//
-	@GetMapping("tempLogin1")
-	public String tempLogin1(HttpSession session) {
-		// 테스트용 임시 유저
-		UserVO userVO = new UserVO();
-		userVO.setUserId("아디1");
-		userVO.setName("브라움");
-		userVO.setDeptName("인사팀");
-		userVO.setPosition("사원");
-		session.setAttribute("userVO", userVO);
-
-		return "redirect:./selectform";
-	}
-
-	//
-	@GetMapping("tempLogin2")
-	public String tempLogin2(HttpSession session) {
-		// 테스트용 임시 유저
-		UserVO userVO = new UserVO();
-		userVO.setUserId("아디3");
-		userVO.setName("소라카");
-		userVO.setDeptName("인사팀");
-		userVO.setPosition("대리");
-		session.setAttribute("userVO", userVO);
-
-		return "redirect:./selectform";
-	}
-
-	//
-	@GetMapping("tempLogin3")
-	public String tempLogin3(HttpSession session) {
-		// 테스트용 임시 유저
-		UserVO userVO = new UserVO();
-		userVO.setUserId("아디4");
-		userVO.setName("소나");
-		userVO.setDeptName("인사팀");
-		userVO.setPosition("과장");
-		session.setAttribute("userVO", userVO);
-
-		return "redirect:./selectform";
-	}
-
-	//
-	@GetMapping("tempLogin4")
-	public String tempLogin4(HttpSession session) {
-		// 테스트용 임시 유저
-		UserVO userVO = new UserVO();
-		userVO.setUserId("아디6");
-		userVO.setName("쓰레쉬");
-		userVO.setDeptName("인사팀");
-		userVO.setPosition("부장");
-		session.setAttribute("userVO", userVO);
-
-		return "redirect:./selectform";
-	}
-
-	//
-	@GetMapping("tempLogout")
-	public String tempLogout(HttpSession session) {
-
-		session.invalidate();
-
-		return "redirect:./selectform";
-	}
+	
 
 	//
 	@PostMapping("form")
@@ -121,14 +62,14 @@ public class DocumentController {
 
 		List<DocumentVO> docuList = documentService.getList(pager, request, session);
 		model.addAttribute("docuList", docuList);
-		System.out.println("list size : " + docuList.size());
+		System.out.println("list 컨트롤러 docuList size : " + docuList.size());
 		model.addAttribute("pager", pager);
 
 		return "document/list";
 	}
 
 	//
-	@GetMapping("detail") // 임시저장 문서로 넘어갈 때는 수정 가능하도록 조건을 나누어야한다.
+	@GetMapping("detail") 
 	public String getDetail(DocumentVO documentVO, Model model, HttpSession session) throws Exception {
 
 		//
@@ -146,6 +87,10 @@ public class DocumentController {
 		List<SignVO> signList = documentService.getSignList(session);
 		model.addAttribute("signList", signList);
 
+		// 임시저장 페이지에 보여줄 표시용 시간도 보낸다
+		LocalDate fakeToday = LocalDate.now();
+		model.addAttribute("fakeToday", fakeToday);
+		
 		return "document/form/variableForm";
 	}
 
@@ -168,14 +113,11 @@ public class DocumentController {
 		formVO = documentService.formDetail(formVO);		
 		model.addAttribute("formVO",formVO);
 		
-		int isWritePage = 1;
-		model.addAttribute("isWritePage", isWritePage);
+		LocalDate fakeToday = LocalDate.now();
+		model.addAttribute("fakeToday", fakeToday);
 		
-		LocalDateTime time = LocalDateTime.now();		 
-		model.addAttribute("timeNow", time);
+		model.addAttribute("isWritePage", 1);
 		
-		
-
 		
 		return "document/form/variableForm";
 	}
@@ -183,19 +125,86 @@ public class DocumentController {
 	
 	//
 	@PostMapping("write")
+	@ResponseBody
 	public String add(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
-			HttpSession session, MultipartFile[] files) throws Exception {
+			MultipartFile[] attaches) throws Exception {
 		
-
+		// Json 형식으로 받아온 결재선, 참조선 데이터를 각 타입에 맞게 넣어준다
 		ObjectMapper mapper = new ObjectMapper();
 	    List<ApprovalLineVO> approverList = mapper.readValue(approversJson, new TypeReference<List<ApprovalLineVO>>() {});
 	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
 	    
+	    if(attaches != null) {
+	    	System.out.println("attaches size : " + attaches.length);
+	    	
+	    }
 
 		// 서비스 메서드 실행
-		int result = documentService.add(documentVO, approverList, referrerList, files, session);
-
-		return "redirect:./list/online";
+		int result = documentService.add(documentVO, approverList, referrerList, attaches);
+		
+		// "완료" 또는 "임시저장"에 따라 리스트 페이지 리턴 경로를 다르게 준다		
+		if(documentVO.getStatus().equals("임시저장")) {
+			return "./list/ontemporary";
+			
+		} else {
+			return "./list/online";
+			
+		}
+	}
+	
+	
+	//
+	@PostMapping("deletetemp")
+	public String deleteTemp(DocumentVO documentVO) throws Exception {
+		
+		int result = documentService.deleteTemp(documentVO);
+		
+		return "redirect:./list/ontemporary";
+	}
+	
+	
+	//
+	@PostMapping("updateonlystatus")
+	public String updateOnlyStatus(DocumentVO documentVO) throws Exception {
+		
+		int result = documentService.updateOnlyStatus(documentVO);
+		
+		
+		return "redirect:./list/ontemporary";
+	}
+	
+	
+	//
+	@PostMapping("updatetemp")
+	@ResponseBody
+	public String updateTemp(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
+			MultipartFile[] attaches, Long[] exists) throws Exception {
+		
+		if(attaches != null) {
+	    	System.out.println("attaches size : " + attaches.length);	    	
+	    } else {
+	    	System.out.println("attaches null입니다 ");
+	    }
+		
+		if(exists != null) {
+	    	System.out.println("exists size : " + exists.length);	    	
+	    } else {
+	    	System.out.println("exists null입니다 ");
+	    }
+		
+		//Json 형식으로 받아온 결재선, 참조선 데이터를 각 타입에 맞게 넣어준다
+		ObjectMapper mapper = new ObjectMapper();
+	    List<ApprovalLineVO> approverList = mapper.readValue(approversJson, new TypeReference<List<ApprovalLineVO>>() {});
+	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
+	    
+	    // 서비스 메서드 실행
+	    int result = documentService.updateTemp(documentVO, approverList, referrerList, attaches, exists);
+		
+	    if(documentVO.getStatus().equals("임시저장")) {
+	    	return "./list/ontemporary";
+	    } else {
+	    	return "./list/online";
+	    }
 	}
 	
 
@@ -215,13 +224,15 @@ public class DocumentController {
 	}
 
 	//
-	public String getFileDetail(AttachmentVO attachmentVO, Model model) throws Exception {
-
+	@PostMapping("filedown")
+	public FileDownView getFileDetail(AttachmentVO attachmentVO, Model model) throws Exception {
+		System.out.println("filedown 컨트롤러 fileNum : " + attachmentVO.getFileNum());
 		attachmentVO = documentService.getFileDetail(attachmentVO);
 
-		model.addAttribute("attachmentVO", attachmentVO);
+		model.addAttribute("fileVO", attachmentVO);
+		model.addAttribute("kind", "docuFiles");
 
-		return "fileDownView";
+		return fileDownView;
 	}
 
 	//

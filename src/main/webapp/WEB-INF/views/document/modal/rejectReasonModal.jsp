@@ -6,7 +6,7 @@
 	<form id="rejectForm" action="/document/reject" method="post">
 		<input type="hidden" name="documentId" id="reject_documentId" value="${docuVO.documentId}">
 		<input type="hidden" name="rejectReason" id="reject_reason">
-		<input type="hidden" name="userId" id="reject_userId" value="${sessionScope.userVO.userId}">
+		<input type="hidden" name="userId" id="reject_userId" value="${sessionScope.user.userId}">
 	</form>
     
 	<!-- 반려 사유 쓰기 Modal-->
@@ -15,7 +15,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">반려 사유</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">반려 사유를 입력해주세요</h5>
                     <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button> -->

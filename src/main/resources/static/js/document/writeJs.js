@@ -116,6 +116,12 @@ const btn_resetReferrers = document.getElementById("btn_resetReferrers");
 btn_resetApprovaers.addEventListener("click", function(){
 	const box_approvers = document.getElementById("box_approvers");
 	box_approvers.innerHTML='';
+	
+	const wrappers = document.getElementsByClassName("approver-wrapper");
+	for(let wrapper of wrappers){
+		wrapper.style.visibility = 'hidden';
+	}
+	
 })
 
 
@@ -125,15 +131,53 @@ btn_resetReferrers.addEventListener("click", function(){
 })
 
 
+//########################
 // 문서 작성 완료 버튼
 const btn_complete = document.getElementById("btn_complete");
 
 btn_complete.addEventListener("click", function() {	
 
 
-	// formId 및 writer 정보는 이미 들어가 있으므로 데이터 입력 생략
 	// writerTime은 시간까지 저장해야하므로 java에서 생성해서 DB에 넣어준다
+	// documentId와 formId를 제외한 writer 정보를 받아와준다
 	
+	// 작성자 이름
+	const input_writerName = document.getElementById("input_writerName");
+	const insert_writerName = document.getElementById("insert_writerName");
+	
+	if(!insert_writerName.innerText.trim()) {
+	       alert("성함을 입력해주세요");
+	       insert_writerName.focus();
+	       return;
+	    }
+
+	    input_writerName.value = insert_writerName.innerText.trim();
+	
+	// 작성자 직급
+	const input_writerPosition = document.getElementById("input_writerPosition");
+	const insert_writerPosition = document.getElementById("insert_writerPosition");
+	
+	if(!insert_writerPosition.innerText.trim()) {
+	       alert("직급을 입력해주세요");
+	       insert_writerPosition.focus();
+	       return;
+	    }
+
+	    input_writerPosition.value = insert_writerPosition.innerText.trim();
+	
+	// 작성자 부서
+	const input_writerDept = document.getElementById("input_writerDept");
+	const insert_writerDept = document.getElementById("insert_writerDept");
+	
+	if(!insert_writerDept.innerText.trim()) {
+	       alert("부서를 입력해주세요");
+	       insert_writerDept.focus();
+	       return;
+	    }
+
+	    input_writerDept.value = insert_writerDept.innerText.trim();
+			
+	// 문서 제목
 	const input_title = document.getElementById("input_title");
     const insert_title = document.getElementById("insert_title");
 
@@ -145,13 +189,12 @@ btn_complete.addEventListener("click", function() {
 
     input_title.value = insert_title.innerText.trim();
     
+	
+	// 문서 컨텐츠
 	const input_content = document.getElementById("input_content");
 	const insert_content = document.getElementById("insert_content");
     
     input_content.value = insert_content.innerHTML;
-	
-    //
-	const input_files = document.getElementById("input_files");
 	
 
     // 결재자 정보 추출 → JSON 문자열로 변환하여 hidden input에 삽입
@@ -190,9 +233,27 @@ btn_complete.addEventListener("click", function() {
 	const input_referrers = document.getElementById("input_referrers");
 	input_referrers.value = JSON.stringify(referrerList);
 	
+	console.log(input_referrers.value);
+		
+    // 문서 status 데이터 삽입
+    const input_docuStatus = document.getElementById("input_docuStatus");
+    input_docuStatus.value = "진행중";
 	
-	const form_document = document.getElementById("form_document");
-	form_document.submit()
+	console.log(insert_content.dataset.voCheck);
+	
+	// 문서가 최초 작성완료이냐 임시저장 문서를 작성완료이냐에 따라 컨트롤러 경로를 바꿔준다
+	  if(insert_content.dataset.voCheck === "임시저장"){
+		  let formPath = "/document/updatetemp";
+		  console.log(formPath);
+		  submitForm(formPath);
+	
+	  } else if (insert_content.dataset.voCheck == ""){
+	    let formPath = "/document/write";
+		submitForm(formPath);
+	
+	  }
+	  
+	  
 })
 
 
@@ -201,34 +262,58 @@ btn_complete.addEventListener("click", function() {
 // 본문 내용의 data 속성 값으로 documentId를 줘서 문서 정보가 null인지 판단한다.
 // null이라면 tds들의 속성에 모두 contenteditable="true" 를 준다. >> 초기 작성 문서라면 내용 입력 가능 하도록 만듦
 // null이라면 tds들의 속성에 모두 contenteditable="false" 를 준다. >> 기존 문서라면 내용 입력 불가능 하도록 만듦
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 임시 기능 추가로 documentId가 아닌 status로 구분하는 것으로 변경한다.
+// data 속성 값으로 status를 줘서 구분한다
+// status가 null 또는 "임시저장"이라면 contenteditable="true"
+// 그 이외 경우는 contenteditable="false"를 준다
+
 const insert_content = document.getElementById("insert_content");
 const tds = document.getElementsByClassName("tds");
+const informations = document.getElementsByClassName("informations");
 
-// 문서 작성 취소 (나가기) 버튼
-const btn_cancle = document.getElementById("btn_cancle");
 
-if(insert_content.dataset.voCheck != "") { // docuVO가 있는 경우 : 상세조회 등 (!! 임시저장 문서에 관한 기능은 추가로 구현해야함)
+if(insert_content.dataset.voCheck == "" || insert_content.dataset.voCheck =="임시저장") { 
+    // docuVO가 없는 경우 : 초기 작성 화면 또는 docuVO가 있지만 임시저장 상태인 경우	
+
+    for(let info of informations){
+        info.contentEditable = "true";
+    }
+	
     for(let td of tds){
-		td.contentEditable = "false";
+		td.contentEditable = "true"; // 편집 가능
 			
 	}
 	
+    // 문서 작성 취소 (나가기) 버튼
+    const btn_cancle = document.getElementById("btn_cancle");
 	btn_cancle.addEventListener("click", function () {
 			  
-	    location.href = "/"; // 홈 경로로 이동
-	  
+        const confirmed = confirm("작성 중인 내용은 저장되지 않습니다. 작성 화면에서 나가시겠습니까?");
+        if (confirmed) {
+          location.href = "/"; // 홈 경로로 이동
+        }
+        
 	});
 	
-} else { // docuVO가 없는 경우 : 초기 작성 화면 
+} else {
+    // docuVO가 있는 경우 : 상세조회 (결재중, 반려, 승인완료 상태 등의 문서)
+
+    for(let info of informations){
+        info.contentEditable = "false";
+    }
+
 	for(let td of tds){
-    	td.contentEditable = "true";
+        td.contentEditable = "false"; // 편집 불가
 	}
 	
+    // 문서 작성 취소 (나가기) 버튼
+    const btn_cancle = document.getElementById("btn_cancle");
 	btn_cancle.addEventListener("click", function () {
-	  const confirmed = confirm("작성 중인 내용은 저장되지 않습니다. 작성 화면에서 나가시겠습니까?");
-	  if (confirmed) {
-	    location.href = "/"; // 홈 경로로 이동
-	  }
+        
+        window.history.back();
+
 	});
 			
 }
@@ -271,5 +356,162 @@ remove_row.addEventListener("click", function () {
 
 
 
+// 첨부 파일 관련 기능 ////////////////////////////////////////////
+var uploadBtn = document.getElementById("uploadBtn");
+var fakeInput = document.getElementById("fake_input_files");
+var fileListDiv = document.getElementById("fileList");
+var form = document.getElementById("form_document");
+var selectedFiles = [];
+
+// 파일 선택 버튼 클릭 → input 클릭
+uploadBtn.addEventListener("click", function () {
+  fakeInput.click();
+});
+
+// 파일 선택 시 → 누적 리스트에 추가
+fakeInput.addEventListener("change", function (event) {
+  var files = Array.from(event.target.files);
+  
+  // 현재 화면에 렌더링된 파일 수 확인
+  var currentWrapperCount = document.querySelectorAll(".file-wrapper").length;
+  
+  // 새로 추가할 파일 수가 제한을 넘는지 확인
+  if (currentWrapperCount + files.length > 5) {
+    alert("첨부파일은 최대 5개까지 가능합니다.");
+    fakeInput.value = "";
+    return;
+  }
+  
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    selectedFiles.push(file);
+	
+	console.log(selectedFiles.length);
+	
+    addFileToView(file);
+  }
+
+  // 같은 파일 다시 선택할 수 있도록 초기화
+  fakeInput.value = "";
+});
+
+// 파일 미리보기용 wrapper 생성
+function addFileToView(file) {
+  var wrapper = document.createElement("div");
+  wrapper.className = "file-wrapper";
+ 
+
+  var nameDiv = document.createElement("div");
+  nameDiv.textContent = file.name;
+
+  var sizeDiv = document.createElement("div");
+  sizeDiv.textContent = "크기: " + (file.size / 1024).toFixed(1) + " KB";
+  
+  var deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "X";
+  deleteBtn.type = "button";
+  deleteBtn.onclick = function () {
+    wrapper.remove();
+    var newList = [];
+    for (var i = 0; i < selectedFiles.length; i++) {
+      if (selectedFiles[i] !== file) {
+        newList.push(selectedFiles[i]);
+      }
+    }
+    selectedFiles = newList;
+  };
+
+  wrapper.appendChild(deleteBtn);
+  wrapper.appendChild(nameDiv);
+  wrapper.appendChild(sizeDiv);
+  fileListDiv.appendChild(wrapper);
+}
 
 
+////////////////////////////////////////
+// 전체 input + 파일 포함해서 FormData로 전송하는 함수
+let submitForm = function submitForm(formPath) {  
+
+  var formData = new FormData();
+
+  // form 안의 input 요소들을 전부 formData에 추가
+  var inputs = form.querySelectorAll("input[name]");
+  for (var i = 0; i < inputs.length; i++) {
+    var input = inputs[i];
+
+    // type이 file인 input은 건너뜀
+    if (input.type === "file") continue;
+
+    formData.append(input.name, input.value);
+  }
+
+  // 신규 파일 추가 (같은 name으로 여러 개 append → 다중 파일 처리됨)
+  for (var j = 0; j < selectedFiles.length; j++) {
+    formData.append("attaches", selectedFiles[j]);
+  }
+  
+  // 기존 문서가 있는 경우 화면에 출력된 파일 num 배열도 보내기  
+  var files = document.getElementsByClassName("exist-files");
+  if(files) {
+	  for (var file of files){
+		console.log("exFileNum : " + file.dataset.fileNum);
+		formData.append("exists", file.dataset.fileNum);
+	  }
+	
+  }
+
+  
+  // fetch API로 ajax 전송
+    fetch(formPath, {
+      method: "POST",
+      body: formData
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("서버 오류 발생");
+        }
+        return response.text(); // 혹은 .json() (컨트롤러 응답 타입에 따라)
+      })
+      .then(data => {
+        console.log("성공:", data);
+        alert("문서가 성공적으로 저장되었습니다");
+        // 페이지 리다이렉트 또는 초기화 등 후속 처리
+        location.href = data;
+      })
+      .catch(error => {
+        console.error("에러:", error);
+        alert("저장 중 오류가 발생했습니다");
+      });
+  
+  
+  
+}
+
+////////////////////////////////////////
+// 첨부 파일 다운로드
+
+const exist_files = document.getElementsByClassName("exist-files");
+
+for (let link of exist_files) {
+  link.addEventListener("click", function() {
+    let fileNum = link.dataset.fileNum;
+
+	// form 요소 생성
+    const form = document.createElement("form");
+    form.method = "post";
+    form.action = "/document/filedown";
+
+    // hidden input 추가
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "fileNum";
+    input.value = fileNum;
+    form.appendChild(input);
+	
+	// body에 form 추가 후 submit
+    document.body.appendChild(form);
+    form.submit();
+    
+
+  })
+}

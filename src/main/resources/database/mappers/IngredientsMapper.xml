@@ -86,7 +86,7 @@
   	
   	<insert id="add" parameterType="IngredientsVO">
   		INSERT INTO INGREDIENTS
-		VALUES (null, #{ingredientsName}, 0, #{ingredientsPrice}, now(), null);
+		VALUES (null, #{ingredientsName}, 0, #{ingredientsPrice}, now(), null, #{saveName}, #{originName})
   	</insert>
   	
   	<insert id="addHistory" parameterType="History" useGeneratedKeys="true" keyProperty="historyId">

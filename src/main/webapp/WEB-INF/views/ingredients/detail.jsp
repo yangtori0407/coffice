@@ -19,13 +19,15 @@
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
 					<!-- contents 내용 -->
-
-					<h3>${vo.ingredientsName}</h3>
-					<h3>${vo.ingredientsStock}</h3>
-					<h3>${vo.ingredientsPrice}</h3>
+					<div style="width:600px; margin:20px auto; text-align:left">
+						<div  style="display: inline-block; padding: 10px 20px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+							이름: ${vo.ingredientsName}<br/>
+							재고: ${vo.ingredientsStock}<br/>
+							가격: ₩${vo.ingredientsPrice}<br/>
+						</div>
+					</div>
 					<div class="card-body">
 					<div class="row" style="margin: 0 auto; width: 600px">
-						<div class="col-12 mb-4">
 							<div class="d-flex justify-content-between align-items-center">
 								<form method="get" class="form-inline d-flex align-items-center">
 									<input type="hidden" name="ingredientsID" value="${vo.ingredientsID}"/>
@@ -40,8 +42,7 @@
 									</div>
 								</form>
 							</div>
-						</div>
-					</div>
+					
 					<table class="table table-striped" style="margin:20px auto;width: 600px;">
 						<thead>
 							<tr>
@@ -55,7 +56,7 @@
 							<c:forEach items="${list}" var="h">
 							<c:forEach items="${h.history}" var="item">
 							<tr>
-								<td>${item.receive?"입고":"출고"}</td>
+								<td style="color:${item.receive?'blue':'red'};">${item.receive?"입고":"출고"}</td>
 								<td>${item.number}</td>
 								<td>${item.userVO.name}</td>
 								<td>${item.registrationDate}</td>			
@@ -63,8 +64,8 @@
 							</c:forEach>
 							</c:forEach>
 						</tbody>
-						</table>
-						</div>
+					</table>
+				</div>
 				<div class="row">
 					<div class="col-sm-12 col-md-4"></div>
 							<div class="col-sm-12 col-md-4">
@@ -91,6 +92,7 @@
 								</div>
 							</div>
 						</div>
+					</div>
 				</div>
 			</div>
 			<!-- end Content -->

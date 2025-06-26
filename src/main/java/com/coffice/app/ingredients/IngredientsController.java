@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.branch.BranchVO;
 import com.coffice.app.page.Pager;
@@ -39,6 +41,11 @@ public class IngredientsController {
 	private IngredientsService ingredientsService;
 	@Autowired
 	private SalesService salesService;
+	
+	@ModelAttribute("ingredients")
+	public String posts() {
+		return "ingredients";
+	}
 
 	@GetMapping("list")
 	public String getList(Model model, Pager pager) throws Exception {
@@ -51,6 +58,8 @@ public class IngredientsController {
 		model.addAttribute("totalList", totalList);
 		
 		model.addAttribute("ingredientsVO", new IngredientsVO());
+		
+		model.addAttribute("kind", "물류 > 물류관리");
 		return "ingredients/list";
 	}
 	
@@ -69,14 +78,14 @@ public class IngredientsController {
 	
 	@PostMapping("add")
 	@ResponseBody
-	public HashMap<String, Object> add(@Validated @ModelAttribute IngredientsVO ingredientsVO, BindingResult bindingResult) throws Exception {
-		  log.info("ingredientsName = {}", ingredientsVO.getIngredientsName());
-		  log.info("bindingResult.hasErrors() = {}", bindingResult.hasErrors());
+	public HashMap<String, Object> add(@Validated @ModelAttribute IngredientsVO ingredientsVO, 
+										BindingResult bindingResult,
+										@RequestParam(value="ingredientsFile", required = false) MultipartFile multipartFile) throws Exception {
+		  log.info("ingredientVO {}", ingredientsVO);
 		    
 		   HashMap<String, Object> map = new HashMap<>();
 		   
 		if(bindingResult.hasErrors()) {
-			log.info("Validation errors found.");
 			map.put("status", "fail");
 			map.put("message", "이름이 필요합니다.");
 		    return map;
@@ -89,10 +98,13 @@ public class IngredientsController {
 	        return map;
 		}
 	    
-		ingredientsService.add(ingredientsVO);
+
+		ingredientsService.add(ingredientsVO, multipartFile);	
+
 		map.put("status", "success");
-		map.put("message", "추가되었습니다.");
-	    return map;
+		map.put("message", "추가되었습니다.");				
+
+		return map;
 	}
 	
 	@PostMapping("addHistory")

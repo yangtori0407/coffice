@@ -4,8 +4,20 @@ const receive = document.getElementsByName("receive");
 let selectValue = null;
 const number = document.getElementById("number");
 
+number.addEventListener('input',()=>{
+    if(number.value<=0){
+        addReceiveBtn.disabled=true;
+    }else{
+        addReceiveBtn.disabled=false;
+    }
+})
+
 addReceiveBtn.addEventListener("click",()=>{
     
+    let c = confirm("정말 입력하시겠습니까?")
+        if(!c){
+            return;
+        }
     
     for(let i=0;i<receive.length;i++){
         if(receive[i].checked){
@@ -15,9 +27,9 @@ addReceiveBtn.addEventListener("click",()=>{
     }
 
     if(selectValue === null){
-        alert("입/출고가 필요합니다.")
+        alert("입/출고가 선택해주세요.")
         return;
-    } else if(selectIngredients.value==="상품을 선택해주세요"){
+    } else if(selectIngredients.value===""){
         alert("상품을 선택해주세요")
         return;
     } else if(number.value===""){

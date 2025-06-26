@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.files.FileManager;
+import com.coffice.app.notification.NotificationService;
 import com.coffice.app.page.Pager;
 
 @Service
@@ -15,6 +16,9 @@ public class BoardSerivce {
 	
 	@Autowired
 	private BoardDAO boardDAO;
+	
+	@Autowired
+	private NotificationService notificationService;
 	
 	@Autowired
 	private FileManager fileManager;
@@ -66,13 +70,21 @@ public class BoardSerivce {
 
 	public CommentVO addComment(CommentVO commentVO) throws Exception{
 		boardDAO.addComment(commentVO);
-		return boardDAO.detailComment(commentVO);
+		commentVO = boardDAO.detailComment(commentVO);
+		BoardVO boardVO = boardDAO.getBoardInfoByBoardNum(commentVO.getBoardNum());
+		notificationService.sendComment(commentVO, boardVO);
+		
+		return commentVO;
 	}
 
 	public CommentVO reply(CommentVO commentVO) throws Exception{
 		int result = boardDAO.addReply(commentVO);
 		
-		return boardDAO.replyDetail(commentVO);
+		commentVO = boardDAO.replyDetail(commentVO);
+		CommentVO p = boardDAO.getParentComment(commentVO.getCommentP());
+		notificationService.sendReply(commentVO, p);
+		
+		return commentVO;
 	}
 
 	public List<CommentVO> replyList(CommentVO commentVO) throws Exception{

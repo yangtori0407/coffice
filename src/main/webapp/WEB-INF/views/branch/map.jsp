@@ -12,6 +12,11 @@
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${appkey}&libraries=services"></script>
 <link href="/css/branch/map.css" rel="stylesheet">
+<c:if test="${not empty msg}">
+	<script>
+		alert("${msg}");
+	</script>
+</c:if>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -20,7 +25,7 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-					<div id="map" style="width:500px;height:400px;min-height: 50vh; margin: 0 auto">
+					<div id="map">
 					<div class="custom_zoomcontrol radius_border">
 						<span id="reloadMap">
 							<ion-icon name="refresh-outline"></ion-icon>
@@ -30,24 +35,24 @@
 					<div class="card-body">
 					<div class="input-group" style="margin:20px auto;width: 600px; display: flex; align-items: center;">
 						<div style="display: inline-block; padding: 10px 20px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-							총매출:${total}
+							총매출:₩${total}
 						</div>
 					</div>
 					<form method="get">
-					<div class="input-group" style="margin:20px auto;width: 600px;">
-							 <select name="kind" class="form-control col-3" id="exampleFormControlSelect1">
+					<div class="search-box">
+							 <select name="kind" id="exampleFormControlSelect1">
 								<option value="k1">지점이름</option>
 								<option value="k2">운영상태</option>
 								<option value="k3">주소</option>
 							  </select>
 											 
-								<input type="text" name="search" id="keyword" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
-								<div class="input-group-append">
-							<button class="btn btn-secondary" type="submit" id="button-addon2">찾기</button>
-						</div>
+								<input type="text" name="search" id="keyword" placeholder="검색어 입력">
+								
+							<button type="submit" id="button-addon2">찾기</button>
+						
 					</div>
 					</form>
-					<table class="table table-striped" style="margin:20px auto;width: 600px;">
+					<table class="table-custom">
 						<thead>
 							<tr>
 								<th>지점번호</th>
@@ -110,32 +115,37 @@
 		<!-- End Content Wrapper -->
 	</div>
 	<!-- 점주지점등록 modal-->
-	<div class="modal" id="addBranch" tabindex="-1">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title">지점점주등록</h5>
-		            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-		                <span aria-hidden="true">×</span>
+	<div class="modal" id="addBranch" tabindex="-1" aria-hidden="true">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content shadow rounded">
+		      <div class="modal-header bg-primary text-white">
+		        <h5 class="modal-title"><i class="fas fa-user-plus mr-2"></i>지점점주등록</h5>
+		            <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">&times;</span>
 		            </button>
 		      </div>
-		      <div class="modal-body" aria-label="Default select example">
-			        <select class="form-select" id="selectUser">
-			            <option selected>추가할 점주를 선택하세요</option>
+		      <div class="modal-body p-4">
+		      	 <div class="form-group mb-3">
+		      	 <label for="selectUser" class="font-weight-bold">점주 선택</label>
+			        <select class="form-select form-control" id="selectUser" required>
+			            <option value="" selected>추가할 점주를 선택하세요</option>
 						<c:forEach items="${notAddBranchMasterList}" var="m">
 							<option value="${m.userId.userId}">${m.userId.name}</option>
 						</c:forEach>
 			        </select>
-					
-			        <select class="form-select" id="selectBranch">
-				            <option selected>추가할 지점을 선택하세요</option>
+			        </div>
+					<div class="form-group mb-3">
+					 <label for="selectBranch" class="font-weight-bold">지점 선택</label>
+			        <select class="form-select form-control" id="selectBranch">
+				            <option value="" selected>추가할 지점을 선택하세요</option>
 						<c:forEach items="${notAddBranchList}" var="b" varStatus="s">
 				            <option value="${s.current.branchId}">${b.branchName},${s.current.branchId}</option>					
 						</c:forEach>
 			        </select>
+			        </div>
 			      <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-			        <button class="btn btn-primary" id="addBranchBtn">add</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal" type="button"><i class="fas fa-times"></i>닫기</button>
+			        <button class="btn btn-primary" id="addBranchBtn"><i class="fas fa-plus-circle"></i>등록</button>
 			      </div>
 			  </div>
 		    </div>

@@ -8,4 +8,6 @@ public class MenuVO {
 	private Integer menuId;
 	private String menuName;
 	private Integer menuPrice;
+	private String saveName;
+	private String originName;
 }

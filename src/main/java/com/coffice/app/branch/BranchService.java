@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
+import com.coffice.app.ingredients.IngredientsVO;
 import com.coffice.app.page.Pager;
 import com.coffice.app.sales.SalesVO;
 import com.coffice.app.users.UserVO;
@@ -53,6 +55,48 @@ public class BranchService {
 		return branchDAO.masterAdd(branchMasterVO);
 	}
 	
+	public boolean nameErrorCheck(BranchMasterVO branchMasterVO, BindingResult bindingResult) throws Exception {
+		boolean check = false;
+		
+		check = bindingResult.hasErrors();
+		
+		BranchMasterVO checkVO = branchDAO.nameCheck(branchMasterVO);
+		if(checkVO != null) {
+			check = true;
+			bindingResult.rejectValue("contactNumber", "branchMasterVO.contactNumber.equal");
+		}
+		
+		return check;
+	}
+	
+	public boolean branchNameCheck(BranchVO branchVO, BindingResult bindingResult) throws Exception {
+		boolean check = false;
+		
+		check = bindingResult.hasErrors();
+		
+		BranchVO checkVO = branchDAO.branchName(branchVO);
+		if(checkVO != null) {
+			check = true;
+			bindingResult.rejectValue("branchName", "branchVO.branchName.equal");
+		}
+		
+		return check;
+	}
+	
+	public boolean branchAddressCheck(BranchVO branchVO, BindingResult bindingResult) throws Exception {
+		boolean check = false;
+		
+		check = bindingResult.hasErrors();
+		
+		BranchVO checkVO = branchDAO.branchAddress(branchVO);
+		if(checkVO != null) {
+			check = true;
+			bindingResult.rejectValue("branchAddress", "branchVO.branchAddress.equal");
+		}
+		
+		return check;
+	}
+	
 	public List<BranchVO> myBranch(BranchVO branchVO,Pager pager) throws Exception {
 		pager.make();
 		pager.makeNum(branchDAO.totalmyBranchCount(branchVO, pager));
@@ -81,5 +125,9 @@ public class BranchService {
 	
 	public List<BranchVO> getTotalChart() throws Exception {
 		return branchDAO.getTotalChart();
+	}
+	
+	public Long registerBranch() throws Exception {
+		return branchDAO.registerBranch();
 	}
 }

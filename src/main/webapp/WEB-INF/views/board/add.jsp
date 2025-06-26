@@ -28,7 +28,7 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					<form action="./add" method="post">
+					<form action="./add" method="post" class="d-flex flex-column">
 						<label>제목</label> <input type="text"
 							class="card mb-4 py-3 border-left-info" name="boardTitle"
 							style="width: 100%;"> <label>내용</label>
@@ -36,7 +36,7 @@
 							<div id="editor" style="height: 550px;"></div>
 							<input type="hidden" id="quill_html" name="boardContents">
 						</div>
-						<div>
+						<div class="ml-auto">
 							<button id="submitBtn" class="btn btn-primary mb-3" type="submit">글
 								작성하기</button>
 						</div>

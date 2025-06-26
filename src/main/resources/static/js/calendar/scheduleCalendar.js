@@ -1,5 +1,9 @@
 const kind = document.getElementById("kind")
 let flag = true;
+const authority = true;
+const uid = document.getElementById("userId")
+const gcolor = "#fb6544"
+const pcolor = "#378006"
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -13,10 +17,12 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     }
         },
         수정: {
-            text: 'editable',
+            text: '간편 수정',
             click: function() {
                 calendar.setOption('editable', flag)
-
+                if(flag){
+                    alert("간편 수정 기능입니다. 일정을 선택 후 원하는 날짜로 옮겨주세요.   -- (반복 일정 제외) --")
+                }
                 flag = !flag
             }
         }
@@ -41,10 +47,12 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         show()
     },
     eventClick: function(e) {
+        if (e.event.extendedProps.preventClick) {
+            console.log("이 이벤트는 클릭 비활성화됨");
+            return;
+        }
         let repeatScheduleDiv = document.getElementById("repeatScheduleDiv")
-        // console.log(e.event.id)
-        // console.log(e.event.groupId)
-        console.log(e.event.groupId)
+        console.log(e.event)
         $("#detailModal").modal("show")
         let scheduleId = e.event.id
         let repeatCheck = document.getElementById("repeatCheck")
@@ -66,7 +74,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         let groupId = e.event.groupId
         let startTime = e.event.extendedProps.startDate
         let endTime = e.event.extendedProps.endDate
-
+        
         type.checked = true;
         detailResult.innerText = e.event.title
         let rstartDate = e.event.startStr.slice(0, 10)
@@ -102,78 +110,84 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             })
         }
         
-        change.addEventListener("click", ()=>{
-            for(a of dis) {
-                a.disabled = false;
-            }
-        })
-        
-        saveChange.addEventListener("click", ()=>{
-            let checked = document.querySelector('input[name="detailResultOptions"]:checked').value;
-            let params = new FormData
-            params.append("scheduleId", scheduleId)
-            params.append("scheduleType", checked)
-            params.append("detail", detailResult.value.trim())
-            params.append("startTime", rsDate.value+rsTime.value)
-            params.append("endTime", reDate.value+reTime.value)
-            
-            if(groupId != "" && !repeatCheck.checked) {
-                console.log(groupId)
-                params.append("exception", true)
-                params.append("exceptions[0].repeatId", groupId)
-                params.append("exceptions[0].exceptionDate", startStr)
-                params.append("exceptions[0].exceptionType", "override")
-            }else if(groupId != "" && repeatCheck.checked) {
-                let rType = document.querySelector('input[name="radioOptionsResult"]:checked').value;
-                let eRepeat = document.getElementById("reRepeat")
-                let rCount = document.getElementById("resultCount")
-                params.append("repeatId", groupId)
-                params.append("repeatType", rType)
-                if(eRepeat.value != "") {
-                    params.append("repeatEnd", eRepeat.value+" 23:59:59")
-                }else if(rCount.value != "") {
-                    params.append("repeatCount", rCount.value)
+        if(uid.value != e.event.extendedProps.userId) {
+            change.setAttribute("style", "display: none;")
+            deleteSchedule.setAttribute("style", "display: none;")
+            saveChange.innerText = "닫기"
+        }else {
+            change.addEventListener("click", ()=>{
+                for(a of dis) {
+                    a.disabled = false;
                 }
-            }
+            })
             
-            fetch("schedule/update", {
-                method: "post",
-                body: params
-            })
-            .then(r=>r.text())
-            .then(r=>{
-                location.reload()
-            })
-        })
-
-        deleteSchedule.addEventListener("click", ()=>{
-            if(confirm("정말 삭제 하시겠습니까?")) {
+            saveChange.addEventListener("click", ()=>{
+                let checked = document.querySelector('input[name="detailResultOptions"]:checked').value;
                 let params = new FormData
-
+                params.append("scheduleId", scheduleId)
+                params.append("scheduleType", checked)
+                params.append("detail", detailResult.value.trim())
+                params.append("startTime", rsDate.value+rsTime.value)
+                params.append("endTime", reDate.value+reTime.value)
+                
                 if(groupId != "" && !repeatCheck.checked) {
-                    console.log("isException and notAll")
+                    console.log(groupId)
                     params.append("exception", true)
                     params.append("exceptions[0].repeatId", groupId)
                     params.append("exceptions[0].exceptionDate", startStr)
-                    params.append("exceptions[0].exceptionType", "skip")
+                    params.append("exceptions[0].exceptionType", "override")
                 }else if(groupId != "" && repeatCheck.checked) {
-                    console.log("isAll")
+                    let rType = document.querySelector('input[name="radioOptionsResult"]:checked').value;
+                    let eRepeat = document.getElementById("reRepeat")
+                    let rCount = document.getElementById("resultCount")
                     params.append("repeatId", groupId)
-                }else {
-                    console.log("notException and notAll")
-                    params.append("scheduleId", scheduleId)
+                    params.append("repeatType", rType)
+                    if(eRepeat.value != "") {
+                        params.append("repeatEnd", eRepeat.value+" 23:59:59")
+                    }else if(rCount.value != "") {
+                        params.append("repeatCount", rCount.value)
+                    }
                 }
-                fetch("schedule/delete", {
+                
+                fetch("schedule/update", {
                     method: "post",
                     body: params
                 })
                 .then(r=>r.text())
                 .then(r=>{
-                    // console.log(r)
                     location.reload()
                 })
-            }
-        })
+            })
+    
+            deleteSchedule.addEventListener("click", ()=>{
+                if(confirm("정말 삭제 하시겠습니까?")) {
+                    let params = new FormData
+    
+                    if(groupId != "" && !repeatCheck.checked) {
+                        console.log("isException and notAll")
+                        params.append("exception", true)
+                        params.append("exceptions[0].repeatId", groupId)
+                        params.append("exceptions[0].exceptionDate", startStr)
+                        params.append("exceptions[0].exceptionType", "skip")
+                    }else if(groupId != "" && repeatCheck.checked) {
+                        console.log("isAll")
+                        params.append("repeatId", groupId)
+                    }else {
+                        console.log("notException and notAll")
+                        params.append("scheduleId", scheduleId)
+                    }
+                    fetch("schedule/delete", {
+                        method: "post",
+                        body: params
+                    })
+                    .then(r=>r.text())
+                    .then(r=>{
+                        // console.log(r)
+                        location.reload()
+                    })
+                }
+            })
+        }
         
         $('#detailModal').on('hidden.bs.modal', function () {
             for(a of dis) {
@@ -183,22 +197,29 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                 rCount.value = null;
                 groupId = null
                 startStr = null
+                change.setAttribute("style", "display: block;")
+                deleteSchedule.setAttribute("style", "display: block;")
+                saveChange.innerText = 'Save Changes'
             }
         })
     },
     eventDrop: function(e) {
-        console.log("EventDrop", e.event.start)
-        let t = new Date(e.event.start)
-        console.log(t.getHours())
-    },
-    eventResize: function(e) {
-        console.log("EventResize", e.event.start)
-        let t = new Date(e.event.start)
-        console.log(t.getHours())
+        let params = new FormData
+        params.append("scheduleId", e.event.id)
+        params.append("startTime", e.event.startStr.slice(0, 10)+e.event.startStr.slice(11, 16))
+        params.append("endTime", e.event.endStr.slice(0, 10)+e.event.endStr.slice(11, 16))
+        fetch("schedule/dragDrop", {
+            method: "post",
+            body: params
+        })
+        .then(r=>r.text())
+        .then(r=>{
+            console.log(r)
+        })
     }
 });
 
-fetch("http://localhost/events/getHolidays")
+fetch("/events/getHolidays")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
@@ -207,16 +228,25 @@ fetch("http://localhost/events/getHolidays")
             start: a.locdate.toString(),
             allDay: true,
             color: '#ee0000',
-            editable: false
+            editable: false,
+            extendedProps: {
+                preventClick: true
+            }
         }
         calendar.addEvent(event);
     }
 })
 
-fetch("http://localhost/events/getRepeatSchedules")
+fetch("/events/getRepeatSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
+        let clr;
+        if(uid.value == a.userId) {
+            clr = pcolor
+        }else {
+            clr = gcolor
+        }
         let exdate = []
         for(e of a.exceptions) {
             if(e.exceptionDate != null) {
@@ -226,14 +256,16 @@ fetch("http://localhost/events/getRepeatSchedules")
         let event = {
             groupId: a.repeatId,
             title: a.detail,
-            color: '#378006',
+            color: clr,
+            editable: false,
             extendedProps: {
                 startDate: a.startTime,
                 endDate: a.endTime,
                 type: a.scheduleType,
                 repeatType: a.repeatType,
                 repeatEnd: a.repeatEnd,
-                repeatCount: a.repeatCount
+                repeatCount: a.repeatCount,
+                userId: a.userId
             },
             rrule: {
                 freq: a.repeatType,
@@ -248,20 +280,20 @@ fetch("http://localhost/events/getRepeatSchedules")
     }
 })
 
-fetch("http://localhost/events/getSchedules")
+fetch("/events/getSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
-        if(a.scheduleType == 'group') {
+        if(uid.value == a.userId) {
             let event = {
                 id: a.scheduleId,
                 title: a.detail,
                 start: a.startTime,
                 end: a.endTime,
-                color: '#378006',
-                editable: false,
+                color: pcolor,
                 extendedProps: {
-                    type: a.scheduleType
+                    type: a.scheduleType,
+                    userId: a.userId,
                 }
             }
             calendar.addEvent(event);
@@ -271,9 +303,11 @@ fetch("http://localhost/events/getSchedules")
                 title: a.detail,
                 start: a.startTime,
                 end: a.endTime,
-                color: '#378006',
+                color: gcolor,
+                editable: !authority,
                 extendedProps: {
-                    type: a.scheduleType
+                    type: a.scheduleType,
+                    userId: a.userId,
                 }
             }
             calendar.addEvent(event);
@@ -328,7 +362,6 @@ send.addEventListener("click", ()=>{
         body: params
     })
     .then(r=>{
-        console.log(r)
         location.reload()
     })
 

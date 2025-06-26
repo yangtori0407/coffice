@@ -78,8 +78,26 @@ public interface DocumentDAO {
 	public int addReferenceLine(ReferenceLineVO referenceLineVO) throws Exception;
 	
 	public int addFile(AttachmentVO attachmentVO) throws Exception;
+
 	
+	// 임시문서 업데이트 ----------------------------------
+	public int deleteTemp(DocumentVO documentVO) throws Exception;
+	
+	public int updateTemp(DocumentVO documentVO) throws Exception;
+	
+	public int deleteApprovalLine(DocumentVO documentVO) throws Exception;
+	// 결재선 및 참조선을 비우고 다시 값을 넣어준다
+	
+	public int deleteReferenceLine(DocumentVO documentVO) throws Exception;
+	
+	// 문서 업데이트 시 기존 파일이 front에서 제외됐다면, 해당 파일을 삭제한다
+	public int deleteAttachment(AttachmentVO attachmentVO) throws Exception;
+	
+	public int updateOnlyStatus(DocumentVO documentVO) throws Exception;
+	
+	// 개별 파일 다운로드 및 삭제 ----------------------------------
 	public AttachmentVO getFileDetail(AttachmentVO attachmentVO)throws Exception;
+	
 	
 
 }

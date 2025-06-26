@@ -1,0 +1,19 @@
+package com.coffice.app.message;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface MessageDAO {
+
+	int add(MessageVO messageVO) throws Exception;
+
+	int addEmailUser(Map<String, Object> info) throws Exception;
+
+	List<MessageVO> getSendMessage(String userId) throws Exception;
+
+	List<MessageVO> getReceiveMessage(String userId) throws Exception;
+
+}
