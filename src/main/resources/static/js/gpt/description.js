@@ -53,8 +53,16 @@ sendGptBtn.addEventListener("click",()=>{
         } else {
             gptLoading.innerText=r
         }
+
+        const lastMessage = document.createElement('div');
+        lastMessage.style.height = '1px';
+        chatBox.appendChild(lastMessage);
+        lastMessage.scrollIntoView({ behavior: "smooth" });
     })
     document.getElementById("gptInput").value="";
+    setTimeout(()=>{
+        chatBox.scrollTop = chatBox.scrollHeight;
+    },0);
 })
 
 document.getElementById("gptInput").addEventListener("keydown",(e)=>{
