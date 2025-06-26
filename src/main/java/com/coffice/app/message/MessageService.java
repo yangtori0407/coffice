@@ -91,4 +91,8 @@ public class MessageService {
 		return messageDAO.getReceiveMessage(userId);
 		
 	}
+
+	public MessageVO detail(MessageVO messageVO) throws Exception{
+		return messageDAO.detail(messageVO);
+	}
 }

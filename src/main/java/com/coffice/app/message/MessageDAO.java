@@ -16,4 +16,6 @@ public interface MessageDAO {
 
 	List<MessageVO> getReceiveMessage(String userId) throws Exception;
 
+	MessageVO detail(MessageVO messageVO) throws Exception;
+
 }

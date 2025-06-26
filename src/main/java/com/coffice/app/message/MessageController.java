@@ -59,4 +59,23 @@ public class MessageController {
 		
 		return "commons/ajaxResult";
 	}
+	
+	@GetMapping("send/detail")
+	public String sendDetail(MessageVO messageVO, Model model) throws Exception{
+		messageVO = messageService.detail(messageVO);
+		model.addAttribute("detail", messageVO);
+		model.addAttribute("message", "send");
+		model.addAttribute("kind", "이메일 > 보낸 이메일");
+		return "message/detail";
+	}
+	
+	@GetMapping("receive/detail")
+	public String receiveDetail(MessageVO messageVO, Model model) throws Exception{
+		//log.info("도착");
+		messageVO = messageService.detail(messageVO);
+		model.addAttribute("detail", messageVO);
+		model.addAttribute("message", "receive");
+		model.addAttribute("kind", "이메일 > 받은 이메일");
+		return "message/detail";
+	}
 }
