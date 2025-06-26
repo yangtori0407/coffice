@@ -77,8 +77,8 @@
 												<tbody>
 													<c:forEach items="${list }" var="l">
 														<tr>
-															<td>${l.deptName } ${l.name }</td>
-															<td><a class="boardA" href="./detail?messageNum=${l.messageNum }">${l.messageTitle }</a></td>
+															<td>${l.sendUser.deptName } ${l.sendUser.name }</td>
+															<td><a class="boardA" href="./receive/detail?messageNum=${l.messageNum }">${l.messageTitle }</a></td>
 															<td>${l.formatted }</td>
 														</tr>
 													</c:forEach>

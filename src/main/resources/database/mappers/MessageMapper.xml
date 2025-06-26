@@ -5,7 +5,7 @@
 
 <mapper namespace="com.coffice.app.message.MessageDAO">
 	<select id="getSendMessage" parameterType="java.lang.String"
-		resultType="MessageVO">
+		resultMap="receiveMessage">
 		SELECT
 			M.MESSAGE_NUM,
 			M.MESSAGE_CONTENTS,
@@ -29,20 +29,35 @@
 		WHERE M.SENDER = #{userId}
 
 	</select>
-
+	<resultMap type="MessageVO" id="receiveMessage">
+		<id column="MESSAGE_NUM" property="messageNum"/>
+		<result column="MESSAGE_CONTENTS" property="messageContents"/>
+		<result column="SEND_DATE" property="sendDate"/>
+		<result column="MESSAGE_TITLE" property="messageTitle"/>
+		
+		<collection property="receiveUsers" javaType="java.util.List" ofType="MessageCheckVO">
+			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
+			<result column="CHECK_STATUS" property="checkStatus"/>
+			<result column="MESSAGE_STATUS" property="messageStatus"/>
+			<result column="SENDER_DELETE" property="senderDelete"/>
+			<result column="USER_ID" property="userId"/>
+			<result column="NAME" property="name"/>
+			<result column="DEPT_NAME" property="deptName"/>
+		</collection>
+	</resultMap>
 
 
 	<select id="getReceiveMessage" parameterType="java.lang.String"
-		resultType="MessageVO">
+		resultMap="sendMessage">
 		SELECT
-		M.MESSAGE_NUM,M.SENDER,
-		M.MESSAGE_CONTENTS,
-		M.SEND_DATE,
-		M.MESSAGE_TITLE,
-		MC.CHECK_STATUS,
-		MC.MESSAGE_STATUS,
-		U.NAME,
-		DP.DEPT_NAME
+			M.MESSAGE_NUM,M.SENDER,
+			M.MESSAGE_CONTENTS,
+			M.SEND_DATE,
+			M.MESSAGE_TITLE,
+			MC.CHECK_STATUS,
+			MC.MESSAGE_STATUS,
+			U.NAME,
+			DP.DEPT_NAME
 		FROM MESSAGE M
 		JOIN MESSAGE_CHECK MC
 		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
@@ -53,6 +68,70 @@
 		U.DEPT_ID
 		WHERE MC.USER_ID = #{userId}
 	</select>
+	
+	<resultMap type="MessageVO" id="sendMessage">
+		<id column="MESSAGE_NUM" property="messageNum"/>
+		<result column="MESSAGE_CONTENTS" property="messageContents"/>
+		<result column="SEND_DATE" property="sendDate"/>
+		<result column="MESSAGE_TITLE" property="messageTitle"/>
+		
+		<association property="sendUser" javaType="MessageCheckVO">
+			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
+			<result column="CHECK_STATUS" property="checkStatus"/>
+			<result column="MESSAGE_STATUS" property="messageStatus"/>
+			<result column="SENDER_DELETE" property="senderDelete"/>
+			<result column="USER_ID" property="userId"/>
+			<result column="NAME" property="name"/>
+			<result column="DEPT_NAME" property="deptName"/>
+		</association>
+	</resultMap>
+	
+	<select id="detail" parameterType="MessageVO" resultMap="getDetail">
+		SELECT
+			M.MESSAGE_NUM,
+			M.MESSAGE_CONTENTS,
+			M.SEND_DATE,
+			M.MESSAGE_TITLE,
+			US.NAME AS SENDER_NAME,
+			US.EMAIL,
+			MC.MESSAGECHECK_NUM,
+			MC.CHECK_STATUS,
+			MC.MESSAGE_STATUS,
+			MC.SENDER_DELETE,
+			MC.USER_ID,
+			UR.NAME AS RECEIVER_NAME,
+			DP.DEPT_NAME
+		FROM MESSAGE M
+		JOIN MESSAGE_CHECK MC
+		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
+		JOIN USERS US
+		ON M.SENDER = US.USER_ID
+		LEFT OUTER JOIN USERS UR
+		ON MC.USER_ID = UR.USER_ID
+		LEFT OUTER JOIN
+		DEPARTMENT DP
+		ON DP.DEPT_ID = UR.DEPT_ID
+		WHERE M.MESSAGE_NUM = #{messageNum}
+	</select>
+	
+	<resultMap type="MessageVO" id="getDetail">
+		<id column="MESSAGE_NUM" property="messageNum"/>
+		<result column="MESSAGE_CONTENTS" property="messageContents"/>
+		<result column="SEND_DATE" property="sendDate"/>
+		<result column="MESSAGE_TITLE" property="messageTitle"/>
+		<result column="SENDER_NAME" property="senderName"/>
+		<result column="EMAIL" property="email"/>
+		
+		<collection property="receiveUsers" javaType="java.util.List" ofType="MessageCheckVO">
+			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
+			<result column="CHECK_STATUS" property="checkStatus"/>
+			<result column="MESSAGE_STATUS" property="messageStatus"/>
+			<result column="SENDER_DELETE" property="senderDelete"/>
+			<result column="USER_ID" property="userId"/>
+			<result column="RECEIVER_NAME" property="name"/>
+			<result column="DEPT_NAME" property="deptName"/>
+		</collection>
+	</resultMap>
 
 	<insert id="add" parameterType="MessageVO"
 		useGeneratedKeys="true" keyProperty="messageNum">

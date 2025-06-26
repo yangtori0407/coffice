@@ -18,20 +18,15 @@ public class MessageVO {
 	private String messageTitle;
 	private Timestamp sendDate;
 	private String sender;
+	private String senderName;
+	private String email;
 	
 	private List<MessageFilesVO> files;
 	
-	//private List<MessageCheckVO> receiveUsers;
-	
-	private int messageCheckNum;
-	private boolean checkStatus;
-	private int messageStatus;
-	private String userId;
-	private boolean senderDelete;
-	private boolean receiverDelete;
-	
-	private String name;
-	private String deptName;
+	//내가 이메일을 보낸 사람들
+	private List<MessageCheckVO> receiveUsers;
+	//나에게 이메일을 보낸 사람들
+	private MessageCheckVO sendUser;
 	
 	
 	
