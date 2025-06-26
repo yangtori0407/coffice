@@ -103,7 +103,7 @@
 			</div>
 		</li>
 
-	<li class="nav-item"><a class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}" href="/ingredients/list">
+	<li class="nav-item"><a id="article" class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}" href="/ingredients/list">
 		<ion-icon name="cube-outline"></ion-icon> <span>물류</span>
 	</a></li>
 

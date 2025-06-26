@@ -22,6 +22,7 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
+				<div class="card shadow mb-4">
 					<div style="width:500px; height:250px; border:3px solid #aaa; margin:20px auto;">
 						<canvas id="chart"></canvas>
 					</div>
@@ -40,14 +41,34 @@
 					  <ion-icon name="menu-outline" style="font-size: 24px; color: #333;"></ion-icon>
 					</button>
 				</div>
-					<table class="table table-striped" style="margin:20px auto;width: 600px;">
+					<div class="row"></div>
+					<div class="col-sm-12"></div>
+					<table class="table table-bordered dataTable" id="dataTable"
+							width="100%" cellspacing="0" role="grid"
+							aria-describedby="dataTable_info" style="width: 98%;margin:0 auto">
 						<thead>
-							<tr>
-								<th>상태</th>
-								<th>금액</th>
-								<th>수량</th>
-								<th>메뉴</th>
-								<th>날짜</th>
+							<tr role="row">
+										<th class="sorting sorting_asc" tabindex="0"
+											aria-controls="dataTable" rowspan="1" colspan="1"
+											aria-sort="ascending"
+											aria-label="Name: activate to sort column descending"
+											style="width: 100.788px;">상태</th>
+										<th class="sorting" tabindex="0" aria-controls="dataTable"
+											rowspan="1" colspan="1"
+											aria-label="Position: activate to sort column ascending"
+											style="width: 450px;">금액</th>
+										<th class="sorting" tabindex="0" aria-controls="dataTable"
+											rowspan="1" colspan="1"
+											aria-label="Office: activate to sort column ascending"
+											style="width: 116.788px;">수량</th>
+										<th class="sorting" tabindex="0" aria-controls="dataTable"
+											rowspan="1" colspan="1"
+											aria-label="Age: activate to sort column ascending"
+											style="width: 116.788px;">메뉴</th>
+										<th class="sorting" tabindex="0" aria-controls="dataTable"
+											rowspan="1" colspan="1"
+											aria-label="Age: activate to sort column ascending"
+											style="width: 116.788px;">날짜</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -65,8 +86,8 @@
 						</tbody>
 					</table>
 			<div class="row">
-				<div class="col-sm-12 col-md-4"></div>
-					<div class="col-sm-12 col-md-4">
+				<div class="col-sm-12 col-md-5"></div>
+					<div class="col-sm-12 col-md-7">
 						<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
 							<ul class="pagination">
 								<li class="paginate_button page-item previous disabled" id="dataTable_previous">
@@ -89,12 +110,13 @@
 							</ul>
 						</div>
 					</div> 
-						<div style="width: 600px; margin: 0 auto; text-align: right;">
+						<div style="width: 96%; margin: 20px auto; text-align: right;">
 							<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#order">
 								주문
 							</a>	
 							<a class="btn btn-success" href="./api/excel/download/sale">매출다운</a>						
 						</div>
+			</div>
 			</div>
 		</div>
 	</div>

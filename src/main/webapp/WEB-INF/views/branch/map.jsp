@@ -25,6 +25,8 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
+				<div class="card shadow mb-4">
+
 					<div id="map">
 					<div class="custom_zoomcontrol radius_border">
 						<span id="reloadMap">
@@ -33,32 +35,51 @@
 					</div>
 					</div>
 					<div class="card-body">
-					<div class="input-group" style="margin:20px auto;width: 600px; display: flex; align-items: center;">
-						<div style="display: inline-block; padding: 10px 20px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+					<div>
+					<div id="dataTable_wrapper"
+						class="dataTables_wrapper dt-bootstrap4">
+					<div class="row">
+						<div class="col-12 mb-4">
+							<div class="d-flex justify-content-between align-items-center">
+								<form method="get" class="form-inline d-flex align-items-center">
+										 <select name="kind"  class="custom-select mr-2">
+											<option value="k1">지점이름</option>
+											<option value="k2">운영상태</option>
+											<option value="k3">주소</option>
+										  </select>
+														 
+											<input type="text" name="search" class="form-control form-control-sm mr-2" id="keyword" style="max-width: 200px;" placeholder="검색어 입력하세요">
+											
+										<button type="submit" class="btn btn-info">검색</button>
+								</form>
+						<div class="ml-3" style="padding: 10px 20px; background-color: #f8f9fa;
+             				border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: 500;">								
 							총매출:₩${total}
 						</div>
+							</div>
+						</div>		
 					</div>
-					<form method="get">
-					<div class="search-box">
-							 <select name="kind" id="exampleFormControlSelect1">
-								<option value="k1">지점이름</option>
-								<option value="k2">운영상태</option>
-								<option value="k3">주소</option>
-							  </select>
-											 
-								<input type="text" name="search" id="keyword" placeholder="검색어 입력">
-								
-							<button type="submit" id="button-addon2">찾기</button>
-						
-					</div>
-					</form>
-					<table class="table-custom">
+					<div class="row">
+					<div class="col-sm-12">
+					<table class="table table-bordered dataTable" id="dataTable"
+							width="100%" cellspacing="0" role="grid"
+							aria-describedby="dataTable_info" style="width: 100%;">
 						<thead>
-							<tr>
-								<th>지점번호</th>
-								<th>지점이름</th>
-								<th>운영상태</th>
-							</tr>
+							<tr role="row">
+														<th class="sorting sorting_asc" tabindex="0"
+															aria-controls="dataTable" rowspan="1" colspan="1"
+															aria-sort="ascending"
+															aria-label="Name: activate to sort column descending"
+															style="width: 100.788px;">지점번호</th>
+														<th class="sorting" tabindex="0" aria-controls="dataTable"
+															rowspan="1" colspan="1"
+															aria-label="Position: activate to sort column ascending"
+															style="width: 450px;">지점이름</th>
+														<th class="sorting" tabindex="0" aria-controls="dataTable"
+															rowspan="1" colspan="1"
+															aria-label="Office: activate to sort column ascending"
+															style="width: 116.788px;">운영상태</th>
+													</tr>
 						</thead>
 						<tbody>
 							<c:forEach items="${list}" var="vo">
@@ -72,9 +93,11 @@
 							</c:forEach>
 						</tbody>
 					</table>
+					</div>
+					</div>
 					<div class="row">
-						<div class="col-sm-12 col-md-4"></div>
-							<div class="col-sm-12 col-md-4">
+						<div class="col-sm-12 col-md-5"></div>
+							<div class="col-sm-12 col-md-7">
 								<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
 									<ul class="pagination">
 										<li class="paginate_button page-item previous disabled" id="dataTable_previous">
@@ -97,15 +120,17 @@
 									</ul>
 								</div>
 							</div>
-							<div style="width: 600px; margin: 0 auto; text-align: right;">
+							<div style="width: 100%; margin: 0 auto; text-align: right;">
 								<a class="btn btn-success" href="./api/excel/download/branch">지점정보다운</a>
 								<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addBranch">
 									점주지정등록
 								</a>							
 							</div>
 						</div>
+						</div>
+						</div>
 					</div>
-					<div>
+
 					</div>
 				</div>
 			</div>

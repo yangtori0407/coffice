@@ -55,9 +55,9 @@
 							<div class="employee-info"><ion-icon name="happy-outline"></ion-icon> 사원번호 : ${user.userId}</div>
 							<div class="employee-info"><ion-icon name="call-outline"></ion-icon>  전화번호 : ${user.phone}</div>
 							<div class="employee-info"><ion-icon name="mail-outline"></ion-icon> 이메일 :  ${user.email}</div>
-							<div style="text-align: center; margin: 60px 0; padding: 40px 20px; background: #f9f9f9; border-left: 5px solid #555; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-family: 'Georgia', serif;">
-								<h3 style="margin-bottom: 20px; color: #444;">오늘의명언</h3>
-								<h4 style="font-style: italic; font-size: 1.5em; color: #222;">${quote}</h4>
+							<div style="text-align: center; margin: 60px 0; padding: 40px 20px;">
+								<h3>오늘의명언</h3>
+								<h4>${quote}</h4>
 							</div>
 							
 							<div class="modal fade" id="pwCheckModal" tabindex="-1" role="dialog" aria-hidden="true">

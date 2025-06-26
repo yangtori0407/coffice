@@ -91,6 +91,8 @@ public class BranchController {
 	public String add(@Validated(RegisterGroup.class) @ModelAttribute BranchVO branchVO,
 						BindingResult bindingResult,
 						RedirectAttributes redirectAttributes) throws Exception {
+		
+		log.info("b:{}",branchVO);
 		if(branchService.branchNameCheck(branchVO, bindingResult)) {
 			return "branch/add";
 		}
