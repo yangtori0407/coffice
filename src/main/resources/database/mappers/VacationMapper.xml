@@ -75,4 +75,12 @@
 			and v.DELETE_STATUS = 0
   	</select>
   	
+  	<update id="updateApply" parameterType="VacationVO">
+  			update VACATION
+  			set START_TIME = #{startTime}, END_TIME = #{endTime}, TYPE = #{type}, APPROVAL_AUTHORITY = #{approvalAuthority}, EDIT_TIME = now(), EDITOR = #{editor}
+  			where DELETE_STATUS = 0
+  			and STATUS = 0
+  			and VACATION_ID = #{vacationId}
+  	</update>
+  	
   </mapper>
