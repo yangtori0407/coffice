@@ -65,6 +65,14 @@ public class IngredientsController {
 	
 	@GetMapping("detail")
 	public String getDetail(IngredientsVO ingredientsVO, Model model, Pager pager) throws Exception {
+		if ("k1".equals(pager.getKind())) { // 운영상태일 때
+	        String keyword = pager.getSearch();
+	        if ("입고".equals(keyword)) {
+	            pager.setSearch("1");
+	        } else if ("출고".equals(keyword)) {
+	            pager.setSearch("0");
+	        }
+	    }
 		IngredientsVO ingredientsVO2 = ingredientsService.getDetail(ingredientsVO);
 		model.addAttribute("vo", ingredientsVO2);
 		

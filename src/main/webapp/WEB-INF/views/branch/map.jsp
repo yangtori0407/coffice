@@ -50,7 +50,7 @@
 														 
 											<input type="text" name="search" class="form-control form-control-sm mr-2" id="keyword" style="max-width: 200px;" placeholder="검색어 입력하세요">
 											
-										<button type="submit" class="btn btn-info">검색</button>
+										<button type="submit" class="btn btn-secondary">검색</button>
 								</form>
 						<div class="ml-3" style="padding: 10px 20px; background-color: #f8f9fa;
              				border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: 500;">								

@@ -41,8 +41,8 @@
 					  <ion-icon name="menu-outline" style="font-size: 24px; color: #333;"></ion-icon>
 					</button>
 				</div>
-					<div class="row"></div>
-					<div class="col-sm-12"></div>
+					<div class="row">
+					<div class="col-sm-12">
 					<table class="table table-bordered dataTable" id="dataTable"
 							width="100%" cellspacing="0" role="grid"
 							aria-describedby="dataTable_info" style="width: 98%;margin:0 auto">
@@ -85,7 +85,9 @@
 							</c:forEach>
 						</tbody>
 					</table>
-			<div class="row">
+				</div>
+			</div>
+			<div class="row" style="margin:20px 0">
 				<div class="col-sm-12 col-md-5"></div>
 					<div class="col-sm-12 col-md-7">
 						<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
@@ -109,12 +111,12 @@
 								</li>
 							</ul>
 						</div>
-					</div> 
+					</div>
 						<div style="width: 96%; margin: 20px auto; text-align: right;">
+							<a class="btn btn-success" href="./api/excel/download/sale">매출다운</a>						
 							<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#order">
 								주문
 							</a>	
-							<a class="btn btn-success" href="./api/excel/download/sale">매출다운</a>						
 						</div>
 			</div>
 			</div>

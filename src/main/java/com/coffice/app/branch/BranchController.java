@@ -64,6 +64,15 @@ public class BranchController {
 
 	@GetMapping("map")
 	public void map(Model model, Pager pager) throws Exception {
+		if ("k2".equals(pager.getKind())) { // 운영상태일 때
+	        String keyword = pager.getSearch();
+	        if ("운영중".equals(keyword)) {
+	            pager.setSearch("1");
+	        } else if ("운영안함".equals(keyword)) {
+	            pager.setSearch("0");
+	        }
+	    }
+		
 		List<BranchVO> list = branchService.getList(pager);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
