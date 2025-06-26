@@ -59,7 +59,7 @@ public class IngredientsController {
 		
 		model.addAttribute("ingredientsVO", new IngredientsVO());
 		
-		model.addAttribute("kind", "물류 > 물류관리");
+		model.addAttribute("kind", "물류");
 		return "ingredients/list";
 	}
 	
@@ -80,6 +80,8 @@ public class IngredientsController {
 		
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
+		
+		model.addAttribute("kind", "물류 > "+ingredientsVO2.getIngredientsName()+" History");
 		return "ingredients/detail";
 	}
 	
