@@ -10,6 +10,7 @@
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="/css/user/afterLogin.css">
+
 </head>
 <body>
   <img class="wave" src="/images/wave7.png">
@@ -21,6 +22,10 @@
     	<img src="/images/login2.png" class="logout-img" alt="로그아웃 이미지">
     	
     	<h2>오늘도 수고많으셨습니다 :)</h2>
+    	
+		<a href="/user/login" class="custom-login-btn">Coffice 로그인</a>
+		
+    	
  	</div>
     </div>
     
