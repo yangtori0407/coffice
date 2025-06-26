@@ -18,4 +18,8 @@ public interface MessageDAO {
 
 	MessageVO detail(MessageVO messageVO) throws Exception;
 
+	int receiveDelete(Map<String, Object> info) throws Exception;
+
+	int sendDelete(Map<String, Object> info) throws Exception;
+
 }

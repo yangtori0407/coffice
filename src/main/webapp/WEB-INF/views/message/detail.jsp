@@ -76,7 +76,7 @@
 
 						<div class="mb-2 ml-auto">
 							<button class="btn btn-danger" id="delBtn" type="button"
-								data-board-num="${detail.messageNum }">삭제하기</button>
+								data-message-num="${detail.messageNum }">삭제하기</button>
 							<c:if test="${message eq 'receive' }">
 								<a href="./update?boardNum=${detail.messageNum }"
 									class="btn btn-primary">답장하기</a>
@@ -92,7 +92,7 @@
 			<!-- End Content Wrapper -->
 		</div>
 		<!-- End Wrapper -->
-		<script src="/js/posts/boardDetail.js"></script>
+		<script src="/js/message/messageDetail.js"></script>
 		<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
 

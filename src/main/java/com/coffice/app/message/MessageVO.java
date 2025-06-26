@@ -18,6 +18,8 @@ public class MessageVO {
 	private String messageTitle;
 	private Timestamp sendDate;
 	private String sender;
+	private boolean senderDelete;
+	
 	private String senderName;
 	private String email;
 	
