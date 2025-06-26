@@ -421,7 +421,12 @@ updateVacation.addEventListener("click", ()=>{
     }
 })
 
-
+let goes = document.getElementsByName("goMypage")
+for(a of goes) {
+    a.addEventListener("click", ()=>{
+        location.href = "/user/mypage"
+    })
+}
 
 calendar.render();
 

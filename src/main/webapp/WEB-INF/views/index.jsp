@@ -22,6 +22,35 @@
 		alert("${msg}");
 	</script>
 </c:if>
+<style>
+	/* 모든 버튼 공통 색상 */
+	.fc .fc-button {
+		background-color: #3A5FCD;
+		color: white;
+		border: none; /* 🔥 테두리 제거 */
+		border-radius: 4px;
+		font-size: 16px;
+		padding: 4px 8px;
+	}
+
+	/* hover 시 */
+	.fc .fc-button:hover {
+		background-color: #2e4ea8;
+	}
+
+	/* 선택된 뷰 버튼 (month, list 등 활성화 버튼) */
+	.fc .fc-button-active {
+		background-color: #274a99 !important;
+		color: white !important;
+		border: none !important; /* 🔥 테두리도 제거 */
+		box-shadow: none !important;
+	}
+
+	.fc .fc-today-button {
+		background-color: #3A5FCD;
+		color: white;
+	}
+</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
