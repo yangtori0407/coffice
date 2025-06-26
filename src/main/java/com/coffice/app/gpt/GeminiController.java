@@ -41,16 +41,16 @@ public class GeminiController {
 		Object prompt = "";
 		String str = productNameVO.getPrompt().trim().toLowerCase();
 		
-		Pattern p = Pattern.compile("\\s*(메뉴|매뉴|menu)");
+		Pattern p = Pattern.compile(".*(메뉴|매뉴|menu).*");
 		Matcher m = p.matcher(str);
 		
-		Pattern p2 = Pattern.compile("\\s*(총매출|총메출)");
+		Pattern p2 = Pattern.compile(".*(총매출|총메출).*");
 		Matcher m2 = p2.matcher(str);
 		
-		Pattern p3 = Pattern.compile("\\s*(지점별매출|지점간매출|지점마다매출|지점들의매출)");
+		Pattern p3 = Pattern.compile(".*(지점별매출|지점간매출|지점마다매출|지점들의매출).*");
 		Matcher m3 = p3.matcher(str);
 		
-		Pattern p4 = Pattern.compile("\\s*(식자재|재료)");
+		Pattern p4 = Pattern.compile(".*(식자재|재료).*");
 		Matcher m4 = p4.matcher(str);
 		
 		if(m.find()) {
