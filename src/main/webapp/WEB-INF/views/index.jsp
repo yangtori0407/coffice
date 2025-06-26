@@ -15,6 +15,7 @@
 <script src= "https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <link rel="stylesheet" type="text/css" href="/css/user/index_employee.css">
+<link rel="stylesheet" type="text/css" href="/css/gpt.css">
 <link rel="stylesheet" type="text/css" href="/css/mainSchedule.css">
 
 <c:if test="${not empty msg}">
@@ -276,8 +277,12 @@
 
 					</div>
 					<!-- contents 내용 끝 -->
-					
-
+						<!-- gpt  -->
+					<div style="position: fixed; bottom: 80px; right: 20px; z-index: 1050;">
+						<a href="#" class="gpt-btn" data-toggle="modal" data-target="#getGpt">
+							<i class="fas fa-robot mr-2"></i>CofficeBot
+						</a>
+					</div>
 				</div>
 			</div>
 			<!-- end Content -->
@@ -285,6 +290,35 @@
 		</div>
 		<!-- End Content Wrapper -->
 		 <c:import url="/WEB-INF/views/templates/ocModal.jsp"></c:import>
+		 <!--gpt 모달-->
+		<div class="modal fade" id="getGpt" tabindex="-1" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+		    <div class="modal-content gpt-modal-content">
+		      <div class="modal-header gpt-modal-header">
+		        <h5 class="modal-title"><i class="fas fa-robot mr-2"></i>CofficeBot</h5>
+				  <ion-icon id="infoIcon" 
+				  			name="information-circle-outline"
+				  			data-container="body" 
+				  			data-toggle="popover" 
+				  			data-placement="top"
+				  			 data-html="true"
+				  			data-content="키워드: 메뉴,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;식자재,
+							  			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;총매출,
+							  			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;지점별매출"></ion-icon>
+		        <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+			  <div class="modal-body gpt-modal-body">
+			    <div id="chatBox" style="max-height:300px; overflow-y:auto; background:#252525; padding:10px; border-radius:10px;">
+			      <!-- 대화 내용 쌓임 -->
+			    </div>
+			    <textarea id="gptInput" class="form-control gpt-textarea mt-2" rows="2" placeholder="메시지를 입력해주세요.."></textarea>
+			    <button id="sendGptBtn" class="btn btn-primary btn-block mt-2">전송</button>
+			  </div>
+		    </div>
+		  </div>
+		</div>
 	</div>
 	<!-- End Wrapper -->
 	<input type="hidden" value="${apiKey}" id="apiKey">
@@ -292,8 +326,12 @@
 	<script src='/fullcalendar/dist/index.global.js'></script>
 	<script src="/js/calendar/homeCalendar.js"></script>
 	<script src="/js/user/attendance.js"></script>
+	<script src="/js/gpt/description.js"></script>
 </body>
 <script type="text/javascript">
+$(function () {
+    $('#infoIcon').popover();
+  });
 const label = [
 	<c:forEach items="${chart}" var="c" varStatus="s">
 		"${c.branchName}"

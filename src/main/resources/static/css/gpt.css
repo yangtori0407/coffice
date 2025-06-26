@@ -1,0 +1,66 @@
+.gpt-btn {
+    background: #0072ff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  /* GPT 모달 스타일 */
+  .gpt-modal-content {
+    background: #1e1e1e;
+    color: #eee;
+    border-radius: 15px;
+    border: 1px solid #333;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  }
+
+  .gpt-modal-header {
+    background: #2d2d2d;
+    border-bottom: 1px solid #444;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  .gpt-modal-body {
+    padding: 20px;
+    background: #252525;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .gpt-textarea {
+    background: #333;
+    border: none;
+    color: #eee;
+    border-radius: 8px;
+    padding: 10px;
+    resize: none;
+  }
+
+  #chatBox {
+      display: flex;
+      flex-direction: column;
+    }
+  
+  #chatBox .chat-bubble {
+     max-width: 70%;
+     padding: 8px 12px;
+     margin: 5px 0;
+     border-radius: 15px;
+     line-height: 1.4;
+   }
+   .chat-bubble.me {
+     background: #0072ff;
+     color: #fff;
+     align-self: flex-start;
+     margin-right: auto;
+   }
+   .chat-bubble.gpt {
+     background: #333;
+     color: #eee;
+     align-self: flex-end;
+     margin-left: auto;
+   }
