@@ -20,6 +20,7 @@ public class MessageVO {
 	private String sender;
 	private boolean senderDelete;
 	
+	private String senderDept;
 	private String senderName;
 	private String email;
 	

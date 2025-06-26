@@ -95,5 +95,14 @@ public class MessageController {
 		model.addAttribute("result", result);
 		return "commons/ajaxResult";
 	}
+	
+	
+	@GetMapping("reply")
+	public String reply(Long messageNum, Authentication authentication, Model model) throws Exception{
+		MessageVO messageVO = messageService.reply(messageNum, authentication.getName());
+		model.addAttribute("detail", messageVO);
+		
+		return "message/reply";
+	}
 
 }

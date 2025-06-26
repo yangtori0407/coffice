@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.coffice.app.users.UserVO;
+
 @Mapper
 public interface MessageDAO {
 
@@ -21,5 +23,7 @@ public interface MessageDAO {
 	int receiveDelete(Map<String, Object> info) throws Exception;
 
 	int sendDelete(Map<String, Object> info) throws Exception;
+
+	UserVO getUserInfo(String userId) throws Exception;
 
 }
