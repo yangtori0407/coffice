@@ -26,7 +26,7 @@
 		DEPARTMENT DP
 		ON DP.DEPT_ID = U.DEPT_ID
 		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0
-
+		ORDER BY M.SEND_DATE DESC
 	</select>
 	<resultMap type="MessageVO" id="receiveMessage">
 		<id column="MESSAGE_NUM" property="messageNum"/>
@@ -65,6 +65,7 @@
 		ON DP.DEPT_ID =
 		U.DEPT_ID
 		WHERE MC.USER_ID = #{userId} AND MC.RECEIVER_DELETE = 0
+		ORDER BY SEND_DATE DESC
 	</select>
 	
 	<resultMap type="MessageVO" id="sendMessage">
@@ -90,8 +91,10 @@
 			M.SEND_DATE,
 			M.MESSAGE_TITLE,
 			M.SENDER_DELETE,
+			M.SENDER,
 			US.NAME AS SENDER_NAME,
 			US.EMAIL,
+			DS.DEPT_NAME AS SENDER_DEPT,
 			MC.MESSAGECHECK_NUM,
 			MC.CHECK_STATUS,
 			MC.MESSAGE_STATUS,
@@ -103,6 +106,8 @@
 		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
 		JOIN USERS US
 		ON M.SENDER = US.USER_ID
+		JOIN DEPARTMENT DS
+		ON US.DEPT_ID = DS.DEPT_ID
 		LEFT OUTER JOIN USERS UR
 		ON MC.USER_ID = UR.USER_ID
 		LEFT OUTER JOIN
@@ -116,9 +121,11 @@
 		<result column="MESSAGE_CONTENTS" property="messageContents"/>
 		<result column="SEND_DATE" property="sendDate"/>
 		<result column="MESSAGE_TITLE" property="messageTitle"/>
+		<result column="SENDER" property="sender"/>
 		<result column="SENDER_NAME" property="senderName"/>
 		<result column="SENDER_DELETE" property="senderDelete"/>
 		<result column="EMAIL" property="email"/>
+		<result column="SENDER_DEPT" property="senderDept"/>
 		
 		<collection property="receiveUsers" javaType="java.util.List" ofType="MessageCheckVO">
 			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
@@ -130,6 +137,14 @@
 			<result column="DEPT_NAME" property="deptName"/>
 		</collection>
 	</resultMap>
+	
+	<select id="getUserInfo" parameterType="java.lang.String">
+		SELECT U.USER_ID, U.NAME, D.DEPT_NAME, U.EMAIL
+		FROM USERS U
+		JOIN DEPARTMENT D
+		ON U.DEPT_ID = D.DEPT_ID
+		WHERE U.USER_ID = #{userId}
+	</select>
 
 	<insert id="add" parameterType="MessageVO"
 		useGeneratedKeys="true" keyProperty="messageNum">

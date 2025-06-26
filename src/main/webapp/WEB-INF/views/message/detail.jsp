@@ -78,7 +78,7 @@
 							<button class="btn btn-danger" id="delBtn" type="button"
 								data-message-num="${detail.messageNum }">삭제하기</button>
 							<c:if test="${message eq 'receive' }">
-								<a href="./update?boardNum=${detail.messageNum }"
+								<a href="/message/reply?messageNum=${detail.messageNum }"
 									class="btn btn-primary">답장하기</a>
 
 							</c:if>
