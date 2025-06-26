@@ -170,6 +170,9 @@ public class UserService implements UserDetailsService{
 		}
 		
 		if(userVO.getPassword() != null && !userVO.getPassword().isBlank()) {
+			if (!userVO.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+	            throw new IllegalArgumentException("비밀번호는 8자리 이상이며, 영문자와 숫자를 포함해야 합니다.");
+	        }
 			userVO.setPassword(passwordEncoder.encode(userVO.getPassword()));
 		}else {
 			userVO.setPassword(originalUser.getPassword()); //변경 안했음 유지

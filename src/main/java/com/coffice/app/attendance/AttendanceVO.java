@@ -21,4 +21,5 @@ public class AttendanceVO {
 	private Long durationTime;
 	private String userId;
 
+
 }

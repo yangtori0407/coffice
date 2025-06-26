@@ -16,12 +16,6 @@
 
 <link rel="stylesheet" type="text/css" href="/css/user/index_employee.css">
 
-
-<c:if test="${not empty msg}">
-	<script>
-		alert("${msg}");
-	</script>
-</c:if>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -40,7 +34,7 @@
 						<div class="col-3">
 
 							<!-- Background Gradient Utilities -->
-							<div class="card shadow mb-4" style="height: 500px;">
+							<div class="card shadow mb-4" style="height: 530px;">
 								<div class="card-header py-3">
 									<h6 class="m-0 font-weight-bold text-primary">사원정보 부분</h6>
 								</div>
@@ -86,14 +80,6 @@
 										  
 										</div>
 									</div>
-									<!-- <div class="px-3 py-5 bg-gradient-success text-white">
-                                    	<div>휴가(총 15일)</div>
-                                    	<div>사용 - 1일</div>
-                                    	<div>잔여 - 14일</div>
-                                    </div>
-                                    <div class="px-3 py-5 bg-gradient-info text-white">.bg-gradient-info</div>
-                                    <div class="px-3 py-5 bg-gradient-warning text-white">.bg-gradient-warning</div>
-                                    <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div> -->
 								</div>
 							</div>
 							<div class="row">

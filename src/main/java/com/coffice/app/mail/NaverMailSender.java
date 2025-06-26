@@ -35,7 +35,7 @@ public class NaverMailSender {
 		Context context = new Context();
 		context.setVariable("authCode" , authCode); //내용 설정
 		
-		String html = templateEngine.process("mail/authEmail", context);
+		String html = templateEngine.process("authEmail", context);
 		helper.setText(html, true);
 		
 		mailSender.send(message);
