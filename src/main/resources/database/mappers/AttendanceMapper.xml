@@ -88,7 +88,7 @@
 	
 	<update id="updateAttendance" parameterType="AttendanceVO">
   		UPDATE ATTENDANCE 
-  		SET START_TIME = #{startTime}, END_TIME = #{endTime}, STATUS= #{status}, REASON= #{reason}
+  		SET START_TIME = #{startTime}, END_TIME = #{endTime}, STATUS= #{status}, REASON= #{reason}, DURATION_TIME = #{durationTime}
   		WHERE USER_ID = #{userId} AND ATTENDANCE_DATE = #{attendanceDate}
   	</update>
 	
