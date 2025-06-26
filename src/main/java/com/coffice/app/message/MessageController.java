@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.coffice.app.page.Pager;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -29,16 +31,16 @@ public class MessageController {
 	private MessageService messageService;
 	
 	@GetMapping("send")
-	public void send(Model model, Authentication authentication) throws Exception{
+	public void send(Model model, Authentication authentication, Pager pager) throws Exception{
 		model.addAttribute("kind", "이메일 > 보낸 이메일");
-		List<MessageVO> list = messageService.getSendMessage(authentication.getName());
+		List<MessageVO> list = messageService.getSendMessage(authentication.getName(), pager);
 		model.addAttribute("message", "send");
 		model.addAttribute("list", list);
 	}
 	@GetMapping("receive")
-	public void receive(Model model, Authentication authentication) throws Exception{
+	public void receive(Model model, Authentication authentication, Pager pager) throws Exception{
 		model.addAttribute("kind", "이메일 > 받은 이메일");
-		List<MessageVO> list = messageService.getReceiveMessage(authentication.getName());
+		List<MessageVO> list = messageService.getReceiveMessage(authentication.getName(), pager);
 		model.addAttribute("message", "receive");
 		model.addAttribute("list", list);
 	}
