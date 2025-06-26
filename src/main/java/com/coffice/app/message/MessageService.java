@@ -95,4 +95,21 @@ public class MessageService {
 	public MessageVO detail(MessageVO messageVO) throws Exception{
 		return messageDAO.detail(messageVO);
 	}
+
+	public int receiveDelete(Long messageNum, String userId) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("messageNum", messageNum);
+		info.put("userId", userId);
+		
+		return messageDAO.receiveDelete(info);
+		
+	}
+
+	public int sendDelete(Long messageNum, String userId) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("messageNum", messageNum);
+		info.put("userId", userId);
+		
+		return messageDAO.sendDelete(info);
+	}
 }

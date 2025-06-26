@@ -78,4 +78,22 @@ public class MessageController {
 		model.addAttribute("kind", "이메일 > 받은 이메일");
 		return "message/detail";
 	}
+	
+	@PostMapping("receive/delete")
+	public String receiveDelete(Long messageNum, Authentication authentication, Model model) throws Exception{
+		//log.info("messageNum : {}", messageNum);
+		int result = messageService.receiveDelete(messageNum, authentication.getName());
+		model.addAttribute("result", result);
+		
+		return "commons/ajaxResult";
+	}
+	
+	@PostMapping("send/delete")
+	public String senderDelete(Long messageNum, Authentication authentication, Model model) throws Exception{
+		log.info("messageNum : {}", messageNum);
+		int result = messageService.sendDelete(messageNum, authentication.getName());
+		model.addAttribute("result", result);
+		return "commons/ajaxResult";
+	}
+
 }
