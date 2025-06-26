@@ -13,9 +13,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AttendanceService {
+
+   
 	
 	@Autowired
 	private AttendanceDAO attendanceDAO;
+
+   
 	
 	public boolean checkIn(String userId) throws Exception{
 		try {
@@ -103,6 +107,14 @@ public class AttendanceService {
 	        attendance.setStatus("결근");
 	        attendanceDAO.updateStatus(attendance);
 	    }
+	}
+	
+	public List<AttendanceVO> getAttendanceListByUser(String userId) throws Exception {
+	    return attendanceDAO.getAttendanceByUser(userId);
+	}
+
+	public int updateAttendance(AttendanceVO attendanceVO) throws Exception{
+		return attendanceDAO.updateAttendance(attendanceVO);
 	}
 
 
