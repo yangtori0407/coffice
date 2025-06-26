@@ -1,8 +1,12 @@
 package com.coffice.app.attendance;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +42,10 @@ public class AttendanceService {
 
 	            String status = StatusCalculator.determineStatus(attendance.getStartTime(), now);
 	            attendance.setStatus(status);
+	            
+	            long durationSeconds = Duration.between(attendance.getStartTime(), now).getSeconds();
+	            attendance.setDurationTime(durationSeconds);
+
 
 	            attendanceDAO.checkOut(attendance);
 	            return true;
@@ -55,5 +63,47 @@ public class AttendanceService {
 	public AttendanceVO todayStatus(String userId, LocalDate date) throws Exception {
 		return attendanceDAO.todayStatus(userId, date);
 	}
+	
+	private static final long WEEKLY_REQUIRED_MINUTES = 40 * 60; // 주 40시간
+
+	
+	public Map<String, Long> getWeeklyWorkStatus(String userId) throws Exception{
+		Long workedSeconds = attendanceDAO.getWeeklyWorkDuration(userId);
+		long standardSeconds = 40 * 60 * 60;
+		
+		long remaining = Math.max(standardSeconds - workedSeconds, 0);
+		long overtime = Math.max(workedSeconds - standardSeconds, 0);
+
+	    Map<String, Long> result = new HashMap<>();
+	    result.put("workedSeconds", workedSeconds);
+	    result.put("remainingSeconds", remaining);
+	    result.put("overtimeSeconds", overtime);
+		
+		return result;
+	}
+
+
+	
+	public void insertAndUpdateAbsences() throws Exception {
+	    // 1. 출근 기록 자체가 없는 사람들 → INSERT 결근
+	    List<String> absentUserIds = attendanceDAO.getAbsentUserIds();
+	    for (String userId : absentUserIds) {
+	        AttendanceVO attendance = new AttendanceVO();
+	        attendance.setUserId(userId);
+	        attendance.setStartTime(null);
+	        attendance.setEndTime(null);
+	        attendance.setStatus("결근");
+	        attendance.setAttendanceDate(LocalDate.now());
+	        attendanceDAO.insertAbsence(attendance);
+	    }
+
+	    // 2. 출근했지만 퇴근 안 한 사람들 → UPDATE status 결근
+	    List<AttendanceVO> unclosedList = attendanceDAO.getTodayUnfinishedAttendances();
+	    for (AttendanceVO attendance : unclosedList) {
+	        attendance.setStatus("결근");
+	        attendanceDAO.updateStatus(attendance);
+	    }
+	}
+
 
 }

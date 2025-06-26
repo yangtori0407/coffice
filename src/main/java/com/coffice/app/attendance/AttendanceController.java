@@ -1,9 +1,11 @@
 package com.coffice.app.attendance;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +52,28 @@ public class AttendanceController {
 		LocalDate today = LocalDate.now();
 		
 		return attendanceService.todayStatus(userId, today);
+	}
+	
+	@GetMapping("/weeklyStatus")
+	public String showWorkStatus(Model model, HttpSession session) throws Exception{
+		String userId = ((UserVO) session.getAttribute("user")).getUserId();
+		Map<String, Long> status = attendanceService.getWeeklyWorkStatus(userId);
+	    model.addAttribute("timeMap", status);
+	    
+		return "/user/mypage";
+	}
+	
+	@PostMapping("/attendance/autoAbsence")
+	public String processAutoAbsences() throws Exception {
+	
+		attendanceService.insertAndUpdateAbsences();
+		
+		return "redirect:/attendance/list";
+	}
+	
+	@GetMapping("/statusUpdate")
+	public void statusUpdate() throws Exception {
+		
 	}
 
 

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <ul
 	class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
@@ -123,6 +124,15 @@
 	<!-- Nav Item - Tables -->
 	<li class="nav-item"><a class="nav-link " href="tables.html"> <ion-icon
 				name="mail-outline"></ion-icon> <span>사내 이메일</span></a></li>
+				
+	
+	<li class="nav-item"><a id="message" class="nav-link" href="/user/register">
+			<ion-icon name="person-add-outline"></ion-icon> <span>사원 등록</span>
+	</a></li>		
+		
+	<li class="nav-item"><a id="message" class="nav-link" href="/employee/list">
+			<ion-icon name="people-outline"></ion-icon> <span>사원 정보</span>
+	</a></li>
 
 	<!-- Divider -->
 	<hr class="sidebar-divider d-none d-md-block">
