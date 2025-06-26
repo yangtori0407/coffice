@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,32 +11,7 @@
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<style>
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-  }
 
-  th, td {
-    border: 1px solid #ccc;
-    text-align: center;
-    padding: 8px;
-    word-wrap: break-word;
-  }
-
-  thead th {
-    background-color: #f2f2f2;
-  }
-
-  th:nth-child(1), td:nth-child(1) { width: 10%; }  /* 문서번호 */
-  th:nth-child(2), td:nth-child(2) { width: 12%; }  /* 양식종류 */
-  th:nth-child(3), td:nth-child(3) { width: 25%; }  /* 제목 */
-  th:nth-child(4), td:nth-child(4) { width: 13%; }  /* 작성자 */
-  th:nth-child(5), td:nth-child(5) { width: 15%; }  /* 작성시간 */
-  th:nth-child(6), td:nth-child(6) { width: 12%; }  /* 진행단계 */
-  th:nth-child(7), td:nth-child(7) { width: 13%; }  /* 문서상태 */
-</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -45,44 +21,136 @@
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
 
-					<!-- contents 내용 -->
-					document List 페이지
-					<table >
-						<thead>						
-							<tr role="row">
-								<th>문서번호</th>
-								<th>양식종류</th>
-								<th>제목</th>
-								<th>작성자</th>
-								<th>작성일</th>
-								<th>진행단계</th>
-								<th>문서상태</th>								
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${docuList}" var="i">
-								<tr>
-									<td>${i.documentId }</td>
-									<td>${i.formName }</td>
-									<td><a href="../detail?documentId=${i.documentId}">${i.title}</a></td>
-									<td>${i.writerName } ${i.writerPosition }</td>
-									<td>${i.writerTime }</td>
-									
-									<c:if test="${i.status eq '반려' || i.status eq '결재완료' }">
-										<td>-</td>
-									</c:if>
-									
-									<c:if test="${i.status eq '진행중' || i.status eq '임시저장' }">
-										<!-- currentStep을 1만큼 낮춰서 출력 -->
-										<td>${i.currentStep -1} / ${i.approvalLineVOs.size() }</td>
-									</c:if>
-									
-									
-									<td>${i.status }</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+				<!-- DataTales Example -->
+				<div class="card shadow mb-4">
+					<!-- <div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary"></h6>
+					</div> -->
+					<div class="card-body">
+						<div>
+							<div id="dataTable_wrapper"
+								class="dataTables_wrapper dt-bootstrap4">
+								<div class="row">
+									<div class="col-12 mb-4">
+										<div
+											class="d-flex justify-content-between align-items-center">
+											<!-- 검색 폼 -->
+											<form method="get"
+												class="form-inline d-flex align-items-center">
+												<select class="custom-select mr-2" name="kind">
+													<option value="k1">제목</option>
+													<option value="k2">본문</option>
+													<option value="k3">제목+본문</option>
+												</select> <input type="search" name="search"
+													class="form-control form-control-sm mr-2"
+													placeholder="검색어를 입력하세요" style="max-width: 200px;">
+												<button type="submit" class="btn btn-secondary ">검색</button>
+											</form>
+
+											
+										</div>
+									</div>
+								</div>
+								<div class="row" style="height: 580px;">
+									<div class="col-sm-12">
+										<table class="table table-bordered dataTable text-center" id="dataTable"
+											width="100%" cellspacing="0" role="grid"
+											aria-describedby="dataTable_info" style="width: 100%;">
+											<thead>
+												<tr role="row">
+													<th class="sorting sorting_asc" tabindex="0"
+														aria-controls="dataTable" rowspan="1" colspan="1"
+														aria-sort="ascending"
+														aria-label="Name: activate to sort column descending"
+														style="width: 100.788px;">문서 번호</th>
+													<th class="sorting" tabindex="0" aria-controls="dataTable"
+														rowspan="1" colspan="1"
+														aria-label="Position: activate to sort column ascending"
+														style="width: 216.788px;">문서 종류</th>
+													<th class="sorting" tabindex="0" aria-controls="dataTable"
+														rowspan="1" colspan="1"
+														aria-label="Office: activate to sort column ascending"
+														style="width: 350px;">제목</th>
+													<th class="sorting" tabindex="0" aria-controls="dataTable"
+														rowspan="1" colspan="1"
+														aria-label="Age: activate to sort column ascending"
+														style="width: 116.788px;">작성자</th>
+													<th class="sorting" tabindex="0" aria-controls="dataTable"
+														rowspan="1" colspan="1"
+														aria-label="Age: activate to sort column ascending"
+														style="width: 116.788px;">작성일</th>
+													<th class="sorting" tabindex="0" aria-controls="dataTable"
+														rowspan="1" colspan="1"
+														aria-label="Age: activate to sort column ascending"
+														style="width: 116.788px;">진행 단계</th>
+													<th class="sorting" tabindex="0" aria-controls="dataTable"
+														rowspan="1" colspan="1"
+														aria-label="Age: activate to sort column ascending"
+														style="width: 116.788px;">문서 상태</th>		
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach items="${docuList}" var="i">
+													<tr>														
+														<td>${i.documentId }</td>
+														<td>${i.formName }</td>
+														<td><a href="../detail?documentId=${i.documentId}">${i.title}</a></td>
+														<td>${i.writerName } ${i.writerPosition }</td>
+														<td><fmt:formatDate value="${i.writerTime }" pattern="yyyy-mm-dd" /></td>
+														
+														<c:if test="${i.status eq '반려' || i.status eq '결재완료' }">
+															<td>-</td>
+														</c:if>
+														
+														<c:if test="${i.status eq '진행중' || i.status eq '임시저장' }">
+															<!-- currentStep을 1만큼 낮춰서 출력 -->
+															<td>${i.currentStep -1} / ${i.approvalLineVOs.size() }</td>
+														</c:if>
+														
+														
+														<td>${i.status }</td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-5"></div>
+									<div class="col-sm-12 col-md-7">
+										<div class="dataTables_paginate paging_simple_numbers"
+											id="dataTable_paginate">
+											<ul class="pagination">
+												<li class="paginate_button page-item previous"
+													id="dataTable_previous"><a
+													href="./list?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}"
+													aria-controls="dataTable" data-dt-idx="0" tabindex="0"
+													class="page-link">Previous</a></li>
+												<c:forEach begin="${pager.start }" end="${pager.end }"
+													var="i">
+													<li
+														class="paginate_button page-item ${pager.nowPage == i ? 'active' : '' }"><a
+														href="./list?nowPage=${i }&search=${pager.search}&kind=${pager.kind}"
+														aria-controls="dataTable" data-dt-idx="1" tabindex="0"
+														class="page-link">${i}</a></li>
+												</c:forEach>
+
+
+												<li class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }
+													id="dataTable_next"><a
+													href="./list?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
+													aria-controls="dataTable" data-dt-idx="7" tabindex="0"
+													class="page-link">Next</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+					
 
 
 				</div>

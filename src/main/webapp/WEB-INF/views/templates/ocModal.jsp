@@ -69,8 +69,7 @@
           <c:choose>
           	<c:when test="${(empty docuVO && isWritePage eq 1) || docuVO.status eq '임시저장'}">
 	            <button id="btn_toApprovers" type="button" class="btn btn-info" id="choose">결재선 넣기</button>
-	            <button id="btn_toReferrers" type="button" class="btn btn-primary" id="choose">참조선 넣기</button>
-	            <button type="button" class="btn btn-primary" id="choose" data-dismiss="modal">선택 완료</button>
+	            <button id="btn_toReferrers" type="button" class="btn btn-primary" id="choose">참조선 넣기</button>            
           </c:when>
           
           <c:when test="${not empty docuVO && docuVO.status ne '임시저장' }">
@@ -98,7 +97,7 @@
 
       </div>
 
-    </div>
+    
 
 
     <script>

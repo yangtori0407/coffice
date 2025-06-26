@@ -29,7 +29,9 @@ if (btn_toApprovers) {
 		// 사원들 다시 채워 넣기
         for(let employee of employee_pills) {
 			// 클래스 초기화 후 employee_approval 클래스 추가
-            employee.className = 'employee_approval';
+            employee.className = 'employee_approval mt-2 mb-2 d-flex align-items-center justify-content-center';
+			employee.style.width = '80%';
+			employee.style.color = 'white';
             box_approvers.appendChild(employee);
         }
 		
@@ -96,9 +98,10 @@ if (btn_toReferrers) {
 		// 사원들 다시 채워 넣기
         for(let employee of employee_pills) {
 			// 우측 결재 박스 채우기 > 클래스 초기화 후 employee_reference 클래스 추가
-            employee.className = 'employee_reference';
+            employee.className = 'employee_reference mt-2 mb-2 d-flex align-items-center justify-content-center';
+			employee.style.width = '80%';
+			employee.style.color = 'white';
             box_referrers.appendChild(employee);
-			
 			
 			// 상단 결재 박스 채우기
 			
@@ -108,153 +111,136 @@ if (btn_toReferrers) {
 }
 
 
-// 우측 결재자, 참조자 박스 리셋버튼
-const btn_resetApprovaers = document.getElementById("btn_resetApprovaers");
-const btn_resetReferrers = document.getElementById("btn_resetReferrers");
 
-
-btn_resetApprovaers.addEventListener("click", function(){
-	const box_approvers = document.getElementById("box_approvers");
-	box_approvers.innerHTML='';
-	
-	const wrappers = document.getElementsByClassName("approver-wrapper");
-	for(let wrapper of wrappers){
-		wrapper.style.visibility = 'hidden';
-	}
-	
-})
-
-
-btn_resetReferrers.addEventListener("click", function(){
-	const box_referrers = document.getElementById("box_referrers");
-	box_referrers.innerHTML='';
-})
 
 
 //########################
 // 문서 작성 완료 버튼
 const btn_complete = document.getElementById("btn_complete");
 
-btn_complete.addEventListener("click", function() {	
+if(btn_complete){
+    btn_complete.addEventListener("click", function() {	
 
 
-	// writerTime은 시간까지 저장해야하므로 java에서 생성해서 DB에 넣어준다
-	// documentId와 formId를 제외한 writer 정보를 받아와준다
-	
-	// 작성자 이름
-	const input_writerName = document.getElementById("input_writerName");
-	const insert_writerName = document.getElementById("insert_writerName");
-	
-	if(!insert_writerName.innerText.trim()) {
-	       alert("성함을 입력해주세요");
-	       insert_writerName.focus();
-	       return;
-	    }
-
-	    input_writerName.value = insert_writerName.innerText.trim();
-	
-	// 작성자 직급
-	const input_writerPosition = document.getElementById("input_writerPosition");
-	const insert_writerPosition = document.getElementById("insert_writerPosition");
-	
-	if(!insert_writerPosition.innerText.trim()) {
-	       alert("직급을 입력해주세요");
-	       insert_writerPosition.focus();
-	       return;
-	    }
-
-	    input_writerPosition.value = insert_writerPosition.innerText.trim();
-	
-	// 작성자 부서
-	const input_writerDept = document.getElementById("input_writerDept");
-	const insert_writerDept = document.getElementById("insert_writerDept");
-	
-	if(!insert_writerDept.innerText.trim()) {
-	       alert("부서를 입력해주세요");
-	       insert_writerDept.focus();
-	       return;
-	    }
-
-	    input_writerDept.value = insert_writerDept.innerText.trim();
-			
-	// 문서 제목
-	const input_title = document.getElementById("input_title");
-    const insert_title = document.getElementById("insert_title");
-
-    if(!insert_title.innerText.trim()) {
-       alert("제목을 입력해주세요");
-       insert_title.focus();
-       return;
-    }
-
-    input_title.value = insert_title.innerText.trim();
+    // writerTime은 시간까지 저장해야하므로 java에서 생성해서 DB에 넣어준다
+    // documentId와 formId를 제외한 writer 정보를 받아와준다
     
-	
-	// 문서 컨텐츠
-	const input_content = document.getElementById("input_content");
-	const insert_content = document.getElementById("insert_content");
+    // 작성자 이름
+    const input_writerName = document.getElementById("input_writerName");
+    const insert_writerName = document.getElementById("insert_writerName");
     
-    input_content.value = insert_content.innerHTML;
-	
+    if(!insert_writerName.innerText.trim()) {
+          alert("성함을 입력해주세요");
+          insert_writerName.focus();
+          return;
+        }
 
-    // 결재자 정보 추출 → JSON 문자열로 변환하여 hidden input에 삽입
-    const approvers = document.querySelectorAll(".employee_approval");
-    const approverList = [];
-
-    if(approvers.length === 0) {
-       alert("결재 대상을 지정해주세요");       
-       return;
-    }
-
-    approvers.forEach(approver => {
-        approverList.push({
-            userId: approver.dataset.selectedId,
-            userName: approver.dataset.selectedName,
-            userPosition: approver.dataset.selectedPosition
-        });
-    });
+        input_writerName.value = insert_writerName.innerText.trim();
     
-    const input_approvers = document.getElementById("input_approvers");
-    input_approvers.value = JSON.stringify(approverList);
+    // 작성자 직급
+    const input_writerPosition = document.getElementById("input_writerPosition");
+    const insert_writerPosition = document.getElementById("insert_writerPosition");
+    
+    if(!insert_writerPosition.innerText.trim()) {
+          alert("직급을 입력해주세요");
+          insert_writerPosition.focus();
+          return;
+        }
+
+        input_writerPosition.value = insert_writerPosition.innerText.trim();
+    
+    // 작성자 부서
+    const input_writerDept = document.getElementById("input_writerDept");
+    const insert_writerDept = document.getElementById("insert_writerDept");
+    
+    if(!insert_writerDept.innerText.trim()) {
+          alert("부서를 입력해주세요");
+          insert_writerDept.focus();
+          return;
+        }
+
+        input_writerDept.value = insert_writerDept.innerText.trim();
+        
+    // 문서 제목
+    const input_title = document.getElementById("input_title");
+      const insert_title = document.getElementById("insert_title");
+
+      if(!insert_title.innerText.trim()) {
+        alert("제목을 입력해주세요");
+        insert_title.focus();
+        return;
+      }
+
+      input_title.value = insert_title.innerText.trim();
+      
+    
+    // 문서 컨텐츠
+    const input_content = document.getElementById("input_content");
+    const insert_content = document.getElementById("insert_content");
+      
+      input_content.value = insert_content.innerHTML;
+    
+
+      // 결재자 정보 추출 → JSON 문자열로 변환하여 hidden input에 삽입
+      const approvers = document.querySelectorAll(".employee_approval");
+      const approverList = [];
+
+      if(approvers.length === 0) {
+        alert("결재 대상을 지정해주세요");       
+        return;
+      }
+
+      approvers.forEach(approver => {
+          approverList.push({
+              userId: approver.dataset.selectedId,
+              userName: approver.dataset.selectedName,
+              userPosition: approver.dataset.selectedPosition
+          });
+      });
+      
+      const input_approvers = document.getElementById("input_approvers");
+      input_approvers.value = JSON.stringify(approverList);
 
 
-	// 참조자 정보 추출 → JSON 문자열로 변환하여 hidden input에 삽입
-    const referrers = document.querySelectorAll(".employee_reference");
-    const referrerList = [];
+    // 참조자 정보 추출 → JSON 문자열로 변환하여 hidden input에 삽입
+      const referrers = document.querySelectorAll(".employee_reference");
+      const referrerList = [];
 
-    referrers.forEach(referrer => {
-        referrerList.push({
-            userId: referrer.dataset.selectedId,
-            userName: referrer.dataset.selectedName,
-            userPosition: referrer.dataset.selectedPosition
-        });
-    });
-	
-	const input_referrers = document.getElementById("input_referrers");
-	input_referrers.value = JSON.stringify(referrerList);
-	
-	console.log(input_referrers.value);
-		
-    // 문서 status 데이터 삽입
-    const input_docuStatus = document.getElementById("input_docuStatus");
-    input_docuStatus.value = "진행중";
-	
-	console.log(insert_content.dataset.voCheck);
-	
-	// 문서가 최초 작성완료이냐 임시저장 문서를 작성완료이냐에 따라 컨트롤러 경로를 바꿔준다
-	  if(insert_content.dataset.voCheck === "임시저장"){
-		  let formPath = "/document/updatetemp";
-		  console.log(formPath);
-		  submitForm(formPath);
-	
-	  } else if (insert_content.dataset.voCheck == ""){
-	    let formPath = "/document/write";
-		submitForm(formPath);
-	
-	  }
-	  
-	  
-})
+      referrers.forEach(referrer => {
+          referrerList.push({
+              userId: referrer.dataset.selectedId,
+              userName: referrer.dataset.selectedName,
+              userPosition: referrer.dataset.selectedPosition
+          });
+      });
+    
+    const input_referrers = document.getElementById("input_referrers");
+    input_referrers.value = JSON.stringify(referrerList);
+    
+    console.log(input_referrers.value);
+      
+      // 문서 status 데이터 삽입
+      const input_docuStatus = document.getElementById("input_docuStatus");
+      input_docuStatus.value = "진행중";
+    
+    console.log(insert_content.dataset.voCheck);
+    
+    // 문서가 최초 작성완료이냐 임시저장 문서를 작성완료이냐에 따라 컨트롤러 경로를 바꿔준다
+      if(insert_content.dataset.voCheck === "임시저장"){
+        let formPath = "/document/updatetemp";
+        console.log(formPath);
+        submitForm(formPath);
+    
+      } else if (insert_content.dataset.voCheck == ""){
+        let formPath = "/document/write";
+      submitForm(formPath);
+    
+      }
+      
+      
+  })
+}
+
 
 
 
@@ -286,16 +272,7 @@ if(insert_content.dataset.voCheck == "" || insert_content.dataset.voCheck =="임
 			
 	}
 	
-    // 문서 작성 취소 (나가기) 버튼
-    const btn_cancle = document.getElementById("btn_cancle");
-	btn_cancle.addEventListener("click", function () {
-			  
-        const confirmed = confirm("작성 중인 내용은 저장되지 않습니다. 작성 화면에서 나가시겠습니까?");
-        if (confirmed) {
-          location.href = "/"; // 홈 경로로 이동
-        }
-        
-	});
+    
 	
 } else {
     // docuVO가 있는 경우 : 상세조회 (결재중, 반려, 승인완료 상태 등의 문서)
@@ -308,15 +285,11 @@ if(insert_content.dataset.voCheck == "" || insert_content.dataset.voCheck =="임
         td.contentEditable = "false"; // 편집 불가
 	}
 	
-    // 문서 작성 취소 (나가기) 버튼
-    const btn_cancle = document.getElementById("btn_cancle");
-	btn_cancle.addEventListener("click", function () {
-        
-        window.history.back();
-
-	});
+    
 			
 }
+
+
 
 
 
@@ -324,39 +297,54 @@ if(insert_content.dataset.voCheck == "" || insert_content.dataset.voCheck =="임
 const add_row = document.getElementById("add-row");
 const remove_row = document.getElementById("remove-row");
 
+// 문서가 기안 올라간 상태면 행 추가, 행 삭제 버튼 없앤다.
+if(insert_content.dataset.voCheck == "진행중" || insert_content.dataset.voCheck =="결재완료" || insert_content.dataset.voCheck =="반려") {
+	add_row.remove();
+	remove_row.remove();
+}
+
 const tbody1 = document.getElementById("tbody1");
 const trs = document.getElementsByClassName("trs");
 
 
-    let tr1 = trs[0].cloneNode(true); // true로 해야 하위 요소 (td들)까지 복사된다.
+let tr1 = trs[0].cloneNode(true); // true로 해야 하위 요소 (td들)까지 복사된다.
 
 
 // 행 추가
-add_row.addEventListener("click", function () {
-  const newRow = tr1.cloneNode(true);
-  
-  	// td 내용 초기화
-	const tds = newRow.querySelectorAll("td");
-	for (let i = 0; i < tds.length; i++) {
-	  tds[i].textContent = "";
-	}
-  
-  tbody1.appendChild(newRow);
-});
+if(add_row){
+	add_row.addEventListener("click", function () {
+	  const newRow = tr1.cloneNode(true);
+	  
+	  	// td 내용 초기화
+		const tds = newRow.querySelectorAll("td");
+		for (let i = 0; i < tds.length; i++) {
+		  tds[i].textContent = "";
+		}
+	  
+	  tbody1.appendChild(newRow);
+	});
+	
+}
 
 // 행 삭제
-remove_row.addEventListener("click", function () {
-  const rows = tbody1.getElementsByClassName("trs");
-  if (rows.length > 1) {
-    tbody1.removeChild(rows[rows.length - 1]);
-  } else {
-    alert("최소 한 개의 행은 남아있어야 합니다.");
-  }
-});
+if(remove_row){
+	remove_row.addEventListener("click", function () {
+	  const rows = tbody1.getElementsByClassName("trs");
+	  if (rows.length > 1) {
+	    tbody1.removeChild(rows[rows.length - 1]);
+	  } else {
+	    alert("최소 한 개의 행은 남아있어야 합니다.");
+	  }
+	});
+	
+}
+
+ 
 
 
 
-// 첨부 파일 관련 기능 ////////////////////////////////////////////
+//
+// 첨부 파일 관련 기능 //
 var uploadBtn = document.getElementById("uploadBtn");
 var fakeInput = document.getElementById("fake_input_files");
 var fileListDiv = document.getElementById("fileList");
@@ -364,9 +352,11 @@ var form = document.getElementById("form_document");
 var selectedFiles = [];
 
 // 파일 선택 버튼 클릭 → input 클릭
-uploadBtn.addEventListener("click", function () {
-  fakeInput.click();
-});
+if(uploadBtn){
+	uploadBtn.addEventListener("click", function () {
+	  fakeInput.click();
+	});	
+}
 
 // 파일 선택 시 → 누적 리스트에 추가
 fakeInput.addEventListener("change", function (event) {
@@ -410,6 +400,9 @@ function addFileToView(file) {
   var deleteBtn = document.createElement("button");
   deleteBtn.textContent = "X";
   deleteBtn.type = "button";
+  deleteBtn.style.color = "gray";
+  deleteBtn.style.border = "none";
+  
   deleteBtn.onclick = function () {
     wrapper.remove();
     var newList = [];
@@ -428,7 +421,7 @@ function addFileToView(file) {
 }
 
 
-////////////////////////////////////////
+//
 // 전체 input + 파일 포함해서 FormData로 전송하는 함수
 let submitForm = function submitForm(formPath) {  
 
@@ -487,31 +480,4 @@ let submitForm = function submitForm(formPath) {
   
 }
 
-////////////////////////////////////////
-// 첨부 파일 다운로드
 
-const exist_files = document.getElementsByClassName("exist-files");
-
-for (let link of exist_files) {
-  link.addEventListener("click", function() {
-    let fileNum = link.dataset.fileNum;
-
-	// form 요소 생성
-    const form = document.createElement("form");
-    form.method = "post";
-    form.action = "/document/filedown";
-
-    // hidden input 추가
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = "fileNum";
-    input.value = fileNum;
-    form.appendChild(input);
-	
-	// body에 form 추가 후 submit
-    document.body.appendChild(form);
-    form.submit();
-    
-
-  })
-}
