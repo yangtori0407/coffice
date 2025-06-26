@@ -1,0 +1,12 @@
+package com.coffice.app.events.vacation;
+
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface AnnualLeaveDAO {
+	
+	public Map<String, Double> getAnnualLeaves(AnnualLeaveVO annualLeaveVO) throws Exception;
+
+}

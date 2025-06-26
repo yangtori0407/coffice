@@ -1,15 +1,23 @@
 package com.coffice.app.events.vacation;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.coffice.app.events.EventUtility;
 import com.coffice.app.users.UserDAO;
 import com.coffice.app.users.UserVO;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class VacationService {
 	
@@ -18,6 +26,9 @@ public class VacationService {
 	
 	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
+	private EventUtility eventUtility;
 	
 	public List<UserVO> getDepsUsers(UserVO userVO) throws Exception {
 		return vacationDAO.getDepsUsers(userVO);
@@ -49,7 +60,17 @@ public class VacationService {
 		return map;
 	}
 	
-	public int approve(VacationVO vacationVO) throws Exception {
+	public int approve(VacationVO vacationVO, Authentication authentication) throws Exception {
+		vacationVO = vacationDAO.getOne(vacationVO);
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setApprovalAuthority(userVO.getUserId());
+		
+		LocalDateTime start = vacationVO.getStartTime();
+		LocalDateTime end = vacationVO.getEndTime();
+		List<LocalDate> holidays = eventUtility.getHolidays();
+
+		Double daysUsed = eventUtility.calculateAnnualLeaveDays(start, end, holidays);
+		vacationVO.setDaysUsed(daysUsed);
 		return vacationDAO.approve(vacationVO);
 	}
 	

@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.coffice.app.attendance.AttendanceService;
+import com.coffice.app.events.vacation.AnnualLeaveService;
 import com.coffice.app.mail.MailService;
 
 import jakarta.servlet.http.HttpSession;
@@ -51,6 +52,9 @@ public class UserController {
 	
 	@Autowired
 	private AttendanceService attendanceService;
+	
+	@Autowired
+	private AnnualLeaveService annualLeaveService;
 
     UserController(WebSecurityCustomizer customizer) {
         this.customizer = customizer;
@@ -197,7 +201,9 @@ public class UserController {
 		String userId = user.getUserId();
 		
 		Map<String, Long> timeMap = attendanceService.getWeeklyWorkStatus(userId);
+		Map<String, Double> annualLeaves = annualLeaveService.getAnnualLeaves(userId);
 		
+		model.addAttribute("annualLeaves", annualLeaves);
 		model.addAttribute("timeMap", timeMap);
 		model.addAttribute("kind", "마이페이지");
 		

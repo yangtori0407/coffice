@@ -15,5 +15,6 @@ public class VacationVO extends EventVO {
 	private String aname;
 	private String bposition;
 	private String bname;
+	private Double daysUsed;
 
 }
