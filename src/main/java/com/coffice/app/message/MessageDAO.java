@@ -14,9 +14,9 @@ public interface MessageDAO {
 
 	int addEmailUser(Map<String, Object> info) throws Exception;
 
-	List<MessageVO> getSendMessage(String userId) throws Exception;
+	List<MessageVO> getSendMessage(Map<String, Object> info) throws Exception;
 
-	List<MessageVO> getReceiveMessage(String userId) throws Exception;
+	List<MessageVO> getReceiveMessage(Map<String, Object> info) throws Exception;
 
 	MessageVO detail(MessageVO messageVO) throws Exception;
 
@@ -26,8 +26,8 @@ public interface MessageDAO {
 
 	UserVO getUserInfo(String userId) throws Exception;
 
-	long getSendTotal(String userId) throws Exception;
+	long getSendTotal(Map<String, Object> info) throws Exception;
 
-	long getReceiveTotal(String userId) throws Exception;
+	long getReceiveTotal(Map<String, Object> info) throws Exception;
 
 }

@@ -4,7 +4,20 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.coffice.app.message.MessageDAO">
-	<select id="getSendMessage" parameterType="java.lang.String"
+	<sql id="search">
+		<choose>
+  				<when test="kind == 'k1'">
+  					AND M.MESSAGE_TITLE LIKE CONCAT('%', #{pager.search}, '%') 
+  				</when>
+  				<when test="kind == 'k2'">
+  					AND M.MESSAGE_CONTENTS LIKE CONCAT('%', #{pager.search}, '%')
+  				</when>
+  				<otherwise>
+  					AND (M.MESSAGE_TITLE LIKE CONCAT('%', #{pager.search}, '%') OR M.MESSAGE_CONTENTS LIKE CONCAT('%', #{pager.search}, '%')) 
+  				</otherwise>
+  		</choose>
+	</sql>
+	<select id="getSendMessage" parameterType="java.util.HashMap"
 		resultMap="receiveMessage">
 		SELECT
 			M.MESSAGE_NUM,
@@ -25,11 +38,12 @@
 		LEFT OUTER JOIN
 		DEPARTMENT DP
 		ON DP.DEPT_ID = U.DEPT_ID
-		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0
+		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0 
+		<include refid="search"></include>
 		ORDER BY M.SEND_DATE DESC
 	</select>
 	
-	<select id="getSendTotal" parameterType="java.lang.String">
+	<select id="getSendTotal" parameterType="java.util.HashMap">
 		SELECT
 			COUNT(*)
 		FROM MESSAGE M
@@ -41,6 +55,7 @@
 		DEPARTMENT DP
 		ON DP.DEPT_ID = U.DEPT_ID
 		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0
+		<include refid="search"></include>
 		ORDER BY M.SEND_DATE DESC
 	</select>
 	<resultMap type="MessageVO" id="receiveMessage">
@@ -60,7 +75,7 @@
 	</resultMap>
 
 
-	<select id="getReceiveMessage" parameterType="java.lang.String"
+	<select id="getReceiveMessage" parameterType="java.util.HashMap"
 		resultMap="sendMessage">
 		SELECT
 			M.MESSAGE_NUM,M.SENDER,
@@ -80,9 +95,10 @@
 		ON DP.DEPT_ID =
 		U.DEPT_ID
 		WHERE MC.USER_ID = #{userId} AND MC.RECEIVER_DELETE = 0
+		<include refid="search"></include>
 		ORDER BY SEND_DATE DESC
 	</select>
-	<select id="getReceiveTotal" parameterType="java.lang.String">
+	<select id="getReceiveTotal" parameterType="java.util.HashMap">
 		SELECT
 			COUNT(*)
 		FROM MESSAGE M
@@ -94,6 +110,7 @@
 		ON DP.DEPT_ID =
 		U.DEPT_ID
 		WHERE MC.USER_ID = #{userId} AND MC.RECEIVER_DELETE = 0
+		<include refid="search"></include>
 		ORDER BY SEND_DATE DESC
 	</select>
 	

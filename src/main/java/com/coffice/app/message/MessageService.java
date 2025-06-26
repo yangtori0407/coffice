@@ -85,17 +85,23 @@ public class MessageService {
 	}
 
 	public List<MessageVO> getSendMessage(String userId, Pager pager) throws Exception {
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		info.put("pager", pager);
 		pager.make();
-		Long total = messageDAO.getSendTotal(userId);
+		Long total = messageDAO.getSendTotal(info);
 		pager.makeNum(total);
-		return messageDAO.getSendMessage(userId);
+		return messageDAO.getSendMessage(info);
 	}
 
 	public List<MessageVO> getReceiveMessage(String userId, Pager pager) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		info.put("pager", pager);
 		pager.make();
-		Long total = messageDAO.getReceiveTotal(userId);
+		Long total = messageDAO.getReceiveTotal(info);
 		pager.makeNum(total);
-		return messageDAO.getReceiveMessage(userId);
+		return messageDAO.getReceiveMessage(info);
 	}
 
 	public MessageVO detail(MessageVO messageVO) throws Exception{
