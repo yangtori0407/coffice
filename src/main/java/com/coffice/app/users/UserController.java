@@ -197,7 +197,7 @@ public class UserController {
 	}
 	
 	@GetMapping("mypage")
-	public void mypage(@AuthenticationPrincipal UserVO userVO, Model model) throws Exception{
+	public String mypage(@AuthenticationPrincipal UserVO userVO, Model model) throws Exception{
 		model.addAttribute("quote", geminiService.getQuote(userVO.getName()));
 
 		String userId = userVO.getUserId();
