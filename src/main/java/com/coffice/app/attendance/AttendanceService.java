@@ -114,6 +114,12 @@ public class AttendanceService {
 	}
 
 	public int updateAttendance(AttendanceVO attendanceVO) throws Exception{
+		
+		if (attendanceVO.getStartTime() != null && attendanceVO.getEndTime() != null) {
+		    Duration duration = Duration.between(attendanceVO.getStartTime(), attendanceVO.getEndTime());
+		    attendanceVO.setDurationTime(duration.getSeconds()); // 초 단위 저장
+		}
+
 		return attendanceDAO.updateAttendance(attendanceVO);
 	}
 
