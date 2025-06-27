@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:import url="/WEB-INF/views/document/modal/selectFormModal.jsp"></c:import>
+
 <ul
 	class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
 	id="accordionSidebar">
@@ -43,7 +45,7 @@
 		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
 			data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item" href="/document/selectform">기안 작성</a> <a
+				<a id="btn-formmenu" class="collapse-item" data-toggle="modal" data-target="#formMenu" href="#" >기안 작성</a> <a
 					class="collapse-item" href="/document/list/online">기안 문서함</a> <a
 					class="collapse-item" href="/document/list/onwaiting">결재 대기 문서함</a>
 				<a class="collapse-item" href="/document/list/onreference">참조
@@ -160,4 +162,5 @@
 
 </ul>
 
+<script src="/js/document/formSelector.js"></script>
 

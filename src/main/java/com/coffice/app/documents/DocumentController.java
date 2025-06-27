@@ -95,15 +95,16 @@ public class DocumentController {
 	}
 
 	
-	// 양식 선택 화면 요청 (GET)
-	@GetMapping("selectform")
-	public String selectform(Model model) throws Exception {
+	// 양식 선택 화면 요청 (POST)
+	@PostMapping("selectform")
+	@ResponseBody
+	public List<FormVO> selectform(Model model) throws Exception {
 		
-		List<FormVO> formList = documentService.getFormsIdName();
-		model.addAttribute("formList", formList);
+		List<FormVO> formList = documentService.getFormsIdName();		
 		
-		return "document/form/selectForm";
+		return formList;
 	}
+	
 	
 	// 선택한 양식 출력 요청 (GET)
 	@GetMapping("write")

@@ -393,9 +393,11 @@ function addFileToView(file) {
 
   var nameDiv = document.createElement("div");
   nameDiv.textContent = file.name;
+  nameDiv.style.fontSize = "large";
 
   var sizeDiv = document.createElement("div");
   sizeDiv.textContent = "크기: " + (file.size / 1024).toFixed(1) + " KB";
+  sizeDiv.style.fontSize = "large";
   
   var deleteBtn = document.createElement("button");
   deleteBtn.textContent = "X";

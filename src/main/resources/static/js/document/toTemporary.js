@@ -232,24 +232,31 @@ if(btn_deletetemp){
 	btn_deletetemp.addEventListener("click", function(){
 		
 		// 경고창 띄우기 만들어야함
+		if(confirm("작성 중인 문서의 내용이 사라집니다. 진행하시겠습니까?")){
+			const documentId = btn_deletetemp.dataset.documentId;
 		
-		const documentId = btn_deletetemp.dataset.documentId;
+			// form 요소 생성
+			const form = document.createElement("form");
+			form.method = "post";
+			form.action = "/document/deletetemp";
 		
-		// form 요소 생성
-	    const form = document.createElement("form");
-	    form.method = "post";
-	    form.action = "/document/deletetemp";
-	
-	    // hidden input 추가
-	    const input = document.createElement("input");
-	    input.type = "hidden";
-	    input.name = "documentId";
-	    input.value = documentId;
-	    form.appendChild(input);
+			// hidden input 추가
+			const input = document.createElement("input");
+			input.type = "hidden";
+			input.name = "documentId";
+			input.value = documentId;
+			form.appendChild(input);
+			
+			// body에 form 추가 후 submit
+			document.body.appendChild(form);
+			form.submit();
+
+			alert("임시 문서가 삭제되었습니다")
+
+		} else {
+
+		}
 		
-		// body에 form 추가 후 submit
-	    document.body.appendChild(form);
-	    form.submit();
 		
 	})
 	
