@@ -9,5 +9,7 @@ public interface AnnualLeaveDAO {
 	
 	public Map<String, Double> getAnnualLeaves(AnnualLeaveVO annualLeaveVO) throws Exception;
 	public int use(AnnualLeaveVO annualLeaveVO) throws Exception;
+	public int insertMopnthlyLeave(Map<String, Object> map) throws Exception;
+	public int insertYearlyLeave(Map<String, Object> map) throws Exception;
 
 }

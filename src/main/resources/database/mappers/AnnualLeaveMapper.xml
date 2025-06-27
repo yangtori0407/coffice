@@ -44,9 +44,16 @@
 			    SELECT DATE_FORMAT(DATE_ADD(#{baseDate}, INTERVAL seq DAY), '%Y-%m-%d') AS work_date
 			    FROM (
 			        SELECT @row := @row + 1 AS seq
-			        FROM (SELECT 0 UNION ALL SELECT 1 ... UNION ALL SELECT 31) t1, (SELECT @row := -1) r
+			        FROM (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+		                 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8
+		                 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12
+		                 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16
+		                 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20
+		                 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23 UNION ALL SELECT 24
+		                 UNION ALL SELECT 25 UNION ALL SELECT 26 UNION ALL SELECT 27 UNION ALL SELECT 28
+		                 UNION ALL SELECT 29 UNION ALL SELECT 30 UNION ALL SELECT 31) t1, (SELECT @row := -1) r
 			    ) days
-			    WHERE MONTH(DATE_ADD(#{baseDate}, INTERVAL seq DAY)) = 6
+			    WHERE MONTH(DATE_ADD(#{baseDate}, INTERVAL seq DAY)) = MONTH(#{baseDate})
 			),
 			weekdays AS (
 			    SELECT work_date
@@ -57,7 +64,8 @@
 			emp_target AS (
 			    SELECT USER_ID
 			    FROM USERS
-			    WHERE DATEDIFF(LAST_DAY(#{baseDate}, JOIN_DATE) &lt; 365 -- 1년 미만자
+			    WHERE DATEDIFF(LAST_DAY(#{baseDate}, HIRE_DATE) &lt; 365 -- 1년 미만자
+			    AND STATUS = 1
 			),
 			emp_attendance AS (
 			    SELECT DISTINCT USER_ID, DATE(ATTENDANCE_DATE) AS present_date
@@ -95,6 +103,35 @@
 			    USER_ID,
 			    '월개근' AS TYPE
 			FROM emp_qualified;
+	</insert>
+	
+	<insert id="insertYearlyLeave" parameterType="map">
+			INSERT INTO ANNUAL_LEAVE (
+			    LEAVE_YEAR,
+			    GRANT_LEAVE,
+			    GRANT_DATE,
+			    EXPIRATION_DATE,
+			    USER_ID,
+			    TYPE
+			)
+			SELECT
+			    #{year} AS LEAVE_YEAR,
+			    15 AS GRANT_LEAVE,
+			    STR_TO_DATE(CONCAT(#{year}, '-01-01'), '%Y-%m-%d') AS GRANT_DATE,
+			    STR_TO_DATE(CONCAT(#{year}, '-12-31'), '%Y-%m-%d') AS EXPIRATION_DATE,
+			    u.USER_ID,
+			    '정기연차' AS TYPE
+			FROM
+			    USERS u
+			WHERE
+			    DATEDIFF(STR_TO_DATE(CONCAT(#{year}, '-01-01'), '%Y-%m-%d'), u.HIRE_DATE) >= 365
+			    AND NOT EXISTS (
+			        SELECT 1
+			        FROM ANNUAL_LEAVE al
+			        WHERE al.USER_ID = u.USER_ID
+			        AND al.LEAVE_YEAR = #{year}
+			        AND al.TYPE = '정기연차'
+			    );
 	</insert>
   	
   </mapper>

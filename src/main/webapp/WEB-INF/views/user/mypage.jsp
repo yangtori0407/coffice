@@ -119,7 +119,7 @@
 								<div>
 									<a href="#" style="text-decoration: none; color: inherit;">
 									<ion-icon name="calendar-outline" style="font-size: 24px;"></ion-icon><br/>
-									<span style="font-size: 13px;">휴가 신청</span>
+									<span style="font-size: 13px;">신청/승인 내역</span>
 									</a>
 								</div>
 
