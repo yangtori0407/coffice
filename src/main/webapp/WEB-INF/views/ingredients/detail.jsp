@@ -42,7 +42,6 @@
 								
 								<div class="ml-3" style="padding: 10px 20px; background-color: #f8f9fa;
              						border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-weight: 500;">
-									이름: ${vo.ingredientsName} /
 									재고: ${vo.ingredientsStock} /
 									가격: ₩${vo.ingredientsPrice}
 								</div>
