@@ -110,21 +110,21 @@
 							</div>
 							<div class="card-footer d-flex justify-content-around text-center" style="padding: 12px 0;">
 								<div>
-									<a href="/vacation/list" style="text-decoration: none; color: inherit;">
+									<a href="/events/vacation" style="text-decoration: none; color: inherit;">
 									<ion-icon name="list-outline" style="font-size: 24px;"></ion-icon><br/>
 									<span style="font-size: 13px;">전체 조회</span>
 									</a>
 								</div>
 
 								<div>
-									<a href="/vacation/apply" style="text-decoration: none; color: inherit;">
+									<a href="#" style="text-decoration: none; color: inherit;">
 									<ion-icon name="calendar-outline" style="font-size: 24px;"></ion-icon><br/>
 									<span style="font-size: 13px;">휴가 신청</span>
 									</a>
 								</div>
 
 								<div>
-									<a href="/leave/usage" style="text-decoration: none; color: inherit;">
+									<a href="#" style="text-decoration: none; color: inherit;">
 									<ion-icon name="document-text-outline" style="font-size: 24px;"></ion-icon><br/>
 									<span style="font-size: 13px;">사용 내역</span>
 									</a>

@@ -8,5 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface AnnualLeaveDAO {
 	
 	public Map<String, Double> getAnnualLeaves(AnnualLeaveVO annualLeaveVO) throws Exception;
+	public int use(AnnualLeaveVO annualLeaveVO) throws Exception;
 
 }

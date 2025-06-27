@@ -19,5 +19,9 @@ public class AnnualLeaveService {
 		
 		return annualLeaveDAO.getAnnualLeaves(annualLeaveVO);
 	}
+	
+	public int use(AnnualLeaveVO annualLeaveVO) throws Exception {
+		return annualLeaveDAO.use(annualLeaveVO);
+	}
 
 }

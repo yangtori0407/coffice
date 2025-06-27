@@ -17,5 +17,84 @@
 				AND
 				LEAVE_YEAR = #{leaveYear}
 	</select>
+	
+	<insert id="use" parameterType="AnnualLeaveVO">
+			INSERT INTO
+				ANNUAL_LEAVE (
+					LEAVE_YEAR,
+					USED_LEAVE,
+					USED_DATE,
+					USER_ID,
+					`TYPE`,
+					VACATION_ID
+				)
+			VALUES 			(
+					#{leaveYear},
+					#{usedLeave},
+					#{usedDate},
+					#{userId},
+					'사용',
+					#{vacationId}
+				)
+	</insert>
+	
+	<insert id="insertMonthlyLeave" parameterType="java.util.Map">
+			-- 1단계: 월개근자 추출
+			WITH month_days AS (
+			    SELECT DATE_FORMAT(DATE_ADD(#{baseDate}, INTERVAL seq DAY), '%Y-%m-%d') AS work_date
+			    FROM (
+			        SELECT @row := @row + 1 AS seq
+			        FROM (SELECT 0 UNION ALL SELECT 1 ... UNION ALL SELECT 31) t1, (SELECT @row := -1) r
+			    ) days
+			    WHERE MONTH(DATE_ADD(#{baseDate}, INTERVAL seq DAY)) = 6
+			),
+			weekdays AS (
+			    SELECT work_date
+			    FROM month_days
+			    WHERE DAYOFWEEK(work_date) NOT IN (1, 7) -- 주말 제외
+			    AND work_date NOT IN (SELECT LOCDATE FROM HOLIDAY) -- 공휴일 제외
+			),
+			emp_target AS (
+			    SELECT USER_ID
+			    FROM USERS
+			    WHERE DATEDIFF(LAST_DAY(#{baseDate}, JOIN_DATE) &lt; 365 -- 1년 미만자
+			),
+			emp_attendance AS (
+			    SELECT DISTINCT USER_ID, DATE(ATTENDANCE_DATE) AS present_date
+			    FROM ATTENDANCE
+			    WHERE STATUS = '정상'
+			),
+			emp_vacation AS (
+			    SELECT USER_ID, DATE(START_TIME) AS v_start, DATE(END_TIME) AS v_end
+			    FROM VACATION
+			),
+			emp_qualified AS (
+			    SELECT e.USER_ID
+			    FROM emp_target e
+			    WHERE NOT EXISTS (
+			        SELECT 1
+			        FROM weekdays w
+			        WHERE NOT EXISTS (
+			            SELECT 1
+			            FROM emp_attendance a
+			            WHERE a.USER_ID = e.USER_ID AND a.present_date = w.work_date
+			            UNION
+			            SELECT 1
+			            FROM emp_vacation v
+			            WHERE v.USER_ID = e.USER_ID AND w.work_date BETWEEN v.v_start AND v.v_end
+			        )
+			    )
+			)
+			
+			-- 2단계: 월차 1일 부여
+			INSERT INTO ANNUAL_LEAVE (LEAVE_YEAR, GRANT_LEAVE, GRANT_DATE, USER_ID, TYPE)
+			SELECT 
+			    YEAR(DATE_ADD(#{baseDate}, INTERVAL 1 MONTH)) AS LEAVE_YEAR,
+			    1 AS GRANT_LEAVE,
+			    DATE_ADD(#{baseDate}, INTERVAL 1 MONTH) AS GRANT_DATE, -- 익월 1일
+			    USER_ID,
+			    '월개근' AS TYPE
+			FROM emp_qualified;
+	</insert>
   	
   </mapper>

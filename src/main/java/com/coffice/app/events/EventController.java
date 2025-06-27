@@ -147,7 +147,7 @@ public class EventController {
 	@PostMapping("vacation/approve")
 	public void approve(VacationVO vacationVO, Authentication authentication) throws Exception {
 		int result = vacationService.approve(vacationVO, authentication);
-		log.info("approve : {}", result);
+		log.info("approveComplete : {}", result);
 	}
 	
 	@GetMapping("vacation/getList")
