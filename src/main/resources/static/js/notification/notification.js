@@ -117,6 +117,10 @@ function createAlert(msg, num) {
         a.href = `/message/receive/detail?messageNum=${msg.relateId}`
     }else if(msg.notiKind == "VACATION"){
         a.href = "/events/vacation";
+    }else if(msg.notiKind == "APPROVAL"){
+        a.href = "/document/list/onwaiting";
+    }else if(msg.notiKind == "REFERENCE"){
+        a.href = "/document/list/onreference";
     }else {
         a.href = "#";
     }
@@ -133,10 +137,12 @@ function createAlert(msg, num) {
     } else if (msg.notiKind == "BOARD") {
         iconCircle.classList.add("icon-circle", "bg-success");
     }else if (msg.notiKind == "REPLY") {
-        iconCircle.classList.add("icon-circle", "bg-primary");
+        iconCircle.classList.add("icon-circle", "bg-success");
     }else if(msg.notiKind == "MESSAGE"){
         iconCircle.classList.add("icon-circle", "bg-secondary");
     }else if(msg.notiKind == "VACATION"){
+        iconCircle.classList.add("icon-circle", "bg-warning");
+    }else if(msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE"){
         iconCircle.classList.add("icon-circle", "bg-warning");
     }
 
@@ -152,6 +158,8 @@ function createAlert(msg, num) {
         icon.setAttribute("name", "mail-unread-outline");
     }else if(msg.notiKind == "VACATION"){
         icon.setAttribute("name", "calendar-outline");
+    }else if(msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE"){
+        icon.setAttribute("name", "document-text-outline");
     }
     iconCircle.appendChild(icon);
     iconWrapper.appendChild(iconCircle);
@@ -165,13 +173,16 @@ function createAlert(msg, num) {
 
     const kindDiv = document.createElement("div");
     kindDiv.classList.add("small", "font-weight-bold")
+    
     if (msg.notiKind == "NOTICE") {
         kindDiv.innerText = "[공지사항]"
     } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY" || msg.notiKind == "MESSAGE") {
         kindDiv.innerText = `[${msg.notiContents}]`
     }else if (msg.notiKind == "VACATION") {
         kindDiv.innerText = `[휴가 신청]`
-    }  
+    }else if (msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE") {
+        kindDiv.innerText = `[결재 요청]`
+    }    
     const contentSpan = document.createElement("span");
     contentSpan.classList.add("font-weight-bold");
     //익명게시판 댓글
@@ -311,6 +322,8 @@ function createToast(msg) {
         icon.setAttribute("name", "mail-unread-outline");
     } else if (msg.notiKind == "VACATION") {
         icon.setAttribute("name", "calendar-outline");
+    }else if (msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE") {
+        icon.setAttribute("name", "document-text-outline");
     }
     icon.classList.add("mr-2");
 
@@ -322,6 +335,8 @@ function createToast(msg) {
         roomName.textContent = `[${msg.notiContents}]`
     }else if (msg.notiKind == "VACATION") {
         roomName.textContent = `[휴가]`
+    }else if (msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE") {
+        roomName.textContent = `[결재 요청]`
     }
 
     const closeBtn = document.createElement("button");
@@ -378,6 +393,10 @@ function createToast(msg) {
             location.href = `/message/receive/detail?messageNum=${msg.relateId}`;
         }else if(msg.notiKind == "MESSAGE"){
             location.href = "/events/vacation";
+        }else if(msg.notiKind == "APPROVAL"){
+            location.href = "/document/list/onwaiting";
+        }else if(msg.notiKind == "REFERENCE"){
+            location.href = "/document/list/onreference";
         }
     });
 
