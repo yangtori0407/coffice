@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.coffice.app.files.FileDownView;
+import com.coffice.app.files.FileVO;
 import com.coffice.app.page.Pager;
+import com.coffice.app.posts.notice.NoticeFilesVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +34,9 @@ public class MessageController {
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+	private FileDownView fileDownView;
 	
 	@GetMapping("send")
 	public void send(Model model, Authentication authentication, Pager pager) throws Exception{
@@ -118,5 +124,15 @@ public class MessageController {
 	@PostMapping("read")
 	public void read(Long messageNum, Authentication authentication) throws Exception{
 		messageService.read(messageNum, authentication.getName());
+	}
+	
+	@GetMapping("fileDown")
+	public FileDownView fileDown(MessageFilesVO filesVO,Model model) throws Exception{
+		FileVO fileVO = (FileVO)messageService.fileDown(filesVO);
+		log.info("파일 다운로드 : {}", fileVO.getOriginName());
+		model.addAttribute("fileVO", fileVO);
+		model.addAttribute("kind", "message");
+		
+		return fileDownView;
 	}
 }

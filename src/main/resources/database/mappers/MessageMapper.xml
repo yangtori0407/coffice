@@ -211,7 +211,7 @@
 			<result column="DEPT_NAME" property="deptName" />
 		</collection>
 		
-		<collection property="files" javaType="java.util.List" ofType="MessageFilesVO">
+		<collection property="files" javaType="java.util.List" ofType="MessageFilesVO" notNullColumn="FILE_NUM">
 			<id column="FILE_NUM" property="fileNum"/>
 			<result column="ORIGIN_NAME" property="originName"/>
 			<result column="SAVE_NAME" property="saveName"/>
@@ -226,6 +226,12 @@
 		ON U.DEPT_ID =
 		D.DEPT_ID
 		WHERE U.USER_ID = #{userId}
+	</select>
+	
+	<select id="getFileDetail" parameterType="MessageFilesVO" resultType="MessageFilesVO">
+		SELECT FILE_NUM, MESSAGE_NUM, ORIGIN_NAME, SAVE_NAME
+		FROM MESSAGE_FILES
+		WHERE FILE_NUM = #{fileNum}
 	</select>
 
 

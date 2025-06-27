@@ -16,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.files.FileManager;
+import com.coffice.app.files.FileVO;
 import com.coffice.app.notification.NotificationService;
 import com.coffice.app.page.Pager;
+import com.coffice.app.posts.notice.NoticeFilesVO;
 import com.coffice.app.users.UserDAO;
 import com.coffice.app.users.UserVO;
 
@@ -208,5 +210,9 @@ public class MessageService {
 		
 		return messageDAO.read(info);
 		
+	}
+
+	public FileVO fileDown(MessageFilesVO filesVO) throws Exception{
+		return messageDAO.getFileDetail(filesVO);
 	}
 }
