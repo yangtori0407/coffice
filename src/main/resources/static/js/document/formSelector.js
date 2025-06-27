@@ -60,9 +60,12 @@ if(btn_formMenu){
 
 // wrapper는 나중에 동적으로 생기는 요소라 const 가져오기 적용이 안될 수 있으므로 이벤트 위임
 formList.addEventListener("click", function (e) {
-	
+
+    
+    
 	const wrapper = e.target.closest(".formWrappers");
 	if (wrapper && formList.contains(wrapper)) {
+
 		const formId = wrapper.dataset.formId;
 		if (formId) {
 			location.href = "/document/write?formId=" + formId;

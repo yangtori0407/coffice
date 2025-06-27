@@ -56,6 +56,71 @@
 		    D.*,
 		    F.NAME AS FORM_NAME		  -- 양식 이름
   	</sql>
+  	
+  	<!-- 홈 화면용 조회 리스트 -->
+  	<select id="getLastTemp" resultType="DocumentVO" parameterType="DocumentVO">
+  		SELECT
+  		 
+  		D.*,
+		F.NAME AS FORM_NAME
+		
+  		FROM DOCUMENTS D
+  		
+  		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+  		
+  		WHERE D.STATUS = '임시저장'
+		  AND D.WRITER_ID = #{writerId}
+		ORDER BY D.DOCUMENT_ID DESC
+		LIMIT 1
+  	</select>
+  	
+  	<select id="getlastHandled" resultType="DocumentVO" parameterType="DocumentVO">
+  		SELECT
+  		 
+  		D.*,
+		F.NAME AS FORM_NAME
+		
+  		FROM DOCUMENTS D
+  		
+  		JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+  		
+  		WHERE A.USER_ID = #{writerId}
+  		  AND A.STEP_ORDER &lt; D.CURRENT_STEP
+  		
+  		ORDER BY D.DOCUMENT_ID DESC
+		LIMIT 1   	
+  	</select>
+  	
+  	<select id="getTodayReference" resultType="DocumentVO" parameterType="DocumentVO">
+  		SELECT * FROM DOCUMENTS D
+		
+		JOIN REFERENCE_LINES R 
+		  ON D.DOCUMENT_ID = R.DOCUMENT_ID		
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE R.USER_ID = #{writerId}
+		  AND D.STATUS != '임시저장'
+		  AND D.WRITER_TIME >= CURDATE()
+  	</select>
+
+	<!-- 결재자가 자신이 결재 차례인 문서를 볼 수 있는 리스트 -->
+  	<select id="getTodayWaiting" resultType="DocumentVO" parameterType="DocumentVO">
+  		SELECT * FROM DOCUMENTS D
+	    
+	    JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+	    
+	    WHERE A.USER_ID = #{writerId}
+	      AND A.STEP_ORDER = D.CURRENT_STEP
+	      AND D.STATUS ='진행중'	      
+  	</select>
 
 	<!-- 작성자가 자신이 올린 문서를 볼 수 있는 리스트 -->
   	<select id="getListLine" resultType="DocumentVO" parameterType="map">

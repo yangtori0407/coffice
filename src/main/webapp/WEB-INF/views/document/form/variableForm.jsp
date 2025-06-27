@@ -512,7 +512,12 @@
 			})
 
 		}
-		   
+		
+		
+		// 사이드바 켜기
+		const collapseTwo = document.getElementById("collapseTwo");
+        collapseTwo.className = 'collapse show';
+		
 	</script>
 	<script src="/js/document/writeJs.js"></script>
 	<script src="/js/document/signTool.js"></script>

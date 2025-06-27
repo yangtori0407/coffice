@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +24,13 @@
 		alert("${msg}");
 	</script>
 </c:if>
+
+<style>
+	.docu-cards:hover {
+		cursor: pointer;
+		background-color: #f8f9fa;
+	}	
+</style>
 
 </head>
 <body id="page-top">
@@ -131,93 +139,194 @@
 
 						<!-- 파트2 -->
 						<div class="col-6">
+						
 
 							<!-- 전자결재 부분 -->
 							<div class="row" style="height: 300px;">
 
-								<!-- Earnings (Monthly) Card Example -->
-								<div class="col-xl-3 col-md-6 mb-4">
+								<!-- getTodayWaiting Card Example -->
+								<div class="col-xl-3 col-md-6 mb-4" style="height: 290px;">
 									<div class="card border-left-primary shadow h-100 py-2">
-										<div class="card-body">
-											<div class="row no-gutters align-items-center">
-												<div class="col mr-2">
+										<div class="">
+											<div class="row no-gutters d-flex align-items-center justify-content-center">
+												<div class="mr-3">
 													<div
-														class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-														Earnings (Monthly)</div>
-													<div class="h5 mb-0 font-weight-bold text-gray-800">전</div>
+														class="text-s font-weight-bold text-primary text-uppercase mb-1">
+														Today ${getTodayWaiting.size()}건<br> 결재 대기
+													</div>													
 												</div>
-												<div class="col-auto">
-													<i class="fas fa-calendar fa-2x text-gray-300"></i>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Earnings (Monthly) Card Example -->
-								<div class="col-xl-3 col-md-6 mb-4">
-									<div class="card border-left-success shadow h-100 py-2">
-										<div class="card-body">
-											<div class="row no-gutters align-items-center">
-												<div class="col mr-2">
-													<div
-														class="text-xs font-weight-bold text-success text-uppercase mb-1">
-														자</div>
-													<div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-												</div>
-												<div class="col-auto">
-													<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Earnings (Monthly) Card Example -->
-								<div class="col-xl-3 col-md-6 mb-4">
-									<div class="card border-left-info shadow h-100 py-2">
-										<div class="card-body">
-											<div class="row no-gutters align-items-center">
-												<div class="col mr-2">
-													<div
-														class="text-xs font-weight-bold text-info text-uppercase mb-1">결
-													</div>
-													<div class="row no-gutters align-items-center">
-														<div class="col-auto">
-															<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-														</div>
-														<div class="col">
-															<div class="progress progress-sm mr-2">
-																<div class="progress-bar bg-info" role="progressbar"
-																	style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-																	aria-valuemax="100"></div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-auto">
-													<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Pending Requests Card Example -->
-								<div class="col-xl-3 col-md-6 mb-4">
-									<div class="card border-left-warning shadow h-100 py-2">
-										<div class="card-body">
-											<div class="row no-gutters align-items-center">
-												<div class="col mr-2">
-													<div
-														class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-														재</div>
-													<div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-												</div>
-												<div class="col-auto">
+												<div class="">
 													<i class="fas fa-comments fa-2x text-gray-300"></i>
 												</div>
 											</div>
+											
+											<div class="row no-gutters d-flex align-items-center justify-content-center">
+												<div class=" align-items-center" style="height: 220px; overflow-y: auto;">
+												
+													<c:forEach items="${getTodayWaiting}" var="i">
+													
+														<div class="docu-cards card mb-1 p-2" style="width: 160px;" 
+														onclick="location.href='/document/detail?documentId=${i.documentId}'">
+														  <div class="d-flex mb-1">
+														    <div style="min-width: 50px; font-weight: bold;">제목</div>
+														    <div class="text-gray-800">${i.title}</div>
+														  </div>
+														  <div class="d-flex">
+														    <div style="min-width: 50px; font-weight: bold;">작성자</div>
+														    <div class="text-gray-800">${i.writerName} ${i.writerPosition}</div>
+														  </div>
+														</div>		
+													</c:forEach>
+												
+												
+													
+																									
+												</div>
+											
+											</div>
+											
+											
+										</div>
+									</div>
+								</div>
+
+								<!-- getTodayReference Card Example -->
+								<div class="col-xl-3 col-md-6 mb-4" style="height: 290px;">
+									<div class="card border-left-success shadow h-100 py-2">
+										<div class="">
+											<div class="row no-gutters d-flex align-items-center justify-content-center">
+												<div class="mr-3">
+													<div
+														class="text-s font-weight-bold text-success text-uppercase mb-1">
+														Today ${getTodayReference.size()}건<br> 참조 문서
+													</div>													
+												</div>
+												<div class="">
+													<i class="fas fa-comments fa-2x text-gray-300"></i>
+												</div>
+											</div>
+											
+											<div class="row no-gutters d-flex align-items-center justify-content-center">
+												<div class=" align-items-center" style="height: 220px; overflow-y: auto;">												
+													
+													<c:forEach items="${getTodayReference}" var="i">
+													
+													<div class="docu-cards card mb-1 p-2" style="width: 160px;" 
+													onclick="location.href='/document/detail?documentId=${i.documentId}'">
+													  <div class="d-flex mb-1">
+													    <div style="min-width: 50px; font-weight: bold;">제목</div>
+													    <div class="text-gray-800">${i.title}</div>
+													  </div>
+													  <div class="d-flex">
+													    <div style="min-width: 50px; font-weight: bold;">작성자</div>
+													    <div class="text-gray-800">${i.writerName} ${i.writerPosition}</div>
+													  </div>
+													</div>		
+													</c:forEach>												
+												</div>
+											
+											</div>
+											
+											
+										</div>
+									</div>
+								</div>
+
+								<!-- getlastHandled Card Example -->
+								<div class="col-xl-3 col-md-6 mb-4" style="height: 290px;">
+									<div class="card border-left-info shadow h-100 py-2">
+										<div class="">
+											<div class="row no-gutters d-flex align-items-center justify-content-center">
+												<div class="mr-3">
+													<div
+														class="text-s font-weight-bold text-info text-uppercase mb-1">
+														최근 <br> 처리 문서
+													</div>													
+												</div>
+												<div class="">
+													<i class="fas fa-comments fa-2x text-gray-300"></i>
+												</div>
+											</div>
+											
+											<div class="row no-gutters d-flex align-items-center justify-content-center">
+												<div class=" align-items-center" style="overflow-y: auto;">												
+													
+													<c:forEach items="${getlastHandled}" var="i">
+													
+													<div class="docu-cards card mb-1 p-2 " style="width: 160px;" 
+													onclick="location.href='/document/detail?documentId=${i.documentId}'">
+													  <div class="d-flex mb-1">
+													    <div style="min-width: 50px; font-weight: bold;">종류</div>
+													    <div class="text-gray-800">${i.formName}</div>
+													  </div>
+													  <div class="d-flex mb-1">
+													    <div style="min-width: 50px; font-weight: bold;">제목</div>
+													    <div class="text-gray-800">${i.title}</div>
+													  </div>
+													  <div class="d-flex mb-1">
+													    <div style="min-width: 50px; font-weight: bold;">작성자</div>
+													    <div class="text-gray-800">${i.writerName} ${i.writerPosition}</div>
+													  </div>
+													  <div class="d-flex mb-1">
+													    <div style="min-width: 50px; font-weight: bold;">상태</div>
+													    <div class="text-gray-800">${i.status}</div>
+													  </div>
+													</div>		
+													</c:forEach>												
+												</div>
+											
+											</div>
+											
+											
+										</div>
+									</div>
+								</div>
+
+								<!-- lastTemp Card Example -->
+								<div class="col-xl-3 col-md-6 mb-4" style="height: 290px;">
+									<div class="card border-left-warning shadow h-100 py-2">
+										<div class="">
+											<div class="row no-gutters d-flex align-items-center justify-content-center">
+												<div class="mr-3">
+													<div
+														class="text-s font-weight-bold text-warning text-uppercase mb-1">
+														최근 편집 <br> 임시 문서
+													</div>													
+												</div>
+												<div class="">
+													<i class="fas fa-comments fa-2x text-gray-300"></i>
+												</div>
+											</div>
+											
+											<div class="row no-gutters d-flex align-items-center justify-content-center">
+												<div class=" align-items-center" style="overflow-y: auto;">												
+													
+													<c:forEach items="${lastTemp}" var="i">
+													
+													<div class="docu-cards card mb-1 p-2" style="width: 160px;" 
+													onclick="location.href='/document/detail?documentId=${i.documentId}'">
+													  <div class="d-flex mb-1">
+													    <div style="min-width: 50px; font-weight: bold;">종류</div>
+													    <div class="text-gray-800">${i.formName}</div>
+													  </div>
+													  <div class="d-flex mb-1">
+													    <div style="min-width: 50px; font-weight: bold;">제목</div>
+													    <div class="text-gray-800">${i.title}</div>
+													  </div>
+													  <div class="d-flex mb-1">
+													    <div style="min-width: 50px; font-weight: bold;">편집일</div>
+													    <div class="text-gray-800">
+													    	<fmt:formatDate value="${i.writerTime }" pattern="yyyy-MM-dd" />
+													    </div>
+													  </div>
+													  
+													</div>		
+													</c:forEach>												
+												</div>
+											
+											</div>
+											
+											
 										</div>
 									</div>
 								</div>

@@ -96,7 +96,7 @@
 														<td>${i.formName }</td>
 														<td><a href="../detail?documentId=${i.documentId}">${i.title}</a></td>
 														<td>${i.writerName } ${i.writerPosition }</td>
-														<td><fmt:formatDate value="${i.writerTime }" pattern="yyyy-mm-dd" /></td>
+														<td><fmt:formatDate value="${i.writerTime }" pattern="yyyy-MM-dd" /></td>
 														
 														<c:if test="${i.status eq '반려' || i.status eq '결재완료' }">
 															<td>-</td>

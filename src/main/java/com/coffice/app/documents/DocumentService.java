@@ -66,6 +66,66 @@ public class DocumentService {
 	
 	
 	//
+	public List<DocumentVO> getLastTemp(HttpSession session) throws Exception {
+		
+		DocumentVO documentVO = new DocumentVO();
+		
+		if(session.getAttribute("user") != null) {
+			UserVO userVO = (UserVO)session.getAttribute("user");
+			documentVO.setWriterId(userVO.getUserId());
+			
+		}
+		
+		return documentDAO.getLastTemp(documentVO);
+	}
+	
+	
+	//
+	public List<DocumentVO> getlastHandled(HttpSession session) throws Exception {
+			
+		DocumentVO documentVO = new DocumentVO();
+		
+		if(session.getAttribute("user") != null) {
+			UserVO userVO = (UserVO)session.getAttribute("user");
+			documentVO.setWriterId(userVO.getUserId());
+			
+		}
+		
+		return documentDAO.getlastHandled(documentVO);
+	}
+	
+	
+	//
+	public List<DocumentVO> getTodayReference(HttpSession session) throws Exception {
+		
+		DocumentVO documentVO = new DocumentVO();
+		
+		if(session.getAttribute("user") != null) {
+			UserVO userVO = (UserVO)session.getAttribute("user");
+			documentVO.setWriterId(userVO.getUserId());
+			
+		}
+		
+		return documentDAO.getTodayReference(documentVO);
+	}
+	
+	
+	//
+	public List<DocumentVO> getTodayWaiting(HttpSession session) throws Exception {
+		
+		DocumentVO documentVO = new DocumentVO();
+		
+		if(session.getAttribute("user") != null) {
+			UserVO userVO = (UserVO)session.getAttribute("user");
+			documentVO.setWriterId(userVO.getUserId());
+			
+		}
+		
+		return documentDAO.getTodayWaiting(documentVO);
+	}
+	
+	
+	//
 	public Map<String, Object> getList(Pager pager, HttpServletRequest request, HttpSession session) throws Exception {
 		
 		// 페이지 관련 값 준비
