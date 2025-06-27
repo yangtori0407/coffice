@@ -75,6 +75,7 @@ stompClientNotification.connect({}, function (frame) {
         notificationArea.lastElementChild.remove();
         showAlarmTooltip();
         createToast(msg);
+        console.log("토스트");
     })
     // //대댓글
     // stompClientNotification.subscribe(`/sub/nof/user.${userIdNotification}`, function (message) {
@@ -112,7 +113,9 @@ function createAlert(msg, num) {
         a.href = `/notice/detail?noticeNum=${msg.relateId}`
     } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
         a.href = `/board/detail?boardNum=${msg.relateId}`
-    } else {
+    } else if(msg.notiKind == "MESSAGE"){
+        a.href = `/message/receive/detail?messageNum=${msg.relateId}`
+    }else {
         a.href = "#";
     }
     a.setAttribute("data-check-num", msg.notiCheckNum);
@@ -129,6 +132,8 @@ function createAlert(msg, num) {
         iconCircle.classList.add("icon-circle", "bg-success");
     }else if (msg.notiKind == "REPLY") {
         iconCircle.classList.add("icon-circle", "bg-primary");
+    }else if(msg.notiKind == "MESSAGE"){
+        iconCircle.classList.add("icon-circle", "bg-secondary");
     }
 
     const icon = document.createElement("ion-icon");
@@ -139,6 +144,8 @@ function createAlert(msg, num) {
         icon.setAttribute("name", "return-down-forward-outline");
     }else if (msg.notiKind == "REPLY") {
         icon.setAttribute("name", "return-down-forward-outline");
+    }else if(msg.notiKind == "MESSAGE"){
+        icon.setAttribute("name", "mail-unread-outline");
     }
     iconCircle.appendChild(icon);
     iconWrapper.appendChild(iconCircle);
@@ -154,10 +161,9 @@ function createAlert(msg, num) {
     kindDiv.classList.add("small", "font-weight-bold")
     if (msg.notiKind == "NOTICE") {
         kindDiv.innerText = "[공지사항]"
-    } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
+    } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY" || msg.notiKind == "MESSAGE") {
         kindDiv.innerText = `[${msg.notiContents}]`
-    }
-
+    } 
     const contentSpan = document.createElement("span");
     contentSpan.classList.add("font-weight-bold");
     //익명게시판 댓글
@@ -165,7 +171,9 @@ function createAlert(msg, num) {
         contentSpan.innerText = "댓글이 달렸습니다."
     } else if (msg.notiKind == "REPLY") {
         contentSpan.innerText = "대댓글이 달렸습니다."
-    } else {
+    } else if(msg.notiKind == "MESSAGE"){
+        contentSpan.innerText = "메일이 도착했습니다."
+    }else {
         contentSpan.innerText = msg.notiContents;
     }
 
@@ -291,13 +299,16 @@ function createToast(msg) {
     } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
         icon.setAttribute("name", "return-down-forward-outline");
     }
+    else if (msg.notiKind == "MESSAGE") {
+        icon.setAttribute("name", "mail-unread-outline");
+    }
     icon.classList.add("mr-2");
 
     const roomName = document.createElement("strong");
     roomName.classList.add("mr-auto");
     if (msg.notiKind == "NOTICE") {
         roomName.textContent = "[공지사항]"
-    } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
+    } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY" || msg.notiKind == "MESSAGE") {
         roomName.textContent = `[${msg.notiContents}]`
     }
 
@@ -330,7 +341,9 @@ function createToast(msg) {
         content.textContent = "댓글이 달렸습니다."
     } else if (msg.notiKind == "REPLY") {
         content.textContent = "대댓글이 달렸습니다."
-    } else{
+    } else if(msg.notiKind == "MESSAGE"){
+        content.textContent = "메일이 도착했습니다."
+    }else{
         content.textContent = msg.notiContents;
     } 
     
@@ -347,6 +360,8 @@ function createToast(msg) {
             location.href = `/notice/detail?noticeNum=${msg.relateId}`;
         } else if (msg.notiKind == "BOARD" || msg.notiKind == "REPLY") {
             location.href = `/board/detail?boardNum=${msg.relateId}`;
+        } else if(msg.notiKind == "MESSAGE"){
+            location.href = `/message/receive/detail?messageNum=${msg.relateId}`
         }
     });
 
