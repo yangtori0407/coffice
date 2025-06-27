@@ -6,19 +6,34 @@
 <mapper namespace="com.coffice.app.message.MessageDAO">
 	<sql id="search">
 		<choose>
-  				<when test="kind == 'k1'">
-  					AND M.MESSAGE_TITLE LIKE CONCAT('%', #{pager.search}, '%') 
-  				</when>
-  				<when test="kind == 'k2'">
-  					AND M.MESSAGE_CONTENTS LIKE CONCAT('%', #{pager.search}, '%')
-  				</when>
-  				<otherwise>
-  					AND (M.MESSAGE_TITLE LIKE CONCAT('%', #{pager.search}, '%') OR M.MESSAGE_CONTENTS LIKE CONCAT('%', #{pager.search}, '%')) 
-  				</otherwise>
-  		</choose>
+			<when test="kind == 'k1'">
+				AND (MESSAGE_TITLE LIKE CONCAT('%', #{pager.search}, '%') OR
+				MESSAGE_CONTENTS LIKE CONCAT('%', #{pager.search}, '%'))
+			</when>
+			<when test="kind == 'k2'">
+				AND MESSAGE_CONTENTS LIKE CONCAT('%', #{pager.search}, '%')
+			</when>
+			<otherwise>
+				AND MESSAGE_TITLE LIKE CONCAT('%', #{pager.search}, '%')
+			</otherwise>
+		</choose>
+	</sql>
+	<sql id="totalSearch">
+		<choose>
+			<when test="kind == 'k1'">
+				AND (M.MESSAGE_TITLE LIKE CONCAT('%', #{pager.search}, '%') OR
+				M.MESSAGE_CONTENTS LIKE CONCAT('%', #{pager.search}, '%'))
+			</when>
+			<when test="kind == 'k2'">
+				AND M.MESSAGE_CONTENTS LIKE CONCAT('%', #{pager.search}, '%')
+			</when>
+			<otherwise>
+				AND M.MESSAGE_TITLE LIKE CONCAT('%', #{pager.search}, '%')
+			</otherwise>
+		</choose>
 	</sql>
 	<select id="getSendMessage" parameterType="java.util.HashMap"
-		resultMap="receiveMessage">
+		resultMap="sendMessage">
 		SELECT
 			M.MESSAGE_NUM,
 			M.MESSAGE_CONTENTS,
@@ -30,185 +45,208 @@
 			MC.USER_ID,
 			U.NAME,
 			DP.DEPT_NAME
-		FROM MESSAGE M
-		JOIN MESSAGE_CHECK MC
-		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
-		LEFT OUTER JOIN USERS U
-		ON MC.USER_ID = U.USER_ID
-		LEFT OUTER JOIN
-		DEPARTMENT DP
-		ON DP.DEPT_ID = U.DEPT_ID
-		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0 
-		<include refid="search"></include>
+		FROM (
+		SELECT *
+			FROM MESSAGE
+			WHERE SENDER = #{userId} AND SENDER_DELETE = 0
+			<include refid="search" />
+			ORDER BY SEND_DATE DESC
+			LIMIT #{pager.startNum}, #{pager.page}
+		) M
+		JOIN MESSAGE_CHECK MC ON M.MESSAGE_NUM = MC.MESSAGE_NUM
+		LEFT JOIN USERS U ON MC.USER_ID = U.USER_ID
+		LEFT JOIN DEPARTMENT DP ON DP.DEPT_ID = U.DEPT_ID
 		ORDER BY M.SEND_DATE DESC
-	</select>
-	
-	<select id="getSendTotal" parameterType="java.util.HashMap">
-		SELECT
-			COUNT(*)
-		FROM MESSAGE M
-		JOIN MESSAGE_CHECK MC
-		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
-		LEFT OUTER JOIN USERS U
-		ON MC.USER_ID = U.USER_ID
-		LEFT OUTER JOIN
-		DEPARTMENT DP
-		ON DP.DEPT_ID = U.DEPT_ID
-		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0
-		<include refid="search"></include>
-		ORDER BY M.SEND_DATE DESC
-	</select>
-	<resultMap type="MessageVO" id="receiveMessage">
-		<id column="MESSAGE_NUM" property="messageNum"/>
-		<result column="MESSAGE_CONTENTS" property="messageContents"/>
-		<result column="SEND_DATE" property="sendDate"/>
-		<result column="MESSAGE_TITLE" property="messageTitle"/>
-		
-		<collection property="receiveUsers" javaType="java.util.List" ofType="MessageCheckVO">
-			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
-			<result column="CHECK_STATUS" property="checkStatus"/>
-			<result column="MESSAGE_STATUS" property="messageStatus"/>
-			<result column="USER_ID" property="userId"/>
-			<result column="NAME" property="name"/>
-			<result column="DEPT_NAME" property="deptName"/>
-		</collection>
-	</resultMap>
-
-
-	<select id="getReceiveMessage" parameterType="java.util.HashMap"
-		resultMap="sendMessage">
-		SELECT
-			M.MESSAGE_NUM,M.SENDER,
-			M.MESSAGE_CONTENTS,
-			M.SEND_DATE,
-			M.MESSAGE_TITLE,
-			MC.CHECK_STATUS,
-			MC.MESSAGE_STATUS,
-			U.NAME,
-			DP.DEPT_NAME
-		FROM MESSAGE M
-		JOIN MESSAGE_CHECK MC
-		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
-		JOIN USERS U
-		ON U.USER_ID = M.SENDER
-		JOIN DEPARTMENT DP
-		ON DP.DEPT_ID =
-		U.DEPT_ID
-		WHERE MC.USER_ID = #{userId} AND MC.RECEIVER_DELETE = 0
-		<include refid="search"></include>
-		ORDER BY SEND_DATE DESC
-	</select>
-	<select id="getReceiveTotal" parameterType="java.util.HashMap">
-		SELECT
-			COUNT(*)
-		FROM MESSAGE M
-		JOIN MESSAGE_CHECK MC
-		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
-		JOIN USERS U
-		ON U.USER_ID = M.SENDER
-		JOIN DEPARTMENT DP
-		ON DP.DEPT_ID =
-		U.DEPT_ID
-		WHERE MC.USER_ID = #{userId} AND MC.RECEIVER_DELETE = 0
-		<include refid="search"></include>
-		ORDER BY SEND_DATE DESC
 	</select>
 	
 	<resultMap type="MessageVO" id="sendMessage">
-		<id column="MESSAGE_NUM" property="messageNum"/>
-		<result column="MESSAGE_CONTENTS" property="messageContents"/>
-		<result column="SEND_DATE" property="sendDate"/>
-		<result column="MESSAGE_TITLE" property="messageTitle"/>
-		
-		<association property="sendUser" javaType="MessageCheckVO">
-			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
-			<result column="CHECK_STATUS" property="checkStatus"/>
-			<result column="MESSAGE_STATUS" property="messageStatus"/>
-			<result column="USER_ID" property="userId"/>
-			<result column="NAME" property="name"/>
-			<result column="DEPT_NAME" property="deptName"/>
+		<id column="MESSAGE_NUM" property="messageNum" />
+		<result column="MESSAGE_CONTENTS" property="messageContents" />
+		<result column="SEND_DATE" property="sendDate" />
+		<result column="MESSAGE_TITLE" property="messageTitle" />
+
+		<collection property="receiveUsers"
+			javaType="java.util.List" ofType="MessageCheckVO">
+			<id column="MESSAGECHECK_NUM" property="messageCheckNum" />
+			<result column="CHECK_STATUS" property="checkStatus" />
+			<result column="MESSAGE_STATUS" property="messageStatus" />
+			<result column="USER_ID" property="userId" />
+			<result column="NAME" property="name" />
+			<result column="DEPT_NAME" property="deptName" />
+		</collection>
+	</resultMap>
+
+	<select id="getSendTotal" parameterType="java.util.HashMap">
+		SELECT COUNT(*) FROM (
+		SELECT M.MESSAGE_NUM
+		FROM MESSAGE M
+		WHERE M.SENDER = #{userId} AND M.SENDER_DELETE = 0
+		<include refid="search"/>
+		GROUP BY M.MESSAGE_NUM
+	) TMP
+	</select>
+
+
+
+	<select id="getReceiveMessage" parameterType="java.util.HashMap"
+		resultMap="receiveMessage">
+		SELECT
+		M.MESSAGE_NUM,
+		M.SENDER,
+		U.NAME,
+		DP.DEPT_NAME,
+		M.MESSAGE_CONTENTS,
+		M.SEND_DATE,
+		M.MESSAGE_TITLE,
+		MC.CHECK_STATUS,
+		MC.MESSAGE_STATUS
+		FROM MESSAGE M
+		JOIN MESSAGE_CHECK MC
+		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
+		JOIN USERS U
+		ON U.USER_ID = M.SENDER
+		JOIN DEPARTMENT DP
+		ON DP.DEPT_ID =
+		U.DEPT_ID
+		WHERE MC.USER_ID = #{userId} AND MC.RECEIVER_DELETE = 0
+		<include refid="search"></include>
+		ORDER BY SEND_DATE DESC
+		LIMIT #{pager.startNum}, #{pager.page}
+	</select>
+	<resultMap type="MessageVO" id="receiveMessage">
+		<id column="MESSAGE_NUM" property="messageNum" />
+		<result column="MESSAGE_CONTENTS" property="messageContents" />
+		<result column="SEND_DATE" property="sendDate" />
+		<result column="MESSAGE_TITLE" property="messageTitle" />
+		<result column="SENDER" property="sender" />
+		<result column="NAME" property="senderName" />
+		<result column="DEPT_NAME" property="senderDept" />
+
+		<association property="receiveMessage"
+			javaType="MessageCheckVO">
+			<id column="MESSAGECHECK_NUM" property="messageCheckNum" />
+			<result column="CHECK_STATUS" property="checkStatus" />
+			<result column="MESSAGE_STATUS" property="messageStatus" />
+			<result column="USER_ID" property="userId" />
 		</association>
 	</resultMap>
-	
-	<select id="detail" parameterType="MessageVO" resultMap="getDetail">
+	<select id="getReceiveTotal" parameterType="java.util.HashMap">
 		SELECT
-			M.MESSAGE_NUM,
-			M.MESSAGE_CONTENTS,
-			M.SEND_DATE,
-			M.MESSAGE_TITLE,
-			M.SENDER_DELETE,
-			M.SENDER,
-			US.NAME AS SENDER_NAME,
-			US.EMAIL,
-			DS.DEPT_NAME AS SENDER_DEPT,
-			MC.MESSAGECHECK_NUM,
-			MC.CHECK_STATUS,
-			MC.MESSAGE_STATUS,
-			MC.USER_ID,
-			UR.NAME AS RECEIVER_NAME,
-			DP.DEPT_NAME
+		COUNT(*)
+		FROM MESSAGE M
+		JOIN MESSAGE_CHECK MC
+		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
+		JOIN USERS U
+		ON U.USER_ID = M.SENDER
+		JOIN DEPARTMENT DP
+		ON DP.DEPT_ID =
+		U.DEPT_ID
+		WHERE MC.USER_ID = #{userId} AND MC.RECEIVER_DELETE = 0
+		<include refid="totalSearch"></include>
+		ORDER BY SEND_DATE DESC
+	</select>
+
+
+
+	<select id="detail" parameterType="MessageVO"
+		resultMap="getDetail">
+		SELECT
+		M.MESSAGE_NUM,
+		M.MESSAGE_CONTENTS,
+		M.SEND_DATE,
+		M.MESSAGE_TITLE,
+		M.SENDER_DELETE,
+		M.SENDER,
+		US.NAME AS SENDER_NAME,
+		US.EMAIL,
+		DS.DEPT_NAME AS SENDER_DEPT,
+		MC.MESSAGECHECK_NUM,
+		MC.CHECK_STATUS,
+		MC.MESSAGE_STATUS,
+		MC.USER_ID,
+		UR.NAME AS RECEIVER_NAME,
+		DP.DEPT_NAME
 		FROM MESSAGE M
 		JOIN MESSAGE_CHECK MC
 		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
 		JOIN USERS US
 		ON M.SENDER = US.USER_ID
 		JOIN DEPARTMENT DS
-		ON US.DEPT_ID = DS.DEPT_ID
+		ON US.DEPT_ID =
+		DS.DEPT_ID
 		LEFT OUTER JOIN USERS UR
 		ON MC.USER_ID = UR.USER_ID
-		LEFT OUTER JOIN
+		LEFT OUTER
+		JOIN
 		DEPARTMENT DP
 		ON DP.DEPT_ID = UR.DEPT_ID
-		WHERE M.MESSAGE_NUM = #{messageNum}
+		WHERE M.MESSAGE_NUM =
+		#{messageNum}
 	</select>
-	
+
 	<resultMap type="MessageVO" id="getDetail">
-		<id column="MESSAGE_NUM" property="messageNum"/>
-		<result column="MESSAGE_CONTENTS" property="messageContents"/>
-		<result column="SEND_DATE" property="sendDate"/>
-		<result column="MESSAGE_TITLE" property="messageTitle"/>
-		<result column="SENDER" property="sender"/>
-		<result column="SENDER_NAME" property="senderName"/>
-		<result column="SENDER_DELETE" property="senderDelete"/>
-		<result column="EMAIL" property="email"/>
-		<result column="SENDER_DEPT" property="senderDept"/>
-		
-		<collection property="receiveUsers" javaType="java.util.List" ofType="MessageCheckVO">
-			<id column="MESSAGECHECK_NUM" property="messageCheckNum"/>
-			<result column="CHECK_STATUS" property="checkStatus"/>
-			<result column="MESSAGE_STATUS" property="messageStatus"/>
-			
-			<result column="USER_ID" property="userId"/>
-			<result column="RECEIVER_NAME" property="name"/>
-			<result column="DEPT_NAME" property="deptName"/>
+		<id column="MESSAGE_NUM" property="messageNum" />
+		<result column="MESSAGE_CONTENTS" property="messageContents" />
+		<result column="SEND_DATE" property="sendDate" />
+		<result column="MESSAGE_TITLE" property="messageTitle" />
+		<result column="SENDER" property="sender" />
+		<result column="SENDER_NAME" property="senderName" />
+		<result column="SENDER_DELETE" property="senderDelete" />
+		<result column="EMAIL" property="email" />
+		<result column="SENDER_DEPT" property="senderDept" />
+
+		<collection property="receiveUsers"
+			javaType="java.util.List" ofType="MessageCheckVO">
+			<id column="MESSAGECHECK_NUM" property="messageCheckNum" />
+			<result column="CHECK_STATUS" property="checkStatus" />
+			<result column="MESSAGE_STATUS" property="messageStatus" />
+
+			<result column="USER_ID" property="userId" />
+			<result column="RECEIVER_NAME" property="name" />
+			<result column="DEPT_NAME" property="deptName" />
 		</collection>
 	</resultMap>
-	
+
 	<select id="getUserInfo" parameterType="java.lang.String">
-		SELECT U.USER_ID, U.NAME, D.DEPT_NAME, U.EMAIL
+		SELECT U.USER_ID, U.NAME,
+		D.DEPT_NAME, U.EMAIL
 		FROM USERS U
 		JOIN DEPARTMENT D
-		ON U.DEPT_ID = D.DEPT_ID
+		ON U.DEPT_ID =
+		D.DEPT_ID
 		WHERE U.USER_ID = #{userId}
 	</select>
 
+
 	<insert id="add" parameterType="MessageVO"
 		useGeneratedKeys="true" keyProperty="messageNum">
-		INSERT INTO MESSAGE(MESSAGE_NUM, MESSAGE_CONTENTS, SEND_DATE, MESSAGE_TITLE, SENDER, SENDER_DELETE)
+		INSERT INTO MESSAGE(MESSAGE_NUM,
+		MESSAGE_CONTENTS, SEND_DATE, MESSAGE_TITLE, SENDER, SENDER_DELETE)
 		VALUES(NULL, #{messageContents}, NOW(), #{messageTitle}, #{sender}, 0)
 	</insert>
 
 	<insert id="addEmailUser" parameterType="java.util.HashMap">
 		INSERT INTO
-		MESSAGE_CHECK(MESSAGECHECK_NUM, MESSAGE_NUM, CHECK_STATUS, MESSAGE_STATUS, USER_ID, RECEIVER_DELETE)
-		VALUES(NULL, #{messageNum}, 0, #{kind}, #{userId}, 0)
+		MESSAGE_CHECK(MESSAGECHECK_NUM, MESSAGE_NUM, CHECK_STATUS,
+		MESSAGE_STATUS, USER_ID, RECEIVER_DELETE)
+		VALUES(NULL, #{messageNum},
+		0, #{kind}, #{userId}, 0)
 	</insert>
-	
+
 	<update id="receiveDelete" parameterType="java.util.HashMap">
-		UPDATE MESSAGE_CHECK SET RECEIVER_DELETE = 1 WHERE MESSAGE_NUM = #{messageNum} AND USER_ID = #{userId}
+		UPDATE MESSAGE_CHECK
+		SET RECEIVER_DELETE = 1 WHERE MESSAGE_NUM = #{messageNum} AND USER_ID
+		= #{userId}
+	</update>
+
+	<update id="sendDelete" parameterType="java.util.HashMap">
+		UPDATE MESSAGE SET
+		SENDER_DELETE = 1 WHERE MESSAGE_NUM = #{messageNum} AND SENDER =
+		#{userId}
 	</update>
 	
-	<update id="sendDelete" parameterType="java.util.HashMap">
-		UPDATE MESSAGE SET SENDER_DELETE = 1 WHERE MESSAGE_NUM = #{messageNum} AND SENDER = #{userId}
+	<update id="read" parameterType="java.util.HashMap">
+		UPDATE MESSAGE_CHECK
+		SET CHECK_STATUS = 1 WHERE MESSAGE_NUM = #{messageNum} AND USER_ID = #{userId}
 	</update>
 </mapper>

@@ -100,6 +100,7 @@ public class MessageService {
 		pager.make();
 		Long total = messageDAO.getSendTotal(info);
 		pager.makeNum(total);
+		
 		return messageDAO.getSendMessage(info);
 	}
 
@@ -157,5 +158,19 @@ public class MessageService {
 		messageVO.setMessageTitle(messageTitle);
 		
 		return messageVO;
+	}
+
+	public MessageVO getCheck(MessageVO messageVO) throws Exception{
+		
+		return messageDAO.detail(messageVO);
+	}
+
+	public int read(Long messageNum, String userId) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		info.put("messageNum", messageNum);
+		
+		return messageDAO.read(info);
+		
 	}
 }

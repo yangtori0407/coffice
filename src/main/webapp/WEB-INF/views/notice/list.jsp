@@ -54,9 +54,9 @@
 												<form method="get"
 													class="form-inline d-flex align-items-center">
 													<select class="custom-select mr-2" name="kind">
-														<option value="k1">제목</option>
+														<option value="k3">제목</option>
 														<option value="k2">본문</option>
-														<option value="k3">제목+본문</option>
+														<option value="k1">제목+본문</option>
 													</select> <input type="search" name="search"
 														class="form-control form-control-sm mr-2"
 														placeholder="검색어를 입력하세요" style="max-width: 200px;">
