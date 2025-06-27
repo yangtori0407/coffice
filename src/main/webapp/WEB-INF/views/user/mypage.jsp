@@ -117,14 +117,14 @@
 								</div>
 
 								<div>
-									<a href="#" style="text-decoration: none; color: inherit;">
+									<a href="/user/vacationHistory" style="text-decoration: none; color: inherit;">
 									<ion-icon name="calendar-outline" style="font-size: 24px;"></ion-icon><br/>
 									<span style="font-size: 13px;">신청/승인 내역</span>
 									</a>
 								</div>
 
 								<div>
-									<a href="#" style="text-decoration: none; color: inherit;">
+									<a href="/user/annualLeaveHistory" style="text-decoration: none; color: inherit;">
 									<ion-icon name="document-text-outline" style="font-size: 24px;"></ion-icon><br/>
 									<span style="font-size: 13px;">사용 내역</span>
 									</a>

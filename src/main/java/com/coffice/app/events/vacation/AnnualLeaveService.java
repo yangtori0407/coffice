@@ -2,11 +2,14 @@ package com.coffice.app.events.vacation;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import com.coffice.app.users.UserVO;
 
 @Service
 public class AnnualLeaveService {
@@ -24,6 +27,10 @@ public class AnnualLeaveService {
 	
 	public int use(AnnualLeaveVO annualLeaveVO) throws Exception {
 		return annualLeaveDAO.use(annualLeaveVO);
+	}
+	
+	public List<AnnualLeaveVO> getList(UserVO userVO) throws Exception {
+		return annualLeaveDAO.getList(userVO);
 	}
 	
 	@Scheduled(cron = "0 0 4 1 * *")

@@ -21,7 +21,7 @@
   	</insert>
   	
   	<select id="getApplyList" parameterType="UserVO" resultType="VacationVO">
-  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
+  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.INSERT_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
 			from VACATION v
 			join USERS u
 			on v.USER_ID = u.USER_ID
@@ -33,7 +33,7 @@
   	</select>
   	
   	<select id="getAcceptList" parameterType="UserVO" resultType="VacationVO">
-  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
+  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.EDIT_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
 			from VACATION v
 			join USERS u
 			on v.USER_ID = u.USER_ID

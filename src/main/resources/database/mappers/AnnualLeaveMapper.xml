@@ -95,11 +95,12 @@
 			)
 			
 			-- 2단계: 월차 1일 부여
-			INSERT INTO ANNUAL_LEAVE (LEAVE_YEAR, GRANT_LEAVE, GRANT_DATE, USER_ID, TYPE)
+			INSERT INTO ANNUAL_LEAVE (LEAVE_YEAR, GRANT_LEAVE, GRANT_DATE, EXPIRATION_DATE, USER_ID, TYPE)
 			SELECT 
 			    YEAR(DATE_ADD(#{baseDate}, INTERVAL 1 MONTH)) AS LEAVE_YEAR,
 			    1 AS GRANT_LEAVE,
 			    DATE_ADD(#{baseDate}, INTERVAL 1 MONTH) AS GRANT_DATE, -- 익월 1일
+			    CONCAT(YEAR(#{baseDate}), '-12-31') AS EXPIRATION_DATE,
 			    USER_ID,
 			    '월개근' AS TYPE
 			FROM emp_qualified;
@@ -133,5 +134,11 @@
 			        AND al.TYPE = '정기연차'
 			    );
 	</insert>
+	
+	<select id="getList" parameterType="UserVO" resultType="AnnualLeaveVO">
+			select * from ANNUAL_LEAVE
+			where USER_ID = #{userId}
+			order by LEAVE_ID DESC
+	</select>
   	
   </mapper>
