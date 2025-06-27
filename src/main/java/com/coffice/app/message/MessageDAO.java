@@ -32,4 +32,6 @@ public interface MessageDAO {
 
 	MessageVO getCheck(Long messageNum) throws Exception;
 
+	int read(Map<String, Object> info) throws Exception;
+
 }

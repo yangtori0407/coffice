@@ -1,39 +1,40 @@
 const messageCheck = document.querySelectorAll(".messageCheck");
-const messageCheckArea = document.getElementById("messageCheckArea");
+
 
 messageCheck.forEach(m => {
-    m.addEventListener("click", ()=>{
+    m.addEventListener("click", (e)=>{
         console.log("click")
         let messageNum = m.getAttribute("data-message-num");
 
         fetch(`/message/getCheck?messageNum=${messageNum}`)
         .then(r => r.json())
         .then(r => {
-            console.log(r);
+            //console.log(r);
+            const messageCheckArea = document.getElementById(`messageCheckArea${r.messageNum}`);
             messageCheckArea.innerHTML = "";
-            createCheck(r.receiveUsers);
+            createCheck(r);
         })
     })
 })
 
-function createCheck(receiveUsers){
-    for(r of receiveUsers){
-
+function createCheck(r){
+    for(user of r.receiveUsers){     
+        const messageCheckArea = document.getElementById(`messageCheckArea${r.messageNum }`);
         const div = document.createElement("div");
         div.classList.add("dropdown-item", "d-flex", "justify-content-between");
         const name = document.createElement("span")
         name.classList.add("mr-2");
-        if(r.userId.includes("@")){
-            name.innerText = r.userId;
+        if(user.userId.includes("@")){
+            name.innerText = user.userId;
         }else{
-            name.innerText = `${r.deptName} ${r.name}`
+            name.innerText = `${user.deptName} ${user.name}`
         }
         
-        const check = document.createElement("span");
-        if(r.userId.includes("@")){
+        const check = document.createElement("span"); 
+        if(user.userId.includes("@")){
             check.innerText = "외부 이메일";
         }else{
-            if(r.messageCheckNum == 0){
+            if(user.checkStatus){
                 check.innerText = "읽음";
             }else{
                 check.innerText = "읽지 않음";

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
@@ -10,8 +10,10 @@
 <title>COFFICE</title>
 <link href="/images/3.png" rel="shortcut icon" type="image/x-icon">
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script type="module"
+	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule
+	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -22,7 +24,7 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-	<div class="card shadow mb-4">
+					<div class="card shadow mb-4">
 						<!-- <div class="card-header py-3">
 							<h6 class="m-0 font-weight-bold text-primary"></h6>
 						</div> -->
@@ -44,11 +46,11 @@
 													</select> <input type="search" name="search"
 														class="form-control form-control-sm mr-2"
 														placeholder="검색어를 입력하세요" style="max-width: 200px;">
-													<button type="submit" class="btn btn-info ">검색</button>
+													<button type="submit" class="btn btn-secondary">검색</button>
 												</form>
 
 												<!-- 추가 버튼 -->
-												<a href="./add" class="btn btn-danger">작성하기</a>
+												<a href="./add" class="btn btn-primary">작성하기</a>
 											</div>
 										</div>
 									</div>
@@ -76,11 +78,25 @@
 												</thead>
 												<tbody>
 													<c:forEach items="${list }" var="l">
-														<tr>
-															<td>${l.sendUser.deptName } ${l.sendUser.name }</td>
-															<td><a class="boardA" href="./receive/detail?messageNum=${l.messageNum }">${l.messageTitle }</a></td>
-															<td>${l.formatted }</td>
-														</tr>
+														<c:choose>
+															<c:when test="${l.receiveMessage.checkStatus eq false }">
+																<tr style="background-color: lightgoldenrodyellow; font-weight: bold;">
+																	<td>${l.senderDept }${l.senderName }</td>
+																	<td><a class="receiveMessage"
+																		href="./receive/detail?messageNum=${l.messageNum }" data-read-status="none" data-message-num="${l.messageNum }">${l.messageTitle }</a></td>
+																	<td>${l.formatted }</td>
+																</tr>
+															</c:when>
+															<c:otherwise>
+																<tr>
+																	<td>${l.senderDept }${l.senderName }</td>
+																	<td><a class="receiveMessage"
+																		href="./receive/detail?messageNum=${l.messageNum }" data-message-num="${l.messageNum}">${l.messageTitle }</a></td>
+																	<td>${l.formatted }</td>
+																</tr>
+															</c:otherwise>
+														</c:choose>
+
 													</c:forEach>
 												</tbody>
 											</table>
@@ -107,7 +123,8 @@
 													</c:forEach>
 
 
-													<li class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }
+													<li
+														class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }
 														id="dataTable_next"><a
 														href="./receive?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="7" tabindex="0"
@@ -128,7 +145,7 @@
 		</div>
 		<!-- End Content Wrapper -->
 	</div>
-	
+	<script src="/js/message/messageReceive.js"></script>
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>

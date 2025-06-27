@@ -113,4 +113,9 @@ public class MessageController {
 	public MessageVO getCheck(MessageVO messageVO) throws Exception{
 		return messageService.getCheck(messageVO);
 	}
+	
+	@PostMapping("read")
+	public void read(Long messageNum, Authentication authentication) throws Exception{
+		messageService.read(messageNum, authentication.getName());
+	}
 }
