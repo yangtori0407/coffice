@@ -26,7 +26,7 @@ public class GeminiService {
 	public String getDescription(String prompt) {
 		String api = geminiurl+geminikey;
 		
-		String text = prompt+"100자내로 알려줘";
+		String text = prompt+"50자내로 알려줘";
 		
 		GeminiReqVO request = new GeminiReqVO();
 		request.createGeminiReqDto(text);
@@ -42,15 +42,13 @@ public class GeminiService {
 					                }
 					                return Mono.error(new RuntimeException("클라이언트 오류 발생: " + clientResponse.statusCode()));
 					            })
-					            .onStatus(status -> status.is4xxClientError(), clientResponse -> {
-					                return Mono.error(new RuntimeException("서버 오류 발생: " + clientResponse.statusCode()));
-					            })
 								.bodyToMono(GeminiResVO.class)
 								.block()
 								;
 								
 		return response.getCandidates().get(0).getContent().getParts().get(0).getText();
 		} catch(Exception e) {
+			e.printStackTrace();
 			return "지금은 gpt를 이용할수 없습니다. 잠시후 다시 시도해주세요.";
 		}
 	}
