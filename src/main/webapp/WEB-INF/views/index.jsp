@@ -290,6 +290,7 @@
 		</div>
 		<!-- End Content Wrapper -->
 		 <c:import url="/WEB-INF/views/templates/ocModal.jsp"></c:import>
+		 
 		 <!--gpt 모달-->
 		<div class="modal fade" id="getGpt" tabindex="-1" aria-hidden="true">
 		  <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
@@ -298,7 +299,7 @@
 		        <h5 class="modal-title"><i class="fas fa-robot mr-2"></i>CofficeBot</h5>
 				  <ion-icon id="infoIcon" 
 				  			name="information-circle-outline"
-				  			data-container="body" 
+				  			tabindex="0"
 				  			data-toggle="popover" 
 				  			data-placement="top"
 				  			 data-html="true"
@@ -329,9 +330,19 @@
 	<script src="/js/gpt/description.js"></script>
 </body>
 <script type="text/javascript">
-$(function () {
-    $('#infoIcon').popover();
+$(document).ready(function () {
+    // Popover 초기화
+    $('#infoIcon').popover({
+      trigger: 'focus',  // 포커스 잃으면 자동으로 닫힘
+      html: true
+    });
+
+    // 클릭하면 포커스 주기
+    $('#infoIcon').on('click', function () {
+      $(this).focus();
+    });
   });
+
 const label = [
 	<c:forEach items="${chart}" var="c" varStatus="s">
 		"${c.branchName}"
