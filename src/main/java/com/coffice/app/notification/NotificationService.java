@@ -11,6 +11,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coffice.app.documents.DocumentVO;
+import com.coffice.app.documents.lines.ReferenceLineVO;
 import com.coffice.app.events.vacation.VacationVO;
 import com.coffice.app.message.MessageVO;
 import com.coffice.app.posts.board.BoardVO;
@@ -99,24 +101,24 @@ public class NotificationService {
 			template.convertAndSend("/sub/notification/user." + p.getUserId(), notificationVO);
 		}
 	}
-	
-	//휴가 알림
+
+	// 휴가 알림
 	public void sendVaction(VacationVO vacationVO) throws Exception {
 		NotificationVO notificationVO = new NotificationVO();
-		notificationVO.setNotiContents("휴가 신청"); //원하는 내용으로 바꾸시면 됩니다~!
+		notificationVO.setNotiContents("휴가 신청"); // 원하는 내용으로 바꾸시면 됩니다~!
 		LocalDateTime now = LocalDateTime.now();
 		Timestamp timestamp = Timestamp.valueOf(now);
 		notificationVO.setNotiDate(timestamp);
 		notificationVO.setRelateEntity("VACATION");
 		notificationVO.setNotiKind("VACATION");
-		
+
 		notificationDAO.add(notificationVO);
-		
+
 		Map<String, Object> info = new HashMap<>();
 		info.put("userId", vacationVO.getApprovalAuthority());
 		info.put("notiNum", notificationVO.getNotiNum());
 		notificationDAO.addNotiCheck(info);
-		
+
 		template.convertAndSend("/sub/notification/user." + vacationVO.getApprovalAuthority(), notificationVO);
 	}
 
@@ -128,13 +130,67 @@ public class NotificationService {
 		notificationVO.setRelateEntity("MESSAGE");
 		notificationVO.setRelateId(messageVO.getMessageNum());
 		notificationDAO.add(notificationVO);
-		
+
 		Map<String, Object> info = new HashMap<>();
 		info.put("userId", userId);
 		info.put("notiNum", notificationVO.getNotiNum());
 		notificationDAO.addNotiCheck(info);
-		
+
 		template.convertAndSend("/sub/notification/user." + userId, notificationVO);
+	}
+
+	public void sendApprovalLine(DocumentVO documentVO, String userId, int status) throws Exception {
+		NotificationVO notificationVO = new NotificationVO();
+		LocalDateTime now = LocalDateTime.now();
+		Timestamp timestamp = Timestamp.valueOf(now);
+		notificationVO.setNotiDate(timestamp);
+		if(status == 0) {
+			notificationVO.setNotiKind("DONE");
+		} else if(status == 1) {
+			notificationVO.setNotiKind("APPROVAL");
+		} else {
+			notificationVO.setNotiKind("REJECT");
+		}
+		notificationVO.setRelateEntity("APPROVAL");
+		notificationVO.setRelateId(documentVO.getDocumentId()); //리다이렉트 할 때 쓸 문서 id
+		//notificationVO.setNotiContents(documentVO.getTitle()); //결재 문서 제목
+
+		// 알림 저장
+		notificationDAO.add(notificationVO);
+
+		// 알림을 보내야 할 사람 저장
+		//결재는 다음 승인자 id만 보내주세요
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		info.put("notiNum", notificationVO.getNotiNum());
+		notificationDAO.addNotiCheck(info);
+		//다음 참조자에게 가는 알림
+		template.convertAndSend("/sub/notification/user." + userId, notificationVO);
+	}
+
+	public void sendReferrenceLine(DocumentVO documentVO, List<ReferenceLineVO> users) throws Exception {
+		NotificationVO notificationVO = new NotificationVO();
+		LocalDateTime now = LocalDateTime.now();
+		Timestamp timestamp = Timestamp.valueOf(now);
+		notificationVO.setNotiDate(timestamp);
+		notificationVO.setNotiKind("REFERENCE");
+		notificationVO.setRelateEntity("REFERENCE");
+		notificationVO.setRelateId(documentVO.getDocumentId()); //리다이렉트 할 때 쓸 문서 id
+		//notificationVO.setNotiContents(null); //결재 문서 제목
+
+		// 알림 저장
+		notificationDAO.add(notificationVO);
+
+		// 알림을 보내야 할 사람 저장
+		// 참조자가 여러명이면 list 형태로 보내주세요
+		Map<String, Object> info = new HashMap<>();
+		for (ReferenceLineVO u : users) {
+			info.put("userId", u.getUserId());
+			info.put("notiNum", notificationVO.getNotiNum());
+			notificationDAO.addNotiCheck(info);
+			//참조자에게 알림이 가는 코드
+			template.convertAndSend("/sub/notification/user." + u.getUserId(), notificationVO);
+		}
 	}
 
 	public Map<String, Object> getNotification(String userId) throws Exception {
