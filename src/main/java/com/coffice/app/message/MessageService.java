@@ -11,14 +11,17 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coffice.app.notification.NotificationService;
 import com.coffice.app.page.Pager;
 import com.coffice.app.users.UserDAO;
 import com.coffice.app.users.UserVO;
 
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class MessageService {
 
 	@Autowired
@@ -26,6 +29,9 @@ public class MessageService {
 	
 	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
+	private NotificationService notificationService;
 
 	private final JavaMailSender messageMailSender;
 
@@ -38,6 +44,7 @@ public class MessageService {
 		//이메일 내용 저장
 		messageVO.setSender(userId);
 		int result = messageDAO.add(messageVO);
+		log.info("messageVO 체크 : {}", result);
 		
 		Map<String, Object> info = new HashMap<>();
 		//로그인 사용자의 이메일을 가지고 오기 위한 로직
@@ -61,9 +68,11 @@ public class MessageService {
 				//이메일 받을 유저 저장
 				messageDAO.addEmailUser(info);
 			}
+			messageVO = messageDAO.detail(messageVO);
+			notificationService.sendMessage(messageVO, s);
 			info.clear();
 		}
-	
+		
 
 		return result;
 	}
