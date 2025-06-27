@@ -158,4 +158,9 @@ public class MessageService {
 		
 		return messageVO;
 	}
+
+	public MessageVO getCheck(MessageVO messageVO) throws Exception{
+		
+		return messageDAO.detail(messageVO);
+	}
 }

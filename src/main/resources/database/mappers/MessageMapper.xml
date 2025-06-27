@@ -192,6 +192,7 @@
 		WHERE U.USER_ID = #{userId}
 	</select>
 
+
 	<insert id="add" parameterType="MessageVO"
 		useGeneratedKeys="true" keyProperty="messageNum">
 		INSERT INTO MESSAGE(MESSAGE_NUM, MESSAGE_CONTENTS, SEND_DATE, MESSAGE_TITLE, SENDER, SENDER_DELETE)

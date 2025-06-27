@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.page.Pager;
 
@@ -106,5 +107,10 @@ public class MessageController {
 		
 		return "message/reply";
 	}
-
+	
+	@GetMapping("getCheck")
+	@ResponseBody
+	public MessageVO getCheck(MessageVO messageVO) throws Exception{
+		return messageService.getCheck(messageVO);
+	}
 }

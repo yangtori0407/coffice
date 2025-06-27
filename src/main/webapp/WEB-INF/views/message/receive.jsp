@@ -128,6 +128,7 @@
 		</div>
 		<!-- End Content Wrapper -->
 	</div>
+	
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>

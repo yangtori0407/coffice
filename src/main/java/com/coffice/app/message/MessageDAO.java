@@ -30,4 +30,6 @@ public interface MessageDAO {
 
 	long getReceiveTotal(Map<String, Object> info) throws Exception;
 
+	MessageVO getCheck(Long messageNum) throws Exception;
+
 }
