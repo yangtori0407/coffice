@@ -15,13 +15,15 @@
 <script src= "https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <link rel="stylesheet" type="text/css" href="/css/user/index_employee.css">
-
+<link rel="stylesheet" type="text/css" href="/css/gpt.css">
+<link rel="stylesheet" type="text/css" href="/css/mainSchedule.css">
 
 <c:if test="${not empty msg}">
 	<script>
 		alert("${msg}");
 	</script>
 </c:if>
+
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -40,7 +42,7 @@
 						<div class="col-3">
 
 							<!-- Background Gradient Utilities -->
-							<div class="card shadow mb-4" style="height: 500px;">
+							<div class="card shadow mb-4" style="height: 530px;">
 								<div class="card-header py-3">
 									<h6 class="m-0 font-weight-bold text-primary">사원정보 부분</h6>
 								</div>
@@ -86,14 +88,6 @@
 										  
 										</div>
 									</div>
-									<!-- <div class="px-3 py-5 bg-gradient-success text-white">
-                                    	<div>휴가(총 15일)</div>
-                                    	<div>사용 - 1일</div>
-                                    	<div>잔여 - 14일</div>
-                                    </div>
-                                    <div class="px-3 py-5 bg-gradient-info text-white">.bg-gradient-info</div>
-                                    <div class="px-3 py-5 bg-gradient-warning text-white">.bg-gradient-warning</div>
-                                    <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div> -->
 								</div>
 							</div>
 							<div class="row">
@@ -283,8 +277,12 @@
 
 					</div>
 					<!-- contents 내용 끝 -->
-					
-
+						<!-- gpt  -->
+					<div style="position: fixed; bottom: 80px; right: 20px; z-index: 1050;">
+						<a href="#" class="gpt-btn" data-toggle="modal" data-target="#getGpt">
+							<i class="fas fa-robot mr-2"></i>CofficeBot
+						</a>
+					</div>
 				</div>
 			</div>
 			<!-- end Content -->
@@ -292,6 +290,36 @@
 		</div>
 		<!-- End Content Wrapper -->
 		 <c:import url="/WEB-INF/views/templates/ocModal.jsp"></c:import>
+		 
+		 <!--gpt 모달-->
+		<div class="modal fade" id="getGpt" tabindex="-1" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+		    <div class="modal-content gpt-modal-content">
+		      <div class="modal-header gpt-modal-header">
+		        <h5 class="modal-title"><i class="fas fa-robot mr-2"></i>CofficeBot</h5>
+				  <ion-icon id="infoIcon" 
+				  			name="information-circle-outline"
+				  			tabindex="0"
+				  			data-toggle="popover" 
+				  			data-placement="top"
+				  			 data-html="true"
+				  			data-content="키워드: 메뉴,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;식자재,
+							  			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;총매출,
+							  			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;지점별매출"></ion-icon>
+		        <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+			  <div class="modal-body gpt-modal-body">
+			    <div id="chatBox" style="max-height:300px; overflow-y:auto; background:#252525; padding:10px; border-radius:10px;">
+			      <!-- 대화 내용 쌓임 -->
+			    </div>
+			    <textarea id="gptInput" class="form-control gpt-textarea mt-2" rows="2" placeholder="메시지를 입력해주세요.."></textarea>
+			    <button id="sendGptBtn" class="btn btn-primary btn-block mt-2">전송</button>
+			  </div>
+		    </div>
+		  </div>
+		</div>
 	</div>
 	<!-- End Wrapper -->
 	<input type="hidden" value="${apiKey}" id="apiKey">
@@ -299,8 +327,22 @@
 	<script src='/fullcalendar/dist/index.global.js'></script>
 	<script src="/js/calendar/homeCalendar.js"></script>
 	<script src="/js/user/attendance.js"></script>
+	<script src="/js/gpt/description.js"></script>
 </body>
 <script type="text/javascript">
+$(document).ready(function () {
+    // Popover 초기화
+    $('#infoIcon').popover({
+      trigger: 'focus',  // 포커스 잃으면 자동으로 닫힘
+      html: true
+    });
+
+    // 클릭하면 포커스 주기
+    $('#infoIcon').on('click', function () {
+      $(this).focus();
+    });
+  });
+
 const label = [
 	<c:forEach items="${chart}" var="c" varStatus="s">
 		"${c.branchName}"

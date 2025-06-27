@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.coyote.http11.upgrade.UpgradeServletOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coffice.app.page.Pager;
 import com.coffice.app.users.UserDAO;
 import com.coffice.app.users.UserVO;
 
@@ -82,13 +84,69 @@ public class MessageService {
 		messageMailSender.send(mimeMessage);
 	}
 
-	public List<MessageVO> getSendMessage(String userId) throws Exception {
-		return messageDAO.getSendMessage(userId);
+	public List<MessageVO> getSendMessage(String userId, Pager pager) throws Exception {
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		info.put("pager", pager);
+		pager.make();
+		Long total = messageDAO.getSendTotal(info);
+		pager.makeNum(total);
+		return messageDAO.getSendMessage(info);
 	}
 
-	public List<MessageVO> getReceiveMessage(String userId) throws Exception{
+	public List<MessageVO> getReceiveMessage(String userId, Pager pager) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		info.put("pager", pager);
+		pager.make();
+		Long total = messageDAO.getReceiveTotal(info);
+		pager.makeNum(total);
+		return messageDAO.getReceiveMessage(info);
+	}
 
-		return messageDAO.getReceiveMessage(userId);
+	public MessageVO detail(MessageVO messageVO) throws Exception{
+		return messageDAO.detail(messageVO);
+	}
+
+	public int receiveDelete(Long messageNum, String userId) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("messageNum", messageNum);
+		info.put("userId", userId);
 		
+		return messageDAO.receiveDelete(info);
+		
+	}
+
+	public int sendDelete(Long messageNum, String userId) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("messageNum", messageNum);
+		info.put("userId", userId);
+		
+		return messageDAO.sendDelete(info);
+	}
+
+	public MessageVO reply(Long messageNum, String userId) throws Exception{
+		MessageVO messageVO = new MessageVO();
+		messageVO.setMessageNum(messageNum);
+		messageVO = detail(messageVO);
+		UserVO userVO = messageDAO.getUserInfo(userId);
+		
+		String message = "<div><br></div>"
+			    + "<p style=\"font-size:10pt;font-family:sans-serif;padding:0 0 0 10pt\">"
+			    + "<span>-----Original Message-----</span><br>"
+			    + "<b>From:</b> &quot;Coffice " + messageVO.getSenderDept() + " " + messageVO.getSenderName() + "&quot; "
+			    + "&lt;" + messageVO.getEmail() + "&gt;<br>"
+			    + "<b>To:</b> " + userVO.getDeptName() + " " + userVO.getName() 
+			    + " &lt;" + userVO.getEmail() + "&gt;<br>"
+			    + "<b>Cc:</b><br>"
+			    + "<b>Sent:</b> " + messageVO.getSendDate() + "<br>"
+			    + "<b>Subject:</b> " + messageVO.getMessageTitle() + "<br>"
+			    + "</p><p>" + messageVO.getMessageContents() + "</p><p><br></p>";
+		
+		messageVO.setMessageContents(message);
+		String messageTitle = "Re:" + messageVO.getMessageTitle();
+		messageVO.setMessageTitle(messageTitle);
+		
+		return messageVO;
 	}
 }

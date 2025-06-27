@@ -41,12 +41,12 @@
 										  </select>			 
 											<input type="search" name="search" id="keyword" class="form-control form-control-sm mr-2" placeholder="검색어를 입력하세요" style="max-width: 200px;">
 											<div class="input-group-append">
-										<button class="btn btn-secondary" type="submit" id="button-addon2">찾기</button>
+										<button class="btn btn-secondary" type="submit" id="button-addon2">검색</button>
 									</div>
 								</form>
 								
 								
-								<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addIngredients">추가하기</a>
+								<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addIngredients">추가</a>
 								
 							</div>
 						</div>
@@ -124,7 +124,7 @@
 									</div>
 								</div>
 									<div class="col-sm-12 col-md-4" style="text-align:right;">
-										<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#addReceive">입/출고</a>
+										<a href="#" class="btn btn-success" data-toggle="modal" data-target="#addReceive">입/출고</a>
 									</div>
 							</div>
 							</div>

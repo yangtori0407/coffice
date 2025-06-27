@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,8 +45,6 @@ public class DocumentController {
 	@Autowired
 	private DocumentService documentService;
 
-	
-
 	//
 	@PostMapping("form")
 	@ResponseBody
@@ -60,11 +59,21 @@ public class DocumentController {
 	@GetMapping("list/*")
 	public String getList(Pager pager, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 
-		List<DocumentVO> docuList = documentService.getList(pager, request, session);
+		List<DocumentVO> docuList = (List<DocumentVO>)documentService.getList(pager, request, session).get("list");
 		model.addAttribute("docuList", docuList);
 		System.out.println("list 컨트롤러 docuList size : " + docuList.size());
 		model.addAttribute("pager", pager);
 
+		String kind = (String) documentService.getList(pager, request, session).get("kind");
+		model.addAttribute("kind", kind);
+		
+		String uri = request.getRequestURI();
+		
+		String[] parts = uri.split("/");
+		String url = parts[parts.length-1];
+		
+		model.addAttribute("document", url);
+		
 		return "document/list";
 	}
 

@@ -1,5 +1,7 @@
 package com.coffice.app.users;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,9 +26,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.coffice.app.gpt.GeminiService;
+import com.coffice.app.attendance.AttendanceService;
 import com.coffice.app.mail.MailService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/user/*")
@@ -41,8 +46,16 @@ public class UserController {
 
 	@Autowired
 	private MailService mailService;
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private GeminiService geminiService;
+	
+	@Autowired
+	private AttendanceService attendanceService;
+
 
     UserController(WebSecurityCustomizer customizer) {
         this.customizer = customizer;
@@ -55,8 +68,8 @@ public class UserController {
 	}
 	
 	@GetMapping("register")
-	public void register(@ModelAttribute UserVO userVO) throws Exception {
-		
+	public void register(@ModelAttribute UserVO userVO, Model model) throws Exception {
+		model.addAttribute("kind", "사원 등록");
 	}
 	
 	@PostMapping("register")
@@ -67,16 +80,14 @@ public class UserController {
 	    
 		if(userService.userErrorCheck(userVO, bindingResult)) {
 			//System.out.println("유효성 검사 실패");
-			 //bindingResult.getAllErrors().forEach(e -> {
-			        //System.out.println("에러 내용: " + e.getDefaultMessage());
-			    //});
+
 			return "user/register";
 		}
 		
 		userService.register(userVO, file);
 		//System.out.println("등록완료");
 		redirectAttributes.addFlashAttribute("msg", "등록이 완료되었습니다!");
-		return "redirect:/";
+		return "redirect:/employee/list";
 	}
 	
 	@GetMapping("afterLogout")
@@ -186,8 +197,17 @@ public class UserController {
 	}
 	
 	@GetMapping("mypage")
-	public void mypage() throws Exception{
+	public String mypage(@AuthenticationPrincipal UserVO userVO, Model model) throws Exception{
+		model.addAttribute("quote", geminiService.getQuote(userVO.getName()));
+
+		String userId = userVO.getUserId();
 		
+		Map<String, Long> timeMap = attendanceService.getWeeklyWorkStatus(userId);
+		
+		model.addAttribute("timeMap", timeMap);
+		model.addAttribute("kind", "마이페이지");
+		
+		return "user/mypage";
 	}
 	
 	@PostMapping("mypage/checkPassword")
@@ -204,26 +224,37 @@ public class UserController {
 	public String update(HttpSession session, Model model) throws Exception {
 		UserVO userVO = (UserVO)session.getAttribute("user");
 		if(userVO != null) {
-			model.addAttribute("user", userVO);
+			model.addAttribute("userVO", userVO);
 		}
+		model.addAttribute("kind", "내 정보 수정");
 		
 		return "user/update";
 	}
 	
 	@PostMapping("update")
-	public String update(@ModelAttribute UserVO userVO, BindingResult bindingResult,
-						@RequestParam("file") MultipartFile file,
-						HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
-		if (userVO.getPassword() != null && !userVO.getPassword().equals(userVO.getPasswordCheck())) {
-		    redirectAttributes.addFlashAttribute("error", "비밀번호가 일치하지 않습니다.");
-		    return "redirect:/user/update";
-		}
+	public String update(@Valid @ModelAttribute("userVO") UserVO userVO, BindingResult bindingResult,
+						@RequestParam("file") MultipartFile file, 
+						HttpSession session, RedirectAttributes redirectAttributes, Model model) throws Exception {
 		
-		userService.update(userVO, file);
-		UserVO updateUser = userService.findById(userVO.getUserId());
-		session.setAttribute("user", updateUser);
-		redirectAttributes.addFlashAttribute("success", "내 정보가 성공적으로 수정되었습니다!");
-		return "redirect:/user/mypage";
+	    if (userVO.getPassword() != null && !userVO.getPassword().isBlank() &&
+	        !userVO.getPassword().equals(userVO.getPasswordCheck())) {
+	    	bindingResult.rejectValue("passwordCheck", "error.passwordCheck", "비밀번호 확인이 일치하지 않습니다.");
+	    	model.addAttribute("kind", "내 정보 수정");
+	        return "user/update";
+	    }
+	    
+	    if (bindingResult.hasErrors()) {
+	    	model.addAttribute("kind", "내 정보 수정");
+	        return "user/update";
+	    }
+	    
+	    userService.update(userVO, file);
+
+	    UserVO updateUser = userService.findById(userVO.getUserId());
+	    session.setAttribute("user", updateUser);
+
+	    redirectAttributes.addFlashAttribute("success", "내 정보가 성공적으로 수정되었습니다!");
+	    return "user/mypage";
 	}
 	
 	

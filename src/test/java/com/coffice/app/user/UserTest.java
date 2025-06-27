@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.coffice.app.gpt.GeminiService;
 import com.coffice.app.users.UserDAO;
 import com.coffice.app.users.UserVO;
 
@@ -22,6 +23,8 @@ class UserTest {
 	private UserDAO userDAO;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private GeminiService productService;
 
 //	@Test
 	void test() throws Exception {
@@ -33,11 +36,25 @@ class UserTest {
 		assertTrue(result);
 	}
 	
-	@Test
+//	@Test
 	void test2() throws Exception {
 		String filename = UUID.randomUUID().toString();
 		filename = filename.concat("-");
 		log.info("fi:{}",filename);
+	}
+	
+//	@Test
+	void test3() throws Exception {
+		String a = "안녕";
+		String b = productService.getDescription(a);
+		log.info("g:{}",b);
+	}
+	
+	@Test
+	void test4() throws Exception {
+		String a = "배수지";
+		String b = productService.getQuote(a);
+		log.info("g:{}",b);
 	}
 
 }

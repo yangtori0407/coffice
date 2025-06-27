@@ -71,7 +71,7 @@
 														<th class="sorting" tabindex="0" aria-controls="dataTable"
 															rowspan="1" colspan="1"
 															aria-label="Office: activate to sort column ascending"
-															style="width: 116.788px;">수신 날짜</th>
+															style="width: 116.788px;">날짜</th>
 															<th class="sorting" tabindex="0" aria-controls="dataTable"
 															rowspan="1" colspan="1"
 															aria-label="Office: activate to sort column ascending"
@@ -82,23 +82,23 @@
 													<c:forEach items="${list }" var="m">
 														<tr>
 															<td>
+																
 															 	<c:choose>
-															 		<c:when test="${m.name eq null }">
-															 			${m.userId }
+															 		<c:when test="${m.receiveUsers[0].name eq null }">
+															 			${m.receiveUsers[0].userId }
 															 		</c:when>
 															 		<c:otherwise>
-															 			${m.deptName } ${m.name }
+															 			${m.receiveUsers[0].deptName } ${m.receiveUsers[0].name }
 															 		</c:otherwise>
 															 	</c:choose>
+															 	<c:if test="${m.receiveUsers.size() > 1 }">
+															 		외 ${m.receiveUsers.size() - 1 }
+															 	</c:if>
 															</td>
-															<td><a class="boardA" href="./detail?messageNum=${m.messageNum }">${m.messageTitle}</a></td>
+															<td><a class="boardA" href="./send/detail?messageNum=${m.messageNum }">${m.messageTitle}</a></td>
 															<td>${m.formatted}</td>
 															<td>
-															<c:choose>
-																<c:when test="${m.name eq null }">외부 메일</c:when>
-																<c:when test="${m.checkStatus eq false }">읽지 않음</c:when>
-																<c:otherwise>읽음</c:otherwise>
-															</c:choose>
+															<button class="btn btn-sm btn-primary">수신확인</button>
 															</td>
 														
 														</tr>
@@ -112,17 +112,17 @@
 										<div class="col-sm-12 col-md-7">
 											<div class="dataTables_paginate paging_simple_numbers"
 												id="dataTable_paginate">
-												<%-- <ul class="pagination">
+												<ul class="pagination">
 													<li class="paginate_button page-item previous"
 														id="dataTable_previous"><a
-														href="./list?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}"
+														href="./send?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="0" tabindex="0"
 														class="page-link">Previous</a></li>
 													<c:forEach begin="${pager.start }" end="${pager.end }"
 														var="i">
 														<li
 															class="paginate_button page-item ${pager.nowPage == i ? 'active' : '' }"><a
-															href="./list?nowPage=${i }&search=${pager.search}&kind=${pager.kind}"
+															href="./send?nowPage=${i }&search=${pager.search}&kind=${pager.kind}"
 															aria-controls="dataTable" data-dt-idx="1" tabindex="0"
 															class="page-link">${i}</a></li>
 													</c:forEach>
@@ -130,10 +130,10 @@
 
 													<li class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }
 														id="dataTable_next"><a
-														href="./list?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
+														href="./send?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="7" tabindex="0"
 														class="page-link">Next</a></li>
-												</ul> --%>
+												</ul>
 											</div>
 										</div>
 									</div>

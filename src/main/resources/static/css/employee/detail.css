@@ -1,0 +1,52 @@
+
+.main {
+	margin-top : 50px;
+	margin-bottom: 50px;
+}
+.circle-img {
+    width: 100px;         /* 크기 조절 */
+    height: 100px;        /* 정사각형이어야 완전히 동그랗게 나옴 */
+    object-fit: cover;    /* 비율 깨짐 방지 + 꽉 채움 */
+    border-radius: 50%;   /* 동그랗게 만들기 */
+    display: block;
+    margin: 0px auto 20px auto;       /* 가운데 정렬 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);  /* 그림자 효과 */
+}
+
+.employee {
+	margin-bottom : -20px ; 
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.employee-name {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.employee-info {
+    
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 17px;
+  color: #6c757d;
+}
+
+
+
+.change {
+	padding : 6px 10px;
+	font-size : 0.85rem;
+}
+
+
+
+
+
+
