@@ -99,12 +99,44 @@
 					    
 					    <!-- 오른쪽 위 박스 -->
 					    <div class="card" style="flex: 1; margin-bottom: 5px;">
-					      <div class="card-header py-3">
-					        <h6 class="m-0 font-weight-bold text-primary">연차 및 휴가</h6>
-					      </div>
-					      <div class="card-body">
-					        <!-- 오른쪽 위 내용 -->
-					      </div>
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">연차 및 휴가</h6>
+							</div>
+							<div class="card-body" style="display: flex; flex-direction: column; justify-content: center; min-height: 200px;">
+							<!-- 오른쪽 위 내용 -->
+								<div style="display: flex; justify-content: space-around;  border-bottom: 1px solid black; padding-bottom: 10px;">
+									<div>사용 연차</div>
+									<div>잔여 연차</div>
+									<div>부여 연차</div>
+								</div>
+								<div style="display: flex; justify-content: space-around; margin-top: 10px; font-weight: bold;">
+									<div><a href="#">${annualLeaves.USED}</a>일</div>
+									<div><a href="#">${annualLeaves.GRANT}</a>일</div>
+									<div><a href="#">${annualLeaves.REMAIN}</a>일</div>
+								</div>
+							</div>
+							<div class="card-footer d-flex justify-content-around text-center" style="padding: 12px 0;">
+								<div>
+									<a href="/events/vacation" style="text-decoration: none; color: inherit;">
+									<ion-icon name="list-outline" style="font-size: 24px;"></ion-icon><br/>
+									<span style="font-size: 13px;">전체 조회</span>
+									</a>
+								</div>
+
+								<div>
+									<a href="/user/vacationHistory" style="text-decoration: none; color: inherit;">
+									<ion-icon name="calendar-outline" style="font-size: 24px;"></ion-icon><br/>
+									<span style="font-size: 13px;">신청/승인 내역</span>
+									</a>
+								</div>
+
+								<div>
+									<a href="/user/annualLeaveHistory" style="text-decoration: none; color: inherit;">
+									<ion-icon name="document-text-outline" style="font-size: 24px;"></ion-icon><br/>
+									<span style="font-size: 13px;">사용 내역</span>
+									</a>
+								</div>
+							</div>
 					    </div>
 					    
 					    

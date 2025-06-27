@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +30,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.coffice.app.gpt.GeminiService;
 import com.coffice.app.attendance.AttendanceService;
+import com.coffice.app.events.vacation.AnnualLeaveService;
+import com.coffice.app.events.vacation.VacationService;
 import com.coffice.app.mail.MailService;
 
 import jakarta.servlet.http.HttpSession;
@@ -55,6 +59,12 @@ public class UserController {
 	
 	@Autowired
 	private AttendanceService attendanceService;
+	
+	@Autowired
+	private AnnualLeaveService annualLeaveService;
+	
+	@Autowired
+	private VacationService vacationService;
 
 
     UserController(WebSecurityCustomizer customizer) {
@@ -203,7 +213,9 @@ public class UserController {
 		String userId = userVO.getUserId();
 		
 		Map<String, Long> timeMap = attendanceService.getWeeklyWorkStatus(userId);
+		Map<String, Double> annualLeaves = annualLeaveService.getAnnualLeaves(userId);
 		
+		model.addAttribute("annualLeaves", annualLeaves);
 		model.addAttribute("timeMap", timeMap);
 		model.addAttribute("kind", "마이페이지");
 		
@@ -270,7 +282,23 @@ public class UserController {
 	@ResponseBody
 	public List<UserVO> getUsers(UserVO userVO) throws Exception {		
 		return userService.getUsers(userVO);
-
+	}
+	
+	@GetMapping("user/vacationHistory")
+	public String vacationHistory(Model model, Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		model.addAttribute("kind", "휴가 내역");
+		model.addAttribute("requestList", vacationService.getApplyList(userVO));
+		model.addAttribute("approvalList", vacationService.getAcceptList(userVO));
+		return "user/vacationHistory";
+	}
+	
+	@GetMapping("user/annualLeaveHistory")
+	public String annualLeaveHistory(Model model, Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		model.addAttribute("kind", "연차 내역");
+		model.addAttribute("allList", annualLeaveService.getList(userVO));
+		return "user/annualLeaveHistory";
 	}
 
 }

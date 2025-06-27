@@ -1,15 +1,24 @@
 package com.coffice.app.events.vacation;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.coffice.app.events.EventUtility;
 import com.coffice.app.users.UserDAO;
 import com.coffice.app.users.UserVO;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class VacationService {
 	
@@ -18,6 +27,12 @@ public class VacationService {
 	
 	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
+	private EventUtility eventUtility;
+	
+	@Autowired
+	private AnnualLeaveService annualLeaveService;
 	
 	public List<UserVO> getDepsUsers(UserVO userVO) throws Exception {
 		return vacationDAO.getDepsUsers(userVO);
@@ -49,8 +64,33 @@ public class VacationService {
 		return map;
 	}
 	
-	public int approve(VacationVO vacationVO) throws Exception {
-		return vacationDAO.approve(vacationVO);
+	@Transactional
+	public int approve(VacationVO vacationVO, Authentication authentication) throws Exception {
+		vacationVO = vacationDAO.getOne(vacationVO);
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setApprovalAuthority(userVO.getUserId());
+		
+		LocalDateTime start = vacationVO.getStartTime();
+		LocalDateTime end = vacationVO.getEndTime();
+		List<LocalDate> holidays = eventUtility.getHolidays();
+
+		Double daysUsed = eventUtility.calculateAnnualLeaveDays(start, end, holidays);
+		vacationVO.setDaysUsed(daysUsed);
+		
+		int result = vacationDAO.approve(vacationVO);
+		log.info("approve : {}", result);
+		
+		AnnualLeaveVO annualLeaveVO = new AnnualLeaveVO();
+		annualLeaveVO.setLeaveYear((long)start.getYear());
+		annualLeaveVO.setUsedDate(start);
+		annualLeaveVO.setUserId(vacationVO.getUserId());
+		annualLeaveVO.setVacationId(vacationVO.getVacationId());
+		annualLeaveVO.setUsedLeave(daysUsed);
+		
+		result = annualLeaveService.use(annualLeaveVO);
+		log.info("use : {}", result);
+		
+		return result;
 	}
 	
 	public List<VacationVO> getList(UserVO userVO) throws Exception {

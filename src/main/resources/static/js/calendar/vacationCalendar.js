@@ -121,6 +121,7 @@ fetch("/events/getHolidays")
 fetch("/events/vacation/getList")
 .then(r=>r.json())
 .then(r=>{
+    console.log(r)
     for(a of r) {
         let clr;
         if(uid.value == a.userId) {
