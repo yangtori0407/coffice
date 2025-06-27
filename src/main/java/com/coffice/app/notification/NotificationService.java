@@ -1,5 +1,7 @@
 package com.coffice.app.notification;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,11 +99,25 @@ public class NotificationService {
 			template.convertAndSend("/sub/notification/user." + p.getUserId(), notificationVO);
 		}
 	}
-
+	
+	//휴가 알림
 	public void sendVaction(VacationVO vacationVO) throws Exception {
 		NotificationVO notificationVO = new NotificationVO();
-		notificationVO.setNotiContents("휴가 신청");
-//		notificationVO.setNotiDate();
+		notificationVO.setNotiContents("휴가 신청"); //원하는 내용으로 바꾸시면 됩니다~!
+		LocalDateTime now = LocalDateTime.now();
+		Timestamp timestamp = Timestamp.valueOf(now);
+		notificationVO.setNotiDate(timestamp);
+		notificationVO.setRelateEntity("VACATION");
+		notificationVO.setNotiKind("VACATION");
+		
+		notificationDAO.add(notificationVO);
+		
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", vacationVO.getApprovalAuthority());
+		info.put("notiNum", notificationVO.getNotiNum());
+		notificationDAO.addNotiCheck(info);
+		
+		template.convertAndSend("/sub/notification/user." + vacationVO.getApprovalAuthority(), notificationVO);
 	}
 
 	public void sendMessage(MessageVO messageVO, String userId) throws Exception {
