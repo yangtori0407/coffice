@@ -34,4 +34,6 @@ public interface MessageDAO {
 
 	int read(Map<String, Object> info) throws Exception;
 
+	int saveFile(MessageFilesVO filesVO) throws Exception;
+
 }

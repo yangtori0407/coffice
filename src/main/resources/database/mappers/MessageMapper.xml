@@ -151,21 +151,24 @@
 	<select id="detail" parameterType="MessageVO"
 		resultMap="getDetail">
 		SELECT
-		M.MESSAGE_NUM,
-		M.MESSAGE_CONTENTS,
-		M.SEND_DATE,
-		M.MESSAGE_TITLE,
-		M.SENDER_DELETE,
-		M.SENDER,
-		US.NAME AS SENDER_NAME,
-		US.EMAIL,
-		DS.DEPT_NAME AS SENDER_DEPT,
-		MC.MESSAGECHECK_NUM,
-		MC.CHECK_STATUS,
-		MC.MESSAGE_STATUS,
-		MC.USER_ID,
-		UR.NAME AS RECEIVER_NAME,
-		DP.DEPT_NAME
+			M.MESSAGE_NUM,
+			M.MESSAGE_CONTENTS,
+			M.SEND_DATE,
+			M.MESSAGE_TITLE,
+			M.SENDER_DELETE,
+			M.SENDER,
+			US.NAME AS SENDER_NAME,
+			US.EMAIL,
+			DS.DEPT_NAME AS SENDER_DEPT,
+			MC.MESSAGECHECK_NUM,
+			MC.CHECK_STATUS,
+			MC.MESSAGE_STATUS,
+			MC.USER_ID,
+			UR.NAME AS RECEIVER_NAME,
+			DP.DEPT_NAME,
+			MF.FILE_NUM,
+			MF.ORIGIN_NAME,
+			MF.SAVE_NAME
 		FROM MESSAGE M
 		JOIN MESSAGE_CHECK MC
 		ON M.MESSAGE_NUM = MC.MESSAGE_NUM
@@ -180,6 +183,8 @@
 		JOIN
 		DEPARTMENT DP
 		ON DP.DEPT_ID = UR.DEPT_ID
+		LEFT JOIN MESSAGE_FILES MF
+		ON M.MESSAGE_NUM = MF.MESSAGE_NUM
 		WHERE M.MESSAGE_NUM =
 		#{messageNum}
 	</select>
@@ -204,6 +209,12 @@
 			<result column="USER_ID" property="userId" />
 			<result column="RECEIVER_NAME" property="name" />
 			<result column="DEPT_NAME" property="deptName" />
+		</collection>
+		
+		<collection property="files" javaType="java.util.List" ofType="MessageFilesVO">
+			<id column="FILE_NUM" property="fileNum"/>
+			<result column="ORIGIN_NAME" property="originName"/>
+			<result column="SAVE_NAME" property="saveName"/>
 		</collection>
 	</resultMap>
 
@@ -231,6 +242,11 @@
 		MESSAGE_STATUS, USER_ID, RECEIVER_DELETE)
 		VALUES(NULL, #{messageNum},
 		0, #{kind}, #{userId}, 0)
+	</insert>
+	
+	<insert id="saveFile" parameterType="MessageFilesVO">
+		INSERT INTO MESSAGE_FILES(FILE_NUM, MESSAGE_NUM, ORIGIN_NAME, SAVE_NAME)
+		VALUES(NULL, #{messageNum}, #{originName}, #{saveName})
 	</insert>
 
 	<update id="receiveDelete" parameterType="java.util.HashMap">
