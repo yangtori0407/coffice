@@ -13,7 +13,7 @@ public interface NotificationDAO {
 
 	int add(NotificationVO notificationVO) throws Exception;
 
-	int addNoticeCheck(Map<String, Object> info) throws Exception;
+	int addNotiCheck(Map<String, Object> info) throws Exception;
 
 	List<UserVO> getUserList(String userId) throws Exception;
 
