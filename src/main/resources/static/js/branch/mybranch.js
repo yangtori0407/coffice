@@ -2,7 +2,7 @@ const radios = document.querySelectorAll('input[name="salesType"]');
 const selectMenu = document.getElementById('selectMenu');
 const orderBody = document.getElementById('orderBody');
 const addPurchase = document.getElementById('addPurchase');
-const modalFooter = document.getElementsByClassName('modal-footer');
+const orderFooter = document.getElementById('orderFooter');
 
 let importOptions = [];
 let expenditureOptions =[];
@@ -58,8 +58,6 @@ let expenditureOptions =[];
             button.id = isImport ? "addImport" : "addExpenditure";
             button.innerText = isImport ? "수입 추가" : "지출 추가";
 
-            const selectedMenuId = selectMenu.value;
-            const salesQuantity = document.getElementById('salesQuantity');
 
             salesQuantity.addEventListener('input',()=>{
                 if(salesQuantity.value=="" || salesQuantity.value <= 0){
@@ -70,12 +68,15 @@ let expenditureOptions =[];
             })
           
             button.addEventListener('click', function() {
+                const selectedMenuId = selectMenu.value;
+                const salesQuantity = document.getElementById('salesQuantity');
+
                 let c = confirm("정말 입력하시겠습니까?")
                 if(!c){
                     return;
                 }
             
-  
+                
             let params = new URLSearchParams();
             if(selectedMenuId==""){
                 alert("메뉴/식자재를 선택해주세요");
@@ -142,8 +143,8 @@ let expenditureOptions =[];
                 alert("오류")
             })
         });
-
-        modalFooter[0].appendChild(button);
+        console.log(orderFooter);
+        orderFooter.appendChild(button);
     });
   });
 

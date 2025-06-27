@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.coffice.app.gpt.GeminiService;
 import com.coffice.app.attendance.AttendanceService;
 import com.coffice.app.events.vacation.AnnualLeaveService;
 import com.coffice.app.events.vacation.VacationService;
@@ -50,6 +53,9 @@ public class UserController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private GeminiService geminiService;
 	
 	@Autowired
 	private AttendanceService attendanceService;
@@ -59,6 +65,7 @@ public class UserController {
 	
 	@Autowired
 	private VacationService vacationService;
+
 
     UserController(WebSecurityCustomizer customizer) {
         this.customizer = customizer;
@@ -200,9 +207,10 @@ public class UserController {
 	}
 	
 	@GetMapping("mypage")
-	public String mypage(HttpSession session, Model model) throws Exception{
-		UserVO user = (UserVO) session.getAttribute("user");
-		String userId = user.getUserId();
+	public String mypage(@AuthenticationPrincipal UserVO userVO, Model model) throws Exception{
+		model.addAttribute("quote", geminiService.getQuote(userVO.getName()));
+
+		String userId = userVO.getUserId();
 		
 		Map<String, Long> timeMap = attendanceService.getWeeklyWorkStatus(userId);
 		Map<String, Double> annualLeaves = annualLeaveService.getAnnualLeaves(userId);

@@ -56,9 +56,16 @@
 							<div class="employee-info"><ion-icon name="happy-outline"></ion-icon> 사원번호 : ${user.userId}</div>
 							<div class="employee-info"><ion-icon name="call-outline"></ion-icon>  전화번호 : ${user.phone}</div>
 							<div class="employee-info"><ion-icon name="mail-outline"></ion-icon> 이메일 :  ${user.email}</div>
-							<div style="text-align: center;">
-								
+							<div class="card mt-4">
+							  <div class="card-header text-center font-weight-bold">
+							    오늘의 명언
+							  </div>
+							  <div class="card-body text-center">
+							    <ion-icon name="sunny-outline" style="font-size: 24px; vertical-align: middle; margin-right: 8px;"></ion-icon>
+							    <span style="font-size: 18px;">${quote}</span>
+							  </div>
 							</div>
+							
 							
 							<div class="modal fade" id="pwCheckModal" tabindex="-1" role="dialog" aria-hidden="true">
 							  <div class="modal-dialog" role="document">

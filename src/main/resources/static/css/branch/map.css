@@ -5,7 +5,7 @@
 	
 	/* 지도 본체 */
 	#map {
-	    width: 600px;
+	    width: 900px;
 	    height: 450px;
 	    min-height: 50vh;
 	    margin: 20px auto;
@@ -106,8 +106,7 @@
 
 	/* 테이블 헤더 */
 	.table-custom thead {
-	    background-color: #4e5451;
-	    color: white;
+	    color: black;
 	    text-align: center;
 	}
 

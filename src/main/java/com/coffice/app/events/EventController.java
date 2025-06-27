@@ -21,6 +21,7 @@ import com.coffice.app.events.schedule.ScheduleService;
 import com.coffice.app.events.schedule.ScheduleVO;
 import com.coffice.app.events.vacation.VacationService;
 import com.coffice.app.events.vacation.VacationVO;
+import com.coffice.app.notification.NotificationService;
 import com.coffice.app.users.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,9 @@ public class EventController {
     
     @Autowired
     private VacationService vacationService;
+    
+    @Autowired
+    private NotificationService notificationService;
 	
 	@GetMapping("schedule")
 	public String schedule(Model model) throws Exception {
@@ -121,6 +125,7 @@ public class EventController {
 		UserVO userVO = (UserVO)authentication.getPrincipal();
 		vacationVO.setUserId(userVO.getUserId());
 		vacationService.applyForLeave(vacationVO);
+		notificationService.sendVaction(vacationVO);
 		return "events/vacation";
 	}
 	

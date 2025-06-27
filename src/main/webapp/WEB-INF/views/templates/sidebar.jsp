@@ -38,21 +38,22 @@
 	<div class="sidebar-heading">Interface</div> -->
 
 	<!-- Nav Item - Pages Collapse Menu -->
-	<li class="nav-item"><a class="nav-link collapsed" href="#"
+	<li class="nav-item">
+	<a class="nav-link collapsed" href="#"
 		data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-		aria-controls="collapseTwo"> <ion-icon
-				name="document-attach-outline"></ion-icon> <span>결재</span>
+		aria-controls="collapseTwo">
+		<ion-icon name="document-attach-outline"></ion-icon> <span>결재</span>
 	</a>
-		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-			data-parent="#accordionSidebar">
+		<div id="collapseTwo" 
+			class="collapse ${document == ('selectForm' or 'online' or 'onwaiting' or 'onreference' or 'handled' or 'ontemporary') ? 'show' : ''}" 
+			aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item" href="/document/selectform">기안 작성</a> <a
-					class="collapse-item" href="/document/list/online">기안 문서함</a> <a
-					class="collapse-item" href="/document/list/onwaiting">결재 대기 문서함</a>
-				<a class="collapse-item" href="/document/list/onreference">참조
-					문서함</a> <a class="collapse-item" href="/document/list/handled">승인/반려
-					문서함</a> <a class="collapse-item" href="/document/list/ontemporary">임시
-					저장 문서함</a>
+				<a class="collapse-item ${document == 'selectForm' ? 'active' : ''}" href="/document/selectform">기안 작성</a> 
+				<a class="collapse-item ${document == 'online' ? 'active' : ''}" href="/document/list/online">기안 문서함</a>
+				<a class="collapse-item ${document == 'onwaiting' ? 'active' : ''}" href="/document/list/onwaiting">결재 대기 문서함</a>
+				<a class="collapse-item ${document == 'onreference' ? 'active' : ''}" href="/document/list/onreference">참조 문서함</a> 
+				<a class="collapse-item ${document == 'handled' ? 'active' : ''}" href="/document/list/handled">승인/반려 문서함</a> 
+				<a class="collapse-item ${document == 'ontemporary' ? 'active' : ''}" href="/document/list/ontemporary">임시 저장 문서함</a>
 			</div>
 		</div></li>
 
@@ -100,7 +101,7 @@
 	</a>
 		<div id="collapseBranch"
 			class="collapse  ${branch == ('map' or 'add' or 'masterAdd' or 'myBranch') ? 'show' :''}"
-			aria-labelledby="headingCalendar" data-parent="#accordionSidebar">
+			aria-labelledby="headingCBranch" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
 				<a class="collapse-item ${branch == ('map') ? 'active' :''}"
 					href="/branch/map">지점지도</a> <a
@@ -113,10 +114,9 @@
 			</div>
 		</div></li>
 
-	<li class="nav-item"><a
-		class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}"
-		href="/ingredients/list"> <ion-icon name="cube-outline"></ion-icon>
-			<span>물류</span>
+
+	<li class="nav-item"><a id="article" class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}" href="/ingredients/list">
+		<ion-icon name="cube-outline"></ion-icon> <span>물류</span>
 	</a></li>
 
 	<!-- Nav Item - Charts -->

@@ -34,6 +34,12 @@ public interface AttendanceDAO {
 	public Long getTotalCount(Pager pager) throws Exception;
 	
 	public List<AttendanceVO> getAllAttendances (Pager pager) throws Exception;
+	
+	public List<AttendanceVO> getAttendanceByUser (String userId) throws Exception;
+	
+	public int updateAttendance (AttendanceVO attendanceVO) throws Exception;
+	
+	
 
 }
 

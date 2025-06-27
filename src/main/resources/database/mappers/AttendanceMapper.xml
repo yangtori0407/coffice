@@ -12,7 +12,7 @@
   	</insert>
   	
   	<update id="checkOut" parameterType="AttendanceVO">
-  		UPDATE ATTENDANCE SET END_TIME = #{endTime}, STATUS= #{status}, duration_time = #{durationTime}
+  		UPDATE ATTENDANCE SET END_TIME = #{endTime}, STATUS= #{status}, DURATION_TIME = #{durationTime}
   		WHERE USER_ID = #{userId} AND ATTENDANCE_DATE = #{attendanceDate}
   	</update>
   	
@@ -28,7 +28,7 @@
 	    COALESCE(SUM(duration_time), 0)
 	  FROM ATTENDANCE
 	  WHERE USER_ID = #{userId}
-	    AND attendance_date BETWEEN
+	    AND ATTENDANCE_DATE BETWEEN
 	      DATE_SUB(CURDATE(), INTERVAL (WEEKDAY(CURDATE())) DAY)
 	      AND DATE_ADD(CURDATE(), INTERVAL (6 - WEEKDAY(CURDATE())) DAY)
 	    AND DURATION_TIME IS NOT NULL
@@ -44,7 +44,7 @@
   	<select id="getAbsentUserIds" resultType="String">
 		SELECT U.USER_ID
 		FROM USERS U
-		WHERE U.STATUS = 1 -- 재직 중인 사원
+		WHERE U.STATUS = 1
 		AND U.USER_ID NOT IN (
 		SELECT A.USER_ID
 		FROM ATTENDANCE A
@@ -73,7 +73,24 @@
 	      AND END_TIME IS NULL
 	</update>
 	
+	<select id="getAttendanceByUser" parameterType="string" resultType="AttendanceVO">
+	  SELECT 
+	    USER_ID,
+	    ATTENDANCE_DATE,
+	    START_TIME,
+	    END_TIME,
+	    STATUS,
+	    REASON
+	  FROM ATTENDANCE
+	  WHERE USER_ID = #{userId}
+	  ORDER BY ATTENDANCE_DATE DESC
+	</select>
 	
+	<update id="updateAttendance" parameterType="AttendanceVO">
+  		UPDATE ATTENDANCE 
+  		SET START_TIME = #{startTime}, END_TIME = #{endTime}, STATUS= #{status}, REASON= #{reason}, DURATION_TIME = #{durationTime}
+  		WHERE USER_ID = #{userId} AND ATTENDANCE_DATE = #{attendanceDate}
+  	</update>
 	
 	
 	

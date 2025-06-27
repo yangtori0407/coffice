@@ -66,7 +66,7 @@ public class DocumentService {
 	
 	
 	//
-	public List<DocumentVO> getList(Pager pager, HttpServletRequest request, HttpSession session) throws Exception {
+	public Map<String, Object> getList(Pager pager, HttpServletRequest request, HttpSession session) throws Exception {
 		
 		// 페이지 관련 값 준비
 		pager.make();
@@ -87,40 +87,40 @@ public class DocumentService {
 		map.put("userId", user.getUserId());
 		
 		List<DocumentVO> list = null;
+		String kind = "";
 		
 		// 파싱한 키워드에 따라 조건 분기 생성
 		switch(url) {
 		case "online" : // 문서 중 작성자가 접속자인 문서만 가져온다, status는 "임시"를 제외한 "결재 중", "반려", "결재 완료"만 해당한다 
 			list = documentDAO.getListLine(map);			
-			
+			kind = "결재 > 기안 문서함";
 			break;
 		
 		case "handled" : // 문서 중 해당 문서의 결재선이 접속자이고, currentStep이 stepOrder보다 큰 (접속자의 처리가 된) 문서만 가져온다
 			list = documentDAO.getListHandled(map);
-			
+			kind = "결재 > 승인/반려 문서함";
 			break;
 			
 		case "onwaiting" : // 문서 중 해당 문서의 결재선이 접속자이고, stepOrder와 문서의 currentStep이 일치하는 문서만 가져온다
 			// approvalVO
 			list = documentDAO.getListWaiting(map);
-			
+			kind = "결재 > 결재 대기 문서함";
 			break;
 			
 		case "onreference" : // 문서 중 해당 문서의 참조선이 접속자인 문서만 가져온다
 			// referVO
 			// get document where userId 맞는 참조선의 documentId도 맞는 문서
 			list = documentDAO.getListReference(map);
-			
+			kind = "결재 > 참조 문서함";
 			break;
 			
 		case "ontemporary" : // 문서 중 작성자가 접속자이고, status가 "임시저장"인 문서만 가져온다
 			list = documentDAO.getListTemporary(map);
-			
+			kind = "결재 > 임시 저장 문서함";
 			break;
 		
 		default :
 			list = documentDAO.getListLine(map);
-			
 		}
 		
 		// 각기 다른 성격의 document가 담긴 list가 만들어졌다.
@@ -130,7 +130,11 @@ public class DocumentService {
 			vo.setApprovalLineVOs(childrenApprovers);
 		}
 		
-		return list;
+		Map<String, Object> result = new HashMap<>();
+		result.put("list", list);
+		result.put("kind", kind);
+		
+		return result;
 	}
 	
 	

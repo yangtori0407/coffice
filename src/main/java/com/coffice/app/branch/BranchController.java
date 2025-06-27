@@ -64,6 +64,15 @@ public class BranchController {
 
 	@GetMapping("map")
 	public void map(Model model, Pager pager) throws Exception {
+		if ("k2".equals(pager.getKind())) { // 운영상태일 때
+	        String keyword = pager.getSearch();
+	        if ("운영중".equals(keyword)) {
+	            pager.setSearch("1");
+	        } else if ("운영안함".equals(keyword)) {
+	            pager.setSearch("0");
+	        }
+	    }
+		
 		List<BranchVO> list = branchService.getList(pager);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
@@ -91,6 +100,8 @@ public class BranchController {
 	public String add(@Validated(RegisterGroup.class) @ModelAttribute BranchVO branchVO,
 						BindingResult bindingResult,
 						RedirectAttributes redirectAttributes) throws Exception {
+		
+		log.info("b:{}",branchVO);
 		if(branchService.branchNameCheck(branchVO, bindingResult)) {
 			return "branch/add";
 		}
@@ -199,7 +210,6 @@ public class BranchController {
 		List<BranchVO> list = branchService.myBranch(branchVO, pager);
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
-		log.info("my list:{}",list);
 		
 		Long totalSale = branchService.totalBranchSales(branchVO);
 		model.addAttribute("total", totalSale);
@@ -223,15 +233,19 @@ public class BranchController {
 			Workbook workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet("지점");
 			
+			CellStyle style = workbook.createCellStyle();
+			style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+			style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+			
 			// 헤더 행 생성
 			Row headerRow = sheet.createRow(0);
-			headerRow.createCell(0).setCellValue("지점번호");
-			headerRow.createCell(1).setCellValue("지점이름");
-			headerRow.createCell(2).setCellValue("지점주소");
-			headerRow.createCell(3).setCellValue("우편번호");
-			headerRow.createCell(4).setCellValue("운영상태");
-			headerRow.createCell(5).setCellValue("점주");
-			headerRow.createCell(6).setCellValue("사업자번호");
+			String[] headers = {"지점번호", "지점이름", "지점주소", "우편번호", "운영상태", "점주", "사업자번호"};
+
+			for (int i = 0; i < headers.length; i++) {
+			    Cell cell = headerRow.createCell(i);
+			    cell.setCellValue(headers[i]);
+			    cell.setCellStyle(style);
+			}
 			
 			
 			// 데이터 행 생성
@@ -263,14 +277,13 @@ public class BranchController {
 				}
 			}
 			
-			// 열 너비 자동 조정
-			sheet.autoSizeColumn(0);
-			sheet.autoSizeColumn(1);
-			sheet.autoSizeColumn(2);
-			sheet.autoSizeColumn(3);
-			sheet.autoSizeColumn(4);
-			sheet.autoSizeColumn(5);
-			sheet.autoSizeColumn(6);
+			sheet.setColumnWidth(0, 15 * 256); 
+			sheet.setColumnWidth(1, 20 * 256); 
+			sheet.setColumnWidth(2, 50 * 256);
+			sheet.setColumnWidth(3, 15 * 256); 
+			sheet.setColumnWidth(4, 15 * 256);
+			sheet.setColumnWidth(5, 15 * 256); 
+			sheet.setColumnWidth(6, 20 * 256);
 			
 			// 엑셀 파일을 ByteArrayOutputStream에 작성
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -278,11 +291,11 @@ public class BranchController {
 			workbook.close();
 			
 			// HTTP 응답 헤더 설정
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Content-Disposition", "attachment; filename=branch.xlsx");
-			headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			HttpHeaders headers2 = new HttpHeaders();
+			headers2.add("Content-Disposition", "attachment; filename=branch.xlsx");
+			headers2.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			
-			return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+			return new ResponseEntity<>(outputStream.toByteArray(), headers2, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -303,18 +316,23 @@ public class BranchController {
 			Workbook workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet("지점");
 			
+			CellStyle style = workbook.createCellStyle();
+			style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+			style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+			
 			CreationHelper creationHelper = workbook.getCreationHelper();
 			CellStyle dataCellStyle = workbook.createCellStyle();
 			dataCellStyle.setDataFormat(creationHelper.createDataFormat().getFormat("yyyy-mm-dd"));
 			
 			// 헤더 행 생성
 			Row headerRow = sheet.createRow(0);
-			headerRow.createCell(0).setCellValue("매출번호");
-			headerRow.createCell(1).setCellValue("수입/지출");
-			headerRow.createCell(2).setCellValue("금액");
-			headerRow.createCell(3).setCellValue("날짜");
-			headerRow.createCell(4).setCellValue("수량");
-			headerRow.createCell(5).setCellValue("메뉴이름");
+			String[] headers = {"매출번호", "수입/지출", "금액", "날짜", "수량", "메뉴이름"};
+
+			for (int i = 0; i < headers.length; i++) {
+			    Cell cell = headerRow.createCell(i);
+			    cell.setCellValue(headers[i]);
+			    cell.setCellStyle(style);
+			}
 			
 			
 			// 데이터 행 생성
@@ -347,12 +365,20 @@ public class BranchController {
 			}
 			
 			// 열 너비 자동 조정
-			sheet.autoSizeColumn(0);
-			sheet.autoSizeColumn(1);
-			sheet.autoSizeColumn(2);
-			sheet.autoSizeColumn(3);
-			sheet.autoSizeColumn(4);
-			sheet.autoSizeColumn(5);
+//			sheet.autoSizeColumn(0);
+//			sheet.autoSizeColumn(1);
+//			sheet.autoSizeColumn(2);
+//			sheet.autoSizeColumn(3);
+//			sheet.autoSizeColumn(4);
+//			sheet.autoSizeColumn(5);
+			
+			sheet.setColumnWidth(0, 10 * 256); 
+			sheet.setColumnWidth(1, 10 * 256); 
+			sheet.setColumnWidth(2, 10 * 256);
+			sheet.setColumnWidth(3, 10 * 256); 
+			sheet.setColumnWidth(4, 10 * 256);
+			sheet.setColumnWidth(5, 10 * 256); 
+			sheet.setColumnWidth(6, 20 * 256);
 			
 			// 엑셀 파일을 ByteArrayOutputStream에 작성
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -360,11 +386,11 @@ public class BranchController {
 			workbook.close();
 			
 			// HTTP 응답 헤더 설정
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Content-Disposition", "attachment; filename=sales.xlsx");
-			headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			HttpHeaders headers2 = new HttpHeaders();
+			headers2.add("Content-Disposition", "attachment; filename=sales.xlsx");
+			headers2.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			
-			return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+			return new ResponseEntity<>(outputStream.toByteArray(), headers2, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

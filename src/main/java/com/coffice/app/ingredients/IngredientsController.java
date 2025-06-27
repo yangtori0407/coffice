@@ -59,12 +59,20 @@ public class IngredientsController {
 		
 		model.addAttribute("ingredientsVO", new IngredientsVO());
 		
-		model.addAttribute("kind", "물류 > 물류관리");
+		model.addAttribute("kind", "물류");
 		return "ingredients/list";
 	}
 	
 	@GetMapping("detail")
 	public String getDetail(IngredientsVO ingredientsVO, Model model, Pager pager) throws Exception {
+		if ("k1".equals(pager.getKind())) { // 운영상태일 때
+	        String keyword = pager.getSearch();
+	        if ("입고".equals(keyword)) {
+	            pager.setSearch("1");
+	        } else if ("출고".equals(keyword)) {
+	            pager.setSearch("0");
+	        }
+	    }
 		IngredientsVO ingredientsVO2 = ingredientsService.getDetail(ingredientsVO);
 		model.addAttribute("vo", ingredientsVO2);
 		
@@ -72,6 +80,8 @@ public class IngredientsController {
 		
 		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
+		
+		model.addAttribute("kind", "물류 > "+ingredientsVO2.getIngredientsName()+" History");
 		return "ingredients/detail";
 	}
 	
@@ -149,7 +159,7 @@ public class IngredientsController {
 	@PostMapping("profit")
 	@ResponseBody
 	public int profit(@AuthenticationPrincipal UserVO userVO, SalesVO salesVO) throws Exception {
-		log.info("p:{}",salesVO);
+		
 		salesVO.setUserId(userVO.getUserId());
 		int result = salesService.profit(salesVO);
 		return result;
@@ -158,7 +168,7 @@ public class IngredientsController {
 	@PostMapping("expenditure")
 	@ResponseBody
 	public int expenditure(@AuthenticationPrincipal UserVO userVO,SalesVO salesVO) throws Exception {
-		log.info("e:{}",salesVO);
+		
 		salesVO.setUserId(userVO.getUserId());
 		int result = salesService.expenditure(salesVO);
 		return result;
