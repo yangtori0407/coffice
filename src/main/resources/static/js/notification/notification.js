@@ -121,8 +121,10 @@ function createAlert(msg, num) {
         a.href = "/document/list/onwaiting";
     }else if(msg.notiKind == "REFERENCE"){
         a.href = "/document/list/onreference";
+    }else if(msg.notiKind == "DONE" || msg.notiKind == "REJECT"){
+        a.href = "/document/list/handled";
     }else {
-        a.href = "#";
+        a.href = "#"; 
     }
     a.setAttribute("data-check-num", msg.notiCheckNum);
 
@@ -132,18 +134,19 @@ function createAlert(msg, num) {
 
     const iconCircle = document.createElement("div");
     if (msg.notiKind == "NOTICE") {
-
         iconCircle.classList.add("icon-circle", "bg-info");
     } else if (msg.notiKind == "BOARD") {
-        iconCircle.classList.add("icon-circle", "bg-success");
+        iconCircle.classList.add("icon-circle", "bg-info");
     }else if (msg.notiKind == "REPLY") {
-        iconCircle.classList.add("icon-circle", "bg-success");
+        iconCircle.classList.add("icon-circle", "bg-info");
     }else if(msg.notiKind == "MESSAGE"){
         iconCircle.classList.add("icon-circle", "bg-secondary");
     }else if(msg.notiKind == "VACATION"){
         iconCircle.classList.add("icon-circle", "bg-warning");
-    }else if(msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE"){
-        iconCircle.classList.add("icon-circle", "bg-warning");
+    }else if(msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE" || msg.notiKind == "DONE"){
+        iconCircle.classList.add("icon-circle", "bg-primary");
+    }else if(msg.notiKind == "REJECT"){
+        iconCircle.classList.add("icon-circle", "bg-danger");
     }
 
     const icon = document.createElement("ion-icon");
@@ -158,8 +161,10 @@ function createAlert(msg, num) {
         icon.setAttribute("name", "mail-unread-outline");
     }else if(msg.notiKind == "VACATION"){
         icon.setAttribute("name", "calendar-outline");
-    }else if(msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE"){
+    }else if(msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE" || msg.notiKind == "DONE"){
         icon.setAttribute("name", "document-text-outline");
+    }else if(msg.notiKind == "REJECT"){
+        icon.setAttribute("name", "alert-outline");
     }
     iconCircle.appendChild(icon);
     iconWrapper.appendChild(iconCircle);
@@ -182,7 +187,11 @@ function createAlert(msg, num) {
         kindDiv.innerText = `[휴가 신청]`
     }else if (msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE") {
         kindDiv.innerText = `[결재 요청]`
-    }    
+    }else if (msg.notiKind == "DONE") {
+        kindDiv.innerText = `[결재 완료]`
+    }else if (msg.notiKind == "REJECT") {
+        kindDiv.innerText = `[결재 반려]`
+    }       
     const contentSpan = document.createElement("span");
     contentSpan.classList.add("font-weight-bold");
     //익명게시판 댓글
@@ -307,7 +316,12 @@ function createToast(msg) {
     const div = document.createElement("div");
     div.style.width = "13px";
     div.style.height = "13px";
-    div.style.backgroundColor = "red";
+    if(msg.notiKind == "REJECT"){
+
+        div.style.backgroundColor = "red";
+    }else{
+        div.style.backgroundColor = "green";
+    }
     div.style.marginRight = "4px"
     div.style.borderRadius = "3px";
 
@@ -322,8 +336,10 @@ function createToast(msg) {
         icon.setAttribute("name", "mail-unread-outline");
     } else if (msg.notiKind == "VACATION") {
         icon.setAttribute("name", "calendar-outline");
-    }else if (msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE") {
+    }else if (msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE" || msg.notiKind == "DONE") {
         icon.setAttribute("name", "document-text-outline");
+    }else if (msg.notiKind == "REJECT") {
+        icon.setAttribute("name", "alert-outline");
     }
     icon.classList.add("mr-2");
 
@@ -337,6 +353,10 @@ function createToast(msg) {
         roomName.textContent = `[휴가]`
     }else if (msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE") {
         roomName.textContent = `[결재 요청]`
+    }else if (msg.notiKind == "DONE") {
+        roomName.textContent = `[결재 완료]`
+    }else if (msg.notiKind == "REJECT") {
+        roomName.textContent = `[결재 반려]`
     }
 
     const closeBtn = document.createElement("button");
@@ -397,6 +417,8 @@ function createToast(msg) {
             location.href = "/document/list/onwaiting";
         }else if(msg.notiKind == "REFERENCE"){
             location.href = "/document/list/onreference";
+        }else if(msg.notiKind == "DONE" || msg.notiKind == "REJECT"){
+            location.href = "/document/list/handled";
         }
     });
 

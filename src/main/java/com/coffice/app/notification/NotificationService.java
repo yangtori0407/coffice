@@ -139,12 +139,18 @@ public class NotificationService {
 		template.convertAndSend("/sub/notification/user." + userId, notificationVO);
 	}
 
-	public void sendApprovalLine(DocumentVO documentVO, String userId) throws Exception {
+	public void sendApprovalLine(DocumentVO documentVO, String userId, int status) throws Exception {
 		NotificationVO notificationVO = new NotificationVO();
 		LocalDateTime now = LocalDateTime.now();
 		Timestamp timestamp = Timestamp.valueOf(now);
 		notificationVO.setNotiDate(timestamp);
-		notificationVO.setNotiKind("APPROVAL");
+		if(status == 0) {
+			notificationVO.setNotiKind("DONE");
+		} else if(status == 1) {
+			notificationVO.setNotiKind("APPROVAL");
+		} else {
+			notificationVO.setNotiKind("REJECT");
+		}
 		notificationVO.setRelateEntity("APPROVAL");
 		notificationVO.setRelateId(documentVO.getDocumentId()); //리다이렉트 할 때 쓸 문서 id
 		//notificationVO.setNotiContents(documentVO.getTitle()); //결재 문서 제목
@@ -158,7 +164,7 @@ public class NotificationService {
 		info.put("userId", userId);
 		info.put("notiNum", notificationVO.getNotiNum());
 		notificationDAO.addNotiCheck(info);
-
+		//다음 참조자에게 가는 알림
 		template.convertAndSend("/sub/notification/user." + userId, notificationVO);
 	}
 
@@ -182,6 +188,7 @@ public class NotificationService {
 			info.put("userId", u.getUserId());
 			info.put("notiNum", notificationVO.getNotiNum());
 			notificationDAO.addNotiCheck(info);
+			//참조자에게 알림이 가는 코드
 			template.convertAndSend("/sub/notification/user." + u.getUserId(), notificationVO);
 		}
 	}
