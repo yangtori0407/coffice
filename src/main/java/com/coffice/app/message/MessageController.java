@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.coffice.app.files.FileDownView;
+import com.coffice.app.files.FileVO;
 import com.coffice.app.page.Pager;
+import com.coffice.app.posts.notice.NoticeFilesVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +34,9 @@ public class MessageController {
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+	private FileDownView fileDownView;
 	
 	@GetMapping("send")
 	public void send(Model model, Authentication authentication, Pager pager) throws Exception{
@@ -52,12 +59,12 @@ public class MessageController {
 	}
 	
 	@PostMapping("add")
-	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers,  Authentication authentication, Model model) throws Exception{
+	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers, @RequestParam("attaches") MultipartFile[] attaches,  Authentication authentication, Model model) throws Exception{
 		log.info("messageVO : {}", messageVO);
-		for(String s : receivers) {
-			log.info("receiver: {}", s);
+		for(MultipartFile s : attaches) {
+			log.info("attaches: {}", s.getOriginalFilename());
 		}
-		int result = messageService.sendMessage(messageVO, receivers, authentication.getName());
+		int result = messageService.sendMessage(messageVO, receivers, authentication.getName(), attaches);
 		model.addAttribute("result", result);
 		
 		return "commons/ajaxResult";
@@ -117,5 +124,15 @@ public class MessageController {
 	@PostMapping("read")
 	public void read(Long messageNum, Authentication authentication) throws Exception{
 		messageService.read(messageNum, authentication.getName());
+	}
+	
+	@GetMapping("fileDown")
+	public FileDownView fileDown(MessageFilesVO filesVO,Model model) throws Exception{
+		FileVO fileVO = (FileVO)messageService.fileDown(filesVO);
+		log.info("파일 다운로드 : {}", fileVO.getOriginName());
+		model.addAttribute("fileVO", fileVO);
+		model.addAttribute("kind", "message");
+		
+		return fileDownView;
 	}
 }

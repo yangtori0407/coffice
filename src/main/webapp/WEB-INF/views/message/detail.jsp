@@ -45,14 +45,14 @@
 								data-board-num="${detail.messageNum }">${detail.messageTitle }</div>
 						</div>
 
-						<div class="d-flex flex-column mb-3">
-							<div class="d-flex mb-3">
-								<div class="mr-2" style="padding: 5px 10px;">보낸사람</div>
+						<div class="d-flex flex-column mb-3 ">
+							<div class="d-flex mb-3 ">
+								<div class="mr-2" style="padding: 5px 10px 5px 0px;">보낸사람</div>
 								<div class="senderArea">${detail.senderName }
 									&lt;${detail.email}&gt;</div>
 							</div>
-							<div class="d-flex">
-								<div class="mr-2" style="padding: 5px 10px;">받는사람</div>
+							<div class="d-flex ">
+								<div class="mr-2" style="padding: 5px 10px 5px 0px;">받는사람</div>
 								<c:forEach items="${detail.receiveUsers }" var="u">
 									<div class="senderArea mr-2">
 										<c:choose>
@@ -64,6 +64,17 @@
 
 							</div>
 						</div>
+						<c:if test="${detail.files.size() > 0 }">
+						
+						<label>첨부파일</label>
+						<div class="card mb-3 py-1 border-info d-flex">
+							<div class="card-body">
+								<c:forEach items="${detail.files }" var="l">
+									<a href="/message/fileDown?fileNum=${l.fileNum }" class="mr-1">${l.originName }</a>
+								</c:forEach>
+							</div>
+						</div>
+						</c:if>
 
 
 						<div class="card shadow mb-3" style="min-height: 600px;">

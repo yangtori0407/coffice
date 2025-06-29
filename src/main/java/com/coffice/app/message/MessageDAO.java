@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.coffice.app.files.FileVO;
+import com.coffice.app.posts.notice.NoticeFilesVO;
 import com.coffice.app.users.UserVO;
 
 @Mapper
@@ -33,5 +35,9 @@ public interface MessageDAO {
 	MessageVO getCheck(Long messageNum) throws Exception;
 
 	int read(Map<String, Object> info) throws Exception;
+
+	int saveFile(MessageFilesVO filesVO) throws Exception;
+
+	FileVO getFileDetail(MessageFilesVO filesVO) throws Exception;
 
 }
