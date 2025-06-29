@@ -57,8 +57,8 @@ input {
 							<div class="card-header py-3">
 								<h6 class="m-0 font-weight-bold text-primary">작성일:
 									${detail.boardDate }</h6>
-								<h6 class="m-0 font-weight-bold text-primary">조회수:
-									${detail.boardHit }</h6>
+								<%-- <h6 class="m-0 font-weight-bold text-primary">조회수:
+									${detail.boardHit }</h6> --%>
 							</div>
 							<div class="card-body">${detail.boardContents }</div>
 						</div>
