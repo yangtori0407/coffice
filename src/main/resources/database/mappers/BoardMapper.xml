@@ -24,19 +24,54 @@
 		INSERT INTO COMMENT(COMMENT_NUM,
 		BOARD_NUM, USER_ID, DELETE_STATUS, COMMENT_DATE, COMMENT_CONTENTS,
 		COMMENT_P, IS_REPLY)
-		VALUES(NULL,#{boardNum}, #{userId},0,NOW(), #{commentContents},#{commentP}, 1);
+		VALUES(NULL,#{boardNum}, #{userId},0,NOW(),
+		#{commentContents},#{commentP}, 1);
 	</insert>
 
-	<select id="getList" parameterType="Pager" resultType="BoardVO">
+	<select id="getList" parameterType="Pager"
+		resultType="BoardVO">
+		SELECT
+		B.BOARD_NUM,
+		B.BOARD_TITLE,
+		B.BOARD_HIT,
+		B.BOARD_DATE,
+		COUNT(C.COMMENT_NUM) AS COMMENT_COUNT
+		FROM (
 		SELECT * FROM BOARD
-		<include refid="search"></include>
+		<include refid="search" />
 		ORDER BY BOARD_NUM DESC
 		LIMIT #{startNum}, #{page}
+		) B
+		LEFT OUTER JOIN COMMENT C
+		ON B.BOARD_NUM = C.BOARD_NUM AND C.DELETE_STATUS = 0
+		GROUP BY B.BOARD_NUM
+		ORDER BY BOARD_DATE DESC
 	</select>
+
+	<resultMap type="BoardVO" id="getComment">
+		<id column="BOARD_NUM" property="boardNum" />
+		<result column="BOARD_TITLE" property="boardTitle" />
+		<result column="USER_ID" property="userId" />
+		<result column="BOARD_HIT" property="boardHit" />
+		<result column="BOARD_CONTENTS" property="boardContents" />
+		<result column="BOARD_DATE" property="boardDate" />
+		<collection property="comments" javaType="java.util.List"
+			ofType="CommentVO" notNullColumn="COMMENT_NUM">
+			<id column="COMMENT_NUM" property="commentNum" />
+			<result column="BOARD_NUM" property="boardNum" />
+			<result column="USER_ID" property="userId" />
+			<result column="CDS" property="deleteStatus" />
+			<result column="COMMENT_DATE" property="commentDate" />
+			<result column="COMMENT_CONTENTS" property="commentContents" />
+			<result column="COMMENT_P" property="commentP" />
+			<result column="IS_REPLY" property="isReply" />
+		</collection>
+
+	</resultMap>
 
 	<select id="getTotalCount" parameterType="Pager"
 		resultType="Long">
-		SELECT COUNT(*) FROM BOARD
+		SELECT COUNT(*) FROM BOARD B
 		<include refid="search"></include>
 	</select>
 
