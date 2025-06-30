@@ -40,6 +40,7 @@ public class EmployeeController {
 		
 		model.addAttribute("employeeList", employeeList);
 		model.addAttribute("pager", pager);
+		model.addAttribute("employee", "list");
 		model.addAttribute("kind", "사원 정보 목록");
 		
 		return "employee/list";
