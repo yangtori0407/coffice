@@ -171,6 +171,8 @@
 		WHERE R.USER_ID = #{writerId}
 		  AND D.STATUS != '임시저장'
 		  AND D.WRITER_TIME >= CURDATE()
+		  
+		ORDER BY D.DOCUMENT_ID DESC
   	</select>
 
 	<!-- 결재자가 자신이 결재 차례인 문서를 볼 수 있는 리스트 -->
@@ -184,7 +186,9 @@
 	    
 	    WHERE A.USER_ID = #{writerId}
 	      AND A.STEP_ORDER = D.CURRENT_STEP
-	      AND D.STATUS ='진행중'	      
+	      AND D.STATUS ='진행중'
+	      
+	    ORDER BY D.DOCUMENT_ID DESC
   	</select>
 
 	<!-- 작성자가 자신이 올린 문서를 볼 수 있는 리스트 -->
