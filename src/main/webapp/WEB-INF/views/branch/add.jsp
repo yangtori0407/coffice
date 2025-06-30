@@ -14,7 +14,7 @@
 <style>
 form {
   width: 600px;
-  margin: 40px auto;
+  margin: 200px auto;
   padding: 2rem;
   background: #fff;
   border-radius: 20px;
