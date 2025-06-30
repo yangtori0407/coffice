@@ -254,5 +254,18 @@ public class NotificationService {
 		}
 		
 	}
+	@Transactional
+	public void checkMessageNotification(MessageVO messageVO, String userId) throws Exception{
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setNotiKind("MESSAGE");
+		notificationVO.setRelateId(messageVO.getMessageNum());
+		
+		notificationVO = notificationDAO.getNoticeNotificationDetail(notificationVO);
+		
+		Map<String, Object> info = new HashMap<>();
+		info.put("notiNum", notificationVO.getNotiNum());
+		info.put("userId", userId);
+		notificationDAO.updateNotiStatus(info);
+	}
 
 }
