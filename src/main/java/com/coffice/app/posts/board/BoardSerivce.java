@@ -2,6 +2,7 @@ package com.coffice.app.posts.board;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -101,5 +102,10 @@ public class BoardSerivce {
 		boardDAO.commentUpdate(commentVO);
 		return boardDAO.detailComment(commentVO);
 		
+	}
+	
+	public void readBoardNotification(BoardVO boardVO, String userId) throws Exception{
+		boardVO.setUserId(userId);
+		notificationService.checkBoardNotification(boardVO);
 	}
 }

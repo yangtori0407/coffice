@@ -215,4 +215,8 @@ public class MessageService {
 	public FileVO fileDown(MessageFilesVO filesVO) throws Exception{
 		return messageDAO.getFileDetail(filesVO);
 	}
+
+	public void readReceiveNotification(MessageVO messageVO, String userId) throws Exception{
+		notificationService.checkMessageNotification(messageVO, userId);
+	}
 }

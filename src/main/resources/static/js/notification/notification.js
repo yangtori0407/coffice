@@ -3,6 +3,7 @@ const userIdNotification = getUserIdCookie("userId");
 //const chatAlert = document.getElementById("chatAlert");
 const notificationModal = document.getElementById("notificationModal");
 const totalArea = document.getElementById("totalArea");
+const alertsDropdown = document.getElementById("alertsDropdown");
 
 function getUserIdCookie(name) {
     return document.cookie
@@ -17,7 +18,18 @@ window.addEventListener("load", () => {
         .then(r => r.json())
         .then(r => {
             totalArea.innerText = r.total;
+        })
+})
+
+alertsDropdown.addEventListener("click", () => {
+    console.log("click");
+    fetch("/notification/getNotification")
+        .then(r => r.json())
+        .then(r => {
+            //totalArea.innerText = r.total;
+            notificationArea.innerHTML = "";
             for (j of r.list) {
+                console.log("알림 for");
                 notificationArea.append(createAlert(j, 0));
             }
         })
@@ -457,7 +469,7 @@ const moreNotiModalBtn = document.querySelector("#moreNotiModalBtn");
 if (moreNotiBtn) {
     moreNotiBtn.addEventListener("click", () => {
         const lastNotiCheckNum = notificationArea.lastElementChild.getAttribute("data-check-num");
-
+        
         fetch(`/notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
             .then(r => r.json())
             .then(r => {
@@ -472,8 +484,11 @@ if (moreNotiBtn) {
 if (moreNotiModalBtn) {
 
     moreNotiModalBtn.addEventListener("click", () => {
+        if(notificationModal.lastElementChild == null){
+            alert("더 이상 불러올 알림이 없습니다.");
+            return;
+        }
         const lastNotiCheckNum = notificationModal.lastElementChild.getAttribute("data-check-num");
-
         fetch(`/notification/moreNotification?notiCheckNum=${lastNotiCheckNum}`)
             .then(r => r.json())
             .then(r => {

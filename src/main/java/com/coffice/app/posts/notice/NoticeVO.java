@@ -1,6 +1,7 @@
 package com.coffice.app.posts.notice;
 
 import java.sql.Date;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +14,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class NoticeVO {
+public class NoticeVO{
 	private Long noticeNum;
 	private String userId;
 	private String noticeTitle;

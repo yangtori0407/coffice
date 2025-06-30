@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.coffice.app.notification.NotificationVO;
 import com.coffice.app.page.Pager;
 
 @Mapper
@@ -21,4 +22,5 @@ public interface NoticeDAO {
 	public int updateFile(int[] deleteFile) throws Exception;
 	public int deleteFile(NoticeVO noticeVO) throws Exception;
 	public List<NoticeVO> getMainList() throws Exception;
+	
 }
