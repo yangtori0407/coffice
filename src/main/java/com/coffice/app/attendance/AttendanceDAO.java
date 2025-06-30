@@ -39,7 +39,7 @@ public interface AttendanceDAO {
 	
 	public int updateAttendance (AttendanceVO attendanceVO) throws Exception;
 	
-	
+	List<AttendanceStatusCountVO> getMonthlyStatusCount(String userId, int year, int month);
 
 }
 

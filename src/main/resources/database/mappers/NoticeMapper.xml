@@ -1,105 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
-  <mapper namespace="com.coffice.app.posts.notice.NoticeDAO">
-  	
-  	<insert id="add" parameterType="noticeVO" useGeneratedKeys="true" keyProperty="noticeNum">
-  		INSERT INTO NOTICE(NOTICE_NUM, USER_ID, NOTICE_TITLE, NOTICE_CONTENTS, NOTICE_HIT, NOTICE_DATE, DELETE_STATUS, UPDATE_DATE) 
-  		VALUES(null, #{userId}, #{noticeTitle}, #{noticeContents}, 0, NOW(), 0, null)
-  	</insert>
-  	
-  	<insert id="addFiles" parameterType="noticeFilesVO">
-  		INSERT INTO NOTICE_FILES VALUES(NULL, #{noticeNum}, #{originName}, #{saveName}, 0)
-  	</insert>
-  	
-  	<!-- <insert id="quillUpload">
-  		INSERT INTO NOTICE_FILES VALUES(NULL, null, #{originName}, #{saveName}, 0)
-  	</insert> -->
-  	
-  	<select id="fileDetail" parameterType="NoticeFilesVO" resultType="NoticeFilesVO">
-  		SELECT * FROM NOTICE_FILES WHERE FILE_NUM = #{fileNum}
-  	</select>
-  	
-  	<select id="getList" parameterType="Pager" resultType="NoticeVO">
-  		SELECT * FROM NOTICE
-  		<include refid="search"></include>
-  		ORDER BY NOTICE_NUM DESC
-  		LIMIT #{startNum}, #{page}
-  	</select>
-  	
-  	<select id="getMainList">
-  		SELECT NOTICE_NUM, NOTICE_TITLE, NOTICE_DATE
-  		FROM NOTICE
-  		ORDER BY NOTICE_DATE DESC
-  		LIMIT 6
-  	</select>
-  	
-  	<sql id="search">
-  		WHERE
-  			<choose>
-  				<when test="kind == 'k1'">
-  					NOTICE_TITLE LIKE CONCAT('%', #{search}, '%') 
-  				</when>
-  				<when test="kind == 'k2'">
-  					NOTICE_CONTENTS LIKE CONCAT('%', #{search}, '%')
-  				</when>
-  				<otherwise>
-  					NOTICE_TITLE LIKE CONCAT('%', #{search}, '%') OR NOTICE_CONTENTS LIKE CONCAT('%', #{search}, '%')
-  				</otherwise>
-  			</choose>
-  		AND DELETE_STATUS = 0
-  	</sql>
-  	
-  	<select id="getTotalCount" resultType="Long" parameterType="Pager">
-  		SELECT COUNT(*) FROM NOTICE
-  		<include refid="search"></include>
-  	</select>
-  	
-  	<select id="getDetail" parameterType="NoticeVO" resultMap="noticeDetail">
-  		SELECT * 
-  		FROM NOTICE A 
-  		LEFT OUTER JOIN 
-  		(SELECT * FROM NOTICE_FILES WHERE NOTICE_NUM = #{noticeNum} AND DELETE_STATUS = 0) B 
-  		ON A.NOTICE_NUM = B.NOTICE_NUM 
-  		WHERE A.NOTICE_NUM = #{noticeNum}
-  	</select>
-  	
-  	<resultMap type="NoticeVO" id="noticeDetail">
-  		<id column="NOTICE_NUM" property="noticeNum"/>
-  		<result column="USER_ID" property="userId"/>
-  		<result column="NOTICE_TITLE" property="noticeTitle"/>
-  		<result column="NOTICE_CONTENTS" property="noticeContents"/>
-  		<result column="NOTICE_HIT" property="noticeHit"/>
-  		<result column="NOTICE_DATE" property="noticeDate"/>
-  		
-  		<collection property="files" javaType="java.util.List" ofType="NoticeFilesVO" notNullColumn="FILE_NUM">
-  			<id column="FILE_NUM" property="fileNum"/>
-  			<id column="NOTICE_NUM" property="noticeNum"/>
-  			<id column="ORIGIN_NAME" property="originName"/>
-  			<id column="SAVE_NAME" property="saveName"/>
-  		</collection>
-  	</resultMap>
-  	
-  	
-  	
-  	<update id="delete" parameterType="NoticeVO">
-  		UPDATE NOTICE SET DELETE_STATUS = 1 WHERE NOTICE_NUM = #{noticeNum}
-  	</update>
-  	
-  	<update id="deleteFile" parameterType="NoticeVO">
-  		UPDATE NOTICE_FILES SET DELETE_STATUS = 1 WHERE NOTICE_NUM = #{noticeNum}
-  	</update>
-  	
-  	<update id="update" parameterType="NoticeVO">
-  		UPDATE NOTICE SET NOTICE_CONTENTS = #{noticeContents}, NOTICE_TITLE = #{noticeTitle}, UPDATE_DATE = now() 
-  		WHERE NOTICE_NUM = #{noticeNum}
-  	</update>
-  	
-  	<update id="updateFile">
-  		UPDATE NOTICE_FILES SET DELETE_STATUS = 1 WHERE FILE_NUM IN
-  		<foreach collection="array" item="num" open="(" close=")" separator=",">
-  			#{num}
-  		</foreach>
-  	</update>
-  </mapper>
+
+<mapper namespace="com.coffice.app.posts.notice.NoticeDAO">
+
+	<insert id="add" parameterType="noticeVO"
+		useGeneratedKeys="true" keyProperty="noticeNum">
+		INSERT INTO NOTICE(NOTICE_NUM, USER_ID, NOTICE_TITLE, NOTICE_CONTENTS,
+		NOTICE_HIT, NOTICE_DATE, DELETE_STATUS, UPDATE_DATE)
+		VALUES(null, #{userId}, #{noticeTitle}, #{noticeContents}, 0, NOW(), 0, null)
+	</insert>
+
+	<insert id="addFiles" parameterType="noticeFilesVO">
+		INSERT INTO NOTICE_FILES VALUES(NULL, #{noticeNum}, #{originName},
+		#{saveName}, 0)
+	</insert>
+
+	<!-- <insert id="quillUpload"> INSERT INTO NOTICE_FILES VALUES(NULL, null, 
+		#{originName}, #{saveName}, 0) </insert> -->
+
+	<select id="fileDetail" parameterType="NoticeFilesVO"
+		resultType="NoticeFilesVO">
+		SELECT * FROM NOTICE_FILES WHERE FILE_NUM = #{fileNum}
+	</select>
+
+	<select id="getList" parameterType="Pager" resultType="NoticeVO">
+		SELECT * FROM NOTICE
+		<include refid="search"></include>
+		ORDER BY NOTICE_NUM DESC
+		LIMIT #{startNum}, #{page}
+	</select>
+
+	<select id="getMainList">
+		SELECT NOTICE_NUM, NOTICE_TITLE, NOTICE_DATE
+		FROM NOTICE
+		ORDER BY NOTICE_DATE DESC
+		LIMIT 6
+	</select>
+
+	<sql id="search">
+		WHERE
+		<choose>
+			<when test="kind == 'k1'">
+				NOTICE_TITLE LIKE CONCAT('%', #{search}, '%') OR NOTICE_CONTENTS LIKE
+				CONCAT('%', #{search}, '%')
+
+			</when>
+			<when test="kind == 'k2'">
+				NOTICE_CONTENTS LIKE CONCAT('%', #{search}, '%')
+			</when>
+			<otherwise>
+				NOTICE_TITLE LIKE CONCAT('%', #{search}, '%')
+			</otherwise>
+		</choose>
+		AND DELETE_STATUS = 0
+	</sql>
+
+	<select id="getTotalCount" resultType="Long"
+		parameterType="Pager">
+		SELECT COUNT(*) FROM NOTICE
+		<include refid="search"></include>
+	</select>
+
+	<select id="getDetail" parameterType="NoticeVO"
+		resultMap="noticeDetail">
+		SELECT *
+		FROM NOTICE A
+		LEFT OUTER JOIN
+		(SELECT * FROM NOTICE_FILES WHERE NOTICE_NUM = #{noticeNum} AND DELETE_STATUS
+		= 0) B
+		ON A.NOTICE_NUM = B.NOTICE_NUM
+		WHERE A.NOTICE_NUM = #{noticeNum}
+	</select>
+
+	<resultMap type="NoticeVO" id="noticeDetail">
+		<id column="NOTICE_NUM" property="noticeNum" />
+		<result column="USER_ID" property="userId" />
+		<result column="NOTICE_TITLE" property="noticeTitle" />
+		<result column="NOTICE_CONTENTS" property="noticeContents" />
+		<result column="NOTICE_HIT" property="noticeHit" />
+		<result column="NOTICE_DATE" property="noticeDate" />
+
+		<collection property="files" javaType="java.util.List"
+			ofType="NoticeFilesVO" notNullColumn="FILE_NUM">
+			<id column="FILE_NUM" property="fileNum" />
+			<id column="NOTICE_NUM" property="noticeNum" />
+			<id column="ORIGIN_NAME" property="originName" />
+			<id column="SAVE_NAME" property="saveName" />
+		</collection>
+	</resultMap>
+
+
+
+	<update id="delete" parameterType="NoticeVO">
+		UPDATE NOTICE SET DELETE_STATUS = 1 WHERE NOTICE_NUM = #{noticeNum}
+	</update>
+
+	<update id="deleteFile" parameterType="NoticeVO">
+		UPDATE NOTICE_FILES SET DELETE_STATUS = 1 WHERE NOTICE_NUM = #{noticeNum}
+	</update>
+
+	<update id="update" parameterType="NoticeVO">
+		UPDATE NOTICE SET NOTICE_CONTENTS = #{noticeContents}, NOTICE_TITLE =
+		#{noticeTitle}, UPDATE_DATE = now()
+		WHERE NOTICE_NUM = #{noticeNum}
+	</update>
+
+	<update id="updateFile">
+		UPDATE NOTICE_FILES SET DELETE_STATUS = 1 WHERE FILE_NUM IN
+		<foreach collection="array" item="num" open="(" close=")"
+			separator=",">
+			#{num}
+		</foreach>
+	</update>
+</mapper>

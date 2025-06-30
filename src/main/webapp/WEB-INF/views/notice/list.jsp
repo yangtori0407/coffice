@@ -54,17 +54,17 @@
 												<form method="get"
 													class="form-inline d-flex align-items-center">
 													<select class="custom-select mr-2" name="kind">
-														<option value="k1">제목</option>
+														<option value="k3">제목</option>
 														<option value="k2">본문</option>
-														<option value="k3">제목+본문</option>
+														<option value="k1">제목+본문</option>
 													</select> <input type="search" name="search"
 														class="form-control form-control-sm mr-2"
 														placeholder="검색어를 입력하세요" style="max-width: 200px;">
-													<button type="submit" class="btn btn-info ">검색</button>
+													<button type="submit" class="btn btn-secondary ">검색</button>
 												</form>
 
 												<!-- 추가 버튼 -->
-												<a href="./add" class="btn btn-danger">작성하기</a>
+												<a href="./add" class="btn btn-primary">작성하기</a>
 											</div>
 										</div>
 									</div>
@@ -88,10 +88,10 @@
 															rowspan="1" colspan="1"
 															aria-label="Office: activate to sort column ascending"
 															style="width: 116.788px;">글쓴이</th>
-														<th class="sorting" tabindex="0" aria-controls="dataTable"
+														<!-- <th class="sorting" tabindex="0" aria-controls="dataTable"
 															rowspan="1" colspan="1"
 															aria-label="Age: activate to sort column ascending"
-															style="width: 116.788px;">조회수</th>
+															style="width: 116.788px;">조회수</th> -->
 														<th class="sorting" tabindex="0" aria-controls="dataTable"
 															rowspan="1" colspan="1"
 															aria-label="Age: activate to sort column ascending"
@@ -104,7 +104,7 @@
 															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeNum }</a></td>
 															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
 															<td>관리자</td>
-															<td>${l.noticeHit }</td>
+															<%-- <td>${l.noticeHit }</td> --%>
 															<td>${l.formatted }</td>
 														</tr>
 													</c:forEach>

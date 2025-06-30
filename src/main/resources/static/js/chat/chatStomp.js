@@ -26,6 +26,10 @@ chatBox.addEventListener("scroll", ()=>{
    if(chatBox.scrollTop == 0){
     const topChat = chatBox.firstElementChild.getAttribute("data-chat-num");
 
+    if(topChat == null){
+        return;
+    }
+
     //채팅 새로 들어오기 전 높이
     const preScrollHeight = chatBox.scrollHeight;
 

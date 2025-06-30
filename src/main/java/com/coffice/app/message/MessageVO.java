@@ -28,8 +28,8 @@ public class MessageVO {
 	
 	//내가 이메일을 보낸 사람들
 	private List<MessageCheckVO> receiveUsers;
-	//나에게 이메일을 보낸 사람들
-	private MessageCheckVO sendUser;
+	//내가 받은 이메일 상태
+	private MessageCheckVO receiveMessage;
 	
 	
 	

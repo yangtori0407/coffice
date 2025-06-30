@@ -57,8 +57,8 @@ input {
 							<div class="card-header py-3">
 								<h6 class="m-0 font-weight-bold text-primary">작성일:
 									${detail.boardDate }</h6>
-								<h6 class="m-0 font-weight-bold text-primary">조회수:
-									${detail.boardHit }</h6>
+								<%-- <h6 class="m-0 font-weight-bold text-primary">조회수:
+									${detail.boardHit }</h6> --%>
 							</div>
 							<div class="card-body">${detail.boardContents }</div>
 						</div>
@@ -73,7 +73,7 @@ input {
 													style="box-shadow: none; outline: none;">
 											</div>
 											<div class="col-1 pl-1">
-												<button id="comBtn" class="btn btn-success w-100"
+												<button id="comBtn" class="btn btn-primary w-100"
 													type="button">입력</button>
 											</div>
 										</div>

@@ -133,6 +133,8 @@ public class AttendanceController {
 
 	    return "redirect:/attendance/statusUpdate?userId=" + attendanceVO.getUserId();
 	}
+	
+	
 
 
 

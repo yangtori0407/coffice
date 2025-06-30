@@ -48,7 +48,7 @@
 													</select> <input type="search" name="search"
 														class="form-control form-control-sm mr-2"
 														placeholder="검색어를 입력하세요" value="${search}" style="max-width: 200px;">
-													<button type="submit" class="btn btn-primary ">검색</button>
+													<button type="submit" class="btn btn-secondary ">검색</button>
 												</form>
 								
 											</div>

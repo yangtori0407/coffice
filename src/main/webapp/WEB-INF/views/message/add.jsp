@@ -51,6 +51,17 @@
 							<div id="editor" style="height: 550px;"></div>
 							<input type="hidden" id="quill_html" name="messageContents">
 						</div>
+						<label for="exampleFormControlFile1">첨부파일</label>
+						<div class="form-group d-flex" id="fileArea">
+							<div class="d-flex mr-1">
+								<input type="file" class="form-control-file attaches" name="attaches">
+								<button class="btn btn-danger del" type="button">X</button>
+							</div>
+						</div>
+						<div>
+							<button id="fileAdd" class="btn btn-danger mb-3" type="button">첨부파일
+								추가하기</button>
+						</div>
 						<div class="ml-auto">
 							<button id="submitBtn" class="btn btn-primary mb-3" type="button">글
 								작성하기</button>
