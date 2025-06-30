@@ -50,7 +50,7 @@
 						<div class="col-3">
 
 							<!-- Background Gradient Utilities -->
-							<div class="card shadow mb-4" style="height: 530px;">
+							<div class="card shadow mb-3" style="height: 530px;">
 								<div class="card-header py-3">
 									<h6 class="m-0 font-weight-bold text-primary">사원정보 부분</h6>
 								</div>
@@ -101,7 +101,7 @@
 							<div class="row">
 								<div class="col">
 									<!-- Roitation Utilities -->
-									<div class="card mt-3" style="">
+									<div class="card" style="">
 										<div
 											class="card-header py-3 d-flex align-items-center justify-content-between">
 											<h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
