@@ -358,7 +358,7 @@
 									<!-- Custom Text Color Utilities -->
 									<div class="card shadow mb-4">
 										<div class="card-header py-3">
-											<h6 class="m-0 font-weight-bold text-primary">일정부분</h6>
+											<h6 class="m-0 font-weight-bold text-primary">나의 일정</h6>
 										</div>
 										<div class="card-body" style="min-height: 300px;">
 											<div id="schedule"></div>
@@ -372,7 +372,7 @@
 								<div class="col" style="min-width: 300px;">
 									<div class="card shadow mb-4">
 										<div class="card-header py-3">
-											<h6 class="m-0 font-weight-bold text-primary">달력부분</h6>
+											<h6 class="m-0 font-weight-bold text-primary">월간 일정</h6>
 										</div>
 										<div class="card-body">
 											<div id="calendar"></div>
