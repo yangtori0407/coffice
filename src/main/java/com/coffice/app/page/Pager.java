@@ -80,6 +80,9 @@ public class Pager {
 	}
 
 	public void makeNum(Long totalCount) {
+		if(totalCount<1) {
+			totalCount=1L;
+		}
 
 		// 1. totalpage 계산
 		Long totalPage = totalCount / getPage();
