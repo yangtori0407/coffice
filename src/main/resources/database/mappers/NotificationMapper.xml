@@ -9,7 +9,7 @@
   		VALUES(null, #{notiKind}, #{notiContents}, now(), #{relateEntity}, #{relateId})
   	</insert>
   	
-  	<insert id="addNoticeCheck" parameterType="NotificationVO">
+  	<insert id="addNotiCheck" parameterType="NotificationVO">
   		INSERT INTO NOTIFICATION_CHECK(NOTICHECK_NUM, NOTI_NUM, USER_ID, NOTICHECK_STATUS)
   		VALUES(null, #{notiNum}, #{userId}, 0)
   	</insert>

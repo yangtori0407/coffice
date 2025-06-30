@@ -214,14 +214,14 @@
 											</div>
 											<div
 												class="col-2 d-flex flex-column align-items-end flex-shrink-0">
-												<button class="btn btn-outline-success btn-sm mb-1 mr-1"
+												<button class="btn btn-primary btn-sm mb-1 mr-1"
 													id="chat-send-btn" style="width: 100%;">입력</button>
 											</div>
 										</div>
 									</div>
 									<div>
 										<label for="file-upload"
-											class="btn btn-outline-secondary btn-sm mt-2">파일 첨부</label> <input
+											class="btn btn-secondary btn-sm mt-2">파일 첨부</label> <input
 											type="file" id="file-upload" style="display: none;">
 									</div>
 								</div>

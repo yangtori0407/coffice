@@ -96,14 +96,21 @@ document.getElementById("submitBtn").addEventListener("click", () => {
     const quill = document.getElementById("quill_html");
     
     const receivers = document.querySelectorAll(".receiverPerson");
+    const attaches = document.querySelectorAll(".attaches");
 
-    const p = new URLSearchParams();
+    const p = new FormData();
     p.append("messageContents",quill.value);
     p.append("messageTitle", messageTitle.value);
    
 
     receivers.forEach(e => {
         p.append("receivers", e.getAttribute("data-user-id"));
+    })
+
+    attaches.forEach(a => {
+        if(a.files.length > 0){
+            p.append("attaches", a.files[0]);
+        }
     })
 
     fetch("./add",{
@@ -180,3 +187,45 @@ function createReceiver(s) {
     return div;
 }
 
+
+// add btn
+const fileAdd = document.getElementById("fileAdd");
+const fileArea = document.getElementById("fileArea");
+
+let max = 1;
+
+fileAdd.addEventListener("click", () => {
+	
+
+	if(max >= 5){
+		alert("첨부파일은 최대 5개만 가능합니다.");
+		return;
+	}
+	
+	const div = document.createElement("div");
+	div.classList.add("d-flex", "mr-1")
+	const file = document.createElement("input");
+	file.setAttribute("type", "file");
+	file.classList.add("form-control-file", "attaches");
+	file.setAttribute("name", "attaches");
+
+	const del = document.createElement("button");
+	del.setAttribute("type", "button")
+	del.classList.add("btn", "btn-danger", "del");
+	del.innerText = "X"
+
+	div.appendChild(file);
+	div.appendChild(del);
+
+	fileArea.appendChild(div);
+	max++;
+
+})
+
+fileArea.addEventListener("click", (e) =>{
+	if(e.target.classList.contains("del")){
+		console.log("del");
+		e.target.parentElement.remove();
+		max--;
+	}
+})

@@ -1,5 +1,6 @@
 package com.coffice.app.events.holidays;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +14,7 @@ public class HolidayVO {
 	private String dateName;
 	private String isHoliday;
 //	@DateTimeFormat(pattern = "yyyyMMdd")
-	private String locdate;
+	private LocalDate locdate;
 	private String seq;
 
 }
