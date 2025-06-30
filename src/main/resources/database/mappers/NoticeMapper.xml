@@ -42,18 +42,20 @@
 		WHERE
 		<choose>
 			<when test="kind == 'k1'">
-				NOTICE_TITLE LIKE CONCAT('%', #{search}, '%') OR NOTICE_CONTENTS LIKE
-				CONCAT('%', #{search}, '%')
-
+				(NOTICE_TITLE LIKE CONCAT('%', #{search}, '%') OR NOTICE_CONTENTS LIKE
+				CONCAT('%', #{search}, '%'))
+				AND DELETE_STATUS = 0
 			</when>
 			<when test="kind == 'k2'">
 				NOTICE_CONTENTS LIKE CONCAT('%', #{search}, '%')
+				AND DELETE_STATUS = 0
 			</when>
 			<otherwise>
 				NOTICE_TITLE LIKE CONCAT('%', #{search}, '%')
+				AND DELETE_STATUS = 0
 			</otherwise>
 		</choose>
-		AND DELETE_STATUS = 0
+		
 	</sql>
 
 	<select id="getTotalCount" resultType="Long"
@@ -80,6 +82,7 @@
 		<result column="NOTICE_CONTENTS" property="noticeContents" />
 		<result column="NOTICE_HIT" property="noticeHit" />
 		<result column="NOTICE_DATE" property="noticeDate" />
+		<result column="DELETE_STATUS" property="deleteStatus"/>
 
 		<collection property="files" javaType="java.util.List"
 			ofType="NoticeFilesVO" notNullColumn="FILE_NUM">

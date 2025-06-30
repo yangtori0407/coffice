@@ -18,6 +18,7 @@ public class BoardVO{
 	private Long boardHit;
 	private String boardContents;
 	private Date boardDate;
+	private Integer deleteStatus;
 	
 	private List<CommentVO> comments;
 	private Long commentCount;

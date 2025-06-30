@@ -52,8 +52,8 @@ public class NoticeService {
 	
 	@Transactional
 	public NoticeVO getDetail(NoticeVO noticeVO) throws Exception {
-		
-		return noticeDAO.getDetail(noticeVO);
+		noticeVO = noticeDAO.getDetail(noticeVO);
+		return noticeVO;
 	}
 
 	public void add(NoticeVO noticeVO, MultipartFile[] attaches) throws Exception {

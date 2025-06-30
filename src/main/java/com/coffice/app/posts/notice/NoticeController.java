@@ -52,10 +52,23 @@ public class NoticeController {
 	@GetMapping("detail")
 	@Transactional
 	public String getDetail(NoticeVO noticeVO, Model model, Authentication authentication) throws Exception{
-		//log.info("detail noticeVO : {}", noticeVO);
+		
 		noticeVO = noticeService.getDetail(noticeVO);
+		
+		if(noticeVO == null) {
+			model.addAttribute("path", "/notice/list");
+			model.addAttribute("result", "접근할 수 없는 공지사항 입니다.");
+			return "commons/result";
+		}
+		
 		noticeService.readNoticeNotification(noticeVO, authentication.getName());
-		//log.info("detail noticeVO : {}", noticeVO);
+		
+		if(noticeVO.getDeleteStatus() == 1) {
+			model.addAttribute("path", "/notice/list");
+			model.addAttribute("result", "접근할 수 없는 공지사항 입니다.");
+			return "commons/result";
+		}
+		
 		model.addAttribute("detail", noticeVO);
 		model.addAttribute("kind", "게시판 > 공지사항");
 		return "notice/detail";
