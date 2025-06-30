@@ -287,7 +287,7 @@ public class UserController {
 	@GetMapping("user/vacationHistory")
 	public String vacationHistory(Model model, Authentication authentication) throws Exception {
 		UserVO userVO = (UserVO)authentication.getPrincipal();
-		model.addAttribute("kind", "휴가 내역");
+		model.addAttribute("kind", "마이 페이지 > 휴가 내역");
 		model.addAttribute("requestList", vacationService.getApplyList(userVO));
 		model.addAttribute("approvalList", vacationService.getAcceptList(userVO));
 		return "user/vacationHistory";
@@ -296,7 +296,7 @@ public class UserController {
 	@GetMapping("user/annualLeaveHistory")
 	public String annualLeaveHistory(Model model, Authentication authentication) throws Exception {
 		UserVO userVO = (UserVO)authentication.getPrincipal();
-		model.addAttribute("kind", "연차 내역");
+		model.addAttribute("kind", "마이 페이지 > 연차 내역");
 		model.addAttribute("allList", annualLeaveService.getList(userVO));
 		return "user/annualLeaveHistory";
 	}
