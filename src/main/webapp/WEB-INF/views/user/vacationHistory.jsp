@@ -77,6 +77,7 @@
 								<table class="table table-bordered table-hover text-center" id="approvalTable" width="100%">
 									<thead class="thead-light">
 										<tr>
+											<th>신청번호</th>
 											<th>승인일자</th>
 											<th>시작일</th>
 											<th>종료일</th>
@@ -87,11 +88,21 @@
 									<tbody>
 										<c:forEach items="${approvalList}" var="app">
 											<tr>
-												<td>${fn:replace(req.editTime, 'T', ' ')}</td>
-												<td>${fn:replace(req.startTime, 'T', ' ')}</td>
-												<td>${fn:replace(req.endTime, 'T', ' ')}</td>
+												<td>${app.vacationId}</td>
+												<td>${fn:replace(app.editTime, 'T', ' ')}</td>
+												<td>${fn:replace(app.startTime, 'T', ' ')}</td>
+												<td>${fn:replace(app.endTime, 'T', ' ')}</td>
 												<td>${app.type}</td>
-												<td>${app.note}</td>
+												<td>
+													<c:choose>
+											          <c:when test="${app.status}">
+											            승인완료
+											          </c:when>
+											          <c:otherwise>
+											            승인대기
+											          </c:otherwise>
+											        </c:choose>
+												</td>
 											</tr>
 										</c:forEach>
 									</tbody>
@@ -105,6 +116,46 @@
 
 			</div>
 
+			<!-- vacationDetailModal -->
+			<div class="modal fade" id="vacationDetailModal" tabindex="-1" aria-labelledby="vacationDetailModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" name="goMypage">
+								<span aria-hidden="true"><ion-icon name="open-outline"></ion-icon></span>
+							</button>
+						</div>
+						<div class="modal-body" style="height: 500px;">
+
+							<div class="card mb-3">
+								<div class="card-header">기본 정보</div>
+								<input type="hidden" id="vid">
+								<div class="card-body">
+									<p id="vacationType"></p>
+									<p id="applier"></p>
+									<p id="insertTime"></p>
+									<p id="period"></p>
+								</div>
+							</div>
+
+							<hr>
+
+							<div class="card">
+								<div class="card-body">
+									<p id="status"></p>
+									<p id="accepter"></p>
+									<p id="acceptTime"></p>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="undo">목록으로</button>
+							<button type="button" class="btn btn-primary" id="updateVacation" data-dismiss="modal"></button>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<!-- end Content -->
 			<c:import url="/WEB-INF/views/templates/foot.jsp"></c:import>
 		</div>
@@ -112,5 +163,6 @@
 	</div>
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
+	<script type="text/javascript" src="/js/user/history.js"></script>
 </body>
 </html>
