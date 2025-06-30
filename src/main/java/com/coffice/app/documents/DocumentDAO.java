@@ -25,7 +25,6 @@ public interface DocumentDAO {
 	
 	public List<FormVO> getFormsIdName() throws Exception;
 	
-	public Long getTotalCount(Pager pager)throws Exception;
 	
 	
 	// 최근 문서 목록 조회
@@ -36,6 +35,18 @@ public interface DocumentDAO {
 	public List<DocumentVO> getTodayReference(DocumentVO documentVO)throws Exception;
 	
 	public List<DocumentVO> getTodayWaiting(DocumentVO documentVO)throws Exception;
+	
+	
+	// 문서 총 갯수 조회
+	public Long getTotalCountOnline(Map<String, Object> map) throws Exception;
+	
+	public Long getTotalCountWaiting(Map<String, Object> map) throws Exception;
+	
+	public Long getTotalCountHandled(Map<String, Object> map) throws Exception;
+	
+	public Long getTotalCountReference(Map<String, Object> map) throws Exception;
+	
+	public Long getTotalCountTemporary(Map<String, Object> map) throws Exception;
 	
 	
 	// 문서 목록 조회 ----------------------------------
