@@ -105,7 +105,7 @@
 		A.BOARD_DATE,
 		A.BOARD_HIT,
 		A.UPDATE_DATE,
-
+		A.DELETE_STATUS AS ADS,
 		C.COMMENT_NUM,
 		C.BOARD_NUM AS C_BOARD_NUM,
 		C.USER_ID AS C_USER_ID,
@@ -132,7 +132,7 @@
 		<result column="BOARD_DATE" property="boardDate" />
 		<result column="BOARD_HIT" property="boardHit" />
 		<result column="UPDATE_DATE" property="updateDate" />
-
+		<result column="ADS" property="deleteStatus"/>
 		<collection property="comments" javaType="java.util.List"
 			ofType="CommentVO" notNullColumn="COMMENT_NUM">
 			<id column="COMMENT_NUM" property="commentNum" />

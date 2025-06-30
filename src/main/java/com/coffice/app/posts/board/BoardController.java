@@ -48,7 +48,19 @@ public class BoardController {
 	@Transactional
 	public String getDetail(Model model, BoardVO boardVO, Authentication authentication) throws Exception{
 		boardVO = boardService.getDetail(boardVO);
+		
+		if(boardVO == null) {
+			model.addAttribute("path", "/board/list");
+			model.addAttribute("result", "접근할 수 없는 글입니다.");
+			return "commons/result";
+		}
 		boardService.readBoardNotification(boardVO, authentication.getName());
+		
+		if(boardVO.getDeleteStatus() == 1) {
+			model.addAttribute("path", "/board/list");
+			model.addAttribute("result", "접근할 수 없는 글입니다.");
+			return "commons/result";
+		}
 		model.addAttribute("detail", boardVO);
 //		for(CommentVO c : boardVO.getComments()) {
 //			log.info("commentVO detail : {}", c);
