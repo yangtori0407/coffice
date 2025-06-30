@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.coffice.app.attendance.AttendanceController;
 import com.coffice.app.documents.DocumentVO;
 import com.coffice.app.documents.lines.ReferenceLineVO;
 import com.coffice.app.events.vacation.VacationVO;
@@ -26,13 +26,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NotificationService {
 
+    private final AttendanceController attendanceController;
+
 	@Autowired
 	private NotificationDAO notificationDAO;
 
 	private final SimpMessagingTemplate template;
 
-	public NotificationService(SimpMessagingTemplate template) {
+	public NotificationService(SimpMessagingTemplate template, AttendanceController attendanceController) {
 		this.template = template;
+		this.attendanceController = attendanceController;
 	}
 
 	@Transactional
@@ -220,17 +223,36 @@ public class NotificationService {
 		return notificationDAO.moreNotification(info);
 	}
 
-	public void checkPostsNotification(NoticeVO noticeVO, String Kind) throws Exception{
+	public void checkNoticeNotification(NoticeVO noticeVO) throws Exception{
 		NotificationVO notificationVO = new NotificationVO();
-		notificationVO.setNotiKind(Kind);
+		notificationVO.setNotiKind("NOTICE");
 		notificationVO.setRelateId(noticeVO.getNoticeNum());
-		notificationVO = notificationDAO.getPostsNotificationDetail(notificationVO);
+		notificationVO = notificationDAO.getNoticeNotificationDetail(notificationVO);
 		
 		Map<String, Object> info = new HashMap<>();
 		info.put("notiNum", notificationVO.getNotiNum());
 		info.put("userId", noticeVO.getUserId());
 		
 		notificationDAO.updateNotiStatus(info);
+	}
+	
+	@Transactional
+	public void checkBoardNotification(BoardVO boardVO) throws Exception{
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setNotiKind("BOARD");
+		notificationVO.setRelateId(boardVO.getBoardNum());
+		List<NotificationVO> list = notificationDAO.getBoardNotificationDetail(notificationVO);
+	
+		Map<String, Object> info = new HashMap<>();
+		for(NotificationVO l : list) {
+			//log.info("NotificationVO get : {}", l);
+			info.put("notiNum", l.getNotiNum());
+			info.put("userId", boardVO.getUserId());
+			notificationDAO.updateNotiStatus(info);
+			
+			info.clear();
+		}
+		
 	}
 
 }

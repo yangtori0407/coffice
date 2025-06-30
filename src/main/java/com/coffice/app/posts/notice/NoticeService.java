@@ -140,6 +140,6 @@ public class NoticeService {
 	@Transactional
 	public void readNoticeNotification(NoticeVO noticeVO, String userId) throws Exception{
 		noticeVO.setUserId(userId);
-		notificationService.checkPostsNotification(noticeVO, "NOTICE");
+		notificationService.checkNoticeNotification(noticeVO);
 	}
 }
