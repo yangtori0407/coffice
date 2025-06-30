@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -59,20 +60,25 @@ public class DocumentController {
 	@GetMapping("list/*")
 	public String getList(Pager pager, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 
-		List<DocumentVO> docuList = (List<DocumentVO>)documentService.getList(pager, request, session).get("list");
-		model.addAttribute("docuList", docuList);
-		System.out.println("list 컨트롤러 docuList size : " + docuList.size());
-		model.addAttribute("pager", pager);
-
-		String kind = (String) documentService.getList(pager, request, session).get("kind");
-		model.addAttribute("kind", kind);
-		
-		String uri = request.getRequestURI();
-		
+		String uri = request.getRequestURI();		
 		String[] parts = uri.split("/");
 		String url = parts[parts.length-1];
 		
-		model.addAttribute("document", url);
+		model.addAttribute("url", url);
+		
+		model.addAttribute("pager", pager);
+		
+		// 리스트 가져오기
+		Map<String, Object> map = documentService.getList(pager, request, session);
+		
+		List<DocumentVO> docuList = (List<DocumentVO>)map.get("list");
+		System.out.println("list 컨트롤러 docuList size : " + docuList.size());
+		
+		String kind = (String)map.get("kind");		
+		
+		model.addAttribute("docuList", docuList);
+		model.addAttribute("kind", kind);
+		
 		
 		return "document/list";
 	}

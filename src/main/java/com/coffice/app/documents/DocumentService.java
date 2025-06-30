@@ -128,10 +128,7 @@ public class DocumentService {
 	//
 	public Map<String, Object> getList(Pager pager, HttpServletRequest request, HttpSession session) throws Exception {
 		
-		// 페이지 관련 값 준비
-		pager.make();
-		pager.makeNum(documentDAO.getTotalCount(pager));
-		
+				
 		// request에서 uri 가져오기 
 		String uri = request.getRequestURI();
 		
@@ -145,24 +142,54 @@ public class DocumentService {
 		// 접속 중인 session의 유저 정보 가져오기
 		UserVO user = (UserVO)session.getAttribute("user");
 		map.put("userId", user.getUserId());
+		System.out.println("userId : " + map.get("userId"));
+		map.put("search", pager.getSearch());
+		System.out.println("search : " + map.get("search"));
+		map.put("kind", pager.getKind());
+		System.out.println("kind : " + map.get("kind"));
 		
 		List<DocumentVO> list = null;
 		String kind = "";
 		
 		// 파싱한 키워드에 따라 조건 분기 생성
 		switch(url) {
-		case "online" : // 문서 중 작성자가 접속자인 문서만 가져온다, status는 "임시"를 제외한 "결재 중", "반려", "결재 완료"만 해당한다 
+		case "online" : // 문서 중 작성자가 접속자인 문서만 가져온다, status는 "임시"를 제외한 "결재 중", "반려", "결재 완료"만 해당한다
+			
+			// 페이지 관련 값 준비
+			pager.make();
+			pager.makeNum(documentDAO.getTotalCountOnline(map));
+			
+			map.put("startNum", pager.getStartNum());
+			System.out.println("startNum : " + map.get("startNum"));
+			map.put("page", pager.getPage());
+			System.out.println("page : " + map.get("page"));
+			
 			list = documentDAO.getListLine(map);			
 			kind = "결재 > 기안 문서함";
 			break;
 		
 		case "handled" : // 문서 중 해당 문서의 결재선이 접속자이고, currentStep이 stepOrder보다 큰 (접속자의 처리가 된) 문서만 가져온다
+			
+			// 페이지 관련 값 준비
+			pager.make();
+			pager.makeNum(documentDAO.getTotalCountHandled(map));
+			
+			map.put("startNum", pager.getStartNum());
+			map.put("page", pager.getPage());
+			
 			list = documentDAO.getListHandled(map);
 			kind = "결재 > 승인/반려 문서함";
 			break;
 			
 		case "onwaiting" : // 문서 중 해당 문서의 결재선이 접속자이고, stepOrder와 문서의 currentStep이 일치하는 문서만 가져온다
 			// approvalVO
+			
+			pager.make();
+			pager.makeNum(documentDAO.getTotalCountWaiting(map));
+			
+			map.put("startNum", pager.getStartNum());
+			map.put("page", pager.getPage());
+			
 			list = documentDAO.getListWaiting(map);
 			kind = "결재 > 결재 대기 문서함";
 			break;
@@ -170,16 +197,37 @@ public class DocumentService {
 		case "onreference" : // 문서 중 해당 문서의 참조선이 접속자인 문서만 가져온다
 			// referVO
 			// get document where userId 맞는 참조선의 documentId도 맞는 문서
+			
+			pager.make();
+			pager.makeNum(documentDAO.getTotalCountReference(map));
+			
+			map.put("startNum", pager.getStartNum());
+			map.put("page", pager.getPage());
+			
 			list = documentDAO.getListReference(map);
 			kind = "결재 > 참조 문서함";
 			break;
 			
 		case "ontemporary" : // 문서 중 작성자가 접속자이고, status가 "임시저장"인 문서만 가져온다
+			
+			pager.make();
+			pager.makeNum(documentDAO.getTotalCountTemporary(map));
+			
+			map.put("startNum", pager.getStartNum());
+			map.put("page", pager.getPage());
+			
 			list = documentDAO.getListTemporary(map);
 			kind = "결재 > 임시 저장 문서함";
 			break;
 		
 		default :
+			
+			pager.make();
+			pager.makeNum(documentDAO.getTotalCountOnline(map));
+			
+			map.put("startNum", pager.getStartNum());
+			map.put("page", pager.getPage());
+			
 			list = documentDAO.getListLine(map);
 		}
 		

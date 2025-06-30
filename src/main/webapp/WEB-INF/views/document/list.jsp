@@ -38,9 +38,9 @@
 											<form method="get"
 												class="form-inline d-flex align-items-center">
 												<select class="custom-select mr-2" name="kind">
-													<option value="k1">제목</option>
+													<option value="k3">제목</option>
 													<option value="k2">본문</option>
-													<option value="k3">제목+본문</option>
+													<option value="k1">제목+본문</option>
 												</select> <input type="search" name="search"
 													class="form-control form-control-sm mr-2"
 													placeholder="검색어를 입력하세요" style="max-width: 200px;">
@@ -123,22 +123,25 @@
 											<ul class="pagination">
 												<li class="paginate_button page-item previous"
 													id="dataTable_previous"><a
-													href="./list?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}"
+													href="./${url}?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}"
 													aria-controls="dataTable" data-dt-idx="0" tabindex="0"
-													class="page-link">Previous</a></li>
+													class="page-link">Previous</a>
+												</li>
+												
 												<c:forEach begin="${pager.start }" end="${pager.end }"
 													var="i">
 													<li
 														class="paginate_button page-item ${pager.nowPage == i ? 'active' : '' }"><a
-														href="./list?nowPage=${i }&search=${pager.search}&kind=${pager.kind}"
+														href="./${url}?nowPage=${i }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="1" tabindex="0"
-														class="page-link">${i}</a></li>
+														class="page-link">${i}</a>
+													</li>
 												</c:forEach>
 
 
 												<li class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }
 													id="dataTable_next"><a
-													href="./list?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
+													href="./${url}?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
 													aria-controls="dataTable" data-dt-idx="7" tabindex="0"
 													class="page-link">Next</a></li>
 											</ul>
