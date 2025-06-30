@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coffice.app.events.EventUtility;
+import com.coffice.app.notification.NotificationService;
 import com.coffice.app.users.UserDAO;
 import com.coffice.app.users.UserVO;
 
@@ -34,12 +35,21 @@ public class VacationService {
 	@Autowired
 	private AnnualLeaveService annualLeaveService;
 	
+	@Autowired
+	private NotificationService notificationService;
+	
 	public List<UserVO> getDepsUsers(UserVO userVO) throws Exception {
 		return vacationDAO.getDepsUsers(userVO);
 	}
 	
-	public int applyForLeave(VacationVO vacationVO) throws Exception {
-		return vacationDAO.applyForLeave(vacationVO);
+	@Transactional
+	public int applyForLeave(VacationVO vacationVO, Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setUserId(userVO.getUserId());
+		int result = vacationDAO.applyForLeave(vacationVO);
+		String mes = userVO.getPosition() + " " + userVO.getName() + "의 휴가 신청";
+		notificationService.sendVaction(mes, vacationVO.getApprovalAuthority());
+		return result;
 	}
 	
 	public List<VacationVO> getApplyList(UserVO userVO) throws Exception {
@@ -89,6 +99,9 @@ public class VacationService {
 		
 		result = annualLeaveService.use(annualLeaveVO);
 		log.info("use : {}", result);
+		
+		String mes = "휴가 신청이 승인됨";
+		notificationService.sendVaction(mes, vacationVO.getUserId());
 		
 		return result;
 	}

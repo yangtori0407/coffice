@@ -122,10 +122,7 @@ public class EventController {
 	
 	@PostMapping("vacation/apply")
 	public String applyForLeave(VacationVO vacationVO, Authentication authentication) throws Exception {
-		UserVO userVO = (UserVO)authentication.getPrincipal();
-		vacationVO.setUserId(userVO.getUserId());
-		vacationService.applyForLeave(vacationVO);
-		notificationService.sendVaction(vacationVO);
+		vacationService.applyForLeave(vacationVO, authentication);
 		return "events/vacation";
 	}
 	
