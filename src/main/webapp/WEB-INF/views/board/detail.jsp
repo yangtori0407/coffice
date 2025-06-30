@@ -73,7 +73,7 @@ input {
 													style="box-shadow: none; outline: none;">
 											</div>
 											<div class="col-1 pl-1">
-												<button id="comBtn" class="btn btn-success w-100"
+												<button id="comBtn" class="btn btn-primary w-100"
 													type="button">입력</button>
 											</div>
 										</div>

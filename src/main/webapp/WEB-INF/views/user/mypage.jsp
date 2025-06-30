@@ -167,18 +167,36 @@
 					        <h6 class="m-0 font-weight-bold text-primary">나의 이번 주 근태현황</h6>
 					      </div>
 				
-					      <div class="card-body" style="display: flex; flex-direction: column; justify-content: center; min-height: 200px; padding-bottom: 100px;">
-					        <div style="display: flex; justify-content: space-around;  border-bottom: 1px solid black; padding-bottom: 10px;">
+					      <div class="card-body" style="display: flex; min-height: 250px; padding: 20px;">
+  
+						  <!-- 왼쪽: 근무 정보 -->
+							<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding-right: 30px;">
+							
+							  <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ccc; padding: 15px 0;">
 							    <div>근무한 시간</div>
+							    <div class="time"><%= timeFormat(worked) %></div>
+							  </div>
+							
+							  <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ccc; padding: 15px 0;">
 							    <div>잔여 시간</div>
+							    <div class="time"><%= timeFormat(remaining) %></div>
+							  </div>
+							
+							  <div style="display: flex; justify-content: space-between; padding: 15px 0;">
 							    <div>초과 시간</div>
+							    <div class="time"><%= timeFormat(overtime) %></div>
+							  </div>
+							
 							</div>
-							<div style="display: flex; justify-content: space-around; margin-top: 10px; font-weight: bold;">
-							     <div><%= timeFormat(worked) %></div>
-							      <div><%= timeFormat(remaining) %></div>
-							      <div><%= timeFormat(overtime) %></div>
-							</div>
-					      </div>
+
+						
+						  <!-- 오른쪽: 그래프 -->
+						  <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+						    <canvas id="monthlyStatusChart" style="max-width: 100%;"></canvas>
+						  </div>
+						</div>
+
+
 					    </div>
 					
 					  </div>
@@ -195,6 +213,53 @@
 	<!-- End Wrapper -->
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 	<script src="/js/user/mypage.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script>
+	  window.addEventListener('DOMContentLoaded', () => {
+	    const ctx = document.getElementById('monthlyStatusChart')?.getContext('2d');
+	
+	    if (!ctx) {
+	      console.error("monthlyStatusChart not found!");
+	      return;
+	    }
+	
+	    new Chart(ctx, {
+	      type: 'bar',
+	      data: {
+	        labels: ['정상근무', '조퇴', '결근'],
+	        datasets: [{
+	          label: '횟수',
+	          data: [
+	            ${normalCount != null ? normalCount : 0},
+	            ${earlyLeaveCount != null ? earlyLeaveCount : 0},
+	            ${absentCount != null ? absentCount : 0}
+	          ],
+	          backgroundColor: ['#007bff', '#ff9800', '#f44336'],
+	          borderWidth: 1
+	        }]
+	      },
+	      options: {
+	        responsive: true,
+	        scales: {
+	          y: {
+	            beginAtZero: true,
+	            ticks: {
+	              precision: 0
+	            }
+	          }
+	        },
+	        plugins: {
+	          legend: {
+	            display: false
+	          }
+	        }
+	      }
+	    });
+	  });
+	</script>
+	<script src="/js/user/graph.js"></script>
+	
+	<script src="/js/user/graph.js"></script>
 	<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 	<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

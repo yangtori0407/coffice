@@ -46,15 +46,15 @@
 		FROM USERS U
 		WHERE U.STATUS = 1
 		AND U.USER_ID NOT IN (
-		SELECT A.USER_ID
-		FROM ATTENDANCE A
-		WHERE DATE(a.start_time) = CURDATE()
+			SELECT A.USER_ID
+			FROM ATTENDANCE A
+			WHERE DATE(a.start_time) = CURDATE()- INTERVAL 1 DAY
 		)
 	</select>
   
   	<insert id="insertAbsence" parameterType="AttendanceVO">
-		INSERT INTO ATTENDANCE (USER_ID, START_TIME, END_TIME, STATUS, ATTENDANCE_DATE)
-		VALUES (#{userId}, NULL, NULL, #{status}, #{attendanceDate})
+		INSERT INTO ATTENDANCE (USER_ID, STATUS, WORK_DATE)
+    	VALUES (#{userId}, '결근', CURDATE() - INTERVAL 1 DAY)
 	</insert>
 	
 	<select id="getTodayUnfinishedAttendances" resultType="AttendanceVO">
@@ -62,14 +62,14 @@
 	    FROM ATTENDANCE
 	    WHERE START_TIME IS NOT NULL
 	      AND END_TIME IS NULL
-	      AND DATE(start_time) = CURDATE()
+	      AND DATE(start_time) = CURDATE()- INTERVAL 1 DAY
 	</select>
 	
 	<update id="updateStatus" parameterType="AttendanceVO">
 	    UPDATE ATTENDANCE
-	    SET STATUS = #{status}
+	    SET STATUS = #{status}, END_TIME = '00:00:00'
 	    WHERE USER_ID = #{userId}
-	      AND DATE(START_TIME) = CURDATE()
+	      AND DATE(START_TIME) = CURDATE() - INTERVAL 1 DAY
 	      AND END_TIME IS NULL
 	</update>
 	
@@ -92,7 +92,15 @@
   		WHERE USER_ID = #{userId} AND ATTENDANCE_DATE = #{attendanceDate}
   	</update>
 	
-	
+	<select id="getMonthlyStatusCount" resultType="AttendanceStatusCountVO">
+	    SELECT STATUS, COUNT(*) AS count
+	    FROM ATTENDANCE
+	    WHERE USER_ID = #{userId}
+	      AND YEAR(ATTENDANCE_DATE) = #{year}
+	      AND MONTH(ATTENDANCE_DATE) = #{month}
+	    GROUP BY STATUS
+	</select>
+
 	
   
   
