@@ -83,7 +83,7 @@ public class DocumentController {
 
 		//
 		DocumentVO docuVO = documentService.getDetail(documentVO);
-
+		
 		if (docuVO == null) {
 			System.out.println("document detail docuVO가 null입니다");
 		}
@@ -99,6 +99,46 @@ public class DocumentController {
 		// 임시저장 페이지에 보여줄 표시용 시간도 보낸다
 		LocalDate fakeToday = LocalDate.now();
 		model.addAttribute("fakeToday", fakeToday);
+		
+		
+		UserVO sessionUser = (UserVO)session.getAttribute("user");
+		String kindMessage = "";
+		
+		
+		
+		if(docuVO.getStatus().equals("임시저장")) {
+			kindMessage = "결재 > 임시 저장 문서";
+			
+		} else if(docuVO.getWriterId().equals(sessionUser.getUserId())) {
+			kindMessage = "결재 > 기안 문서";
+			
+		} else {
+			
+				for(ReferenceLineVO line : docuVO.getReferenceLineVOs()) {
+					if(line.getUserId().equals(sessionUser.getUserId()) && !(docuVO.getStatus().equals("임시저장"))) {
+						
+						kindMessage = "결재 > 참조 문서";
+					}
+				}
+				
+				for(ApprovalLineVO line : docuVO.getApprovalLineVOs()) {
+					if(line.getStepOrder() < docuVO.getCurrentStep() && line.getUserId().equals(sessionUser.getUserId())) {
+						
+						kindMessage = "결재 > 승인/반려 문서";
+					}
+				}
+				
+				for(ApprovalLineVO line : docuVO.getApprovalLineVOs()) {
+					if(line.getStepOrder() == docuVO.getCurrentStep() && line.getUserId().equals(sessionUser.getUserId())) {
+						
+						kindMessage = "결재 > 결재 대기 문서";
+					}
+				}
+				
+		}
+		
+		
+		model.addAttribute("kind", kindMessage);
 		
 		return "document/form/variableForm";
 	}
@@ -127,8 +167,7 @@ public class DocumentController {
 		model.addAttribute("fakeToday", fakeToday);
 		
 		model.addAttribute("isWritePage", 1);
-		
-		
+		model.addAttribute("kind", "결재 > 문서 작성");		
 		return "document/form/variableForm";
 	}
 	
