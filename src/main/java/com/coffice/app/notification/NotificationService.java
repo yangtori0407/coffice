@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.coffice.app.attendance.AttendanceController;
 import com.coffice.app.documents.DocumentVO;
 import com.coffice.app.documents.lines.ReferenceLineVO;
 import com.coffice.app.events.vacation.VacationVO;
@@ -26,13 +26,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NotificationService {
 
+    private final AttendanceController attendanceController;
+
 	@Autowired
 	private NotificationDAO notificationDAO;
 
 	private final SimpMessagingTemplate template;
 
-	public NotificationService(SimpMessagingTemplate template) {
+	public NotificationService(SimpMessagingTemplate template, AttendanceController attendanceController) {
 		this.template = template;
+		this.attendanceController = attendanceController;
 	}
 
 	@Transactional
@@ -103,9 +106,9 @@ public class NotificationService {
 	}
 
 	// 휴가 알림
-	public void sendVaction(VacationVO vacationVO) throws Exception {
+	public void sendVaction(String contents, String receiver) throws Exception {
 		NotificationVO notificationVO = new NotificationVO();
-		notificationVO.setNotiContents("휴가 신청"); // 원하는 내용으로 바꾸시면 됩니다~!
+		notificationVO.setNotiContents(contents); // 원하는 내용으로 바꾸시면 됩니다~!
 		LocalDateTime now = LocalDateTime.now();
 		Timestamp timestamp = Timestamp.valueOf(now);
 		notificationVO.setNotiDate(timestamp);
@@ -115,11 +118,11 @@ public class NotificationService {
 		notificationDAO.add(notificationVO);
 
 		Map<String, Object> info = new HashMap<>();
-		info.put("userId", vacationVO.getApprovalAuthority());
+		info.put("userId", receiver);
 		info.put("notiNum", notificationVO.getNotiNum());
 		notificationDAO.addNotiCheck(info);
 
-		template.convertAndSend("/sub/notification/user." + vacationVO.getApprovalAuthority(), notificationVO);
+		template.convertAndSend("/sub/notification/user." + receiver, notificationVO);
 	}
 
 	public void sendMessage(MessageVO messageVO, String userId) throws Exception {
@@ -218,6 +221,51 @@ public class NotificationService {
 		// log.info("notiCheckNum: {}", notiCheckNum);
 		// log.info("userId : {}", name);
 		return notificationDAO.moreNotification(info);
+	}
+
+	public void checkNoticeNotification(NoticeVO noticeVO) throws Exception{
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setNotiKind("NOTICE");
+		notificationVO.setRelateId(noticeVO.getNoticeNum());
+		notificationVO = notificationDAO.getNoticeNotificationDetail(notificationVO);
+		
+		Map<String, Object> info = new HashMap<>();
+		info.put("notiNum", notificationVO.getNotiNum());
+		info.put("userId", noticeVO.getUserId());
+		
+		notificationDAO.updateNotiStatus(info);
+	}
+	
+	@Transactional
+	public void checkBoardNotification(BoardVO boardVO) throws Exception{
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setNotiKind("BOARD");
+		notificationVO.setRelateId(boardVO.getBoardNum());
+		List<NotificationVO> list = notificationDAO.getBoardNotificationDetail(notificationVO);
+	
+		Map<String, Object> info = new HashMap<>();
+		for(NotificationVO l : list) {
+			//log.info("NotificationVO get : {}", l);
+			info.put("notiNum", l.getNotiNum());
+			info.put("userId", boardVO.getUserId());
+			notificationDAO.updateNotiStatus(info);
+			
+			info.clear();
+		}
+		
+	}
+	@Transactional
+	public void checkMessageNotification(MessageVO messageVO, String userId) throws Exception{
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setNotiKind("MESSAGE");
+		notificationVO.setRelateId(messageVO.getMessageNum());
+		
+		notificationVO = notificationDAO.getNoticeNotificationDetail(notificationVO);
+		
+		Map<String, Object> info = new HashMap<>();
+		info.put("notiNum", notificationVO.getNotiNum());
+		info.put("userId", userId);
+		notificationDAO.updateNotiStatus(info);
 	}
 
 }

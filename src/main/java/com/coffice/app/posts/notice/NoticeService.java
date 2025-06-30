@@ -10,11 +10,13 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.files.FileManager;
 import com.coffice.app.ingredients.IngredientsService;
 import com.coffice.app.notification.NotificationService;
+import com.coffice.app.notification.NotificationVO;
 import com.coffice.app.page.Pager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ public class NoticeService {
 	
 	@Autowired
 	private NotificationService notificationService;
+	
 
     NoticeService(IngredientsService ingredientsService) {
         this.ingredientsService = ingredientsService;
@@ -46,8 +49,10 @@ public class NoticeService {
 		pager.makeNum(noticeDAO.getTotalCount(pager));
 		return noticeDAO.getList(pager);
 	}
-
+	
+	@Transactional
 	public NoticeVO getDetail(NoticeVO noticeVO) throws Exception {
+		
 		return noticeDAO.getDetail(noticeVO);
 	}
 
@@ -132,17 +137,9 @@ public class NoticeService {
 		
 	}
 	
-//	public List<String> htmlParse(String html){
-//		Document doc = Jsoup.parse(html);
-//		Elements images = doc.select("img");
-//		List<String> fileNames = new ArrayList<>();
-//		
-//		for(Element img : images) {
-//			String src = img.attr("src");
-//			String fileName = src.substring(src.lastIndexOf("/") + 1);
-//			fileNames.add(fileName);
-//		}
-//		
-//		return fileNames;
-//	}
+	@Transactional
+	public void readNoticeNotification(NoticeVO noticeVO, String userId) throws Exception{
+		noticeVO.setUserId(userId);
+		notificationService.checkNoticeNotification(noticeVO);
+	}
 }

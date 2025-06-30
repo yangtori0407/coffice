@@ -102,7 +102,7 @@
 													<c:forEach items="${list }" var="l">
 														<tr>
 															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeNum }</a></td>
-															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
+															<td style="font-weight:bold"><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
 															<td>관리자</td>
 															<%-- <td>${l.noticeHit }</td> --%>
 															<td>${l.formatted }</td>

@@ -1,6 +1,7 @@
 package com.coffice.app.posts.board;
 
 import java.sql.Date;
+
 import java.util.List;
 
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class BoardVO {
+public class BoardVO{
 	private Long boardNum;
 	private String boardTitle;
 	private String userId;

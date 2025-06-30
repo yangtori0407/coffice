@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -49,9 +50,11 @@ public class NoticeController {
 	}
 	
 	@GetMapping("detail")
-	public String getDetail(NoticeVO noticeVO, Model model) throws Exception{
+	@Transactional
+	public String getDetail(NoticeVO noticeVO, Model model, Authentication authentication) throws Exception{
 		//log.info("detail noticeVO : {}", noticeVO);
 		noticeVO = noticeService.getDetail(noticeVO);
+		noticeService.readNoticeNotification(noticeVO, authentication.getName());
 		//log.info("detail noticeVO : {}", noticeVO);
 		model.addAttribute("detail", noticeVO);
 		model.addAttribute("kind", "게시판 > 공지사항");
@@ -103,7 +106,7 @@ public class NoticeController {
 	}
 	
 	@GetMapping("update")
-	public String update(NoticeVO noticeVO, Model model) throws Exception{
+	public String update(NoticeVO noticeVO, Model model, Authentication authentication) throws Exception{
 		noticeVO = noticeService.getDetail(noticeVO);
 		//log.info("size : {}",noticeVO.getFiles().size());
 		model.addAttribute("update", noticeVO);

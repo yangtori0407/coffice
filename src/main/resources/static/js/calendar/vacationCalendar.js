@@ -53,14 +53,21 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             console.log(r)
             let st;
             let et;
-            if(r.vacationVO.status == 0) {
+            if(r.vacationVO.status == '대기') {
                 st = "승인 대기"
                 et = ""
                 updateVacation.setAttribute("style", "display: block;")
-            }else {
+                reject.setAttribute("style", "display: block")
+            }else if(r.vacationVO.status == '승인') {
                 st = "승인 완료"
                 et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
                 updateVacation.setAttribute("style", "display: none;")
+                reject.setAttribute("style", "display: none")
+            }else {
+                st = "승인 거절"
+                et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
+                updateVacation.setAttribute("style", "display: none;")
+                reject.setAttribute("style", "display: none")
             }
             let vid = document.getElementById("vid")
             let t = document.getElementById("vacationType")
@@ -77,12 +84,14 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             p.innerHTML = "<strong>신청 기간 : </strong>"+r.vacationVO.startTime.slice(2, 10) + " " + r.vacationVO.startTime.slice(11, 16) + " ~ " + r.vacationVO.endTime.slice(2, 10) + " " + r.vacationVO.endTime.slice(11, 16)
             s.innerHTML = "<strong>처리 상태 : </strong>"+st
             ac.innerHTML = "<strong>승인자 : </strong>"+r.accepter.position + " " + r.accepter.name
-            at.innerHTML = "<strong>승인일 : </strong>"+et
+            at.innerHTML = "<strong>처리일 : </strong>"+et
             let userId = document.getElementById("userId")
             if(userId.value == r.vacationVO.userId) {
                 updateVacation.innerText = "수정"
+                // reject.setAttribute("style", "display: none")
             }else {
                 updateVacation.innerText = "승인"
+                // reject.setAttribute("style", "display: block")
             }
         })
         $("#vacationDetailModal").modal("show")
@@ -193,6 +202,7 @@ send.addEventListener("click", ()=>{
 })
 
 const updateVacation = document.getElementById("updateVacation")
+const reject = document.getElementById("reject")
 function accept() {
 
     let applyList = document.getElementById("applyList")
@@ -208,10 +218,12 @@ function accept() {
         for( a of r ) {
             console.log(a.status)
             let stat;
-            if(a.status == 0) {
+            if(a.status == '대기') {
                 stat = "승인 대기 \t <ion-icon name='ellipse' style='color:yellow;'></ion-icon>"
-            }else {
+            }else if(a.status == '승인') {
                 stat = "승인 완료 \t <ion-icon name='ellipse' style='color:green;'></ion-icon>"
+            }else {
+                stat = "승인 거절 \t <ion-icon name='ellipse' style='color:red;'></ion-icon>"
             }
             let li = document.createElement("li")
             li.classList.add("list-group-item")
@@ -239,14 +251,21 @@ function accept() {
                     console.log(r)
                     let st;
                     let et;
-                    if(r.vacationVO.status == 0) {
+                    if(r.vacationVO.status == '대기') {
                         st = "승인 대기"
                         et = ""
                         updateVacation.setAttribute("style", "display: block;")
-                    }else {
+                        reject.setAttribute("style", "display: block")
+                    }else if(r.vacationVO.status == '승인') {
                         st = "승인 완료"
                         et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
                         updateVacation.setAttribute("style", "display: none;")
+                        reject.setAttribute("style", "display: none")
+                    }else {
+                        st = "승인 거절"
+                        et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
+                        updateVacation.setAttribute("style", "display: none;")
+                        reject.setAttribute("style", "display: none")
                     }
                     let vid = document.getElementById("vid")
                     let t = document.getElementById("vacationType")
@@ -263,9 +282,10 @@ function accept() {
                     p.innerHTML = "<strong>신청 기간 : </strong>"+r.vacationVO.startTime.slice(2, 10) + " " + r.vacationVO.startTime.slice(11, 16) + " ~ " + r.vacationVO.endTime.slice(2, 10) + " " + r.vacationVO.endTime.slice(11, 16)
                     s.innerHTML = "<strong>처리 상태 : </strong>"+st
                     ac.innerHTML = "<strong>승인자 : </strong>"+r.accepter.position + " " + r.accepter.name
-                    at.innerHTML = "<strong>승인일 : </strong>"+et
+                    at.innerHTML = "<strong>처리일 : </strong>"+et
                 })
                 updateVacation.innerText = "수정"
+                reject.setAttribute("style", "display: none")
                 $("#listModal").modal("hide")
                 $("#vacationDetailModal").modal("show")
             })
@@ -282,10 +302,12 @@ function accept() {
         ul.classList.add("list-group")
         for( a of r ) {
             let stat;
-            if(a.status == 0) {
+            if(a.status == '대기') {
                 stat = "승인 대기 \t <ion-icon name='ellipse' style='color:yellow;'></ion-icon>"
-            }else {
+            }else if(a.status == '승인') {
                 stat = "승인 완료 \t <ion-icon name='ellipse' style='color:green;'></ion-icon>"
+            }else {
+                stat = "승인 거절 \t <ion-icon name='ellipse' style='color:red;'></ion-icon>"
             }
             let li = document.createElement("li")
             li.classList.add("list-group-item")
@@ -313,14 +335,21 @@ function accept() {
                     console.log(r)
                     let st;
                     let et;
-                    if(r.vacationVO.status == 0) {
+                    if(r.vacationVO.status == '대기') {
                         st = "승인 대기"
                         et = ""
                         updateVacation.setAttribute("style", "display: block;")
-                    }else {
+                        reject.setAttribute("style", "display: block")
+                    }else if(r.vacationVO.status == '승인') {
                         st = "승인 완료"
                         et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
                         updateVacation.setAttribute("style", "display: none;")
+                        reject.setAttribute("style", "display: none")
+                    }else {
+                        st = "승인 거절"
+                        et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
+                        updateVacation.setAttribute("style", "display: none;")
+                        reject.setAttribute("style", "display: none")
                     }
                     let vid = document.getElementById("vid")
                     let t = document.getElementById("vacationType")
@@ -337,9 +366,10 @@ function accept() {
                     p.innerHTML = "<strong>신청 기간 : </strong>"+r.vacationVO.startTime.slice(2, 10) + " " + r.vacationVO.startTime.slice(11, 16) + " ~ " + r.vacationVO.endTime.slice(2, 10) + " " + r.vacationVO.endTime.slice(11, 16)
                     s.innerHTML = "<strong>처리 상태 : </strong>"+st
                     ac.innerHTML = "<strong>승인자 : </strong>"+r.accepter.position + " " + r.accepter.name
-                    at.innerHTML = "<strong>승인일 : </strong>"+et
+                    at.innerHTML = "<strong>처리일 : </strong>"+et
                 })
                 updateVacation.innerText = "승인"
+                reject.setAttribute("style", "display: block")
                 $("#listModal").modal("hide")
                 $("#vacationDetailModal").modal("show")
             })
@@ -422,12 +452,119 @@ updateVacation.addEventListener("click", ()=>{
     }
 })
 
+reject.addEventListener("click", ()=>{
+    if(confirm("거부 처리하시겠습니까?")) {
+        let vid = document.getElementById("vid")
+        let params = new FormData
+        params.append("vacationId", vid.value)
+        fetch("/events/vacation/reject", {
+            method: "post",
+            body: params
+        })
+        .then(r=>r.text())
+        .then(r=>{
+            accept()
+        })
+    }
+})
+
 let goes = document.getElementsByName("goMypage")
 for(a of goes) {
     a.addEventListener("click", ()=>{
         location.href = "/user/mypage"
     })
 }
+
+
+$('#exampleModal').on('hidden.bs.modal', function () {
+    const modal = document.getElementById('exampleModal');
+    const form = modal.querySelector("form");
+    if (form) form.reset();
+    modal.querySelectorAll('select').forEach(select => {
+        select.selectedIndex = 0;
+    });
+})
+
+document.addEventListener('DOMContentLoaded', function () {
+  const vType = document.getElementById('vType');
+  const sTime = document.getElementById('sTime');
+  const eTime = document.getElementById('eTime');
+  const sDate = document.getElementById('sDate');
+  const eDate = document.getElementById('eDate');
+  const modal = document.getElementById('exampleModal');
+
+  function resetFields() {
+    sTime.disabled = false;
+    eTime.disabled = false;
+    eDate.disabled = false;
+
+    sTime.value = '';
+    eTime.value = '';
+    sDate.value = '';
+    eDate.value = '';
+    vType.value = '연차'; // 기본값이 있다면 이걸로
+  }
+
+  vType.addEventListener('change', function () {
+    const type = vType.value;
+
+    const syncDate = () => {
+      if (sDate && eDate) eDate.value = sDate.value;
+    };
+
+    switch (type) {
+      case '연차':
+        sTime.value = '09:00';
+        eTime.value = '18:00';
+        sTime.disabled = true;
+        eTime.disabled = true;
+        eDate.disabled = false;
+        break;
+
+      case '오전':
+        sTime.value = '09:00';
+        eTime.value = '14:00';
+        sTime.disabled = true;
+        eTime.disabled = true;
+        syncDate();
+        eDate.disabled = true;
+        break;
+
+      case '오후':
+        sTime.value = '14:00';
+        eTime.value = '18:00';
+        sTime.disabled = true;
+        eTime.disabled = true;
+        syncDate();
+        eDate.disabled = true;
+        break;
+
+      case '시간':
+        sTime.disabled = false;
+        eTime.disabled = false;
+        eDate.disabled = false;
+        break;
+
+      default:
+        sTime.disabled = false;
+        eTime.disabled = false;
+        eDate.disabled = false;
+        break;
+    }
+  });
+
+  sDate.addEventListener('change', function () {
+    const type = vType.value;
+    if (type === '오전' || type === '오후') {
+      eDate.value = sDate.value;
+    }
+  });
+
+  // 모달 닫힐 때 초기화
+  $('#exampleModal').on('hidden.bs.modal', function () {
+    resetFields();
+  });
+});
 
 calendar.render();
 

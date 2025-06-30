@@ -113,7 +113,7 @@
       let chatMax = 0;
 
       btn.addEventListener("click", () => {
-        fetch("http://localhost/user/organizationChart", {
+        fetch("/user/organizationChart", {
           method: "get"
         })
           .then(r => r.json())
@@ -164,7 +164,7 @@
 
           let params = new URLSearchParams
           params.append("deptId", deptId)
-          fetch('http://localhost/user/getUsers?' + params, {
+          fetch('/user/getUsers?' + params, {
             method: "get"
           })
             .then(r => r.json())

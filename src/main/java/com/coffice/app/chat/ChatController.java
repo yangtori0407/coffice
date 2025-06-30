@@ -24,6 +24,7 @@ import com.coffice.app.chat.vo.ChatContentsVO;
 import com.coffice.app.chat.vo.ChatFilesVO;
 import com.coffice.app.chat.vo.ChatPersonVO;
 import com.coffice.app.chat.vo.ChatRoomVO;
+import com.coffice.app.files.FileDownView;
 import com.coffice.app.files.FileVO;
 import com.coffice.app.posts.notice.NoticeFilesVO;
 import com.coffice.app.users.UserVO;
@@ -44,6 +45,9 @@ public class ChatController {
 	}
 
 	private final SimpMessagingTemplate template;
+	
+	@Autowired
+	private FileDownView downView;
 
 	@Autowired
 	public ChatController(SimpMessagingTemplate template) {
@@ -141,13 +145,13 @@ public class ChatController {
 	}
 
 	@GetMapping("fileDown")
-	public String fileDown(NoticeFilesVO filesVO, Model model) throws Exception {
+	public FileDownView fileDown(NoticeFilesVO filesVO, Model model) throws Exception {
 		FileVO fileVO = (FileVO) chatService.fileDown(filesVO);
 
 		model.addAttribute("fileVO", fileVO);
 		model.addAttribute("kind", "chatFile");
 
-		return "fileDownView";
+		return downView;
 	}
 
 	@PostMapping("updateAlarm")

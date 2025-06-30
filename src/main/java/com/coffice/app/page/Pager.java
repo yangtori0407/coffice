@@ -80,6 +80,9 @@ public class Pager {
 	}
 
 	public void makeNum(Long totalCount) {
+		if(totalCount<1) {
+			totalCount=1L;
+		}
 
 		System.out.println("totalCount : " + totalCount);
 		

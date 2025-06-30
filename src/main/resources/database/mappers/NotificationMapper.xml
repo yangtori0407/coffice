@@ -43,7 +43,12 @@
   		FROM NOTIFICATION_CHECK
   		WHERE USER_ID = #{userId} AND NOTICHECK_STATUS = 0
   	</select>
-  	
+  	<select id="getNoticeNotificationDetail" parameterType="NotificationVO" resultType="NotificationVO">
+  		SELECT NOTI_NUM FROM NOTIFICATION WHERE NOTI_KIND = #{notiKind} AND RELATE_ID = #{relateId} 
+  	</select>
+  	<select id="getBoardNotificationDetail" parameterType="NotificationVO" resultType="NotificationVO">
+  		SELECT NOTI_NUM FROM NOTIFICATION WHERE NOTI_KIND = #{notiKind} AND RELATE_ID = #{relateId} 
+  	</select>
   	<update id="updateNotiStatus" parameterType="java.util.HashMap">
   		UPDATE NOTIFICATION_CHECK SET NOTICHECK_STATUS = 1 WHERE NOTI_NUM = #{notiNum} AND USER_ID = #{userId}
   	</update>

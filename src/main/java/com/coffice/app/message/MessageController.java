@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,11 +60,11 @@ public class MessageController {
 	}
 	
 	@PostMapping("add")
-	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers, @RequestParam("attaches") MultipartFile[] attaches,  Authentication authentication, Model model) throws Exception{
-		log.info("messageVO : {}", messageVO);
-		for(MultipartFile s : attaches) {
-			log.info("attaches: {}", s.getOriginalFilename());
-		}
+	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers, @RequestParam(value = "attaches", required = false) MultipartFile[] attaches,  Authentication authentication, Model model) throws Exception{
+//		log.info("messageVO : {}", messageVO);
+//		for(MultipartFile s : attaches) {
+//			log.info("attaches: {}", s.getOriginalFilename());
+//		}
 		int result = messageService.sendMessage(messageVO, receivers, authentication.getName(), attaches);
 		model.addAttribute("result", result);
 		
@@ -80,9 +81,11 @@ public class MessageController {
 	}
 	
 	@GetMapping("receive/detail")
-	public String receiveDetail(MessageVO messageVO, Model model) throws Exception{
+	@Transactional
+	public String receiveDetail(MessageVO messageVO, Model model, Authentication authentication) throws Exception{
 		//log.info("도착");
 		messageVO = messageService.detail(messageVO);
+		messageService.readReceiveNotification(messageVO, authentication.getName());
 		model.addAttribute("detail", messageVO);
 		model.addAttribute("message", "receive");
 		model.addAttribute("kind", "이메일 > 받은 이메일");
