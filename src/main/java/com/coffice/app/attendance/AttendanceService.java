@@ -3,6 +3,7 @@ package com.coffice.app.attendance;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +90,8 @@ public class AttendanceService {
 
 	
 	public void insertAndUpdateAbsences() throws Exception {
+		
+		LocalDate yesterday = LocalDate.now().minusDays(1);
 	    // 1. 출근 기록 자체가 없는 사람들 → INSERT 결근
 	    List<String> absentUserIds = attendanceDAO.getAbsentUserIds();
 	    for (String userId : absentUserIds) {
@@ -97,7 +100,7 @@ public class AttendanceService {
 	        attendance.setStartTime(null);
 	        attendance.setEndTime(null);
 	        attendance.setStatus("결근");
-	        attendance.setAttendanceDate(LocalDate.now());
+	        attendance.setAttendanceDate(yesterday);
 	        attendanceDAO.insertAbsence(attendance);
 	    }
 
@@ -105,6 +108,7 @@ public class AttendanceService {
 	    List<AttendanceVO> unclosedList = attendanceDAO.getTodayUnfinishedAttendances();
 	    for (AttendanceVO attendance : unclosedList) {
 	        attendance.setStatus("결근");
+	        attendance.setEndTime(LocalDateTime.of(yesterday, LocalTime.MIDNIGHT));  
 	        attendanceDAO.updateStatus(attendance);
 	    }
 	}
@@ -122,6 +126,10 @@ public class AttendanceService {
 
 		return attendanceDAO.updateAttendance(attendanceVO);
 	}
+	
+	public List<AttendanceStatusCountVO> getMonthlyStatusCount(String userId, int year, int month) {
+        return attendanceDAO.getMonthlyStatusCount(userId, year, month);
+    }
 
 
 }

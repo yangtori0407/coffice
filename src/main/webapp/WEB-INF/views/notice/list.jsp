@@ -60,11 +60,11 @@
 													</select> <input type="search" name="search"
 														class="form-control form-control-sm mr-2"
 														placeholder="검색어를 입력하세요" style="max-width: 200px;">
-													<button type="submit" class="btn btn-info ">검색</button>
+													<button type="submit" class="btn btn-secondary ">검색</button>
 												</form>
 
 												<!-- 추가 버튼 -->
-												<a href="./add" class="btn btn-danger">작성하기</a>
+												<a href="./add" class="btn btn-primary">작성하기</a>
 											</div>
 										</div>
 									</div>

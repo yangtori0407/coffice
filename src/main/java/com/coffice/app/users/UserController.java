@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.coffice.app.gpt.GeminiService;
 import com.coffice.app.attendance.AttendanceService;
+import com.coffice.app.attendance.AttendanceStatusCountVO;
 import com.coffice.app.mail.MailService;
 
 import jakarta.servlet.http.HttpSession;
@@ -203,8 +204,26 @@ public class UserController {
 		String userId = userVO.getUserId();
 		
 		Map<String, Long> timeMap = attendanceService.getWeeklyWorkStatus(userId);
-		
 		model.addAttribute("timeMap", timeMap);
+		
+		int year = LocalDate.now().getYear();
+	    int month = LocalDate.now().getMonthValue();
+
+	    List<AttendanceStatusCountVO> statusList = attendanceService.getMonthlyStatusCount(userId, year, month);
+
+	    int normal = 0, earlyLeave = 0, absent = 0;
+	    for (AttendanceStatusCountVO vo : statusList) {
+	        switch (vo.getStatus()) {
+	            case "정상근무" -> normal = vo.getCount();
+	            case "조퇴" -> earlyLeave = vo.getCount();
+	            case "결근" -> absent = vo.getCount();
+	        }
+	    }
+
+	    model.addAttribute("normalCount", normal);
+	    model.addAttribute("earlyLeaveCount", earlyLeave);
+	    model.addAttribute("absentCount", absent);
+	    
 		model.addAttribute("kind", "마이페이지");
 		
 		return "user/mypage";
