@@ -59,7 +59,7 @@ public class MessageService {
 		int result = messageDAO.add(messageVO);
 		
 		List<MessageFilesVO> files = new ArrayList<>();
-		if(attaches.length > 0) {
+		if(attaches!= null && attaches.length > 0) {
 			
 			for(MultipartFile f : attaches) {
 				MessageFilesVO filesVO = new MessageFilesVO();

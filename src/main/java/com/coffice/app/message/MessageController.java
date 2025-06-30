@@ -60,11 +60,11 @@ public class MessageController {
 	}
 	
 	@PostMapping("add")
-	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers, @RequestParam("attaches") MultipartFile[] attaches,  Authentication authentication, Model model) throws Exception{
-		log.info("messageVO : {}", messageVO);
-		for(MultipartFile s : attaches) {
-			log.info("attaches: {}", s.getOriginalFilename());
-		}
+	public String add(MessageVO messageVO,@RequestParam("receivers") String[] receivers, @RequestParam(value = "attaches", required = false) MultipartFile[] attaches,  Authentication authentication, Model model) throws Exception{
+//		log.info("messageVO : {}", messageVO);
+//		for(MultipartFile s : attaches) {
+//			log.info("attaches: {}", s.getOriginalFilename());
+//		}
 		int result = messageService.sendMessage(messageVO, receivers, authentication.getName(), attaches);
 		model.addAttribute("result", result);
 		
