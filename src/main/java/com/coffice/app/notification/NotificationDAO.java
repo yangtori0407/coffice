@@ -24,5 +24,7 @@ public interface NotificationDAO {
 	List<NotificationVO> moreNotification(Map<String, Object> info) throws Exception;
 
 	int getNonReadNotification(String userId) throws Exception;
+	
+	NotificationVO getPostsNotificationDetail(NotificationVO notificationVO) throws Exception;
 
 }

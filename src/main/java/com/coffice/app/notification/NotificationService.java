@@ -220,4 +220,17 @@ public class NotificationService {
 		return notificationDAO.moreNotification(info);
 	}
 
+	public void checkPostsNotification(NoticeVO noticeVO, String Kind) throws Exception{
+		NotificationVO notificationVO = new NotificationVO();
+		notificationVO.setNotiKind(Kind);
+		notificationVO.setRelateId(noticeVO.getNoticeNum());
+		notificationVO = notificationDAO.getPostsNotificationDetail(notificationVO);
+		
+		Map<String, Object> info = new HashMap<>();
+		info.put("notiNum", notificationVO.getNotiNum());
+		info.put("userId", noticeVO.getUserId());
+		
+		notificationDAO.updateNotiStatus(info);
+	}
+
 }
