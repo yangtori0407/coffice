@@ -135,7 +135,6 @@ document.getElementById('btn-send-sign').addEventListener('click', function () {
 
 	const signNameInput = document.getElementById("signNameInput");
     let signName = signNameInput.value.trim();
-	const imageWrapper = document.getElementById("id_imageWrapper");
 	
     if (signName === "") {
         alert("사인 용도 또는 별명을 입력해주세요")
@@ -162,8 +161,10 @@ document.getElementById('btn-send-sign').addEventListener('click', function () {
             .then(response => response.json())
             .then(data => {
 				
-				// 사인 만들기 메뉴화면 초기화 후 모달 닫기				
-				imageWrapper.innerHTML = '';
+				// 내용 초기화 후 모달 닫기
+				clearCanvas();
+				const signNameInput = document.getElementById("signNameInput");
+				signNameInput.value="";
 				$('#id-sign-maker').modal('hide');
 
                 alert('서명이 업로드되었습니다.');
