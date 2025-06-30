@@ -18,6 +18,7 @@ import com.coffice.app.documents.forms.FormVO;
 import com.coffice.app.documents.lines.ApprovalLineVO;
 import com.coffice.app.documents.lines.ReferenceLineVO;
 import com.coffice.app.files.FileManager;
+import com.coffice.app.notification.NotificationService;
 import com.coffice.app.page.Pager;
 import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
@@ -35,6 +36,9 @@ public class DocumentService {
 	
 	@Autowired
 	private FileManager fileManager;
+	
+	@Autowired
+	private NotificationService notificationService;
 	
 	@Value("${app.files.base}")
 	private String path;
@@ -627,9 +631,21 @@ public class DocumentService {
 		System.out.println("appVO StepOrder : " + approvalLineVO.getStepOrder());
 		
 		if(childrenApprovers.size() == approvalLineVO.getStepOrder()) {
-			documentVO.setStatus("결재완료");			
+			documentVO.setStatus("결재완료");
+			// 문서가 "결재완료" 상태가 되면 작성자한테 결재완료 알림을 보낸다 
+			notificationService.sendApprovalLine(documentVO, documentVO.getWriterId(), 0);
+			
 		} 		
 		documentVO.setCurrentStep(documentVO.getCurrentStep() + 1); // 결재할 때마다 문서 스텝 +1
+		
+		// 문서가 아직 진행 중이라면 다음 결재권자에게 알림을 보낸다, 완료 상태라면 어차피 문서 step이 더 크므로 받을 사람이 없다.
+		for(ApprovalLineVO approver : childrenApprovers) {
+			if(documentVO.getCurrentStep() == approver.getStepOrder()) {
+				notificationService.sendApprovalLine(documentVO, approver.getUserId(), 1);
+			}
+		}
+		
+		
 		
 		documentVO.setModifierId(user.getUserId());
 		documentVO.setModifierName(user.getName());
@@ -687,6 +703,8 @@ public class DocumentService {
 		documentVO.setCurrentStep(documentVO.getCurrentStep() + 1); 
 		// +1을 하게 되면 반려자는 반려 리스트에서 볼 수 있고, 다음 결재자는 스텝이 같아지지만 status가 '반려'라 대기 목록에 보이지 않는다. 
 		documentVO.setStatus("반려");
+		// 문서가 "결재완료" 상태가 되면 작성자한테 결재완료 알림을 보낸다 
+		notificationService.sendApprovalLine(documentVO, documentVO.getWriterId(), 2);
 		
 		documentVO.setModifierId(user.getUserId());
 		documentVO.setModifierName(user.getName());
