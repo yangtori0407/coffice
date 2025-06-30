@@ -81,6 +81,8 @@ public class Pager {
 
 	public void makeNum(Long totalCount) {
 
+		System.out.println("totalCount : " + totalCount);
+		
 		// 1. totalpage 계산
 		Long totalPage = totalCount / getPage();
 

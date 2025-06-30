@@ -27,28 +27,93 @@
 	  	SELECT FORM_ID, NAME FROM FORMS
 	  </select>
   
-  	<sql id="search">
-  		WHERE
-  			<choose>
-  				<when test="kind == 'k1'">
-  					TITLE
-  				</when>
-  				
-  				<when test="kind=='k2'">
-  					CONTENT
-  				</when>
-  				<otherwise>
-  					USER_ID
-  				</otherwise>
-  			</choose>
-  			LIKE CONCAT('%', #{search} , '%')
-  	</sql>
+  <!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
   
-  	<select id="getTotalCount" resultType="Long" parameterType="Pager">
-  		SELECT COUNT(DOCUMENT_ID) FROM DOCUMENTS
+  	<sql id="search">		
+		<choose>
+			<when test="kind == 'k1'">
+				AND (D.TITLE LIKE CONCAT('%', #{search}, '%') OR D.CONTENT LIKE CONCAT('%', #{search}, '%'))
+			</when>
+			<when test="kind == 'k2'">
+				AND D.CONTENT LIKE CONCAT('%', #{search}, '%')
+			</when>
+			<otherwise>
+				AND D.TITLE LIKE CONCAT('%', #{search}, '%')
+			</otherwise>
+		</choose>
+	</sql>
+
+  
+  	<select id="getTotalCountOnline" resultType="Long" parameterType="map">
+  		SELECT 
+  		
+  		COUNT (D.DOCUMENT_ID)
+  		
+  		FROM DOCUMENTS D		
+				  
+		WHERE D.STATUS != '임시저장'
+		  AND D.WRITER_ID = #{userId}
+  		<include refid="search"></include>
+  		
+  	</select>
+  	
+  	<select id="getTotalCountWaiting" resultType="Long" parameterType="map">
+  		SELECT
+  		
+  		COUNT (D.DOCUMENT_ID)
+  		
+  		FROM DOCUMENTS D
+	    
+	    JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+			    
+	    WHERE A.USER_ID = #{userId}
+	      AND A.STEP_ORDER = D.CURRENT_STEP
+	      AND D.STATUS ='진행중'
   		<include refid="search"></include>
   	</select>
   
+  	<select id="getTotalCountHandled" resultType="Long" parameterType="map">
+  		SELECT
+  		
+  		COUNT (D.DOCUMENT_ID)
+  		
+  		FROM DOCUMENTS D
+  		
+  		JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+	  		
+  		WHERE A.USER_ID = #{userId}
+  		  AND A.STEP_ORDER &lt; D.CURRENT_STEP
+  		<include refid="search"></include>
+  	</select>
+  	
+  	<select id="getTotalCountReference" resultType="Long" parameterType="map">
+  		SELECT
+  		
+  		COUNT (D.DOCUMENT_ID)
+  		
+  		FROM DOCUMENTS D
+		
+		JOIN REFERENCE_LINES R 
+		  ON D.DOCUMENT_ID = R.DOCUMENT_ID		
+				  
+		WHERE R.USER_ID = #{userId}
+		  AND D.STATUS != '임시저장'
+  		<include refid="search"></include>
+  	</select>
+  	
+  	<select id="getTotalCountTemporary" resultType="Long" parameterType="map">
+  		SELECT
+  		
+  		COUNT (D.DOCUMENT_ID)
+	    
+	    FROM DOCUMENTS D
+			  
+		WHERE D.STATUS = '임시저장'
+		  AND D.WRITER_ID = #{userId}
+  		<include refid="search"></include>
+  	</select>
   	
   	
   	<!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
@@ -133,6 +198,10 @@
 		  
 		WHERE D.STATUS != '임시저장'
 		  AND D.WRITER_ID = #{userId}
+		  <include refid="search"></include>
+		  
+		ORDER BY DOCUMENT_ID DESC
+		LIMIT #{startNum}, #{page}
   	</select>
   	
   	<!-- 결재자가 자신이 결재 차례인 문서를 볼 수 있는 리스트 -->
@@ -149,6 +218,10 @@
 	    WHERE A.USER_ID = #{userId}
 	      AND A.STEP_ORDER = D.CURRENT_STEP
 	      AND D.STATUS ='진행중'
+	      <include refid="search"></include>
+	      
+	    ORDER BY DOCUMENT_ID DESC
+		LIMIT #{startNum}, #{page}
   	</select>
   	
   	<!-- 결재자가 자신이 처리한 문서를 볼 수 있는 리스트 (결재 차례가 아닐지라도) -->
@@ -164,7 +237,10 @@
   		
   		WHERE A.USER_ID = #{userId}
   		  AND A.STEP_ORDER &lt; D.CURRENT_STEP <!-- 문서의 step이 결재자의 step보다 크다. 즉 결재자의 step을 거쳤다는 뜻 -->
+  		  <include refid="search"></include>
   		
+  		ORDER BY DOCUMENT_ID DESC
+		LIMIT #{startNum}, #{page}
   	</select>
   	
   	<!-- 자신이 참조자인 문서를 볼 수 있는 리스트 -->
@@ -180,6 +256,10 @@
 		  
 		WHERE R.USER_ID = #{userId}
 		  AND D.STATUS != '임시저장'
+		  <include refid="search"></include>
+		  
+		ORDER BY DOCUMENT_ID DESC
+		LIMIT #{startNum}, #{page}
   	</select>
   	
   	<!-- 자신이 작성자이고 문서가 임시 상태인 문서를 볼 수 있는 리스트 -->
@@ -193,6 +273,10 @@
 		  
 		WHERE D.STATUS = '임시저장'
 		  AND D.WRITER_ID = #{userId}
+		  <include refid="search"></include>
+		  
+		ORDER BY DOCUMENT_ID DESC
+		LIMIT #{startNum}, #{page}
 	</select>
   	  	
   	  	
@@ -317,39 +401,7 @@
   	</select>
   	
   	
-  	<!-- 테이블이 4개나 되어서 조인 안쓰고 직관적으로 VO별로 select 해버렸음 
-  	<resultMap type="DocumentVO" id="detailResult">
-  		<id column="DOCUMENT_ID" property="documentId"/>
-  		<result column="FORM_ID" property="formId"/>
-  		<result column="TITLE" property="title"/>
-  		<result column="CONTENT" property="content"/>
-  		<result column="USER_ID" property="userId"/>
-  		<result column="TIME" property="time"/>
-  		<result column="CURRENT_STEP" property="currentStep"/>	
-  		<result column="STATUS" property="status"/>
-  		
-  		<collection property="attachmentVOs" javaType="java.util.List" ofType="AttachmentVO">
-  			<id column="FILE_NUM" property="fileNum"/>
-  			<result column="ORIGIN_NAME" property="originName"/>
-  			<result column="SAVE_NAME" property="saveName"/>
-  		</collection>
-  		
-  		<collection property="approvalLineVOs" javaType="java.util.List" ofType="ApprovalLineVO">
-  			<id column="A_LINE_ID" property="aLineId"/>
-  			<result column="USER_ID" property="userId"/>
-  			<result column="SIGN_ID" property="signId"/>
-  			<result column="STEP_ORDER" property="stepOrder"/>
-  			<result column="STATUS" property="status"/>
-  			<result column="HANDLING_TIME" property="handlingTime"/>
-  			<result column="REJECT_REASON" property="rejectReason"/>
-  		</collection>
-  		
-  		<collection property="referenceLineVOs" javaType="java.util.List" ofType="ReferenceLineVO">
-  			<id column="R_LINE_ID" property="rLineId"/>
-  			<result column="USER_ID" property="userId"/>  			
-  		</collection>
-  		
-  	</resultMap> -->
+  	
   	
   	<insert id="add" parameterType="DocumentVO" useGeneratedKeys="true" keyProperty="documentId">
   		INSERT INTO DOCUMENTS 
