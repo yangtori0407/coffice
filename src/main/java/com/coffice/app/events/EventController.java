@@ -152,6 +152,12 @@ public class EventController {
 		log.info("approveComplete : {}", result);
 	}
 	
+	@PostMapping("vacation/reject")
+	public void reject(VacationVO vacationVO, Authentication authentication) throws Exception {
+		int result = vacationService.reject(vacationVO, authentication);
+		log.info("rejectComplete : {}", result);
+	}
+	
 	@GetMapping("vacation/getList")
 	@ResponseBody
 	public List<VacationVO> getList(Authentication authentication) throws Exception {

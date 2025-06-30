@@ -44,7 +44,7 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<form action="#">
+							<form action="#" name="f">
 
 								<c:if test="${kind eq '일정' }">
 									<div class="form-check form-check-inline">
@@ -72,7 +72,11 @@
 										<label for="vType">종류</label>
 										<div class="input-group">
 											<select name="vType" id="vType" class="form-control">
+												<option value="">선택</option>
 												<option value="연차">연차</option>
+												<option value="오전">오전 반차</option>
+												<option value="오후">오후 반차</option>
+												<option value="시간">시간차</option>
 												<option value="병가">병가</option>
 												<option value="경조사">경조사</option>
 												<option value="보상">보상 휴가</option>
@@ -384,6 +388,7 @@
 							</div>
 						</div>
 						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal" id="reject">승인 거절</button>
 							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="undo">목록으로</button>
 							<button type="button" class="btn btn-primary" id="updateVacation" data-dismiss="modal"></button>
 						</div>
