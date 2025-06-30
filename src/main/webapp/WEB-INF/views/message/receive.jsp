@@ -54,7 +54,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="row">
+									<div class="row" style="height: 580px;">
 										<div class="col-sm-12">
 											<table class="table table-bordered dataTable" id="dataTable"
 												width="100%" cellspacing="0" role="grid"

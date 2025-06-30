@@ -28,6 +28,16 @@ public interface DocumentDAO {
 	public Long getTotalCount(Pager pager)throws Exception;
 	
 	
+	// 최근 문서 목록 조회
+	public List<DocumentVO> getLastTemp(DocumentVO documentVO)throws Exception;
+	
+	public List<DocumentVO> getlastHandled(DocumentVO documentVO)throws Exception;
+	
+	public List<DocumentVO> getTodayReference(DocumentVO documentVO)throws Exception;
+	
+	public List<DocumentVO> getTodayWaiting(DocumentVO documentVO)throws Exception;
+	
+	
 	// 문서 목록 조회 ----------------------------------
 	public List<DocumentVO> getListLine(Map<String, Object> map)throws Exception;
 	

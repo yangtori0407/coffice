@@ -4,6 +4,7 @@
 
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
+<c:import url="/WEB-INF/views/document/modal/selectFormModal.jsp"></c:import>
 
 <ul
 	class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
@@ -48,12 +49,16 @@
 			class="collapse ${document == ('selectForm' or 'online' or 'onwaiting' or 'onreference' or 'handled' or 'ontemporary') ? 'show' : ''}" 
 			aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item ${document == 'selectForm' ? 'active' : ''}" href="/document/selectform">기안 작성</a> 
+				<a class="collapse-item ${document == 'selectForm' ? 'active' : ''}" 
+				data-toggle="modal" data-target="#formMenu" href="#" id="btn-formmenu" >기안 작성
+				</a> 
 				<a class="collapse-item ${document == 'online' ? 'active' : ''}" href="/document/list/online">기안 문서함</a>
 				<a class="collapse-item ${document == 'onwaiting' ? 'active' : ''}" href="/document/list/onwaiting">결재 대기 문서함</a>
 				<a class="collapse-item ${document == 'onreference' ? 'active' : ''}" href="/document/list/onreference">참조 문서함</a> 
 				<a class="collapse-item ${document == 'handled' ? 'active' : ''}" href="/document/list/handled">승인/반려 문서함</a> 
 				<a class="collapse-item ${document == 'ontemporary' ? 'active' : ''}" href="/document/list/ontemporary">임시 저장 문서함</a>
+				
+				
 			</div>
 		</div></li>
 
@@ -172,4 +177,5 @@
 
 </ul>
 
+<script src="/js/document/formSelector.js"></script>
 
