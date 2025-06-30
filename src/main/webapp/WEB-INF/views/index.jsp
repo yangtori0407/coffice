@@ -387,7 +387,7 @@
 					</div>
 					<!-- contents 내용 끝 -->
 						<!-- gpt  -->
-					<div style="position: fixed; bottom: 80px; right: 20px; z-index: 1050;">
+					<div style="position: fixed; bottom: 150px; right: 20px; z-index: 1050;">
 						<a href="#" class="gpt-btn" data-toggle="modal" data-target="#getGpt">
 							<i class="fas fa-robot mr-2"></i>CofficeBot
 						</a>
