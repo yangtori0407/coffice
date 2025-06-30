@@ -1,5 +1,6 @@
 package com.coffice.app.attendance;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -92,9 +93,23 @@ public class AttendanceService {
 	public void insertAndUpdateAbsences() throws Exception {
 		
 		LocalDate yesterday = LocalDate.now().minusDays(1);
+		
+		DayOfWeek dayOfWeek = yesterday.getDayOfWeek();
+	    if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+	        //System.out.println("❌ 어제는 주말(" + dayOfWeek + ")이므로 결근 처리 스킵");
+	        return;
+	    }
+		
 	    // 1. 출근 기록 자체가 없는 사람들 → INSERT 결근
 	    List<String> absentUserIds = attendanceDAO.getAbsentUserIds();
 	    for (String userId : absentUserIds) {
+	    	
+	    	boolean alreadyExists = attendanceDAO.existsAttendance(userId, yesterday);
+	        if (alreadyExists) {
+	            
+	            continue; // skip insert
+	        }
+	    	
 	        AttendanceVO attendance = new AttendanceVO();
 	        attendance.setUserId(userId);
 	        attendance.setStartTime(null);

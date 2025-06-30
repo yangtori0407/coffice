@@ -83,6 +83,7 @@ public class UserController {
 	
 	@GetMapping("register")
 	public void register(@ModelAttribute UserVO userVO, Model model) throws Exception {
+		model.addAttribute("user", "register");
 		model.addAttribute("kind", "사원 등록");
 	}
 	

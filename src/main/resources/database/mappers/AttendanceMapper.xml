@@ -48,12 +48,20 @@
 		AND U.USER_ID NOT IN (
 			SELECT A.USER_ID
 			FROM ATTENDANCE A
-			WHERE DATE(a.start_time) = CURDATE()- INTERVAL 1 DAY
+			WHERE DATE(A.START_TIME) = CURDATE()- INTERVAL 1 DAY
 		)
 	</select>
+	
+	<select id="existsAttendance" resultType="boolean">
+	    SELECT COUNT(*) > 0
+	    FROM ATTENDANCE
+	    WHERE USER_ID = #{userId}
+	      AND ATTENDANCE_DATE = #{attendanceDate}
+	</select>
+	
   
   	<insert id="insertAbsence" parameterType="AttendanceVO">
-		INSERT INTO ATTENDANCE (USER_ID, STATUS, WORK_DATE)
+		INSERT INTO ATTENDANCE (USER_ID, STATUS, ATTENDANCE_DATE)
     	VALUES (#{userId}, '결근', CURDATE() - INTERVAL 1 DAY)
 	</insert>
 	
@@ -62,7 +70,7 @@
 	    FROM ATTENDANCE
 	    WHERE START_TIME IS NOT NULL
 	      AND END_TIME IS NULL
-	      AND DATE(start_time) = CURDATE()- INTERVAL 1 DAY
+	      AND DATE(START_TIME) = CURDATE()- INTERVAL 1 DAY
 	</select>
 	
 	<update id="updateStatus" parameterType="AttendanceVO">
