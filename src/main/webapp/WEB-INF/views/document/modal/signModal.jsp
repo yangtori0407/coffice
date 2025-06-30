@@ -17,7 +17,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">직인 목록</h5>
+                    <h4 class="modal-title" id="exampleModalLabel" style="font-weight: bolder;">직인 목록</h4>
                     <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button> -->
@@ -46,7 +46,7 @@
                 
                 <div class="modal-footer">
                 
-                	<button class="btn btn-primary" type="button" id="id_makeSign" data-toggle="modal" data-target="#id-sign-maker" >직인 생성</button>
+                	<button class="btn btn-success" type="button" id="id_makeSign" data-toggle="modal" data-target="#id-sign-maker" >직인 생성</button>
                     <button class="btn btn-primary" type="button" id="id_useSign" >직인 사용</button>
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
                     
@@ -62,45 +62,66 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">직인 생성</h5>
+                    <h4 class="modal-title" id="exampleModalLabel" style="font-weight: bolder;">직인 생성</h4>
                     <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button> -->
                 </div>
                 
                 <div class="modal-body"> <!-- 직인 컨텐츠 -->
-                	<div class="imageWrapper" id="id_imageWrapper" style="height:200px;">
-                		<div>
-                            <label>선 굵기: 
-                                <select id="lineWidthSelect" class="form-select form-select-sm" style="width: 80px; display:inline-block;">
-                                    <option value="2">얇게</option>
-                                    <option value="4" selected>보통</option>
-                                    <option value="6">두껍게</option>
-                                </select>
-                            </label>
+  
+  
+					  <div id="id_imageWrapper" style="display: flex; height: 200px; gap: 10px; padding: 5px;">
+					  
+					  <!-- 왼쪽: Canvas -->
+					  <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+					    <canvas id="signCanvas" width="200" height="180" 
+					            style="border:1px solid #ccc; background:white; cursor:crosshair;">
+					    </canvas>
+					  </div>
+					
+					  <!-- 오른쪽: 선 굵기 + 색상 + 이름 입력 -->
+					  <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+					    
+					    <!-- 위쪽: 선 굵기, 색상 -->
+					    <div>
+					      <div style="margin-bottom: 8px;">
+					        <label style="font-size: 18px;">
+					          선 굵기:
+					          <select id="lineWidthSelect" class="form-select form-select-sm" style="width: 80px; display: inline-block;">
+					            <option value="2">얇게</option>
+					            <option value="4" selected>보통</option>
+					            <option value="6">두껍게</option>
+					          </select>
+					        </label>
+					      </div>
+					
+					      <div>
+					        <label style="font-size: 18px;">
+					          색 &nbsp; &nbsp; 상:
+					          <input type="color" id="lineColorPicker" value="#000000" style="vertical-align: middle;">
+					        </label>
+					      </div>
+					    </div>
+					
+					    <!-- 아래쪽: 이름 입력 -->
+					    <div>
+					      <input type="text" id="signNameInput" placeholder="직인명 또는 용도를 적어주세요"
+					             style="width: 100%; font-size: 15px; padding: 6px; margin-bottom: 5px;" >
+					    </div>
+					    
+					  </div>
+					
+					</div>
+  
+  
+  
+				</div>
 
-                            <label style="margin-left: 10px;">색상: 
-                                <input type="color" id="lineColorPicker" value="#000000" style="vertical-align: middle;">
-                            </label>
-                        </div>
-
-                        <canvas id="signCanvas" width="160" height="160" 
-                            style="border:1px solid #ccc; background:white; cursor:crosshair;">
-                        </canvas>
-
-                        <div>
-                            <label style="margin-left: 10px;"> 
-                                <input type="text" id="signNameInput" placeholder="직인명 또는 용도를 적어주세요">
-                            </label>
-                        </div>
-
-                        <div style="margin-top: 10px;">
-                            <button id="clearCanvasBtn" class="btn btn-sm btn-warning">초기화</button>
-                        </div>
-                	</div>
-                </div>
                 
-                <div class="modal-footer">                    
+                
+                <div class="modal-footer">
+                    <button id="clearCanvasBtn" class="btn btn-warning">초기화</button>
                     <button class="btn btn-primary" type="button" id="btn-send-sign" >추가하기</button>
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
                     
