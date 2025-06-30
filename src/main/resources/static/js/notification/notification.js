@@ -134,7 +134,7 @@ function createAlert(msg, num) {
     }else if(msg.notiKind == "REFERENCE"){
         a.href = "/document/list/onreference";
     }else if(msg.notiKind == "DONE" || msg.notiKind == "REJECT"){
-        a.href = "/document/list/handled";
+        a.href = "/document/list/online";
     }else {
         a.href = "#"; 
     }
@@ -430,7 +430,7 @@ function createToast(msg) {
         }else if(msg.notiKind == "REFERENCE"){
             location.href = "/document/list/onreference";
         }else if(msg.notiKind == "DONE" || msg.notiKind == "REJECT"){
-            location.href = "/document/list/handled";
+            location.href = "/document/list/online";
         }
     });
 
