@@ -106,6 +106,21 @@ public class VacationService {
 		return result;
 	}
 	
+	@Transactional
+	public int reject(VacationVO vacationVO, Authentication authentication) throws Exception {
+		vacationVO = vacationDAO.getOne(vacationVO);
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setApprovalAuthority(userVO.getUserId());
+		
+		int result = vacationDAO.reject(vacationVO);
+		log.info("reject : {}", result);
+		
+		String mes = "휴가 신청이 거절됨";
+		notificationService.sendVaction(mes, vacationVO.getUserId());
+		
+		return result;
+	}
+	
 	public List<VacationVO> getList(UserVO userVO) throws Exception {
 		return vacationDAO.getList(userVO);
 	}
