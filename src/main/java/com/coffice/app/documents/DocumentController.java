@@ -25,6 +25,7 @@ import com.coffice.app.documents.forms.FormVO;
 import com.coffice.app.documents.lines.ApprovalLineVO;
 import com.coffice.app.documents.lines.ReferenceLineVO;
 import com.coffice.app.files.FileDownView;
+import com.coffice.app.notification.NotificationService;
 import com.coffice.app.page.Pager;
 import com.coffice.app.signs.SignVO;
 import com.coffice.app.users.UserVO;
@@ -41,7 +42,10 @@ import lombok.extern.slf4j.Slf4j;
 public class DocumentController {
 
 	@Autowired
-	FileDownView fileDownView;
+	private NotificationService notificationService;
+	
+	@Autowired
+	private FileDownView fileDownView;
 	
 	@Autowired
 	private DocumentService documentService;
@@ -202,6 +206,13 @@ public class DocumentController {
 			return "./list/ontemporary";
 			
 		} else {
+			// 데이터 다 처리하고, 페이지 넘기기 전에 알림(Notification) 메서드 실행해준다.
+	    	// 1. 참조자 알림 보내기
+	    	notificationService.sendReferrenceLine(documentVO, referrerList);
+	    	
+	    	// 2. 기안이 올라가면서 첫번째 결재자한테 알림 보내기
+	    	notificationService.sendApprovalLine(documentVO, approverList.get(0).getUserId(), 1);
+			
 			return "./list/online";
 			
 		}
@@ -258,6 +269,13 @@ public class DocumentController {
 	    if(documentVO.getStatus().equals("임시저장")) {
 	    	return "./list/ontemporary";
 	    } else {
+	    	// 데이터 다 처리하고, 페이지 넘기기 전에 알림(Notification) 메서드 실행해준다.
+	    	// 1. 참조자 알림 보내기
+	    	notificationService.sendReferrenceLine(documentVO, referrerList);
+	    	
+	    	// 2. 기안이 올라가면서 첫번째 결재자한테 알림 보내기
+	    	notificationService.sendApprovalLine(documentVO, approverList.get(0).getUserId(), 1);
+	    	
 	    	return "./list/online";
 	    }
 	}

@@ -28,6 +28,10 @@ public class UserService implements UserDetailsService{
 	@Autowired
 	private UserDAO userDAO;
 	@Autowired
+	private RoleDAO roleDAO;
+	@Autowired
+	private EmployeeRoleDAO employeeRoleDAO;
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private FileManager fileManager;
@@ -94,6 +98,7 @@ public class UserService implements UserDetailsService{
 	}
 	
 	public int register(UserVO userVO, MultipartFile file) throws Exception {
+		
 		if(userVO.getUserId()==null || userVO.getUserId().isBlank()) {
 			String employeeId;
 			do {
@@ -108,7 +113,18 @@ public class UserService implements UserDetailsService{
 			userVO.setOriginName(file.getOriginalFilename());
 		}
 		userVO.setPassword(passwordEncoder.encode(userVO.getPassword()));
-		return userDAO.register(userVO);
+		
+		
+		int result = userDAO.register(userVO);
+		
+		Long userRoleId = roleDAO.findRoleIdByName("ROLE_EMPLOYEE");
+		
+	    EmployeeRoleVO userRole = new EmployeeRoleVO();
+	    userRole.setUserId(userVO.getUserId());
+	    userRole.setRoleId(userRoleId);
+	    employeeRoleDAO.insertRole(userRole);
+	    
+	    return result;
 	}
 	
 	public UserVO detail(UserVO userVO) throws Exception{

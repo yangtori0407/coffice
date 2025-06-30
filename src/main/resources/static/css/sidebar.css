@@ -1,4 +1,4 @@
-.chat-active, .ingredients-active {
+.chat-active, .ingredients-active, .user-active, .employee-active {
     background-color: rgb(17, 106, 207);
     color: white;
     font-weight: bolder;

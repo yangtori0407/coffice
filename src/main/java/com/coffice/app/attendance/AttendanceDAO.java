@@ -23,6 +23,8 @@ public interface AttendanceDAO {
 							         @Param("startDate") LocalDate startDate,
 							         @Param("endDate") LocalDate endDate) throws Exception;
 
+	boolean existsAttendance(@Param("userId") String userId, @Param("date") LocalDate date) throws Exception;
+	
 	public List<String> getAbsentUserIds() throws Exception;
 	
 	public int insertAbsence(AttendanceVO attendanceVO) throws Exception;
