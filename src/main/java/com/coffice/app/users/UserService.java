@@ -53,9 +53,6 @@ public class UserService implements UserDetailsService{
 	            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId);
 	        }
 
-	        // 권한 정상 출력되는지 확인
-	        System.out.println("▶ userVO.getAuthorities(): " + userVO.getAuthorities());
-
 	        return userVO;
 
 	    } catch (Exception e) {
