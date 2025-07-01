@@ -127,10 +127,17 @@ public class ChatService {
 		
 		return chatContentsVO;
 	}
-
-	public List<ChatContentsVO> getChatContentsList(ChatRoomVO chatRoomVO) throws Exception{
-		// TODO Auto-generated method stub
-		return chatDAO.getChatContentsList(chatRoomVO);
+	
+	@Transactional
+	public List<ChatContentsVO> getChatContentsList(ChatRoomVO chatRoomVO, String userId) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("chatRoomNum", chatRoomVO.getChatRoomNum());
+		info.put("userId", userId);
+		ChatPersonVO chatPersonVO = chatDAO.getChatPersonDetail(info);
+		info.clear();
+		info.put("chatRoomNum", chatRoomVO.getChatRoomNum());
+		info.put("joinedAt", chatPersonVO.getJoinedAt());
+		return chatDAO.getChatContentsList(info);
 	}
 	
 	@Transactional
@@ -174,15 +181,15 @@ public class ChatService {
 		return chatDAO.getChatUserInfo(chatRoomNum);
 	}
 
-	public List<String> getChatUsersDetail(String chatRoomNum) throws Exception{
+	public List<UserVO> getChatUsersDetail(String chatRoomNum) throws Exception{
 		
 		List<UserVO> list = chatDAO.getChatUsersDetail(chatRoomNum);
-		List<String> result = new ArrayList<>();
-		for(UserVO l : list) {
-			result.add(l.getDeptName() + " " + l.getName() + " " + l.getPosition());
-		}
+//		List<String> result = new ArrayList<>();
+//		for(UserVO l : list) {
+//			result.add(l.getDeptName() + " " + l.getName() + " " + l.getPosition());
+//		}
 		
-		return result;
+		return list;
 	}
 
 	public int updateLastReadAt(String userId, String chatRoomNum) throws Exception{
@@ -228,6 +235,33 @@ public class ChatService {
 		int result = chatDAO.exit(info);
 		
 		return result;
+	}
+	@Transactional
+	public ChatContentsVO invite(String chatRoomNum, String[] inviteUser) throws Exception{
+		String inviteUsers = "";
+		ChatPersonVO chatPersonVO = new ChatPersonVO();
+		chatPersonVO.setChatRoomNum(chatRoomNum);
+		for(String a : inviteUser) {
+			chatPersonVO.setUserId(a);
+			int result = chatDAO.findExist(chatPersonVO);
+			if(result > 0) {
+				chatDAO.updateExit(chatPersonVO);
+			}else {
+				
+				chatDAO.invite(chatPersonVO);
+			}
+			String name = chatDAO.getUserName(a);
+			inviteUsers += name + ", ";
+		}
+		inviteUsers.trim();
+		String result = inviteUsers.substring(0, inviteUsers.length() - 2);
+		result += "님이 초대되었습니다.";
+		ChatContentsVO chatContentsVO = new ChatContentsVO();
+		chatContentsVO.setChatContents(result);
+		chatContentsVO.setSender("system");
+		chatContentsVO.setChatRoomNum(chatRoomNum);
+		chatDAO.addContents(chatContentsVO);
+		return chatContentsVO;
 	}
 
 }

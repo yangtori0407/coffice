@@ -64,40 +64,40 @@
 
 
 
-        <div class="modal-footer">
-          
-          <c:choose>
-          	<c:when test="${(empty docuVO && isWritePage eq 1) || docuVO.status eq '임시저장'}">
-	            <button id="btn_toApprovers" type="button" class="btn btn-info" id="choose">결재선 넣기</button>
-	            <button id="btn_toReferrers" type="button" class="btn btn-primary" id="choose">참조선 넣기</button>            
-          </c:when>
-          
-          <c:when test="${not empty docuVO && docuVO.status ne '임시저장' }">
-          		
-          </c:when>
-          
-          <c:otherwise>
-          		<button type="button" class="btn btn-primary" id="choose" data-dismiss="modal">선택 완료</button>
-          </c:otherwise>
-          
-          </c:choose>
+          <div class="modal-footer">
 
-          
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>          
-        
-        </div>
+            <c:choose>
+              <c:when test="${(empty docuVO && isWritePage eq 1) || docuVO.status eq '임시저장'}">
+                <button id="btn_toApprovers" type="button" class="btn btn-info" id="choose">결재선 넣기</button>
+                <button id="btn_toReferrers" type="button" class="btn btn-primary" id="choose">참조선 넣기</button>
+              </c:when>
+
+              <c:when test="${not empty docuVO && docuVO.status ne '임시저장' }">
+
+              </c:when>
+
+              <c:otherwise>
+                <button type="button" class="btn btn-primary" id="choose" data-dismiss="modal">선택 완료</button>
+              </c:otherwise>
+
+            </c:choose>
 
 
-            
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
 
           </div>
 
 
+
+
         </div>
+
 
       </div>
 
-    
+    </div>
+
+
 
 
     <script>
@@ -143,6 +143,7 @@
               const chatUser = document.querySelectorAll(".chatUser");
               chatMax = chatUser.length;
             }
+
           })
       })
 
@@ -196,7 +197,7 @@
                   if (duplication.length > 0) {
 
                     for (d of duplication) {
-                      console.log("선택: ", d.dataset.selectedDepartment);
+                      //console.log("선택: ", d.dataset.selectedDepartment);
                       if (d.dataset.selectedId == empId) {
                         alert("중복 선택입니다.");
                         return;
@@ -212,6 +213,21 @@
                   }
                   chatMax++;
                   //---------------------------------------------------------------------------------------------
+                  //채팅방 초대부분
+                  const chatUsers = document.querySelector("#chatUsers");
+                  const existPerson = document.querySelectorAll(".existPerson");
+
+                  if (chatUsers) {
+                    chatMax = existPerson.length;
+
+                    for (const e of existPerson) {
+                      if (e.dataset.userId == empId) {
+                        alert("이미 채팅을 참여하고 있습니다.");
+                        return; // ✅ 여기서는 함수 전체에서 빠져나옴!
+                      }
+                    }
+                  }
+
 
                   addSelectedEmployee(a.userId, a.name, a.position, departmentName);
 
@@ -281,11 +297,13 @@
         const receiver = document.querySelector("#receiverArea")
 
         if (receiver) {
-          console.log("이메일!!!!");
+          //console.log("이메일!!!!");
           message(selected, receiver)
-          
-        }
 
+        }
+        //---채팅방 초대 모달창 관련 코드
+        const chatUsers = document.querySelector("#chatUsers");
+        invitePeople(selected);
       })
 
 
@@ -366,7 +384,7 @@
         span.classList.add("receiverPerson");
         span.dataset.userId = s.dataset.selectedId;
         span.innerText = s.dataset.selectedDepartment + " " + s.dataset.selectedName + " " + s.dataset.selectedPosition
-        
+
 
         const button = document.createElement("button")
         button.classList.add("btn", "btn-sm", "ml-auto", "p-0")
@@ -380,6 +398,24 @@
         div.appendChild(button);
 
         return div;
+      }
+
+      function invitePeople(selected) {
+        const chatRoomNum = document.getElementById("chatInfo");
+        const p = new URLSearchParams();
+        for (a of selected) {
+          p.append("inviteUser", a.dataset.selectedId);
+        }
+        p.append("chatRoomNum", chatRoomNum.dataset.chatNum);
+
+        fetch("./invite", {
+          method: "POST",
+          body: p
+        })
+        .then(r => r.text())
+        .then(r => {
+          
+        })
       }
 
     </script>
