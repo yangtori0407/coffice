@@ -121,7 +121,11 @@ public class NoticeController {
 	@GetMapping("update")
 	public String update(NoticeVO noticeVO, Model model, Authentication authentication) throws Exception{
 		noticeVO = noticeService.getDetail(noticeVO);
-		//log.info("size : {}",noticeVO.getFiles().size());
+		if(noticeVO == null || noticeVO.getUserId() != authentication.getName()) {
+			model.addAttribute("path", "/board/list");
+			model.addAttribute("result", "잘못된 접근입니다.");
+			return "commons/result";
+		}
 		model.addAttribute("update", noticeVO);
 		model.addAttribute("kind", "게시판 > 공지사항 > 수정하기");
 		return "notice/update";
