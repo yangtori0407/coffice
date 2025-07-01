@@ -43,7 +43,7 @@
 				</form>
 			</div></li>
 
-		<!-- Nav Item - Alerts -->
+		<%-- <!-- Nav Item - Alerts -->
 		<sec:authorize access="isAuthenticated()">
 			<sec:authentication property="principal" var="user" />
 			<input type="hidden" id="userId" value="${user.userId}">
@@ -80,7 +80,7 @@
 						data-toggle="modal" data-target="#moreNotification">알림
 						더보기</button>
 				</div></li>
-		</sec:authorize>
+		</sec:authorize> --%>
 
 		<!-- Modal -->
 		<div class="modal fade" id="moreNotification" data-backdrop="static"
