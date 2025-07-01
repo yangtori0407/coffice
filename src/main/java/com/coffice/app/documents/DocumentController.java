@@ -62,7 +62,6 @@ public class DocumentController {
 	}
 
 	//
-	@PreAuthorize("principal.status != null and principal.status == 1")
 	@GetMapping("list/*")
 	public String getList(Pager pager, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 
@@ -93,7 +92,6 @@ public class DocumentController {
 
 	
 	//
-	@PreAuthorize("principal.status != null and principal.status == 1")
 	@GetMapping("detail") 
 	public String getDetail(DocumentVO documentVO, Model model, HttpSession session) throws Exception {
 
@@ -118,13 +116,20 @@ public class DocumentController {
 		
 		
 		UserVO sessionUser = (UserVO)session.getAttribute("user");
-		String kindMessage = "";
-		String docuKind = "";
+		String kindMessage = null;
+		String docuKind = null;
 		
 		
 		if(docuVO.getStatus().equals("임시저장")) {
-			kindMessage = "결재 > 임시 저장 문서";
-			docuKind = "ontemporary";
+			if(docuVO.getWriterId().equals(sessionUser.getUserId())) {
+				kindMessage = "결재 > 임시 저장 문서";
+				docuKind = "ontemporary";
+				
+			} else {
+				model.addAttribute("message", "해당 사용자는 접근할 수 없는 문서입니다");
+				return "document/message";
+				
+			}
 			
 		} else if(docuVO.getWriterId().equals(sessionUser.getUserId())) {
 			kindMessage = "결재 > 기안 문서";
@@ -158,6 +163,11 @@ public class DocumentController {
 				
 		}
 		
+		// 어디에도 해당 안되는 사람이라면
+		if(docuKind == null) {
+			model.addAttribute("message", "해당 사용자는 접근할 수 없는 문서입니다");
+			return "document/message";
+		}
 		
 		model.addAttribute("kind", kindMessage);
 		model.addAttribute("docuKind", docuKind);
@@ -178,7 +188,6 @@ public class DocumentController {
 	
 	
 	// 선택한 양식 출력 요청 (GET)
-	@PreAuthorize("principal.status != null and principal.status == 1")
 	@GetMapping("write")
 	public String write(Model model, HttpSession session, FormVO formVO) throws Exception {
 				
@@ -197,7 +206,6 @@ public class DocumentController {
 	
 	
 	//
-	@PreAuthorize("principal.status != null and principal.status == 1")
 	@PostMapping("write")
 	@ResponseBody
 	public String add(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
