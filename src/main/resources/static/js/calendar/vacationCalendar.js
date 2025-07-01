@@ -255,7 +255,7 @@ function accept() {
                         st = "승인 대기"
                         et = ""
                         updateVacation.setAttribute("style", "display: block;")
-                        reject.setAttribute("style", "display: block")
+                        reject.setAttribute("style", "display: none")
                     }else if(r.vacationVO.status == '승인') {
                         st = "승인 완료"
                         et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)

@@ -110,7 +110,7 @@
 			<div class="bg-white py-2 collapse-inner rounded">
 				<a class="collapse-item ${branch == ('map') ? 'active' :''}"
 					href="/branch/map">지점지도</a> 
-					<sec:authorize access="hasAuthority('물류팀')">
+					<sec:authorize access="hasAuthority('3')">
 					<a
 					class="collapse-item ${branch == ('add') ? 'active' :''}"
 					href="/branch/add">지점등록</a> <a
@@ -123,7 +123,7 @@
 			</div>
 		</div></li>
 
-	<sec:authorize access="hasAuthority('물류팀')">
+	<sec:authorize access="hasAuthority('3')">
 		<li class="nav-item"><a id="article" class="nav-link ${ingredients == 'ingredients' ? 'ingredients-active' :''}" href="/ingredients/list">
 			<ion-icon name="cube-outline"></ion-icon> <span>물류</span>
 		</a></li>	
