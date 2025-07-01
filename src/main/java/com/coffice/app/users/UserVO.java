@@ -24,10 +24,12 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
 @ToString
+@Slf4j
 public class UserVO implements UserDetails{
 	
 	private String userId;
@@ -65,16 +67,18 @@ public class UserVO implements UserDetails{
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		
+
 		List<GrantedAuthority> ar = new ArrayList<>();
 		 if (this.roles != null) {
 			for(RoleVO roleVO: this.roles) {
 				GrantedAuthority authority = new SimpleGrantedAuthority(roleVO.getRoleName());
 				ar.add(authority);
 			}
-		 } else if (this.deptName != null) {
-			 GrantedAuthority authority = new SimpleGrantedAuthority(this.deptName);
-			 ar.add(authority);
+		 }
+		 
+		 if (this.deptId != null) {
+				 GrantedAuthority authority = new SimpleGrantedAuthority(String.valueOf(this.deptId));
+				 ar.add(authority);
 		 }
 		
 		return ar;
@@ -113,7 +117,7 @@ public class UserVO implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return this.status == true;
+		return UserDetails.super.isEnabled();
 	}
 	
 	
