@@ -3,7 +3,7 @@ const messageCheck = document.querySelectorAll(".messageCheck");
 
 messageCheck.forEach(m => {
     m.addEventListener("click", (e)=>{
-        console.log("click")
+        //console.log("click")
         let messageNum = m.getAttribute("data-message-num");
 
         fetch(`/message/getCheck?messageNum=${messageNum}`)

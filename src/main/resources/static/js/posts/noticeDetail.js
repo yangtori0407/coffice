@@ -4,7 +4,7 @@ const upBtn = document.querySelector("#upBtn");
 if(delBtn){
 
     delBtn.addEventListener("click", ()=>{
-        console.log("click")
+        //console.log("click")
         const noticeNum = delBtn.getAttribute("data-notice-num");
         let param = new URLSearchParams();
         param.append("noticeNum", noticeNum);
