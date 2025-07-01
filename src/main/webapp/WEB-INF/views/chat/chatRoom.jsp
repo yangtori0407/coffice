@@ -42,6 +42,7 @@
 											data-chat-num="${chatRoomVO.chatRoomNum }">${chatRoomVO.chatRoomName}</h6>
 									</div>
 									<div class="d-flex align-items-center">
+
 										<div class="align-items-center">
 											<button class="btn" id="exitBtn">
 												<ion-icon name="exit-outline"
@@ -79,15 +80,22 @@
 												<div
 													class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
 													style="width: 250px; max-height: 300px; overflow-y: auto;"
-													aria-labelledby="dropdownMenuLink">
+													aria-labelledby="dropdownMenuLink" id="chatUsers">
 
 													<div id="chatUsersListArea" class="dropdown-header"
-														style="font-size: 14px; font-weight: initial;">채팅
-														참여자</div>
+														style="font-size: 14px; font-weight: initial;">
+														<div class="d-flex justify-content-between w-100">
+															<div class="p-2">채팅참여자</div>
+															<button type="button" class="btn btn-primary"
+																data-toggle="modal" data-target="#exampleModal"
+																id="diagram" style="font-size: 10px; height: 30px;">초대하기</button>
+														</div>
+													</div>
 													<%-- <c:forEach items="${users }" var="u">
 														<div class="dropdown-item-text w-100 px-3 py-2 chatUsersList">
 															${u.deptName } ${u.name } ${u.position }</div>
 													</c:forEach> --%>
+
 												</div>
 											</div>
 										</div>
@@ -220,9 +228,8 @@
 										</div>
 									</div>
 									<div>
-										<label for="file-upload"
-											class="btn btn-secondary btn-sm mt-2">파일 첨부</label> <input
-											type="file" id="file-upload" style="display: none;">
+										<label for="file-upload" class="btn btn-secondary btn-sm mt-2">파일
+											첨부</label> <input type="file" id="file-upload" style="display: none;">
 									</div>
 								</div>
 							</div>
@@ -238,6 +245,7 @@
 	</div>
 	<!-- End Wrapper -->
 	<script src="/js/chat/chatStomp.js"></script>
+	<c:import url="/WEB-INF/views/templates/ocModal.jsp"></c:import>
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 </body>
 </html>

@@ -66,6 +66,7 @@ class Message {
     flag = false; //파일인지 아닌지
     system = false; //나가는 메세지인지 아닌지
     fileNum = "";
+    invite = false; //초대문구
 }
 
 stompClient.connect({}, function (frame) {
@@ -323,8 +324,6 @@ exitBtn.addEventListener("click", ()=>{
                 m.chatRoomNum = chatNum;
                 stompClient.send("/pub/sendMessage", {}, JSON.stringify(m))
 
-                let userList = document.querySelectorAll("#")
-
                 location.href = "./main";
             }
         })
@@ -356,11 +355,11 @@ chatUsersList.addEventListener("click", () => {
     })
     .then(r => r.json())
     .then(r => {
-        chatUsersListArea
         for(j of r){
             const div = document.createElement("div");
-            div.classList.add("dropdown-item-text", "w-100", "px-3" , "py-2")
-            div.innerText = j
+            div.classList.add("dropdown-item-text", "w-100", "px-3" , "py-2", "existPerson")
+            div.innerText = j.deptName + " " + j.name + " " + j.position;
+            div.dataset.userId = j.userId;
             chatUsersListArea.after(div);
         }
     })

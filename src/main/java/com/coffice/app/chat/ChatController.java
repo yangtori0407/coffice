@@ -81,7 +81,7 @@ public class ChatController {
 //			log.info("chat participate users : {}", u);
 				// String 비교는 반드시 equals!!!!!
 				if (!u.getUserId().equals(chatContentsVO.getSender()) && u.getAlarmStatus() == 1) {
-					log.info("chat participate users : {}", u);
+					//log.info("chat participate users : {}", u);
 					template.convertAndSend("/sub/chat/user." + u.getUserId(), alert);
 				}
 			}
@@ -119,7 +119,7 @@ public class ChatController {
 	public void chatRoom(ChatRoomVO chatRoomVO, Model model, Authentication authentication) throws Exception {
 		String userId = authentication.getName();
 		chatRoomVO = chatService.getChatInfo(chatRoomVO, userId);
-		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO);
+		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO, userId);
 		//List<UserVO> users = chatService.getChatUsersDetail(chatRoomVO.getChatRoomNum());
 		// chatService.updateLastReadAt(userId, chatRoomVO);
 //		for(ChatContentsVO c : contents) {
@@ -188,9 +188,16 @@ public class ChatController {
 	
 	@PostMapping("chatUsersList")
 	@ResponseBody
-	public List<String> chatUsersList(String chatRoomNum) throws Exception{
-		List<String> users = chatService.getChatUsersDetail(chatRoomNum);
+	public List<UserVO> chatUsersList(String chatRoomNum) throws Exception{
+		List<UserVO> users = chatService.getChatUsersDetail(chatRoomNum);
 		return users;
+	}
+	
+	@PostMapping("invite")
+	public void invite(String chatRoomNum, @RequestParam("inviteUser") String[] inviteUser, Model model) throws Exception {
+		ChatContentsVO chatContentsVO = chatService.invite(chatRoomNum, inviteUser);
+		
+		template.convertAndSend("/sub/chatRoom." + chatContentsVO.getChatRoomNum(), chatContentsVO);
 	}
 
 }
