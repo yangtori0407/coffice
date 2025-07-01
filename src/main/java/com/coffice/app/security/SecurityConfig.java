@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -16,6 +18,7 @@ import com.coffice.app.users.UserService;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 	
 	@Autowired
@@ -51,12 +54,19 @@ public class SecurityConfig {
 					auth
 					.requestMatchers("/").authenticated()
 					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
-					.requestMatchers("/employee/list", "/user/register").hasRole("ADMIN")
-					.requestMatchers("/ingredients/list", "branch/add", "branch/masterAdd").hasAuthority("물류팀")
+					.requestMatchers("/employee/list","employee/detail", "/user/register").hasRole("ADMIN")
+					.requestMatchers("/ingredients/list","/ingredients/detail","branch/add", "branch/masterAdd").hasAuthority("물류팀")
 					.requestMatchers("/user/mypage","/user/update","/user/logout").authenticated()
+					.requestMatchers("/document/**").authenticated()
 					.anyRequest().permitAll()
 					;
 			})
+			
+			 .exceptionHandling(exception -> exception
+			            .accessDeniedHandler((request, response, accessDeniedException) -> {
+			            	 response.sendRedirect("/error/403");
+			            })
+			        )
 			
 			.formLogin(formlogin ->{
 				formlogin
