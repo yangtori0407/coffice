@@ -91,6 +91,11 @@ function selectLocalImage() {
 let isSubmitting = false;
 
 document.getElementById("submitBtn").addEventListener("click", () => {
+    const rp = document.querySelectorAll(".receiverPerson");
+    if(rp.length == 0){
+        alert("받는 사람을 입력하세요");
+        return;
+    }
     isSubmitting = true;
     const messageTitle = document.getElementById("messageTitle");
     const quill = document.getElementById("quill_html");
