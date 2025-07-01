@@ -40,9 +40,9 @@
 												<form method="get"
 													class="form-inline d-flex align-items-center">
 													<select class="custom-select mr-2" name="kind">
-														<option value="k1">제목</option>
+														<option value="k1">제목+본문</option>
+														<option value="k3">제목</option>
 														<option value="k2">본문</option>
-														<option value="k3">제목+본문</option>
 													</select> <input type="search" name="search"
 														class="form-control form-control-sm mr-2"
 														placeholder="검색어를 입력하세요" style="max-width: 200px;">
@@ -81,7 +81,8 @@
 														<c:choose>
 															<c:when test="${l.receiveMessage.checkStatus eq false }">
 																<tr style="background-color: lightgoldenrodyellow; font-weight: bold;">
-																	<td>${l.senderDept }${l.senderName }</td>
+																	<td><a class="receiveMessage"
+																		href="./receive/detail?messageNum=${l.messageNum }" style="color: #858796;">${l.senderDept } ${l.senderName }</a></td>
 																	<td><a class="receiveMessage"
 																		href="./receive/detail?messageNum=${l.messageNum }" data-read-status="none" data-message-num="${l.messageNum }">${l.messageTitle }</a></td>
 																	<td>${l.formatted }</td>
@@ -89,7 +90,8 @@
 															</c:when>
 															<c:otherwise>
 																<tr>
-																	<td>${l.senderDept }${l.senderName }</td>
+																	<td><a class="receiveMessage"
+																		href="./receive/detail?messageNum=${l.messageNum }" style="color: #858796;">${l.senderDept } ${l.senderName }</a></td>
 																	<td><a class="receiveMessage"
 																		href="./receive/detail?messageNum=${l.messageNum }" data-message-num="${l.messageNum}">${l.messageTitle }</a></td>
 																	<td>${l.formatted }</td>

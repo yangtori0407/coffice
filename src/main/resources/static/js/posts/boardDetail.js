@@ -6,6 +6,15 @@ const boardNum = board.getAttribute("data-board-num");
 const inputContents = document.getElementById("contents");
 const comArea = document.getElementById("comArea");
 
+function getUserIdCookie(name) {
+    return document.cookie
+        .split("; ")
+        .find(cookie => cookie.startsWith(name + "="))
+        ?.split("=")[1] ?? null;
+}
+
+const userId = getUserIdCookie("userId");
+
 //원글 삭제 버튼
 if(delBtn){
 	
@@ -332,17 +341,20 @@ function createReplyDiv(r, addReply, commentNum) {
 		// editItem.setAttribute("data-com-num", o.commentNum);
 		// editItem.innerText = "수정";
 
-		const deleteItem = document.createElement("button");
-		deleteItem.classList.add("dropdown-item", "replyDelBtn");
-		deleteItem.setAttribute("type", "button");
-		deleteItem.setAttribute("data-com-num", o.commentNum);
-		deleteItem.innerText = "삭제";
+		if(userId == o.userId){
 
-		menu.appendChild(deleteItem);
-		dropdown.appendChild(dropdownBtn);
-		dropdown.appendChild(menu);
-
-		col2.appendChild(dropdown);
+			const deleteItem = document.createElement("button");
+			deleteItem.classList.add("dropdown-item", "replyDelBtn");
+			deleteItem.setAttribute("type", "button");
+			deleteItem.setAttribute("data-com-num", o.commentNum);
+			deleteItem.innerText = "삭제";
+	
+			menu.appendChild(deleteItem);
+			dropdown.appendChild(dropdownBtn);
+			dropdown.appendChild(menu);
+	
+			col2.appendChild(dropdown);
+		}
 
 		row.appendChild(col10);
 		row.appendChild(col2);
