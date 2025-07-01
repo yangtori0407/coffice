@@ -13,13 +13,20 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(r=>r.json())
         .then(r=>{
             console.log(r)
+            let userId = document.getElementById("userId")
             let st;
             let et;
             if(r.vacationVO.status == '대기') {
                 st = "승인 대기"
                 et = ""
                 updateVacation.setAttribute("style", "display: block;")
-                reject.setAttribute("style", "display: block")
+                if(userId.value == r.vacationVO.userId) {
+                    updateVacation.innerText = "수정"
+                    reject.setAttribute("style", "display: none")
+                }else {
+                    updateVacation.innerText = "승인"
+                    reject.setAttribute("style", "display: block")
+                }
             }else if(r.vacationVO.status == '승인') {
                 st = "승인 완료"
                 et = r.vacationVO.editTime.slice(0, 10) + " " + r.vacationVO.editTime.slice(11, 16)
@@ -47,12 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
             s.innerHTML = "<strong>처리 상태 : </strong>"+st
             ac.innerHTML = "<strong>승인자 : </strong>"+r.accepter.position + " " + r.accepter.name
             at.innerHTML = "<strong>처리일 : </strong>"+et
-            let userId = document.getElementById("userId")
-            if(userId.value == r.vacationVO.userId) {
-                updateVacation.innerText = "수정"
-            }else {
-                updateVacation.innerText = "승인"
-            }
         })
         $("#vacationDetailModal").modal("show")
         });

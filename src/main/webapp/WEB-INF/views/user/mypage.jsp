@@ -27,7 +27,7 @@
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
-				<div class="container-fluid">
+				<div class="container-fluid" style="margin-top: 50px;">
 	
 					<div class="row" style="height: 650px; padding: 0 30px;">
 					  
