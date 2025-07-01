@@ -77,7 +77,7 @@ public class DocumentController {
 		Map<String, Object> map = documentService.getList(pager, request, session);
 		
 		List<DocumentVO> docuList = (List<DocumentVO>)map.get("list");
-		System.out.println("list 컨트롤러 docuList size : " + docuList.size());
+		//System.out.println("list 컨트롤러 docuList size : " + docuList.size());
 		
 		String kind = (String)map.get("kind");
 		String docuKind = (String)map.get("docuKind");
@@ -99,7 +99,7 @@ public class DocumentController {
 		DocumentVO docuVO = documentService.getDetail(documentVO);
 		
 		if (docuVO == null) {
-			System.out.println("document detail docuVO가 null입니다");
+			//System.out.println("document detail docuVO가 null입니다");
 		}
 		
 		
@@ -217,7 +217,7 @@ public class DocumentController {
 	    List<ReferenceLineVO> referrerList = mapper.readValue(referrersJson, new TypeReference<List<ReferenceLineVO>>() {});
 	    
 	    if(attaches != null) {
-	    	System.out.println("attaches size : " + attaches.length);
+	    	//System.out.println("attaches size : " + attaches.length);
 	    	
 	    }
 
@@ -270,15 +270,15 @@ public class DocumentController {
 			MultipartFile[] attaches, Long[] exists) throws Exception {
 		
 		if(attaches != null) {
-	    	System.out.println("attaches size : " + attaches.length);	    	
+	    	//System.out.println("attaches size : " + attaches.length);	    	
 	    } else {
-	    	System.out.println("attaches null입니다 ");
+	    	//System.out.println("attaches null입니다 ");
 	    }
 		
 		if(exists != null) {
-	    	System.out.println("exists size : " + exists.length);	    	
+	    	//System.out.println("exists size : " + exists.length);	    	
 	    } else {
-	    	System.out.println("exists null입니다 ");
+	    	//System.out.println("exists null입니다 ");
 	    }
 		
 		//Json 형식으로 받아온 결재선, 참조선 데이터를 각 타입에 맞게 넣어준다
@@ -322,7 +322,7 @@ public class DocumentController {
 	//
 	@PostMapping("filedown")
 	public FileDownView getFileDetail(AttachmentVO attachmentVO, Model model) throws Exception {
-		System.out.println("filedown 컨트롤러 fileNum : " + attachmentVO.getFileNum());
+		//System.out.println("filedown 컨트롤러 fileNum : " + attachmentVO.getFileNum());
 		attachmentVO = documentService.getFileDetail(attachmentVO);
 
 		model.addAttribute("fileVO", attachmentVO);
@@ -335,9 +335,9 @@ public class DocumentController {
 	@PostMapping("proceed")
 	public String updateApprovalProceed(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
 
-		System.out.println("user "+approvalLineVO.getUserId());
-		System.out.println("docu "+approvalLineVO.getDocumentId());
-		System.out.println("sign "+approvalLineVO.getSignId());
+		//System.out.println("user "+approvalLineVO.getUserId());
+		//System.out.println("docu "+approvalLineVO.getDocumentId());
+		//System.out.println("sign "+approvalLineVO.getSignId());
 		
 		int result = documentService.updateApprovalProceed(approvalLineVO, session);
 
@@ -349,9 +349,9 @@ public class DocumentController {
 	@PostMapping("reject")
 	public String updateApprovalReject(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
 
-		System.out.println("user "+approvalLineVO.getUserId());
-		System.out.println("docu "+approvalLineVO.getDocumentId());
-		System.out.println("reason "+approvalLineVO.getRejectReason());
+		//System.out.println("user "+approvalLineVO.getUserId());
+		//System.out.println("docu "+approvalLineVO.getDocumentId());
+		//System.out.println("reason "+approvalLineVO.getRejectReason());
 		
 		int result = documentService.updateApprovalReject(approvalLineVO, session);
 

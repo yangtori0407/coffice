@@ -146,11 +146,11 @@ public class DocumentService {
 		// 접속 중인 session의 유저 정보 가져오기
 		UserVO user = (UserVO)session.getAttribute("user");
 		map.put("userId", user.getUserId());
-		System.out.println("userId : " + map.get("userId"));
+		//System.out.println("userId : " + map.get("userId"));
 		map.put("search", pager.getSearch());
-		System.out.println("search : " + map.get("search"));
+		//System.out.println("search : " + map.get("search"));
 		map.put("kind", pager.getKind());
-		System.out.println("kind : " + map.get("kind"));
+		//System.out.println("kind : " + map.get("kind"));
 		
 		List<DocumentVO> list = null;
 		String kind = "";
@@ -165,9 +165,9 @@ public class DocumentService {
 			pager.makeNum(documentDAO.getTotalCountOnline(map));
 			
 			map.put("startNum", pager.getStartNum());
-			System.out.println("startNum : " + map.get("startNum"));
+			//System.out.println("startNum : " + map.get("startNum"));
 			map.put("page", pager.getPage());
-			System.out.println("page : " + map.get("page"));
+			//System.out.println("page : " + map.get("page"));
 			
 			list = documentDAO.getListLine(map);			
 			kind = "결재 > 기안 문서함";
@@ -298,7 +298,7 @@ public class DocumentService {
 		documentVO.setCurrentStep(1L);
 		// 임시저장 기능 추가로 (documentVO의 status에 임의 값 세팅이 아닌 '임시저장' 또는 '진행중' 데이터를 받아오는 것으로 코드 변경
 		//documentVO.setStatus("진행중");
-		System.out.println("status : " + documentVO.getStatus());
+		//System.out.println("status : " + documentVO.getStatus());
 		
 		// formName, stepCount는 문서 작성 시점의 폼 관련 값을 고정할 필요가 없으므로 문서 조회할 때 가져오겠다
 		
@@ -307,14 +307,14 @@ public class DocumentService {
 		Long step = 1L;
 
 		for (ApprovalLineVO vo : approverList) {			
-			vo.setStepOrder(step++);	System.out.println("step : " + step);
+			vo.setStepOrder(step++);	//System.out.println("step : " + step);
 			vo.setStatus("결재대기");			
 		}		
 		
 		
-		System.out.println("docu writerName은 : " + documentVO.getWriterName());		
-		System.out.println("docu Position은 : " + documentVO.getWriterPosition());
-		System.out.println("docu Dept은 : " + documentVO.getWriterDept());
+		//System.out.println("docu writerName은 : " + documentVO.getWriterName());		
+		//System.out.println("docu Position은 : " + documentVO.getWriterPosition());
+		//System.out.println("docu Dept은 : " + documentVO.getWriterDept());
 		// 문서 DB추가
 		int result = documentDAO.add(documentVO);
 		// insert 실행하면서 생긴 documentId (PK) **
@@ -353,7 +353,7 @@ public class DocumentService {
 		
 		if (multipartFiles != null) {
 			for(MultipartFile f : multipartFiles) {
-				System.out.println("f.oriName : " + f.getOriginalFilename());
+				//System.out.println("f.oriName : " + f.getOriginalFilename());
 				
 				if(f.isEmpty()) {
 					continue;
@@ -404,9 +404,9 @@ public class DocumentService {
 		documentVO.setWriterTime(Timestamp.valueOf(LocalDateTime.now()));
 		
 		
-		System.out.println("docu writerName은 : " + documentVO.getWriterName());
-		System.out.println("docu Position은 : " + documentVO.getWriterPosition());
-		System.out.println("docu Dept은 : " + documentVO.getWriterDept());
+		//System.out.println("docu writerName은 : " + documentVO.getWriterName());
+		//System.out.println("docu Position은 : " + documentVO.getWriterPosition());
+		//System.out.println("docu Dept은 : " + documentVO.getWriterDept());
 		// 문서 기본 정보 및 제목, 내용 업데이트
 		int result = documentDAO.updateTemp(documentVO);
 		
@@ -419,7 +419,7 @@ public class DocumentService {
 		Long step = 1L;
 
 		for (ApprovalLineVO vo : approverList) {			
-			vo.setStepOrder(step++);	System.out.println("step : " + step);
+			vo.setStepOrder(step++);	//System.out.println("step : " + step);
 			vo.setStatus("결재대기");			
 		}
 		
@@ -453,7 +453,7 @@ public class DocumentService {
 		result = 0;
 		
 		// 기존 파일 목록에서 없는 것 삭제하기
-		System.out.println("file docuId : " + documentVO.getDocumentId());
+		//System.out.println("file docuId : " + documentVO.getDocumentId());
 
 		// 1. 기존 첨부파일 목록 조회
 		List<AttachmentVO> beforeList = documentDAO.getChildrenFiles(documentVO);
@@ -471,7 +471,7 @@ public class DocumentService {
 		    boolean shouldDelete = exists == null || !keepFileNums.contains(file.getFileNum());
 
 		    if (shouldDelete) {
-		        System.out.println("삭제 대상 파일번호: " + file.getFileNum());
+		        //System.out.println("삭제 대상 파일번호: " + file.getFileNum());
 
 		        // 3-1. DB에서 삭제
 		        result += documentDAO.deleteAttachment(file);
@@ -487,7 +487,7 @@ public class DocumentService {
 		// 신규 파일 세이브
 		if (multipartFiles != null) {
 			for(MultipartFile f : multipartFiles) {
-				System.out.println("f.oriName : " + f.getOriginalFilename());
+				//System.out.println("f.oriName : " + f.getOriginalFilename());
 				
 				if(f.isEmpty()) {
 					continue;
@@ -499,13 +499,13 @@ public class DocumentService {
 				// 파일명 DB추가
 				AttachmentVO fileVO = new AttachmentVO();
 				fileVO.setDocumentId(documentVO.getDocumentId());
-				System.out.println("getDocumentId : " + documentVO.getDocumentId());
+				//System.out.println("getDocumentId : " + documentVO.getDocumentId());
 				
 				fileVO.setOriginName(f.getOriginalFilename());
-				System.out.println("f.getOriginalFilename() : " + f.getOriginalFilename());
+				//System.out.println("f.getOriginalFilename() : " + f.getOriginalFilename());
 				
 				fileVO.setSaveName(fileName);
-				System.out.println("fileName : " + fileName);
+				//System.out.println("fileName : " + fileName);
 				
 				result += documentDAO.addFile(fileVO);
 				
@@ -636,8 +636,8 @@ public class DocumentService {
 		// 결재 관련 데이터를 변경해준다. 수정자 변수에 접속자 정보(수정하는 사람)도 넣어준다.		
 		// 중간 결재자면 status 유지 및 문서의 step은 +1
 		// 마지막 결재자면 status는 '결재완료'로 변경
-		System.out.println("childrenApprovers size : " + childrenApprovers.size());
-		System.out.println("appVO StepOrder : " + approvalLineVO.getStepOrder());
+		//System.out.println("childrenApprovers size : " + childrenApprovers.size());
+		//System.out.println("appVO StepOrder : " + approvalLineVO.getStepOrder());
 		
 		if(childrenApprovers.size() == approvalLineVO.getStepOrder()) {
 			documentVO.setStatus("결재완료");
@@ -706,8 +706,8 @@ public class DocumentService {
 		// 결재 관련 데이터를 변경해준다. 수정자 변수에 접속자 정보(수정하는 사람)도 넣어준다.		
 		// 중간 결재자면 status 유지 및 문서의 step은 +1
 		// 마지막 결재자면 status는 '결재완료'로 변경
-		System.out.println("childrenApprovers size : " + childrenApprovers.size());
-		System.out.println("appVO StepOrder : " + approvalLineVO.getStepOrder());
+		//System.out.println("childrenApprovers size : " + childrenApprovers.size());
+		//System.out.println("appVO StepOrder : " + approvalLineVO.getStepOrder());
 		
 		documentVO.setCurrentStep(documentVO.getCurrentStep() + 1); 
 		// +1을 하게 되면 반려자는 반려 리스트에서 볼 수 있고, 다음 결재자는 스텝이 같아지지만 status가 '반려'라 대기 목록에 보이지 않는다. 
