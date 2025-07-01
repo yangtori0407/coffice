@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,7 +43,7 @@ public class UserService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		//System.out.println(" userId: " + userId);
+
 		String pw;
 		try {
 			pw = userDAO.checkPassword(userId);
@@ -53,14 +55,15 @@ public class UserService implements UserDetailsService{
 		UserVO userVO = new UserVO();
 		userVO.setUserId(userId);
 		//System.out.println("로그인 요청 아이디 : "+ userId);
-
+		System.out.println("▶ userVO.getAuthorities(): " + userVO.getAuthorities());
+		
 		try {
 			userVO = userDAO.detail(userVO);
 			if (userVO == null) {
 	            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId);
 	        }
 			
-			//System.out.println(" DB에서 가져온 비밀번호: " + userVO.getPassword());
+
 	        
 		} catch (Exception e) {
 			// TODO: handle exception

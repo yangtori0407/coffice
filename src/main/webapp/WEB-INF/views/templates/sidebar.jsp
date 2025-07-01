@@ -157,17 +157,17 @@
 			</div>
 		</div></li>
 		
-		<!--<sec:authorize access="isAuthenticated()">-->
-		<li class="nav-item"><a id="message" class="nav-link ${user == 'register' ? 'user-active' : '' }"
-		 href="/user/register">
-			<ion-icon name="person-add-outline"></ion-icon> <span>사원 등록</span>
-		</a></li>		
-			
-		<li class="nav-item"><a id="message" class="nav-link ${employee == 'list' ? 'employee-active' : '' }" 
-		href="/employee/list">
-			<ion-icon name="people-outline"></ion-icon> <span>사원 정보</span>
-		</a></li>
-		<!--</sec:authorize>-->
+		<sec:authorize access="hasRole('ADMIN')">
+			<li class="nav-item"><a id="message" class="nav-link ${user == 'register' ? 'user-active' : '' }"
+			 href="/user/register">
+				<ion-icon name="person-add-outline"></ion-icon> <span>사원 등록</span>
+			</a></li>		
+				
+			<li class="nav-item"><a id="message" class="nav-link ${employee == 'list' ? 'employee-active' : '' }" 
+			href="/employee/list">
+				<ion-icon name="people-outline"></ion-icon> <span>사원 정보</span>
+			</a></li>
+		</sec:authorize>
 
 	<!-- Divider -->
 	<hr class="sidebar-divider d-none d-md-block">
