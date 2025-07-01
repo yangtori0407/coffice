@@ -59,7 +59,7 @@ public class EventUtility {
     public List<LocalDate> getHolidays() throws Exception {
     	List<HolidayVO> vos = holidayService.getHolidays();
     	List<LocalDate> holidays = new ArrayList<>();
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     	for(HolidayVO vo : vos) {
     		LocalDate date = LocalDate.parse(vo.getLocdate(), formatter);
     		holidays.add(date);
