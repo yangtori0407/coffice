@@ -61,7 +61,7 @@
 		WHERE CHAT_NUM = #{chatNum}
 	</select>
 
-	<select id="getChatContentsList" parameterType="ChatContentsVO"
+	<select id="getChatContentsList" parameterType="java.util.HashMap"
 		resultType="ChatContentsVO">
 		SELECT D.CHAT_NUM, D.CHATROOM_NUM, D.CHAT_CONTENTS,
 		D.SEND_DATE,
@@ -72,8 +72,9 @@
 			FROM CHAT_CONTENTS C
 			LEFT JOIN USERS U 
 			ON C.SENDER = U.USER_ID
-			LEFT JOIN CHAT_FILES CF ON C.CHAT_NUM = CF.CHAT_NUM
-			WHERE C.CHATROOM_NUM = #{chatRoomNum}
+			LEFT JOIN CHAT_FILES CF 
+			ON C.CHAT_NUM = CF.CHAT_NUM
+			WHERE C.CHATROOM_NUM = #{chatRoomNum} AND SEND_DATE >= #{joinedAt}
 			ORDER BY C.SEND_DATE DESC
 			LIMIT 30
 		) D
@@ -153,14 +154,27 @@
 					WHERE CHATROOM_NUM = #{chatRoomNum} AND USER_ID = #{userId})
 		AND CHATROOM_NUM = #{chatRoomNum}
 	</select>
+	<select id="getChatPersonDetail" parameterType="java.util.HashMap" resultType="ChatPersonVO">
+		SELECT CHATROOM_NUM, USER_ID, JOINED_AT, LAST_READ_AT, ALARM_STATUS, EXIT_STATUS
+		FROM CHAT_PERSON
+		WHERE CHATROOM_NUM = #{chatRoomNum} AND USER_ID = #{userId}
+	</select>
+	
+	<select id="findExist" parameterType="ChatPersonVO">
+		SELECT COUNT(*) FROM CHAT_PERSON
+		WHERE CHATROOM_NUM = #{chatRoomNum} AND USER_ID = #{userId} 
+	</select>
 
-
+	<select id="getUserName" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT NAME FROM USERS WHERE USER_ID = #{userId}
+	</select>
 	<insert id="addChat" parameterType="ChatRoomVO"
 		useGeneratedKeys="true" keyProperty="chatRoomNum">
 		INSERT INTO CHAT_ROOM
 		VALUES(#{chatRoomNum}, #{chatRoomName}, NOW(),
 		#{chatRoomCreator})
 	</insert>
+	
 
 	<insert id="addUser" parameterType="ChatAddVO">
 		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT,
@@ -195,6 +209,11 @@
 		VALUES(NULL, #{chatNum},
 		#{originName}, #{saveName})
 	</insert>
+	
+	<insert id="invite" parameterType="java.util.HashMap">
+		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT, LAST_READ_AT, ALARM_STATUS, EXIT_STATUS)
+		VALUES(#{chatRoomNum}, #{userId}, NOW(), NOW(), 0, 0)
+	</insert>
 
 	<update id="updateLastReadAt" parameterType="java.util.HashMap">
 		UPDATE CHAT_PERSON
@@ -215,6 +234,10 @@
 	
 	<update id="exit" parameterType="java.util.HashMap">
 		UPDATE CHAT_PERSON SET EXIT_STATUS = 1 WHERE CHATROOM_NUM = #{chatRoomNum} AND USER_ID = #{userId}
+	</update>
+	
+	<update id="updateExit" parameterType="ChatPersonVO">
+		UPDATE CHAT_PERSON SET EXIT_STATUS = 0, JOINED_AT = NOW(), ALARM_STATUS = 1 WHERE CHATROOM_NUM = #{chatRoomNum} AND USER_ID = #{userId}
 	</update>
 
 </mapper>
