@@ -10,5 +10,6 @@
 	    FROM ROLE
 	    WHERE ROLE_NAME = #{roleName}
 	</select>
+	
   	
   </mapper>

@@ -28,11 +28,16 @@
 		    U.SAVE_NAME,
 		    U.ORIGIN_NAME,
 		    U.DEPT_ID, 
-		    D.DEPT_NAME
-		  FROM USERS U
-		  JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
-		  WHERE U.USER_ID = #{userId}
-  	</select>
+		    D.DEPT_NAME,
+		    
+		    R.ROLE_ID,
+        	R.ROLE_NAME
+		   FROM USERS U
+		    JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
+		    LEFT JOIN EMPLOYEE_ROLE ER ON U.USER_ID = ER.USER_ID
+		    LEFT JOIN ROLE R ON ER.ROLE_ID = R.ROLE_ID
+		    WHERE U.USER_ID = #{userId}
+	</select>
   	
   	<resultMap id="detailResult" type="UserVO">
 	    <result column="USER_ID" property="userId"/>
@@ -50,6 +55,11 @@
 	    <result column="ORIGIN_NAME" property="originName"/>
 	    <result column="DEPT_ID" property="deptId"/>
 	    <result column="DEPT_NAME" property="deptName"/>
+	    
+	    <collection property="roles" ofType="RoleVO">
+	        <result column="ROLE_ID" property="roleId"/>
+	        <result column="ROLE_NAME" property="roleName"/>
+	    </collection>
   	</resultMap>
   	
 
