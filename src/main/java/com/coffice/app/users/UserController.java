@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -77,7 +77,12 @@ public class UserController {
 
 	
 	@GetMapping("login")
-	public void login() throws Exception {
+	public String login() throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth != null && auth.isAuthenticated() && !(auth.getPrincipal() instanceof String)) {
+	        return "redirect:/";
+	    }
+	    return "user/login";
 		
 	}
 	
