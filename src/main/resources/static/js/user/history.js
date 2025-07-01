@@ -13,14 +13,19 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(r=>r.json())
         .then(r=>{
             console.log(r)
-            let userId = document.getElementById("userId")
+            function getCookie(name) {
+                const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                if (match) return decodeURIComponent(match[2]);
+                return null;
+            }
+            const uid = getCookie("userId");
             let st;
             let et;
             if(r.vacationVO.status == '대기') {
                 st = "승인 대기"
                 et = ""
                 updateVacation.setAttribute("style", "display: block;")
-                if(userId.value == r.vacationVO.userId) {
+                if(uid == r.vacationVO.userId) {
                     updateVacation.innerText = "수정"
                     reject.setAttribute("style", "display: none")
                 }else {
