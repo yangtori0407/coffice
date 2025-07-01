@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomErrorController implements ErrorController {
 
 	@RequestMapping("/error")
-    public String handleError(HttpServletRequest request, @AuthenticationPrincipal UserVO userVO) {
+    public String handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         if (status != null) {
             int statusCode = Integer.parseInt(status.toString());
@@ -27,6 +27,7 @@ public class CustomErrorController implements ErrorController {
             	return "error/403";
             }
             if (statusCode == 404) return "error/404";
+            if (statusCode == 500) return "error/500";
         }
         return "error/error"; // generic error
     }
