@@ -1,6 +1,11 @@
 const kind = document.getElementById("kind")
 let flag = true;
-const uid = document.getElementById("userId")
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  if (match) return decodeURIComponent(match[2]);
+  return null;
+}
+const uid = getCookie("userId");
 const gcolor = "#fb6544"
 const pcolor = "#378006"
 
@@ -133,7 +138,7 @@ fetch("/events/vacation/getList")
     console.log(r)
     for(a of r) {
         let clr;
-        if(uid.value == a.userId) {
+        if(uid == a.userId) {
             clr = pcolor
         }else {
             clr = gcolor
