@@ -1,7 +1,12 @@
 const kind = document.getElementById("kind")
 let flag = true;
 const authority = true;
-const uid = document.getElementById("userId")
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  if (match) return decodeURIComponent(match[2]);
+  return null;
+}
+const uid = getCookie("userId");
 const gcolor = "#fb6544"
 const pcolor = "#378006"
 
@@ -110,7 +115,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             })
         }
         
-        if(uid.value != e.event.extendedProps.userId) {
+        if(uid != e.event.extendedProps.userId) {
             change.setAttribute("style", "display: none;")
             deleteSchedule.setAttribute("style", "display: none;")
             saveChange.innerText = "닫기"
@@ -243,7 +248,7 @@ fetch("/events/getRepeatSchedules")
 .then(r=>{
     for(a of r) {
         let clr;
-        if(uid.value == a.userId) {
+        if(uid == a.userId) {
             clr = pcolor
         }else {
             clr = gcolor
@@ -285,7 +290,7 @@ fetch("/events/getSchedules")
 .then(r=>r.json())
 .then(r=>{
     for(a of r) {
-        if(uid.value == a.userId) {
+        if(uid == a.userId) {
             let event = {
                 id: a.scheduleId,
                 title: a.detail,
@@ -352,8 +357,11 @@ send.addEventListener("click", ()=>{
         let rCount = document.getElementById("repeatCount")
         params.append("repeatType", rType)
         if(eRepeat.value != "") {
-            params.append("repeatEnd", eRepeat.value+" 23:59:59")
+            params.append("repeatEnd", eRepeat.value+"T23:59:59")
         }else if(rCount.value != "") {
+            params.append("repeatCount", rCount.value)
+        }else {
+            params.append("repeatEnd", eRepeat.value+"T23:59:59")
             params.append("repeatCount", rCount.value)
         }
     }
@@ -363,6 +371,7 @@ send.addEventListener("click", ()=>{
         body: params
     })
     .then(r=>{
+        // console.log(r)
         location.reload()
     })
 

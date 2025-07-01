@@ -22,7 +22,7 @@ public class ScheduleVO extends EventVO{
 	private String scheduleType;
 	private Integer repeatCount;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul", pattern = "yyyy-MM-dd'T'HH:mm:ss")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:SS")
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:SS")
 	private LocalDateTime repeatEnd;
 	private String repeatType;
 	private List<ScheduleRepeatExceptionVO> exceptions = new ArrayList<>();
