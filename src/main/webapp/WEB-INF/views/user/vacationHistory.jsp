@@ -57,11 +57,14 @@
 												<td>${req.type}</td>
 												<td>
 													<c:choose>
-											          <c:when test="${req.status}">
-											            승인완료
+											          <c:when test="${req.status eq '승인'}">
+											            승인 완료
+											          </c:when>
+													  <c:when test="${req.status eq '거절'}">
+											            승인 거절
 											          </c:when>
 											          <c:otherwise>
-											            승인대기
+											            승인 대기
 											          </c:otherwise>
 											        </c:choose>
 												</td>
@@ -95,11 +98,14 @@
 												<td>${app.type}</td>
 												<td>
 													<c:choose>
-											          <c:when test="${app.status}">
-											            승인완료
+											          <c:when test="${app.status eq '승인'}">
+											            승인 완료
+											          </c:when>
+													  <c:when test="${app.status eq '거절'}">
+											            승인 거절
 											          </c:when>
 											          <c:otherwise>
-											            승인대기
+											            승인 대기
 											          </c:otherwise>
 											        </c:choose>
 												</td>
@@ -149,6 +155,7 @@
 							</div>
 						</div>
 						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal" id="reject">승인 거절</button>
 							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="undo">목록으로</button>
 							<button type="button" class="btn btn-primary" id="updateVacation" data-dismiss="modal"></button>
 						</div>
