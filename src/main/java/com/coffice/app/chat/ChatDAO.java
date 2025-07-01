@@ -34,7 +34,7 @@ public interface ChatDAO {
 
 	ChatContentsVO getContentsInfo(ChatContentsVO chatContentsVO) throws Exception;
 
-	List<ChatContentsVO> getChatContentsList(ChatRoomVO chatRoomVO) throws Exception;
+	List<ChatContentsVO> getChatContentsList(Map<String, Object> info) throws Exception;
 
 	String checkDuplication(ChatAddVO chatAddVO) throws Exception;
 
@@ -63,5 +63,15 @@ public interface ChatDAO {
 	int getChatAmount(Map<String, Object> info) throws Exception;
 
 	int exit(Map<String, Object> info) throws Exception;
+
+	ChatPersonVO getChatPersonDetail(Map<String, Object> info) throws Exception;
+
+	int invite(ChatPersonVO chatPersonVO) throws Exception;
+
+	int findExist(ChatPersonVO chatPersonVO) throws Exception;
+
+	int updateExit(ChatPersonVO chatPersonVO) throws Exception;
+
+	String getUserName(String userId) throws Exception;
 	
 }
