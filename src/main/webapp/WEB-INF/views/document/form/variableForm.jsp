@@ -349,7 +349,8 @@
 		            </c:choose>
 			        
 			        <c:if test="${not empty docuVO}">
-			        	<button id="btn_tolist" class="btn btn-secondary me-2 mr-3" >목록 가기</button>   
+			        	<button id="btn_tolist" class="btn btn-secondary me-2 mr-3" 
+			        	onclick="location.href='/document/list/${docuKind}'" >목록 가기</button>
 			        </c:if>
 			        
 			      </div>
@@ -514,9 +515,7 @@
 		}
 		
 		
-		// 사이드바 켜기
-		const collapseTwo = document.getElementById("collapseTwo");
-        collapseTwo.className = 'collapse show';
+		
 		
 	</script>
 	<script src="/js/document/writeJs.js"></script>
