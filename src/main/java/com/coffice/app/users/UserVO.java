@@ -52,7 +52,7 @@ public class UserVO implements UserDetails{
 	@Email(message = "이메일 형식이 올바르지 않습니다",groups = {RegisterGroup.class, UpdateGroup.class})
 	@NotBlank(message = "필수사항입니다", groups= RegisterGroup.class)
 	private String email;
-	private Integer status;
+	private boolean status;
 	private Date resignDate;
 	private String saveName;
 	private String originName;
@@ -113,7 +113,7 @@ public class UserVO implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return this.status == 1;
+		return this.status == true;
 	}
 	
 	

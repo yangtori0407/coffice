@@ -20,6 +20,8 @@ public class SecurityConfig {
 	
 	@Autowired
     private LoginSuccessHandler loginSuccessHandler;
+	@Autowired
+	private LoginFailureHandler loginFailureHandler;
 	
 	@Autowired
 	private UserService userService;
@@ -72,7 +74,7 @@ public class SecurityConfig {
 				.usernameParameter("userId")
 				.passwordParameter("password")
 				.successHandler(loginSuccessHandler)
-				.failureUrl("/user/login?error=true")
+				.failureHandler(loginFailureHandler)
 				.permitAll()
 				;
 			})
