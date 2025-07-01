@@ -10,7 +10,7 @@ const comArea = document.getElementById("comArea");
 if(delBtn){
 	
 	delBtn.addEventListener("click", () => {
-		console.log("click")
+		//console.log("click")
 		let param = new URLSearchParams();
 		param.append("boardNum", boardNum);
 	
@@ -48,7 +48,7 @@ comBtn.addEventListener("click", () => {
 	})
 		.then(r => r.json())
 		.then(r => {
-			console.log(r)
+			//console.log(r)
 			createComment(r.commentContents, r.commentDate, r.commentNum);
 			inputContents.value = "";
 		})
@@ -67,7 +67,7 @@ inputContents.addEventListener("keydown", (e) => {
 		})
 			.then(r => r.json())
 			.then(r => {
-				console.log(r);
+				//console.log(r);
 				createComment(r.commentContents, r.commentDate, r.commentNum);
 				inputContents.value = "";
 			})
@@ -524,7 +524,7 @@ comArea.addEventListener("click", (e) => {
 		})
 			.then(r => r.json())
 			.then(updatedComment => {
-				console.log(updatedComment);
+				//console.log(updatedComment);
 				// 기존 card 내의 요소 참조
 				const card = e.target.closest(".card");
 				const leftCol = card.querySelector(".col-10");

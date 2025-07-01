@@ -70,11 +70,11 @@ class Message {
 }
 
 stompClient.connect({}, function (frame) {
-    console.log("Stomp 연결 성공: ", frame);
+    //console.log("Stomp 연결 성공: ", frame);
 
     stompClient.subscribe(`/sub/chatRoom.${chatNum}`, function (message) {
         const msg = JSON.parse(message.body); //서버에서 문자열로 보낸걸 json 객체로 받음
-        console.log(msg);
+        //console.log(msg);
         let chat = displayReceiveMessage(msg);
         chatBox.append(chat);
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -245,7 +245,7 @@ fileUpload.addEventListener("change", (e) => {
             m.fileNum = r.chatFilesVO.fileNum;
             m.sender = r.chatContentsVO.sender;
 
-            console.log(m);
+            //console.log(m);
             stompClient.send("/pub/sendMessage", {}, JSON.stringify(m))
         })
 })
@@ -254,7 +254,7 @@ fileUpload.addEventListener("change", (e) => {
 const alarmBtn = document.getElementById("alarmBtn");
 
 alarmBtn.addEventListener("click", () => {
-    console.log("!!!!!!!!!!")
+    //console.log("!!!!!!!!!!")
     if (alarmBtn.getAttribute("data-ion-name") == "notifications") {
         const p = new URLSearchParams();
         p.append("chatNum", chatNum);
@@ -346,7 +346,7 @@ chatUsersList.addEventListener("click", () => {
         current = next;
     }
 
-    console.log("!!!!!")
+    //console.log("!!!!!")
     let p = new URLSearchParams();
     p.append("chatRoomNum", chatNum);
     fetch("./chatUsersList", {

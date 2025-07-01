@@ -45,7 +45,7 @@
 							</div>
 						</div>
 						<div>
-							<button id="fileAdd" class="btn btn-danger mb-3" type="button">첨부파일
+							<button id="fileAdd" class="btn btn-primary mb-3" type="button">첨부파일
 								추가하기</button>
 						</div>
 						<div class="ml-auto">

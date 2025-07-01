@@ -78,7 +78,7 @@ function selectLocalImage() {
 			body: formData
 		}).then(r => r.text())
 			.then(r => {
-				console.log(r);
+				//console.log(r);
 				const range = quill.getSelection();
 				quill.insertEmbed(range.index, 'image', "/files/" + r);
 			})
@@ -123,7 +123,7 @@ fileAdd.addEventListener("click", () => {
 
 fileArea.addEventListener("click", (e) =>{
 	if(e.target.classList.contains("del")){
-		console.log("del");
+		//console.log("del");
 		e.target.parentElement.remove();
 		max--;
 	}
