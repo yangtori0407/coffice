@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,6 +62,7 @@ public class DocumentController {
 	}
 
 	//
+	@PreAuthorize("principal.status != null and principal.status == 1")
 	@GetMapping("list/*")
 	public String getList(Pager pager, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 
@@ -91,6 +93,7 @@ public class DocumentController {
 
 	
 	//
+	@PreAuthorize("principal.status != null and principal.status == 1")
 	@GetMapping("detail") 
 	public String getDetail(DocumentVO documentVO, Model model, HttpSession session) throws Exception {
 
@@ -175,6 +178,7 @@ public class DocumentController {
 	
 	
 	// 선택한 양식 출력 요청 (GET)
+	@PreAuthorize("principal.status != null and principal.status == 1")
 	@GetMapping("write")
 	public String write(Model model, HttpSession session, FormVO formVO) throws Exception {
 				
@@ -193,6 +197,7 @@ public class DocumentController {
 	
 	
 	//
+	@PreAuthorize("principal.status != null and principal.status == 1")
 	@PostMapping("write")
 	@ResponseBody
 	public String add(DocumentVO documentVO, @RequestParam("approvers") String approversJson, @RequestParam("referrers") String referrersJson, 
