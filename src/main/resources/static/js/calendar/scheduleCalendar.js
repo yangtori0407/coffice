@@ -222,10 +222,11 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 fetch("/events/getHolidays")
 .then(r=>r.json())
 .then(r=>{
+
     for(a of r) {
         let event = {
             title: a.dateName,
-            start: a.locdate.toString(),
+            start: a.locdate,
             allDay: true,
             color: '#ee0000',
             editable: false,

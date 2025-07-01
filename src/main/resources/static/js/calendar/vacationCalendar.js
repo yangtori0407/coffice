@@ -115,7 +115,7 @@ fetch("/events/getHolidays")
     for(a of r) {
         let event = {
             title: a.dateName,
-            start: a.locdate.toString(),
+            start: a.locdate,
             allDay: true,
             color: '#ee0000',
             editable: false,

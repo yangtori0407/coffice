@@ -20,8 +20,7 @@ class HolidayServiceTest {
 
 	@Test
 	void test() throws Exception {
-		Calendar calendar = Calendar.getInstance();
-		int result = holidayService.addHoliday(calendar.get(Calendar.YEAR));
+		int result = holidayService.updateHoliday();
 		
 		assertNotEquals(0, result);
 	}

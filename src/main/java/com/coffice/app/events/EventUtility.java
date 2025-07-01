@@ -2,6 +2,7 @@ package com.coffice.app.events;
 
 import java.util.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -58,8 +59,10 @@ public class EventUtility {
     public List<LocalDate> getHolidays() throws Exception {
     	List<HolidayVO> vos = holidayService.getHolidays();
     	List<LocalDate> holidays = new ArrayList<>();
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     	for(HolidayVO vo : vos) {
-    		holidays.add(vo.getLocdate());
+    		LocalDate date = LocalDate.parse(vo.getLocdate(), formatter);
+    		holidays.add(date);
     	}
     	return holidays;
     }
