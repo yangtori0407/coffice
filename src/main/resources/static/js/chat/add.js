@@ -40,7 +40,7 @@ addRoomBtn.addEventListener("click", () => {
     })
     .then(r => r.json())
     .then(r => {
-        console.log(r);
+        //console.log(r);
         if(r.flag == -1){
             let f =confirm("해당 사람들과 동일한 채팅방이 존재합니다.\n채팅방으로 이동하시겠습니까?")
             if(f){

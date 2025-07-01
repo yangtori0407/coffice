@@ -22,14 +22,14 @@ window.addEventListener("load", () => {
 })
 
 alertsDropdown.addEventListener("click", () => {
-    console.log("click");
+    //console.log("click");
     fetch("/notification/getNotification")
         .then(r => r.json())
         .then(r => {
             //totalArea.innerText = r.total;
             notificationArea.innerHTML = "";
             for (j of r.list) {
-                console.log("알림 for");
+                //console.log("알림 for");
                 notificationArea.append(createAlert(j, 0));
             }
         })
@@ -48,7 +48,7 @@ class Notification {
 }
 
 stompClientNotification.connect({}, function (frame) {
-    console.log("Stomp 연결 성공: ", frame);
+    //console.log("Stomp 연결 성공: ", frame);
 
     //공지사항 알림
     stompClientNotification.subscribe(`/sub/notice`, function (message) {
@@ -76,7 +76,7 @@ stompClientNotification.connect({}, function (frame) {
             chatAmountNum++;
             chatAmount.innerText = chatAmountNum;
         }
-        console.log(msg);
+        //console.log(msg);
         createChatToast(msg);
     })
     //모든 알림
@@ -87,7 +87,7 @@ stompClientNotification.connect({}, function (frame) {
         notificationArea.lastElementChild.remove();
         showAlarmTooltip();
         createToast(msg);
-        console.log("토스트");
+        //console.log("토스트");
     })
     // //대댓글
     // stompClientNotification.subscribe(`/sub/nof/user.${userIdNotification}`, function (message) {
@@ -226,7 +226,7 @@ function createAlert(msg, num) {
     a.appendChild(textWrapper);
 
     a.addEventListener("click", () => {
-        console.log("!!!!a태그!!!!")
+        //console.log("!!!!a태그!!!!")
         clickNotification(msg.notiNum);
     })
 

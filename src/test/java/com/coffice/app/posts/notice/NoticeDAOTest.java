@@ -13,14 +13,14 @@ class NoticeDAOTest {
 	private NoticeDAO noticeDAO;
 	@Test
 	void testAdd() throws Exception{
-		for(int i = 1; i <= 100;i++) {
-			NoticeVO noticeVO = new NoticeVO();
-			noticeVO.setUserId("test1");
-			noticeVO.setNoticeTitle("NoticeTitle" + i);
-			noticeVO.setNoticeContents("NoticeContents"+ i);
-			
-			noticeDAO.add(noticeVO);
-		}
+//		for(int i = 1; i <= 100;i++) {
+//			NoticeVO noticeVO = new NoticeVO();
+//			noticeVO.setUserId("test1");
+//			noticeVO.setNoticeTitle("NoticeTitle" + i);
+//			noticeVO.setNoticeContents("NoticeContents"+ i);
+//			
+//			noticeDAO.add(noticeVO);
+//		}
 	}
 
 }

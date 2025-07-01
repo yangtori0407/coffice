@@ -86,7 +86,7 @@ function selectLocalImage() {
 			body: formData
 		}).then(r => r.text())
 			.then(r => {
-				console.log(r);
+				//console.log(r);
 				const range = quill.getSelection();
 				quill.insertEmbed(range.index, 'image', "/files/" + r);
 
@@ -135,7 +135,7 @@ fileAdd.addEventListener("click", () => {
 //첨부파일 목록 삭제
 fileArea.addEventListener("click", (e) => {
 	if (e.target.classList.contains("del")) {
-		console.log("del");
+		//console.log("del");
 		e.target.parentElement.remove();
 		max--;
 	}
@@ -147,7 +147,7 @@ attacheArea.addEventListener("click", (e) => {
 		delAttach.push(e.target.getAttribute("data-file-num"));
 		e.target.parentElement.remove();
 		max--;
-		console.log(delAttach);
+		//console.log(delAttach);
 	}
 })
 
@@ -158,7 +158,7 @@ const contents = document.getElementById("quill_html").value;
 
 
 finishBtn.addEventListener("click", () => {
-	console.log("click");
+	//console.log("click");
 	const formData = new FormData();
 	const files = document.querySelectorAll('input[type="file"]');
 	files.forEach((input, index) => {
@@ -167,7 +167,7 @@ finishBtn.addEventListener("click", () => {
 		if(input.files.length > 0){
 			formData.append("attaches", input.files[0]);
 		}
-		console.log("파일파일")
+		//console.log("파일파일")
 	});
 	
 	formData.append("noticeTitle", title.value);

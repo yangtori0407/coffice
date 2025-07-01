@@ -110,7 +110,7 @@ const receiverArea = document.getElementById("receiverArea");
 
 emailInput.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
-        console.log("enter");
+        //console.log("enter");
         receiverArea.insertBefore(createReceiver(emailInput.value), emailInput); //insertBefore(삽입할_노드, 기준_노드) 기준 노드 위에 삽입할 노드 넣는 방법
         emailInput.value = "";
     }
