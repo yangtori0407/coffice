@@ -192,7 +192,13 @@ public class DocumentController {
 	public String write(Model model, HttpSession session, FormVO formVO) throws Exception {
 				
 		// 처음 양식 선택 시 보낸 formId를 이용해서 form 정보를 조회 해온다.
-		formVO = documentService.formDetail(formVO);		
+		formVO = documentService.formDetail(formVO);
+		
+		if(formVO == null) {
+			model.addAttribute("rejectMessage", "존재하지 않는 문서 양식 입니다");
+			return "document/message";
+		}
+		
 		model.addAttribute("formVO",formVO);
 		
 		LocalDate fakeToday = LocalDate.now();
