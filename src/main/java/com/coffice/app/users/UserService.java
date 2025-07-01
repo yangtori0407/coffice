@@ -43,35 +43,27 @@ public class UserService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+	    try {
+	        UserVO userVO = new UserVO();
+	        userVO.setUserId(userId);
 
-		String pw;
-		try {
-			pw = userDAO.checkPassword(userId);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		UserVO userVO = new UserVO();
-		userVO.setUserId(userId);
-		//System.out.println("로그인 요청 아이디 : "+ userId);
-		System.out.println("▶ userVO.getAuthorities(): " + userVO.getAuthorities());
-		
-		try {
-			userVO = userDAO.detail(userVO);
-			if (userVO == null) {
+	        userVO = userDAO.detail(userVO);
+
+	        if (userVO == null) {
 	            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId);
 	        }
-			
 
-	        
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			throw new UsernameNotFoundException("DB 조회 중 오류 발생: " + e.getMessage());
-		}
-		return userVO;
+	        // 권한 정상 출력되는지 확인
+	        System.out.println("▶ userVO.getAuthorities(): " + userVO.getAuthorities());
+
+	        return userVO;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new UsernameNotFoundException("DB 조회 중 오류 발생: " + e.getMessage());
+	    }
 	}
+
 	
 	//등록 시 입력값 유효성 검사를 위한 검증 메서드
 	public boolean userErrorCheck(UserVO userVO, BindingResult bindingResult) throws Exception{
