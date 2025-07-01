@@ -121,7 +121,7 @@ public class ChatController {
 		chatRoomVO = chatService.getChatInfo(chatRoomVO, userId);
 		if(chatRoomVO == null) {
 			model.addAttribute("result", "접근할 수 없는 채팅방입니다.");
-			model.addAttribute("path", "/message/main");
+			model.addAttribute("path", "/chat/main");
 			return "commons/result";
 		}
 		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO, userId);
@@ -131,7 +131,7 @@ public class ChatController {
 		model.addAttribute("contents", contents);
 		//model.addAttribute("users", users);
 		model.addAttribute("kind", "메신저");
-		return "message/chatRoom";
+		return "chat/chatRoom";
 	}
 
 	@PostMapping("fileUpload")
