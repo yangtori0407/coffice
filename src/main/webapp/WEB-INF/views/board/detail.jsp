@@ -38,14 +38,14 @@ input {
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					<sec:authentication property="principal" var="user" />
+					<sec:authentication property="principal" var="login" />
 					<!-- <h2 class="mb-2 text-gray-800">익명게시판</h2> -->
 					<div class="d-flex flex-column">
 
 						<div class="card mb-4 py-2 border-left-info">
 							<div class="card-body" id="board" data-board-num="${detail.boardNum }">${detail.boardTitle }</div>
 						</div>
-						<c:if test="${detail.userId == user.userId }">
+						<c:if test="${detail.userId eq login.userId }">
 							<div class="mb-2 ml-auto">
 								<button class="btn btn-danger" id="delBtn" type="button"
 									data-board-num="${detail.boardNum }">삭제하기</button>

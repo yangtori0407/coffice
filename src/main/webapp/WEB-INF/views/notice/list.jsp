@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,7 +66,9 @@
 												</form>
 
 												<!-- 추가 버튼 -->
-												<a href="./add" class="btn btn-primary">작성하기</a>
+												<sec:authorize access="hasRole('ADMIN')">
+													<a href="./add" class="btn btn-primary">작성하기</a>
+												</sec:authorize>
 											</div>
 										</div>
 									</div>
@@ -100,10 +104,11 @@
 												</thead>
 												<tbody>
 													<c:forEach items="${list }" var="l">
-													
+
 														<tr>
 															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeNum }</a></td>
-															<td style="font-weight:bold"><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
+															<td style="font-weight: bold"><a
+																href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
 															<td>관리자</td>
 															<%-- <td>${l.noticeHit }</td> --%>
 															<td>${l.formatted }</td>
@@ -135,7 +140,8 @@
 													</c:forEach>
 
 
-													<li class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }"
+													<li
+														class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }"
 														id="dataTable_next"><a
 														href="./list?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="7" tabindex="0"

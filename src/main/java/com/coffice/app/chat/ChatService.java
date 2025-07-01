@@ -101,6 +101,9 @@ public class ChatService {
 		info.put("userId", userId);
 		info.put("chatRoomNum", chatRoomVO.getChatRoomNum());
 		chatRoomVO = chatDAO.getChatInfo(chatRoomVO);
+		if(chatRoomVO == null) {
+			return null;
+		}
 		chatRoomVO.setAlarmStatus(chatDAO.getChatAlarm(info));
 		
 		return chatRoomVO;

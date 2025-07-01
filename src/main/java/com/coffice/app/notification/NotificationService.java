@@ -229,28 +229,33 @@ public class NotificationService {
 		notificationVO.setRelateId(noticeVO.getNoticeNum());
 		notificationVO = notificationDAO.getNoticeNotificationDetail(notificationVO);
 		
-		Map<String, Object> info = new HashMap<>();
-		info.put("notiNum", notificationVO.getNotiNum());
-		info.put("userId", noticeVO.getUserId());
-		
-		notificationDAO.updateNotiStatus(info);
+		if(notificationVO != null) {
+			Map<String, Object> info = new HashMap<>();
+			info.put("notiNum", notificationVO.getNotiNum());
+			info.put("userId", noticeVO.getUserId());
+			
+			notificationDAO.updateNotiStatus(info);
+			
+		}
 	}
 	
 	@Transactional
-	public void checkBoardNotification(BoardVO boardVO) throws Exception{
+	public void checkBoardNotification(BoardVO boardVO, String userId) throws Exception{
 		NotificationVO notificationVO = new NotificationVO();
 		notificationVO.setNotiKind("BOARD");
 		notificationVO.setRelateId(boardVO.getBoardNum());
 		List<NotificationVO> list = notificationDAO.getBoardNotificationDetail(notificationVO);
-	
-		Map<String, Object> info = new HashMap<>();
-		for(NotificationVO l : list) {
-			//log.info("NotificationVO get : {}", l);
-			info.put("notiNum", l.getNotiNum());
-			info.put("userId", boardVO.getUserId());
-			notificationDAO.updateNotiStatus(info);
+		if(list != null) {
 			
-			info.clear();
+			Map<String, Object> info = new HashMap<>();
+			for(NotificationVO l : list) {
+				//log.info("NotificationVO get : {}", l);
+				info.put("notiNum", l.getNotiNum());
+				info.put("userId", userId);
+				notificationDAO.updateNotiStatus(info);
+				
+				info.clear();
+			}
 		}
 		
 	}
@@ -262,10 +267,14 @@ public class NotificationService {
 		
 		notificationVO = notificationDAO.getNoticeNotificationDetail(notificationVO);
 		
-		Map<String, Object> info = new HashMap<>();
-		info.put("notiNum", notificationVO.getNotiNum());
-		info.put("userId", userId);
-		notificationDAO.updateNotiStatus(info);
+		if(notificationVO != null) {
+			
+			Map<String, Object> info = new HashMap<>();
+			info.put("notiNum", notificationVO.getNotiNum());
+			info.put("userId", userId);
+			notificationDAO.updateNotiStatus(info);
+		}
+		
 	}
 
 }

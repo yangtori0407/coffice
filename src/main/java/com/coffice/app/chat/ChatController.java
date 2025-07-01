@@ -116,22 +116,22 @@ public class ChatController {
 	}
 
 	@GetMapping("chatRoom")
-	public void chatRoom(ChatRoomVO chatRoomVO, Model model, Authentication authentication) throws Exception {
+	public String chatRoom(ChatRoomVO chatRoomVO, Model model, Authentication authentication) throws Exception {
 		String userId = authentication.getName();
 		chatRoomVO = chatService.getChatInfo(chatRoomVO, userId);
+		if(chatRoomVO == null) {
+			model.addAttribute("result", "접근할 수 없는 채팅방입니다.");
+			model.addAttribute("path", "/message/main");
+			return "commons/result";
+		}
 		List<ChatContentsVO> contents = chatService.getChatContentsList(chatRoomVO, userId);
-		//List<UserVO> users = chatService.getChatUsersDetail(chatRoomVO.getChatRoomNum());
-		// chatService.updateLastReadAt(userId, chatRoomVO);
-//		for(ChatContentsVO c : contents) {
-//			log.info("챗 내용 : {}", c);
-//		}
 		log.info("chatRoomVO : {}", chatRoomVO);
 		model.addAttribute("chatRoomVO", chatRoomVO);
 		model.addAttribute("userId", userId);
 		model.addAttribute("contents", contents);
 		//model.addAttribute("users", users);
 		model.addAttribute("kind", "메신저");
-
+		return "message/chatRoom";
 	}
 
 	@PostMapping("fileUpload")

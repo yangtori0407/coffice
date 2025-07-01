@@ -105,7 +105,6 @@ public class BoardSerivce {
 	}
 	
 	public void readBoardNotification(BoardVO boardVO, String userId) throws Exception{
-		boardVO.setUserId(userId);
-		notificationService.checkBoardNotification(boardVO);
+		notificationService.checkBoardNotification(boardVO, userId);
 	}
 }
