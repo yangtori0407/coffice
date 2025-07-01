@@ -128,7 +128,7 @@ input {
 																답글</button>
 
 														</div>
-														<c:if test="${com.userId == user.userId }">
+														<c:if test="${com.userId eq login.userId }">
 															<div class="dropdown">
 																<button
 																	class="btn dropdown-toggle p-0 border-0 bg-transparent"

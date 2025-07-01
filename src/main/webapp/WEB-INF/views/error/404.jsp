@@ -22,10 +22,18 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-
-					<h2>접근할수 없습니다.</h2>
-
-
+					 <div class="text-center">
+                        <div class="error mx-auto" data-text="404">404</div>
+					    <p class="lead text-gray-800 mb-3">요청하신 페이지를 찾을 수 없습니다</p>
+					    <p class="text-gray-500 mb-2">존재하지 않거나 삭제된 페이지일 수 있습니다.</p>
+					    <p class="text-gray-500 mb-4">입력한 주소를 다시 확인해 주세요.</p>
+					    <sec:authorize access="isAuthenticated()">
+                        <a href="/" style="color: #3498db;">&larr; 대시보드로 돌아가기</a>
+                        </sec:authorize>
+                        <sec:authorize access="!isAuthenticated()">
+                        <a href="/" style="color: #3498db;">&larr; 로그인하러 가기</a>
+                        </sec:authorize>
+                    </div>
 				</div>
 			</div>
 			<!-- end Content -->
