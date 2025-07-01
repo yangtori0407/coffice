@@ -93,8 +93,6 @@ public class HolidayService {
 
 		for (HolidayVO vo : list) {
 		    LocalDate date = LocalDate.parse(vo.getLocdate(), formatter);
-		    // 변환된 LocalDate를 사용하거나 vo에 set해도 됨 (필드 추가 시)
-		    System.out.println("Parsed locdate: " + date);
 		}
 		
 		return list;
