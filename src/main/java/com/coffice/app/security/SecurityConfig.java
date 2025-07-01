@@ -18,7 +18,6 @@ import com.coffice.app.users.UserService;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 	
 	@Autowired
@@ -57,7 +56,7 @@ public class SecurityConfig {
 					.requestMatchers("/").authenticated()
 					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
 					.requestMatchers("/employee/list","employee/detail", "/user/register").hasRole("ADMIN")
-					.requestMatchers("/ingredients/list","/ingredients/detail","branch/add", "branch/masterAdd").hasAuthority("물류팀")
+					.requestMatchers("/ingredients/list","/ingredients/detail","/branch/add", "/branch/masterAdd").hasAuthority("3")
 					.requestMatchers("/user/mypage","/user/update","/user/logout").authenticated()
 					.requestMatchers("/document/**").authenticated()
 					.anyRequest().permitAll()
