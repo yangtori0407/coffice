@@ -113,7 +113,7 @@ public class UserVO implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return UserDetails.super.isEnabled();
+		return this.status == 1;
 	}
 	
 	

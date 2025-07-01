@@ -51,12 +51,18 @@ public class SecurityConfig {
 					auth
 					.requestMatchers("/").authenticated()
 					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
-					.requestMatchers("/employee/list", "/user/register").hasRole("ADMIN")
-					.requestMatchers("/ingredients/list", "branch/add", "branch/masterAdd").hasAuthority("물류팀")
+					.requestMatchers("/employee/list","employee/detail", "/user/register").hasRole("ADMIN")
+					.requestMatchers("/ingredients/list","/ingredients/detail","branch/add", "branch/masterAdd").hasAuthority("물류팀")
 					.requestMatchers("/user/mypage","/user/update","/user/logout").authenticated()
 					.anyRequest().permitAll()
 					;
 			})
+			
+			 .exceptionHandling(exception -> exception
+			            .accessDeniedHandler((request, response, accessDeniedException) -> {
+			            	 response.sendRedirect("/error/403");
+			            })
+			        )
 			
 			.formLogin(formlogin ->{
 				formlogin
