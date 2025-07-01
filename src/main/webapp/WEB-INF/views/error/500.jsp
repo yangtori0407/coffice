@@ -23,7 +23,7 @@
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
 
-					<h2>접근할수 없습니다.</h2>
+					<h2>내부서버오류입니다.</h2>
 
 
 				</div>
