@@ -154,6 +154,7 @@ public class DocumentService {
 		
 		List<DocumentVO> list = null;
 		String kind = "";
+		String docuKind = "";
 		
 		// 파싱한 키워드에 따라 조건 분기 생성
 		switch(url) {
@@ -170,6 +171,7 @@ public class DocumentService {
 			
 			list = documentDAO.getListLine(map);			
 			kind = "결재 > 기안 문서함";
+			docuKind = "online";
 			break;
 		
 		case "handled" : // 문서 중 해당 문서의 결재선이 접속자이고, currentStep이 stepOrder보다 큰 (접속자의 처리가 된) 문서만 가져온다
@@ -183,6 +185,7 @@ public class DocumentService {
 			
 			list = documentDAO.getListHandled(map);
 			kind = "결재 > 승인/반려 문서함";
+			docuKind = "handled";
 			break;
 			
 		case "onwaiting" : // 문서 중 해당 문서의 결재선이 접속자이고, stepOrder와 문서의 currentStep이 일치하는 문서만 가져온다
@@ -196,6 +199,7 @@ public class DocumentService {
 			
 			list = documentDAO.getListWaiting(map);
 			kind = "결재 > 결재 대기 문서함";
+			docuKind = "onwaiting";
 			break;
 			
 		case "onreference" : // 문서 중 해당 문서의 참조선이 접속자인 문서만 가져온다
@@ -210,6 +214,7 @@ public class DocumentService {
 			
 			list = documentDAO.getListReference(map);
 			kind = "결재 > 참조 문서함";
+			docuKind = "onreference";
 			break;
 			
 		case "ontemporary" : // 문서 중 작성자가 접속자이고, status가 "임시저장"인 문서만 가져온다
@@ -222,6 +227,7 @@ public class DocumentService {
 			
 			list = documentDAO.getListTemporary(map);
 			kind = "결재 > 임시 저장 문서함";
+			docuKind = "ontemporary";
 			break;
 		
 		default :
@@ -233,6 +239,8 @@ public class DocumentService {
 			map.put("page", pager.getPage());
 			
 			list = documentDAO.getListLine(map);
+			kind = "결재 > 기안 문서함";
+			docuKind = "online";
 		}
 		
 		// 각기 다른 성격의 document가 담긴 list가 만들어졌다.
@@ -245,6 +253,7 @@ public class DocumentService {
 		Map<String, Object> result = new HashMap<>();
 		result.put("list", list);
 		result.put("kind", kind);
+		result.put("docuKind", docuKind);
 		
 		return result;
 	}

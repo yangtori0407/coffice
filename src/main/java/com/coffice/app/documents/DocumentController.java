@@ -78,15 +78,18 @@ public class DocumentController {
 		List<DocumentVO> docuList = (List<DocumentVO>)map.get("list");
 		System.out.println("list 컨트롤러 docuList size : " + docuList.size());
 		
-		String kind = (String)map.get("kind");		
+		String kind = (String)map.get("kind");
+		String docuKind = (String)map.get("docuKind");
 		
 		model.addAttribute("docuList", docuList);
 		model.addAttribute("kind", kind);
+		model.addAttribute("docuKind", docuKind);
 		
 		
 		return "document/list";
 	}
 
+	
 	//
 	@GetMapping("detail") 
 	public String getDetail(DocumentVO documentVO, Model model, HttpSession session) throws Exception {
@@ -113,14 +116,16 @@ public class DocumentController {
 		
 		UserVO sessionUser = (UserVO)session.getAttribute("user");
 		String kindMessage = "";
-		
+		String docuKind = "";
 		
 		
 		if(docuVO.getStatus().equals("임시저장")) {
 			kindMessage = "결재 > 임시 저장 문서";
+			docuKind = "ontemporary";
 			
 		} else if(docuVO.getWriterId().equals(sessionUser.getUserId())) {
 			kindMessage = "결재 > 기안 문서";
+			docuKind = "online";
 			
 		} else {
 			
@@ -128,6 +133,7 @@ public class DocumentController {
 					if(line.getUserId().equals(sessionUser.getUserId()) && !(docuVO.getStatus().equals("임시저장"))) {
 						
 						kindMessage = "결재 > 참조 문서";
+						docuKind = "onreference";
 					}
 				}
 				
@@ -135,6 +141,7 @@ public class DocumentController {
 					if(line.getStepOrder() < docuVO.getCurrentStep() && line.getUserId().equals(sessionUser.getUserId())) {
 						
 						kindMessage = "결재 > 승인/반려 문서";
+						docuKind = "handled";
 					}
 				}
 				
@@ -142,6 +149,7 @@ public class DocumentController {
 					if(line.getStepOrder() == docuVO.getCurrentStep() && line.getUserId().equals(sessionUser.getUserId())) {
 						
 						kindMessage = "결재 > 결재 대기 문서";
+						docuKind = "onwaiting";
 					}
 				}
 				
@@ -149,6 +157,7 @@ public class DocumentController {
 		
 		
 		model.addAttribute("kind", kindMessage);
+		model.addAttribute("docuKind", docuKind);
 		
 		return "document/form/variableForm";
 	}
@@ -177,7 +186,8 @@ public class DocumentController {
 		model.addAttribute("fakeToday", fakeToday);
 		
 		model.addAttribute("isWritePage", 1);
-		model.addAttribute("kind", "결재 > 문서 작성");		
+		model.addAttribute("kind", "결재 > 문서 작성");
+		model.addAttribute("docuKind", "write");
 		return "document/form/variableForm";
 	}
 	
