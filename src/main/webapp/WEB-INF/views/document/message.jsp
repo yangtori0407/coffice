@@ -36,7 +36,7 @@
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 	
 	<script>
-		alert("${message}");
+		alert("${rejectMessage}");
 		location.href="/";
 	</script>
 	

@@ -126,7 +126,7 @@ public class DocumentController {
 				docuKind = "ontemporary";
 				
 			} else {
-				model.addAttribute("message", "해당 사용자는 접근할 수 없는 문서입니다");
+				model.addAttribute("rejectMessage", "해당 사용자는 접근할 수 없는 문서입니다");
 				return "document/message";
 				
 			}
@@ -165,7 +165,7 @@ public class DocumentController {
 		
 		// 어디에도 해당 안되는 사람이라면
 		if(docuKind == null) {
-			model.addAttribute("message", "해당 사용자는 접근할 수 없는 문서입니다");
+			model.addAttribute("rejectMessage", "해당 사용자는 접근할 수 없는 문서입니다");
 			return "document/message";
 		}
 		

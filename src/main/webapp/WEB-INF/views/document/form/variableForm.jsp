@@ -424,7 +424,7 @@
 					
 					
 					<c:if test="${docuVO.status eq '반려'}">
-						<div id="id_reject_wrapper">
+						<div id="id_reject_wrapper" class="d-flex align-items-center justify-content-center mt-5">
 							<button class="btn btn-info" type="button" id="id_view_reject" 
 							data-toggle="modal" data-target="#rejectReasonModal">반려 사유 보기</button>
 						</div>

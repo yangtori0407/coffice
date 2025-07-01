@@ -22,7 +22,7 @@
                 </div>
                 
                 <div class="modal-body"> <!-- 반려 사유 내용 -->
-                	<div class="rejectWrapper" id="id_rejectWrapper" style="height:300px;">
+                	<div class="rejectWrapper d-flex align-items-center justify-content-center" id="id_rejectWrapper" style="height:300px;">
                 		<div id="id_rejectContent" contenteditable="true" style="height:90%; width:90%; background-color: rgb(225, 255, 201);">
                 		
                 		</div>
@@ -51,7 +51,7 @@
                 </div>
                 
                 <div class="modal-body"> <!-- 반려 사유 내용 -->
-                	<div class="rejectWrapper" id="id_rejectWrapper2" style="height:300px;">
+                	<div class="rejectWrapper d-flex align-items-center justify-content-center" id="id_rejectWrapper2" style="height:300px;">
                 		<div id="id_rejectContent2" contenteditable="true" style="height:90%; width:90%; background-color: rgb(225, 255, 201);">
                             <c:forEach items="${docuVO.approvalLineVOs}" var="i" varStatus="status">
                                 <c:if test="${i.status eq '반려'}">
