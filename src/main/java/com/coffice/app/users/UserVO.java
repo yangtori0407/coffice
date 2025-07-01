@@ -72,6 +72,9 @@ public class UserVO implements UserDetails{
 				GrantedAuthority authority = new SimpleGrantedAuthority(roleVO.getRoleName());
 				ar.add(authority);
 			}
+		 } else if (this.deptName != null) {
+			 GrantedAuthority authority = new SimpleGrantedAuthority(this.deptName);
+			 ar.add(authority);
 		 }
 		
 		return ar;

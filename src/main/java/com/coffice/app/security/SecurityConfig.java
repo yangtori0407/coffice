@@ -49,8 +49,10 @@ public class SecurityConfig {
 			
 			.authorizeHttpRequests(auth ->{
 					auth
+					.requestMatchers("/").authenticated()
 					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
 					//.requestMatchers("/employee/list", "/user/register").hasRole("ADMIN")
+					.requestMatchers("/ingredients/list", "branch/add", "branch/masterAdd").hasAuthority("물류팀")
 					.requestMatchers("/user/mypage","/user/update","/user/logout").authenticated()
 					.anyRequest().permitAll()
 					;

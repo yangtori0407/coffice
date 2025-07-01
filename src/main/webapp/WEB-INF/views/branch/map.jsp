@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -122,9 +123,11 @@
 							</div>
 							<div style="width: 100%; margin: 0 auto; text-align: right;">
 								<a class="btn btn-success" href="./api/excel/download/branch">지점정보다운</a>
+								<sec:authorize access="hasAuthority('물류팀')">
 								<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addBranch">
 									점주지정등록
-								</a>							
+								</a>															
+								</sec:authorize>
 							</div>
 						</div>
 						</div>
