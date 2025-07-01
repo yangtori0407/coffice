@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -194,7 +195,7 @@
 			      <div class="col-2 d-flex align-items-center justify-content-center" style="border-right: 1px solid lightgray; background-color: #f8f9fa; font-size: large;" >작성일</div>
 			      <div id="insert_writeTime" class="col-4 d-flex align-items-center justify-content-center" style="border-right: 1px solid lightgray; height: 35px;">
 				        <c:if test="${not empty docuVO && docuVO.status ne '임시저장'}">
-				        	${docuVO.writerTime}
+				        	<fmt:formatDate value="${docuVO.writerTime }" pattern="yyyy-MM-dd / HH:mm" />
 				        </c:if>
 				        
 				        <c:if test="${empty docuVO || docuVO.status eq '임시저장'}">
@@ -205,7 +206,7 @@
 			      <div id="insert_handleTime" class="col-4 d-flex align-items-center justify-content-center" style=" height: 35px;">
 				        
 				        <c:if test="${not empty docuVO && docuVO.status ne '임시저장'}">
-				        	${docuVO.modifierTime}
+				        	<fmt:formatDate value="${docuVO.modifierTime }" pattern="yyyy-MM-dd / HH:mm" />
 				        </c:if>
 				        
 				        <c:if test="${empty docuVO || docuVO.status eq '임시저장' }">
