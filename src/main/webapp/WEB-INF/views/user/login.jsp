@@ -30,9 +30,13 @@
       <form action="/user/login" method="post">
       	<img src="/images/login2.png">
         <h2 class="title">Welcome!</h2>
-        	<c:if test="${param.error == 'true'}">
-        		<div style="color:red;">아이디 또는 비밀번호가 올바르지 않습니다.</div>
-    		</c:if>
+        	<c:if test="${param.error == 'badCredentials'}">
+			    <div style="color:red;">아이디 또는 비밀번호가 올바르지 않습니다.</div>
+			</c:if>
+			
+			<c:if test="${param.error == 'disabled'}">
+			    <div style="color:red;">퇴사자 계정은 로그인할 수 없습니다.</div>
+			</c:if>
     		<br>
               <div class="input-div one">
                  <div class="i">
