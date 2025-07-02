@@ -22,22 +22,22 @@
 			<div id="content">
 				<c:import url="/WEB-INF/views/templates/top.jsp"></c:import>
 				<div class="container-fluid">
-				<div class="text-center">
-					<div class="error mx-auto" data-text="500">500</div>
-                        <p class="lead text-gray-800 mb-3" style="font-size: 24px;">서버 오류가 발생했습니다</p>
-						<p class="text-gray-500 mb-2">요청을 처리하는 도중 서버에서 문제가 발생했습니다.</p>
-						<p class="text-gray-500 mb-4">잠시 후 다시 시도해 주세요. 문제가 지속되면 관리자에게 문의하세요.</p>
-						<sec:authorize access="isAuthenticated()">
+					<div class="text-center">
+                        <div class="error mx-auto" data-text="403">403</div>
+                        <p class="lead text-gray-800 mb-2" style="font-size: 1.5rem;">접근할 수 없습니다</p>
+            			<p class="text-gray-500 mb-2">접근 권한이 없는 페이지입니다.</p>
+                        <sec:authorize access="isAuthenticated()">
                         <a href="/" style="color: #3498db;">&larr; 대시보드로 돌아가기</a>
                         </sec:authorize>
                         <sec:authorize access="!isAuthenticated()">
                         <a href="/" style="color: #3498db;">&larr; 로그인하러 가기</a>
                         </sec:authorize>
+                    </div>
 				</div>
 			</div>
-		</div>
 			<!-- end Content -->
 			<c:import url="/WEB-INF/views/templates/foot.jsp"></c:import>
+		</div>
 		<!-- End Content Wrapper -->
 	</div>
 	<!-- End Wrapper -->
