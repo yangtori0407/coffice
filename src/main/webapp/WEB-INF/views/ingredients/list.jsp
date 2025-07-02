@@ -84,7 +84,7 @@
 									<td>
 									<c:choose>
 											<c:when test="${not empty vo.saveName}">
-												<img src="/coffice/upload/ingredients/${vo.saveName}" class="rounded-circle mr-2" style="width: 30px; height: 30px; object-fit: cover;" >
+												<img src="/app/upload/ingredients/${vo.saveName}" class="rounded-circle mr-2" style="width: 30px; height: 30px; object-fit: cover;" >
 											</c:when>
 											<c:otherwise>
 												<img src="/images/noImage.jpg" class="rounded-circle mr-2" style="width: 30px; height: 30px; object-fit: cover;" >

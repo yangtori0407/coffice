@@ -33,8 +33,8 @@ public class FileConfig implements WebMvcConfigurer{
 		
 		registry.addResourceHandler("/signs/**").addResourceLocations("file:///" + path + "signs/");
 		
-		registry.addResourceHandler("/coffice/upload/ingredients/**").addResourceLocations("file:\\"+"D:/workspace2/coffice/upload/ingredients/");
-		registry.addResourceHandler("/coffice/upload/menu/**").addResourceLocations("file:\\"+"D:/workspace2/coffice/upload/menu/");
+		registry.addResourceHandler("/app/upload/ingredients/**").addResourceLocations("file:/home/ubuntu/app/upload/ingredients/");
+		registry.addResourceHandler("/app/upload/menu/**").addResourceLocations("file:\\"+"/home/ubuntu/app/upload/menu");
 		
 	}
 	

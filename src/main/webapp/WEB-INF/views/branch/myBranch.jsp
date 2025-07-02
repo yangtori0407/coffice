@@ -145,7 +145,7 @@
 	          <!-- 이미지 자리 -->
 	          <c:choose>
 				<c:when test="${not empty m.saveName}">
-					<img src="/coffice/upload/menu/${m.saveName}"  alt="${m.menuName}" 
+					<img src="/app/upload/menu/${m.saveName}"  alt="${m.menuName}" 
 	               		style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 8px;" >
 				</c:when>
 				<c:otherwise>
