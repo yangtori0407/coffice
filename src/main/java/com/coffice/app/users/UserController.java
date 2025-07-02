@@ -146,6 +146,7 @@ public class UserController {
 			mailService.sendAuthCode(email, session);
 			
 			session.setAttribute("resetEmail", email);
+			session.setAttribute("resetUserId", userId);
 			
 			redirectAttributes.addFlashAttribute("msg", "인증 메일이 전송되었습니다.");
 			return "redirect:/user/verifyCode";
@@ -165,16 +166,18 @@ public class UserController {
 	public String verifyCode(@RequestParam("code") String inputCode, HttpSession session, RedirectAttributes redirectAttributes) throws Exception{
 		String sessionCode = (String)session.getAttribute("authCode");
 		String email = (String)session.getAttribute("resetEmail");
+		String userId = (String) session.getAttribute("resetUserId");
+		
+		System.out.println("[DEBUG] 세션 이메일: " + email);
+		System.out.println("[DEBUG] 세션 아이디: " + userId);
+
 		
 		if(inputCode != null && inputCode.equals(sessionCode)) {
 			session.setAttribute("verifiedEmail", email);
 			
-			UserVO userVO = new UserVO();
-			userVO.setEmail(email);
-			userVO = userService.findByEmail(email);
+			UserVO userVO = userService.findByEmail(email, userId);
 			
 			if(userVO != null) {
-				String userId = userVO.getUserId();
 				redirectAttributes.addFlashAttribute("msg", "인증 성공하였습니다.");
 				return "redirect:/user/resetPw?userId=" + userId;
 			} else {

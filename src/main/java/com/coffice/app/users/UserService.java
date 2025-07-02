@@ -131,8 +131,8 @@ public class UserService implements UserDetailsService{
 		return result;
 	}
 	
-	public UserVO findByEmail(String email) throws Exception {
-		return userDAO.findByEmail(email);
+	public UserVO findByEmail(String email, String userId) throws Exception {
+		return userDAO.findByEmail(email,userId);
 	}
 	
 	public UserVO findById(String userId) throws Exception {

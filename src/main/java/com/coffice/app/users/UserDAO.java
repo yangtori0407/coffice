@@ -12,7 +12,7 @@ public interface UserDAO {
 	
 	public UserVO detail(UserVO userVO) throws Exception;
 	
-	public UserVO findByEmail(String email) throws Exception;
+	public UserVO findByEmail(String email, String userId) throws Exception;
 	
 	public UserVO checkIdEmail(String email, String userId) throws Exception;
 	

@@ -64,7 +64,7 @@
   	
 
   	<select id="findByEmail" parameterType="UserVO" resultType="UserVO">
-  	 	SELECT * FROM USERS WHERE EMAIL = #{email}
+  	 	SELECT * FROM USERS WHERE EMAIL = #{email} AND USER_ID = #{userId}
   	</select>
   	
   	<update id="updatePassword" parameterType="UserVO">
