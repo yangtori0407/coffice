@@ -360,9 +360,6 @@ send.addEventListener("click", ()=>{
             params.append("repeatEnd", eRepeat.value+"T23:59:59")
         }else if(rCount.value != "") {
             params.append("repeatCount", rCount.value)
-        }else {
-            params.append("repeatEnd", eRepeat.value+"T23:59:59")
-            params.append("repeatCount", rCount.value)
         }
     }
 

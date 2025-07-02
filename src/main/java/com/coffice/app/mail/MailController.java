@@ -18,8 +18,12 @@ public class MailController {
 	
 	@PostMapping("mailsend")
 	@ResponseBody
-	public String mailSend(@RequestParam String email, HttpSession session) {
+	public String mailSend(@RequestParam String email, @RequestParam String userId, HttpSession session) {
+		
 		try {
+			session.setAttribute("resetEmail", email);
+	        session.setAttribute("resetUserId", userId);
+			
 			mailService.sendAuthCode(email, session);
 			return "메일 전송 완료";
 		} catch (Exception e) {

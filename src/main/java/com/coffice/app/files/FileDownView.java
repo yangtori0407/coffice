@@ -23,28 +23,47 @@ public class FileDownView extends AbstractView {
 	
 	
 	@Override
-	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
+	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,	
 			HttpServletResponse response) throws Exception {
+		
 		FileVO fileVO = (FileVO)model.get("fileVO");
 		String kind = (String)model.get("kind");
 		
-		System.out.println(path.concat(kind) + " : : " + fileVO.getSaveName());
+		//System.out.println(path.concat(kind) + " : : " + fileVO.getSaveName());
+		
 		File file = new File(path.concat(kind), fileVO.getSaveName());
 		
-		response.setContentLengthLong(file.length());
+		// 파일 존재 여부 확인
+		if (!file.exists() || !file.isFile()) {
+			// 404 상태 설정 후 /error로 리다이렉트
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.sendRedirect("/error");
+			return;
+		}
 		
-		String name = URLEncoder.encode(fileVO.getOriginName(), "UTF-8");
 		
-		response.setHeader("Content-Disposition", "attachment;fileName=\"".concat(name).concat("\""));
+		// try with resources : try 블록 안에서 열린 모든 AutoCloseable 객체는 자동으로 close()가 호출된다. (Java7 이상)
+		try (
+			FileInputStream fr = new FileInputStream(file);
+			OutputStream os = response.getOutputStream();
+				
+		) {
+			// 응답 설정
+			response.setContentLengthLong(file.length());
+			
+			String name = URLEncoder.encode(fileVO.getOriginName(), "UTF-8");		
+			response.setHeader("Content-Disposition", "attachment;fileName=\"".concat(name).concat("\""));
+			
+			FileCopyUtils.copy(fr, os);
+			
+		} catch (Exception e) {
 		
-		FileInputStream fr = new FileInputStream(file);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.sendRedirect("/error");
+			
+		}
 		
-		OutputStream os = response.getOutputStream();
-		
-		FileCopyUtils.copy(fr, os);
-		
-		os.close();
-		fr.close();
 		
 	}
+	
 }
