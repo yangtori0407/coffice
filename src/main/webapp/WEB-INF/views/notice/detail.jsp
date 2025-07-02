@@ -24,7 +24,7 @@
 				<div class="container-fluid">
 					<!-- <h2 class="mb-2 text-gray-800">공지사항</h2> -->
 					<!-- contents 내용 -->
-					<div>
+					<div class="d-flex flex-column">
 
 						<div class="card mb-4 py-2 border-left-danger">
 							<div class="card-body">${detail.noticeTitle }</div>
@@ -39,16 +39,19 @@
 							</div>
 							<div class="card-body">${detail.noticeContents }</div>
 						</div>
-						<label>첨부파일</label>
-						<div class="card mb-3 py-1 border-bottom-secondary d-flex">
+						<div class="card shadow mb-4">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">첨부파일</h6>
+							</div>
 							<div class="card-body">
 								<c:forEach items="${detail.files }" var="l">
 									<a href="./fileDown?fileNum=${l.fileNum }" class="mr-1">${l.originName }</a>
 								</c:forEach>
 							</div>
 						</div>
+
 						<sec:authorize access="hasRole('ADMIN')">
-							<div class="mb-2">
+							<div class="mb-2 ml-auto">
 								<button class="btn btn-danger" id="delBtn" type="button"
 									data-notice-num="${detail.noticeNum }">삭제하기</button>
 								<a href="./update?noticeNum=${detail.noticeNum }"

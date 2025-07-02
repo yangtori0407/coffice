@@ -81,14 +81,14 @@ public class NoticeController {
 	}
 	
 	@PostMapping("add")
-	public String add(NoticeVO noticeVO, @RequestParam("attaches")MultipartFile[] attaches, Authentication authentication) throws Exception{
+	public String add(NoticeVO noticeVO, @RequestParam("attaches")MultipartFile[] attaches, Authentication authentication, Model model) throws Exception{
 		UserVO userVO = (UserVO)authentication.getPrincipal();
 		noticeVO.setUserId(userVO.getUserId());
-		noticeService.add(noticeVO, attaches);
+		int result = noticeService.add(noticeVO, attaches);
+		model.addAttribute("result", result);
 		
+		return "commons/ajaxResult";
 		
-		
-		return "redirect:/notice/list";
 	}
 	
 	@PostMapping("quillUpload")
@@ -121,8 +121,8 @@ public class NoticeController {
 	@GetMapping("update")
 	public String update(NoticeVO noticeVO, Model model, Authentication authentication) throws Exception{
 		noticeVO = noticeService.getDetail(noticeVO);
-		if(noticeVO == null || noticeVO.getUserId() != authentication.getName()) {
-			model.addAttribute("path", "/board/list");
+		if(noticeVO == null || !noticeVO.getUserId().equals(authentication.getName())) {
+			model.addAttribute("path", "/notice/list");
 			model.addAttribute("result", "잘못된 접근입니다.");
 			return "commons/result";
 		}

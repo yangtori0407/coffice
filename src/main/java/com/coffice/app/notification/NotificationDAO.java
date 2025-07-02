@@ -19,16 +19,19 @@ public interface NotificationDAO {
 
 	List<NotificationVO> getNotification(String userId) throws Exception;
 
-	int updateNotiStatus(Map<String, Object> info) throws Exception;
+	Integer updateNotiStatus(Map<String, Object> info) throws Exception;
 
 	List<NotificationVO> moreNotification(Map<String, Object> info) throws Exception;
 
-	int getNonReadNotification(String userId) throws Exception;
+	Integer getNonReadNotification(String userId) throws Exception;
 	
 	NotificationVO getNoticeNotificationDetail(NotificationVO notificationVO) throws Exception;
 
 	List<NotificationVO> getBoardNotificationDetail(NotificationVO notificationVO) throws Exception;
 	
-	int chekVacation(Map<String, Object> info);
+	Integer chekNotification(Map<String, Object> info) throws Exception;
+
+	Integer checkOnline(Map<String, Object> info) throws Exception;
+
 
 }

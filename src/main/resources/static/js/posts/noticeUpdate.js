@@ -96,58 +96,59 @@ function selectLocalImage() {
 
 }
 
-// add btn
-const fileAdd = document.getElementById("fileAdd");
-const fileArea = document.getElementById("fileArea");
-const attacheArea = document.getElementById("attacheArea");
+const attachesArea = document.getElementById("attachesArea");
 
 const finishBtn = document.getElementById("finishBtn");
 
-let max = parseInt(fileArea.getAttribute("data-file-length"));
-let delAttach = [];
+const fileBtn = document.getElementById("fileBtn");
+const fileInput = document.getElementById("hiddenFileInput");
 
-fileAdd.addEventListener("click", () => {
+let selectedFiles = [];
 
-	if (max >= 5) {
-		alert("첨부파일은 최대 5개만 가능합니다.");
-		return;
+fileBtn.addEventListener("click", () => {
+	fileInput.click();
+})
+
+fileInput.addEventListener("change", () => {
+	for (const file of fileInput.files) {
+		selectedFiles.push(file); // 누적 추가
+		addFileBadge(file);       // 화면에 표시
 	}
+	fileInput.value = ""; // 같은 파일 다시 선택 가능하게
+});
+
+function addFileBadge(file) {
+	const fileId = `${file.name}-${file.size}`;
 
 	const div = document.createElement("div");
-	div.classList.add("d-flex", "mr-1")
-	const file = document.createElement("input");
-	file.setAttribute("type", "file");
-	file.classList.add("form-control-file");
-	file.setAttribute("name", "attaches");
+	div.classList.add("file-badge", "d-flex", "align-items-center" , "mr-2");
 
-	const del = document.createElement("button");
-	del.setAttribute("type", "button")
-	del.classList.add("btn", "btn-danger", "del");
-	del.innerText = "X"
+	const name = document.createElement("div");
+	name.innerText = file.name;
 
-	div.appendChild(file);
-	div.appendChild(del);
+	const btn = document.createElement("button");
+	btn.innerText = "X";
+	btn.classList.add("btn", "btn-sm");
+	btn.addEventListener("click", () => {
+		// 리스트에서 제거
+		selectedFiles = selectedFiles.filter(f => `${f.name}-${f.size}` !== fileId);
+		div.remove(); // UI에서도 제거
+	});
 
-	fileArea.appendChild(div);
-	max++;
-})
+	div.appendChild(name);
+	div.appendChild(btn);
+	attachesArea.appendChild(div);
+}
 
-//첨부파일 목록 삭제
-fileArea.addEventListener("click", (e) => {
-	if (e.target.classList.contains("del")) {
-		//console.log("del");
-		e.target.parentElement.remove();
-		max--;
-	}
-})
+let delAttach = [];
+
 
 //기존 첨부파일 목록 삭제
-attacheArea.addEventListener("click", (e) => {
-	if(e.target.classList.contains("attachDelete")){
+attachesArea.addEventListener("click", (e) => {
+	if (e.target.classList.contains("attachDelete")) {
 		delAttach.push(e.target.getAttribute("data-file-num"));
 		e.target.parentElement.remove();
-		max--;
-		//console.log(delAttach);
+		console.log(delAttach);
 	}
 })
 
@@ -160,32 +161,28 @@ const contents = document.getElementById("quill_html").value;
 finishBtn.addEventListener("click", () => {
 	//console.log("click");
 	const formData = new FormData();
-	const files = document.querySelectorAll('input[type="file"]');
-	files.forEach((input, index) => {
-		//input => input 태그 하나하나씩
-		//input.files => 파일객체
-		if(input.files.length > 0){
-			formData.append("attaches", input.files[0]);
-		}
-		//console.log("파일파일")
-	});
+	for(s of selectedFiles){
+		formData.append("attaches", s);
+	}
 	
+
 	formData.append("noticeTitle", title.value);
 	formData.append("noticeContents", quill.root.innerHTML);
-	for(let t of delAttach){
+
+	for (let t of delAttach) {
 		formData.append("deleteFile", t);
 	}
-	formData.append("noticeNum", fileArea.getAttribute("data-notice-num"));
+	formData.append("noticeNum", attachesArea.dataset.noticeNum);
 
 	fetch("/notice/update", {
 		method: "POST",
 		body: formData
 	})
-	.then(r => r.text())
-	.then(r => {
-		if(r * 1 == 1){
-			alert("수정이 완료 되었습니다.");
-			location.href = "./detail?noticeNum=" + fileArea.getAttribute("data-notice-num");
-		}
-	})
+		.then(r => r.text())
+		.then(r => {
+			if (r * 1 == 1) {
+				alert("수정이 완료 되었습니다.");
+				location.href = "./detail?noticeNum=" + attachesArea.dataset.noticeNum;
+			}
+		})
 })

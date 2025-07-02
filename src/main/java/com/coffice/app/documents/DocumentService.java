@@ -26,8 +26,10 @@ import com.coffice.app.users.UserVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class DocumentService {
 	
 	
@@ -256,7 +258,8 @@ public class DocumentService {
 		result.put("docuKind", docuKind);
 		
 		//결재 알림 읽음 처리
-		notificationService.checkDocumentNotification(kind);
+		//log.info("{}",docuKind);
+		notificationService.checkDocumentNotification(docuKind, user.getUserId());
 		
 		return result;
 	}

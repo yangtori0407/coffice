@@ -63,7 +63,7 @@ public class MessageService {
 			
 			for(MultipartFile f : attaches) {
 				MessageFilesVO filesVO = new MessageFilesVO();
-				String fileName = fileManager.fileSave(path.concat("message"), f);
+				String fileName = fileManager.fileSave(path.concat("message/"), f);
 				filesVO.setOriginName(f.getOriginalFilename());
 				filesVO.setSaveName(fileName);
 				filesVO.setMessageNum(messageVO.getMessageNum());
@@ -97,9 +97,9 @@ public class MessageService {
 				messageDAO.addEmailUser(info);
 			}
 			messageVO = messageDAO.detail(messageVO);
-			notificationService.sendMessage(messageVO, s);
 			info.clear();
 		}
+		notificationService.sendMessage(messageVO, receivers);
 		
 
 		return result;

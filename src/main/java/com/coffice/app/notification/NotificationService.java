@@ -125,7 +125,7 @@ public class NotificationService {
 		template.convertAndSend("/sub/notification/user." + receiver, notificationVO);
 	}
 
-	public void sendMessage(MessageVO messageVO, String userId) throws Exception {
+	public void sendMessage(MessageVO messageVO, String[] receivers) throws Exception {
 		NotificationVO notificationVO = new NotificationVO();
 		notificationVO.setNotiDate(messageVO.getSendDate());
 		notificationVO.setNotiContents(messageVO.getMessageTitle());
@@ -133,13 +133,17 @@ public class NotificationService {
 		notificationVO.setRelateEntity("MESSAGE");
 		notificationVO.setRelateId(messageVO.getMessageNum());
 		notificationDAO.add(notificationVO);
-
-		Map<String, Object> info = new HashMap<>();
-		info.put("userId", userId);
-		info.put("notiNum", notificationVO.getNotiNum());
-		notificationDAO.addNotiCheck(info);
-
-		template.convertAndSend("/sub/notification/user." + userId, notificationVO);
+		
+		for(String s : receivers) {
+			
+			Map<String, Object> info = new HashMap<>();
+			info.put("userId", s);
+			info.put("notiNum", notificationVO.getNotiNum());
+			notificationDAO.addNotiCheck(info);
+			
+			template.convertAndSend("/sub/notification/user." + receivers, notificationVO);
+			info.clear();
+		}
 	}
 
 	public void sendApprovalLine(DocumentVO documentVO, String userId, int status) throws Exception {
@@ -156,7 +160,7 @@ public class NotificationService {
 		}
 		notificationVO.setRelateEntity("APPROVAL");
 		notificationVO.setRelateId(documentVO.getDocumentId()); //리다이렉트 할 때 쓸 문서 id
-		//notificationVO.setNotiContents(documentVO.getTitle()); //결재 문서 제목
+		notificationVO.setNotiContents(documentVO.getTitle()); //결재 문서 제목
 
 		// 알림 저장
 		notificationDAO.add(notificationVO);
@@ -179,7 +183,7 @@ public class NotificationService {
 		notificationVO.setNotiKind("REFERENCE");
 		notificationVO.setRelateEntity("REFERENCE");
 		notificationVO.setRelateId(documentVO.getDocumentId()); //리다이렉트 할 때 쓸 문서 id
-		//notificationVO.setNotiContents(null); //결재 문서 제목
+		notificationVO.setNotiContents(documentVO.getTitle()); //결재 문서 제목
 
 		// 알림 저장
 		notificationDAO.add(notificationVO);
@@ -283,12 +287,26 @@ public class NotificationService {
 		info.put("notiKind", "VACATION");
 		info.put("userId", name);
 		
-		int result = notificationDAO.chekVacation(info);
+		int result = notificationDAO.chekNotification(info);
 		
 	}
 
-	public void checkDocumentNotification(String kind) {
-		// TODO Auto-generated method stub
+	public void checkDocumentNotification(String kind, String userId) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("userId", userId);
+		if(kind.equals("online")) {
+			log.info("결재 완료");
+			info.put("notiKind1", "DONE");
+			info.put("notiKind2", "REJECT");
+			notificationDAO.checkOnline(info);
+		}else if(kind.equals("onwaiting")) {
+			log.info(userId);
+			info.put("notiKind", "APPROVAL");
+			notificationDAO.chekNotification(info);
+		}else if(kind.equals("onreference")) {
+			info.put("notiKind", "REFERENCE");
+			notificationDAO.chekNotification(info);
+		}
 		
 	}
 
