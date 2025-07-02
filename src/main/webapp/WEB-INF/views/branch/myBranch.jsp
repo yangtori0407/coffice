@@ -3,6 +3,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -158,7 +159,9 @@
 	        </div>
 	      </c:forEach>
 	    </div>
+		<sec:authorize access="hasAuthority('3')">
 		<a class="btn btn-primary mt-4" href="#" data-toggle="modal" data-target="#addMenu" style="width:100%;">메뉴추가</a>
+		</sec:authorize>
 	    <button class="btn btn-danger mt-4" data-toggle="collapse" data-target="#sideMenu" style="width:100%;">닫기</button>
 	  </div>
 	</div>
