@@ -58,7 +58,7 @@
 	    FROM USERS U
 	    JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
 	    <include refid="search"/>
-	    ORDER BY U.HIRE_DATE DESC
+	    ORDER BY U.HIRE_DATE DESC , U.USER_ID ASC
 	    LIMIT #{startNum}, #{page}
   	</select>
   	

@@ -28,7 +28,7 @@
 				<div class="container-fluid">
 
 					<!-- contents 내용 -->
-					<form method="post">
+					<form method="post" class="d-flex flex-column">
 						<label>제목</label> <input type="text"
 							class="card mb-4 py-3 border-left-info" name="boardTitle"
 							style="width: 100%;" value="${update.boardTitle}"> <label>내용</label>
@@ -36,7 +36,7 @@
 							<div id="editor" style="height: 550px;"></div>
 							<input type="hidden" id="quill_html" name="boardContents" value="<c:out value='${update.boardContents }' escapeXml='true'/>">
 						</div>
-						<div>
+						<div class="ml-auto">
 							<button id="finishBtn" class="btn btn-primary mb-3" type="submit">수정하기</button>
 						</div>
 					</form>
