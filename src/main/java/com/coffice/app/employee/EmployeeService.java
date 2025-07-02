@@ -23,7 +23,7 @@ public class EmployeeService {
 	@Autowired
 	private FileManager fileManager;
 	
-	@Value("${app.profiles.base}")
+	@Value("${app.files.base}")
 	private String path;
 	
 	@Autowired
@@ -48,7 +48,7 @@ public class EmployeeService {
 
 	   
 	    if (!file.isEmpty()) {
-	        String fileName = fileManager.fileSave(path, file);
+	        String fileName = fileManager.fileSave(path.concat("profile/"), file);
 	        employeeVO.setSaveName(fileName);
 	        employeeVO.setOriginName(file.getOriginalFilename());
 	        isChanged = true;

@@ -138,7 +138,8 @@ public class AttendanceService {
 
         LocalDate today = LocalDate.now();
         LocalDate firstDayOfMonth = today.withDayOfMonth(1);
-
+        
+        // 이번 달 평일(근무일) 수 계산
         long totalWorkingDays = firstDayOfMonth.datesUntil(today.plusDays(1))
                 .filter(d -> {
                     DayOfWeek day = d.getDayOfWeek();

@@ -13,12 +13,7 @@ public class FileConfig implements WebMvcConfigurer{
 	
 	@Value("${app.files.url}")
 	private String url;
-	
-	@Value("${app.profiles.url}")
-	private String profileUrl;
-	
-	@Value("${app.profiles.base}")
-	private String profilePath;
+
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -27,8 +22,8 @@ public class FileConfig implements WebMvcConfigurer{
 		registry.addResourceHandler(url).addResourceLocations("file:\\" + path);
 		
 		registry
-			.addResourceHandler(profileUrl)
-			.addResourceLocations("file:\\"+ profilePath)
+			.addResourceHandler("/coffice/upload/profile/**")
+			.addResourceLocations("file:\\" + path + "profile/");
 			;
 		
 		registry.addResourceHandler("/signs/**").addResourceLocations("file:///" + path + "signs/");

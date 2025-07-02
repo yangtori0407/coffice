@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService{
 	@Autowired
 	private FileManager fileManager;
 	
-	@Value("${app.profiles.base}")
+	@Value("${app.files.base}")
 	private String path;
 
 	@Override
@@ -100,7 +100,7 @@ public class UserService implements UserDetailsService{
 		}
 		
 		if(!file.isEmpty()) {
-			String fileName = fileManager.fileSave(path , file);
+			String fileName = fileManager.fileSave(path.concat("profile/") , file);
 			userVO.setSaveName(fileName);
 			userVO.setOriginName(file.getOriginalFilename());
 		}
