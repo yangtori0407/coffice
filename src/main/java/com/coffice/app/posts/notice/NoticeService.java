@@ -55,8 +55,8 @@ public class NoticeService {
 		noticeVO = noticeDAO.getDetail(noticeVO);
 		return noticeVO;
 	}
-
-	public void add(NoticeVO noticeVO, MultipartFile[] attaches) throws Exception {
+	@Transactional
+	public int add(NoticeVO noticeVO, MultipartFile[] attaches) throws Exception {
 		int result = noticeDAO.add(noticeVO);
 		
 		for (MultipartFile f : attaches) {
@@ -64,7 +64,7 @@ public class NoticeService {
 				continue;
 			}
 
-			String fileName = fileManager.fileSave(path.concat("notice"), f);
+			String fileName = fileManager.fileSave(path.concat("notice/"), f);
 			NoticeFilesVO filesVO = new NoticeFilesVO();
 			filesVO.setNoticeNum(noticeVO.getNoticeNum());
 			filesVO.setSaveName(fileName);
@@ -78,6 +78,8 @@ public class NoticeService {
 		//알림 보내기
 		
 		notificationService.sendNotice(noticeVO);
+		
+		return result;
 	}
 
 	public String quillUpload(MultipartFile multipartFile) throws Exception {
@@ -120,7 +122,7 @@ public class NoticeService {
 					continue;
 				}
 
-				String fileName = fileManager.fileSave(path.concat("notice"), f);
+				String fileName = fileManager.fileSave(path.concat("notice/"), f);
 				NoticeFilesVO filesVO = new NoticeFilesVO();
 				filesVO.setNoticeNum(noticeVO.getNoticeNum());
 				filesVO.setSaveName(fileName);

@@ -92,43 +92,44 @@ let isSubmitting = false;
 
 document.getElementById("submitBtn").addEventListener("click", () => {
     const rp = document.querySelectorAll(".receiverPerson");
-    if(rp.length == 0){
+    if (rp.length == 0) {
         alert("받는 사람을 입력하세요");
         return;
     }
     isSubmitting = true;
     const messageTitle = document.getElementById("messageTitle");
     const quill = document.getElementById("quill_html");
-    
+
     const receivers = document.querySelectorAll(".receiverPerson");
     const attaches = document.querySelectorAll(".attaches");
 
     const p = new FormData();
-    p.append("messageContents",quill.value);
+    p.append("messageContents", quill.value);
     p.append("messageTitle", messageTitle.value);
-   
+
 
     receivers.forEach(e => {
         p.append("receivers", e.getAttribute("data-user-id"));
     })
 
-    attaches.forEach(a => {
-        if(a.files.length > 0){
-            p.append("attaches", a.files[0]);
-        }
-    })
+    for (s of selectedFiles) {
 
-    fetch("./add",{
+        p.append("attaches", s);
+
+    }
+
+
+    fetch("./add", {
         method: "POST",
         body: p
     })
-    .then(r => r.text())
-    .then(r => {
-        if(r > 0){
-            alert("이메일 전송 했습니다.")
-            location.href = "./send";
-        }
-    })
+        .then(r => r.text())
+        .then(r => {
+            if (r > 0) {
+                alert("이메일 전송 했습니다.")
+                location.href = "./send";
+            }
+        })
 })
 
 window.addEventListener('beforeunload', (event) => {
@@ -150,12 +151,12 @@ emailInput.addEventListener("keydown", (e) => {
         emailInput.value = "";
     }
 })
-emailInput.addEventListener("blur", (e)=>{
-    if(emailInput.value != ""){
+emailInput.addEventListener("blur", (e) => {
+    if (emailInput.value != "") {
 
         receiverArea.insertBefore(createReceiver(emailInput.value), emailInput); //insertBefore(삽입할_노드, 기준_노드) 기준 노드 위에 삽입할 노드 넣는 방법
         emailInput.value = "";
-    }else{
+    } else {
         return;
     }
 })
@@ -192,45 +193,46 @@ function createReceiver(s) {
     return div;
 }
 
+const fileBtn = document.getElementById("fileBtn");
+const fileInput = document.getElementById("hiddenFileInput");
 
-// add btn
-const fileAdd = document.getElementById("fileAdd");
-const fileArea = document.getElementById("fileArea");
+let selectedFiles = [];
 
-let max = 1;
-
-fileAdd.addEventListener("click", () => {
-	
-
-	if(max >= 5){
-		alert("첨부파일은 최대 5개만 가능합니다.");
-		return;
-	}
-	
-	const div = document.createElement("div");
-	div.classList.add("d-flex", "mr-1")
-	const file = document.createElement("input");
-	file.setAttribute("type", "file");
-	file.classList.add("form-control-file", "attaches");
-	file.setAttribute("name", "attaches");
-
-	const del = document.createElement("button");
-	del.setAttribute("type", "button")
-	del.classList.add("btn", "btn-danger", "del");
-	del.innerText = "X"
-
-	div.appendChild(file);
-	div.appendChild(del);
-
-	fileArea.appendChild(div);
-	max++;
-
+fileBtn.addEventListener("click", () => {
+    fileInput.click();
 })
 
-fileArea.addEventListener("click", (e) =>{
-	if(e.target.classList.contains("del")){
-		//console.log("del");
-		e.target.parentElement.remove();
-		max--;
-	}
-})
+fileInput.addEventListener("change", () => {
+    for (const file of fileInput.files) {
+        selectedFiles.push(file); // 누적 추가
+        addFileBadge(file);       // 화면에 표시
+    }
+    fileInput.value = ""; // 같은 파일 다시 선택 가능하게
+});
+
+function addFileBadge(file) {
+    const fileId = `${file.name}-${file.size}`;
+
+    const div = document.createElement("div");
+    div.classList.add("file-badge", "d-flex", "align-items-center", "mr-2");
+
+    const name = document.createElement("div");
+    name.innerText = file.name;
+
+    const btn = document.createElement("button");
+    btn.innerText = "X";
+    btn.classList.add("btn", "btn-sm");
+    btn.addEventListener("click", () => {
+        // 리스트에서 제거
+        // 자바 스크립의 클로자
+        //fileId 버튼을 만들 때의 그 시점에서 생성된 값
+        // 삭제 버튼에 이벤트를 달 때 함수 내부에서 그값을 참조하게 함으로써 나중에 버튼이 눌렸을 때도 그 값을 사용할 수 있다.
+         // 여기서 fileId는 이 함수가 등록될 때의 값을 "기억"하고 있음
+        selectedFiles = selectedFiles.filter(f => `${f.name}-${f.size}` !== fileId);
+        div.remove(); // UI에서도 제거
+    });
+
+    div.appendChild(name);
+    div.appendChild(btn);
+    attachesArea.appendChild(div);
+}

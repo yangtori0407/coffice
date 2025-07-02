@@ -290,16 +290,39 @@ alarmBtn.addEventListener("click", () => {
 
 //==============채팅방 나갈 때 마지막으로 읽은 시간 업데이트 하기
 
-window.addEventListener("beforeunload", ()=>{
-    let p = new URLSearchParams();
-    p.append("chatRoomNum", chatNum);
-    fetch("./updateLastReadAt", {
+function sendLastReadAt() {
+  const url = "./updateLastReadAt";
+  const params = new URLSearchParams();
+  params.append("chatRoomNum", chatNum);
+
+  //페이지 나갈때도 요청이 보내질 수 있게 요청
+  try {
+    if (navigator.sendBeacon) {
+      // 모바일 및 데스크톱 모두에서 안정적으로 작동
+      navigator.sendBeacon(url, params);
+    } else {
+      // sendBeacon이 없는 아주 오래된 브라우저 fallback
+      fetch(url, {
         method: "POST",
-        body: p,
-        keepalive: true //언로드 중에도 요청을 끝까지 보내준다.
-    })
-    
-})
+        body: params,
+        keepalive: true,
+      });
+    }
+  } catch (e) {
+    // fallback 시도 실패 → 무시
+    console.error("Failed to send read time:", e);
+  }
+}
+
+// 데스크톱: 페이지 언로드 시도
+window.addEventListener("beforeunload", sendLastReadAt);
+
+// 모바일 대응: 페이지 숨김 또는 닫힘
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    sendLastReadAt();
+  }
+});
 
 //========채팅방 나가기
 const exitBtn = document.getElementById("exitBtn");

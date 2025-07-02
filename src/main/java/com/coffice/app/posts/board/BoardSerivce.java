@@ -55,7 +55,7 @@ public class BoardSerivce {
 	public String quillUpload(MultipartFile file) throws Exception{
 		String fileName = "";
 		if(!file.isEmpty()) {
-			fileName = fileManager.fileSave(path.concat("quill"), file);
+			fileName = fileManager.fileSave(path.concat("quill/"), file);
 			
 //			QuillFileVO quillFileVO = new QuillFileVO();
 //			quillFileVO.setSaveName(fileName);

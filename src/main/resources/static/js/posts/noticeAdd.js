@@ -87,47 +87,47 @@ function selectLocalImage() {
 
 }
 
-// add btn
-const fileAdd = document.getElementById("fileAdd");
-const fileArea = document.getElementById("fileArea");
+const fileBtn = document.getElementById("fileBtn");
+const fileInput = document.getElementById("hiddenFileInput");
+const attachesArea = document.getElementById("attachesArea");
 
-let max = 1;
+let selectedFiles = [];
 
-fileAdd.addEventListener("click", () => {
-	
-
-	if(max >= 5){
-		alert("첨부파일은 최대 5개만 가능합니다.");
-		return;
-	}
-	
-	const div = document.createElement("div");
-	div.classList.add("d-flex", "mr-1")
-	const file = document.createElement("input");
-	file.setAttribute("type", "file");
-	file.classList.add("form-control-file");
-	file.setAttribute("name", "attaches");
-
-	const del = document.createElement("button");
-	del.setAttribute("type", "button")
-	del.classList.add("btn", "btn-danger", "del");
-	del.innerText = "X"
-
-	div.appendChild(file);
-	div.appendChild(del);
-
-	fileArea.appendChild(div);
-	max++;
-
+fileBtn.addEventListener("click", ()=>{
+	fileInput.click();
 })
 
-fileArea.addEventListener("click", (e) =>{
-	if(e.target.classList.contains("del")){
-		//console.log("del");
-		e.target.parentElement.remove();
-		max--;
-	}
-})
+fileInput.addEventListener("change", () => {
+  for (const file of fileInput.files) {
+    selectedFiles.push(file); // 누적 추가
+    addFileBadge(file);       // 화면에 표시
+  }
+  fileInput.value = ""; // 같은 파일 다시 선택 가능하게
+});
+
+function addFileBadge(file) {
+  const fileId = `${file.name}-${file.size}`;
+
+  const div = document.createElement("div");
+  div.classList.add("file-badge", "d-flex", "align-items-center", "mr-2");
+
+  const name = document.createElement("div");
+  name.innerText = file.name;
+
+  const btn = document.createElement("button");
+  btn.innerText = "X";
+  btn.classList.add("btn", "btn-sm");
+  btn.addEventListener("click", () => {
+    // 리스트에서 제거
+    selectedFiles = selectedFiles.filter(f => `${f.name}-${f.size}` !== fileId);
+    div.remove(); // UI에서도 제거
+  });
+
+  div.appendChild(name);
+  div.appendChild(btn);
+  attachesArea.appendChild(div);
+}
+
 
 document.addEventListener("keydown", (e)=>{
 	if(e.key == "Enter"){
@@ -138,4 +138,32 @@ document.addEventListener("keydown", (e)=>{
 			e.preventDefault();
 		}
 	}
+})
+
+//보내기
+const noticeTitle = document.getElementById("noticeTitle");
+const noticeContents = document.getElementById("quill_html");
+
+const noticeAdd = document.getElementById("noticeAdd");
+
+noticeAdd.addEventListener("click", () => {
+	const f = new FormData();
+	f.append("noticeTitle", noticeTitle.value);
+	f.append("noticeContents", noticeContents.value);
+	
+	for(file of selectedFiles){
+		f.append("attaches", file);
+	}
+
+	fetch("./add", {
+		method: "POST",
+		body: f
+	})
+	.then(r => r.text())
+	.then(r => {
+		if(r*1 > 0){
+			alert("작성이 완료 되었습니다.");
+			location.href = "./list";
+		}
+	})
 })

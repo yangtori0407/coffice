@@ -65,15 +65,17 @@
 							</div>
 						</div>
 						<c:if test="${detail.files.size() > 0 }">
-						
-						<label>첨부파일</label>
-						<div class="card mb-3 py-1 border-info d-flex">
-							<div class="card-body">
-								<c:forEach items="${detail.files }" var="l">
-									<a href="/message/fileDown?fileNum=${l.fileNum }" class="mr-1">${l.originName }</a>
-								</c:forEach>
+
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">첨부파일</h6>
+								</div>
+								<div class="card-body">
+									<c:forEach items="${detail.files }" var="l">
+										<a href="/message/fileDown?fileNum=${l.fileNum }" class="mr-1">${l.originName }</a>
+									</c:forEach>
+								</div>
 							</div>
-						</div>
 						</c:if>
 
 

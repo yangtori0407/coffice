@@ -113,6 +113,7 @@
 						class="dropdown-item text-center small text-gray-500">알림
 						더보기</button>
 					<div class="modal-footer">
+						
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal">닫기</button>
 					</div>
