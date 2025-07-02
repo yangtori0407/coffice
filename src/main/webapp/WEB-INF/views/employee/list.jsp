@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -113,7 +114,11 @@
 															<td>${e.userId}</td>
 															<td>${e.deptName}</td>
 															<td>${e.position}</td>
-															<td><a href="/attendance/statusUpdate?userId=${e.userId}">${e.attendancePercent}%</a></td>
+															<td>
+																<a href="/attendance/statusUpdate?userId=${e.userId}">
+																	<fmt:formatNumber value="${percentMap[e.userId]}" pattern="#0.0"/>%
+																</a>
+															</td>
 															<td>
 												                <a href="./update?userId=${e.userId}" class="btn btn-sm btn-primary">수정</a>
 												            </td>
