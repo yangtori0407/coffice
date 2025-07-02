@@ -167,9 +167,6 @@ public class UserController {
 		String sessionCode = (String)session.getAttribute("authCode");
 		String email = (String)session.getAttribute("resetEmail");
 		String userId = (String) session.getAttribute("resetUserId");
-		
-		System.out.println("[DEBUG] 세션 이메일: " + email);
-		System.out.println("[DEBUG] 세션 아이디: " + userId);
 
 		
 		if(inputCode != null && inputCode.equals(sessionCode)) {
