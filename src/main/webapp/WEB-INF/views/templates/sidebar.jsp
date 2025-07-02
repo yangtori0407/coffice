@@ -117,9 +117,11 @@
 					class="collapse-item ${branch == ('masterAdd') ? 'active' :''}"
 					href="/branch/masterAdd">점주등록</a> 
 					</sec:authorize>
+					<sec:authorize access="hasAnyAuthority('6','3')">
 					<a
 					class="collapse-item ${branch == ('myBranch') ? 'active' :''}"
 					href="/branch/myBranch">my지점</a>
+					</sec:authorize>
 			</div>
 		</div></li>
 
