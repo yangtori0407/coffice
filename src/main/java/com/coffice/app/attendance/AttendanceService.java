@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -131,6 +132,33 @@ public class AttendanceService {
 	public List<AttendanceVO> getAttendanceListByUser(String userId) throws Exception {
 	    return attendanceDAO.getAttendanceByUser(userId);
 	}
+	
+	public double calculateNormalPercent(String userId) throws Exception {
+        List<AttendanceVO> allList = attendanceDAO.getAttendanceByUser(userId);
+
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfMonth = today.withDayOfMonth(1);
+
+        long totalWorkingDays = firstDayOfMonth.datesUntil(today.plusDays(1))
+                .filter(d -> {
+                    DayOfWeek day = d.getDayOfWeek();
+                    return day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY;
+                })
+                .count();
+
+            // 정상근무 일 수만 필터링
+            long normal = allList.stream()
+                .filter(a -> {
+                    LocalDate date = a.getAttendanceDate();
+                    return !date.isBefore(firstDayOfMonth) && !date.isAfter(today);
+                })
+                .filter(a -> "정상근무".equals(a.getStatus()))
+                .map(AttendanceVO::getAttendanceDate)  // 날짜 중복 제거용
+                .distinct()
+                .count();
+
+            return totalWorkingDays == 0 ? 0 : (double) normal / totalWorkingDays * 100;
+    }
 
 	public int updateAttendance(AttendanceVO attendanceVO) throws Exception{
 		

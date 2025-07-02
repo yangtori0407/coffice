@@ -96,10 +96,11 @@ public class AttendanceController {
 		        a.setEndTimeStr(a.getEndTime().format(timeFormatter));
 		    }
 		}
+		double normalPercent = attendanceService.calculateNormalPercent(userId);
 
-		
 		model.addAttribute("employeeVO", employeeVO);
 		model.addAttribute("attendanceList", attendanceList);
+		model.addAttribute("normalPercent", normalPercent);
 		model.addAttribute("pager", pager);
 		model.addAttribute("kind", "사원 근태 수정");
 		

@@ -1,7 +1,9 @@
 package com.coffice.app.employee;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.coffice.app.attendance.AttendanceService;
 import com.coffice.app.page.Pager;
 import com.coffice.app.users.UserService;
 import com.coffice.app.users.UserVO;
@@ -28,6 +31,8 @@ public class EmployeeController {
 	private EmployeeService employeeService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private AttendanceService attendanceService;
 	
 	@GetMapping("list")
 	public String list(Pager pager, Model model) throws Exception {
@@ -38,7 +43,14 @@ public class EmployeeController {
 		
 		List<EmployeeVO> employeeList = employeeService.getEmployeesAttendancePercentage(pager, startDate, endDate);
 		
+		// 직원별 정상근무 퍼센트 계산해서 Map에 담기
+	    Map<String, Double> percentMap = new HashMap<>();
+	    for (EmployeeVO e : employeeList) {
+	        double percent = attendanceService.calculateNormalPercent(e.getUserId());
+	        percentMap.put(e.getUserId(), percent);
+	    }
 		model.addAttribute("employeeList", employeeList);
+		model.addAttribute("percentMap", percentMap);
 		model.addAttribute("pager", pager);
 		model.addAttribute("employee", "list");
 		model.addAttribute("kind", "사원 정보 목록");
