@@ -261,12 +261,13 @@ public class NotificationService {
 	}
 	@Transactional
 	public void checkMessageNotification(MessageVO messageVO, String userId) throws Exception{
+		log.info("메세지 읽음 처리 완료");
 		NotificationVO notificationVO = new NotificationVO();
 		notificationVO.setNotiKind("MESSAGE");
 		notificationVO.setRelateId(messageVO.getMessageNum());
 		
 		notificationVO = notificationDAO.getNoticeNotificationDetail(notificationVO);
-		
+		log.info("{}", notificationVO);
 		if(notificationVO != null) {
 			
 			Map<String, Object> info = new HashMap<>();
@@ -274,6 +275,20 @@ public class NotificationService {
 			info.put("userId", userId);
 			notificationDAO.updateNotiStatus(info);
 		}
+		
+	}
+
+	public void checkVacation(String name) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("notiKind", "VACATION");
+		info.put("userId", name);
+		
+		int result = notificationDAO.chekVacation(info);
+		
+	}
+
+	public void checkDocumentNotification(String kind) {
+		// TODO Auto-generated method stub
 		
 	}
 

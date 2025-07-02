@@ -28,5 +28,7 @@ public interface NotificationDAO {
 	NotificationVO getNoticeNotificationDetail(NotificationVO notificationVO) throws Exception;
 
 	List<NotificationVO> getBoardNotificationDetail(NotificationVO notificationVO) throws Exception;
+	
+	int chekVacation(Map<String, Object> info);
 
 }

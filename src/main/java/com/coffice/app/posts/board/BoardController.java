@@ -102,13 +102,14 @@ public class BoardController {
 	
 	@GetMapping("update")
 	public String updateView(BoardVO boardVO, Model model, Authentication authentication) throws Exception{
-		BoardVO boarVO = boardService.getDetail(boardVO);
-		if(boardVO == null || boardVO.getUserId() != authentication.getName()) {
+		boardVO = boardService.getDetail(boardVO);
+		log.info("{}", boardVO);
+		if(boardVO == null || !boardVO.getUserId().equals(authentication.getName())) {
 			model.addAttribute("path", "/board/list");
 			model.addAttribute("result", "접근 권한이 없습니다.");
 			return "commons/result";
 		}
-		model.addAttribute("update", boarVO);
+		model.addAttribute("update", boardVO);
 		model.addAttribute("kind", "게시판 > 익명게시판 > 수정하기");
 		return "board/update";
 	}
