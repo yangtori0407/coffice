@@ -152,3 +152,20 @@ fetch("/events/getSchedules")
 })
 
 calendar.render();
+
+function calculateDurationObject(startStr, endStr) {
+  const start = new Date(startStr);
+  const end = new Date(endStr);
+  const ms = end - start;
+
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const hours = Math.floor((seconds / 3600) % 24);
+  const days = Math.floor(seconds / (3600 * 24));
+
+  const duration = {};
+  if (days > 0) duration.days = days;
+  if (hours > 0) duration.hours = hours;
+  if (minutes > 0) duration.minutes = minutes;
+  return duration;
+}
