@@ -456,7 +456,7 @@ public class DocumentService {
 		}
 		
 		
-		String folderName = "docuFiles";
+		String folderName = "docuFiles/";
 		result = 0;
 		
 		// 기존 파일 목록에서 없는 것 삭제하기

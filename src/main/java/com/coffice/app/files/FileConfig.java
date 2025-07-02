@@ -31,7 +31,7 @@ public class FileConfig implements WebMvcConfigurer{
 			.addResourceLocations("file:\\"+ profilePath)
 			;
 		
-		registry.addResourceHandler("/signs/**").addResourceLocations("file:///" + path + "signs/");
+		registry.addResourceHandler("/signs/**").addResourceLocations("file:" + path + "signs/");
 		
 		registry.addResourceHandler("/app/upload/ingredients/**").addResourceLocations("file:/home/ubuntu/app/upload/ingredients/");
 		registry.addResourceHandler("/app/upload/menu/**").addResourceLocations("file:/home/ubuntu/app/upload/menu/");
