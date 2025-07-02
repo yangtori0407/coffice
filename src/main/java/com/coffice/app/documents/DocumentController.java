@@ -99,7 +99,8 @@ public class DocumentController {
 		DocumentVO docuVO = documentService.getDetail(documentVO);
 		
 		if (docuVO == null) {
-			//System.out.println("document detail docuVO가 null입니다");
+			model.addAttribute("rejectMessage", "존재하지 않는 문서입니다");
+			return "document/message";
 		}
 		
 		
@@ -165,7 +166,7 @@ public class DocumentController {
 		
 		// 어디에도 해당 안되는 사람이라면
 		if(docuKind == null) {
-			model.addAttribute("rejectMessage", "해당 사용자는 접근할 수 없는 문서입니다");
+			model.addAttribute("rejectMessage", "해당 사용자는 조회할 수 없는 문서입니다");
 			return "document/message";
 		}
 		

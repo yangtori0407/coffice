@@ -281,10 +281,14 @@ public class DocumentService {
 		}		
 		
 		DocumentVO resultVO = documentDAO.getDetail(documentVO);
-		resultVO.setAttachmentVOs(attachmentVOs);
-		resultVO.setApprovalLineVOs(approvalLineVOs);
-		resultVO.setReferenceLineVOs(referenceLineVOs);
 		
+		if(resultVO != null) {
+			resultVO.setAttachmentVOs(attachmentVOs);
+			resultVO.setApprovalLineVOs(approvalLineVOs);
+			resultVO.setReferenceLineVOs(referenceLineVOs);
+			
+		}
+				
 		return resultVO;
 	}
 	
