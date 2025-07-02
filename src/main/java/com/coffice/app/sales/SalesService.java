@@ -18,7 +18,7 @@ public class SalesService {
 	private SalesDAO salesDAO;
 	@Autowired
 	private FileManager fileManager;
-	@Value("D:/workspace2/coffice/upload/menu/")
+	@Value("/home/ubuntu/app/upload/menu/")
 	private String path;
 	
 	public List<MenuVO> menuList() throws Exception {

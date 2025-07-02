@@ -19,7 +19,7 @@ public class IngredientsService {
 	private IngredientsDAO ingredeintsDAO;
 	@Autowired
 	private FileManager fileManager;
-	@Value("D:/workspace2/coffice/upload/ingredients/")
+	@Value("/home/ubuntu/app/upload/ingredients/")
 	private String path;
 	
 	public List<IngredientsVO> getList(Pager pager) throws Exception {
