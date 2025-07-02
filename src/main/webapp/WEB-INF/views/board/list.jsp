@@ -12,11 +12,11 @@
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule
 	src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-	<style>
-		.boardA{
-			color: rgb(87, 178, 230);
-		}
-	</style>
+<style>
+.boardA {
+	color: rgb(87, 178, 230);
+}
+</style>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -96,13 +96,18 @@
 												</thead>
 												<tbody>
 													<c:forEach items="${list }" var="l">
-														<tr>
-															<td><a class="boardA" href="./detail?boardNum=${l.boardNum }">${l.boardNum }</a></td>
-															<td style="font-weight: bold;"><a class="boardA" href="./detail?boardNum=${l.boardNum }">${l.boardTitle }</a></td>
-															<td>${l.commentCount }</td>
-															<%-- <td>${l.boardHit }</td> --%>
-															<td>${l.boardDate }</td>
-														</tr>
+														
+
+															<tr>
+																<td><a class="boardA"
+																	href="./detail?boardNum=${l.boardNum }">${l.boardNum }</a></td>
+																<td style="font-weight: bold;"><a class="boardA"
+																	href="./detail?boardNum=${l.boardNum }">${l.boardTitle }</a></td>
+																<td>${l.commentCount }</td>
+																<%-- <td>${l.boardHit }</td> --%>
+																<td>${l.boardDate }</td>
+															</tr>
+														
 													</c:forEach>
 												</tbody>
 											</table>
@@ -129,7 +134,8 @@
 													</c:forEach>
 
 
-													<li class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }
+													<li
+														class="paginate_button page-item next ${pager.endCheck == false ? '' : 'disabled' }
 														id="dataTable_next"><a
 														href="./list?nowPage=${pager.end+1 }&search=${pager.search}&kind=${pager.kind}"
 														aria-controls="dataTable" data-dt-idx="7" tabindex="0"

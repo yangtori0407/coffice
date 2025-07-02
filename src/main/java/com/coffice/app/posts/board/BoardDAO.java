@@ -43,5 +43,9 @@ public interface BoardDAO {
 
 	public CommentVO getParentComment(Long commentP) throws Exception;
 
+	public BoardVO getBoardDetail(BoardVO boardVO) throws Exception;
+
+	public List<CommentVO> getCommentList(BoardVO boardVO) throws Exception;
+
 
 }

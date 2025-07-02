@@ -107,6 +107,7 @@
 		SELECT USER_ID, ALARM_STATUS FROM CHAT_PERSON WHERE
 		CHATROOM_NUM =
 		#{chatRoomNum}
+		WHERE EXIT_STATUS = 0
 	</select>
 
 	<select id="getChatUsersDetail" parameterType="java.lang.String"

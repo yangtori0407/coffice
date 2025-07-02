@@ -28,8 +28,7 @@
 		#{commentContents},#{commentP}, 1);
 	</insert>
 
-	<select id="getList" parameterType="Pager"
-		resultType="BoardVO">
+	<select id="getList" parameterType="Pager" resultType="BoardVO">
 		SELECT
 		B.BOARD_NUM,
 		B.BOARD_TITLE,
@@ -42,9 +41,11 @@
 		ORDER BY BOARD_NUM DESC
 		LIMIT #{startNum}, #{page}
 		) B
-		LEFT OUTER JOIN COMMENT C
+		LEFT OUTER JOIN
+		COMMENT C
 		ON B.BOARD_NUM = C.BOARD_NUM AND C.DELETE_STATUS = 0
-		GROUP BY B.BOARD_NUM
+		GROUP BY
+		B.BOARD_NUM
 		ORDER BY BOARD_NUM DESC
 	</select>
 
@@ -79,18 +80,21 @@
 		WHERE
 		<choose>
 			<when test="kind == 'k1'">
-				BOARD_TITLE LIKE CONCAT('%', #{search}, '%') OR
-				BOARD_CONTENTS LIKE CONCAT('%',
-				#{search}, '%')
+				(BOARD_TITLE LIKE CONCAT('%', #{search}, '%') OR
+				BOARD_CONTENTS LIKE CONCAT('%', #{search}, '%'))
+				AND DELETE_STATUS =
+				0
 			</when>
 			<when test="kind == 'k2'">
-				BOARD_CONTENTS LIKE CONCAT('%', #{search}, '%')
+				BOARD_CONTENTS LIKE CONCAT('%', #{search}, '%') AND
+				DELETE_STATUS = 0
 			</when>
 			<otherwise>
-				BOARD_TITLE LIKE CONCAT('%', #{search}, '%')
+				BOARD_TITLE LIKE CONCAT('%', #{search}, '%') AND
+				DELETE_STATUS = 0
 			</otherwise>
 		</choose>
-		AND DELETE_STATUS = 0
+
 	</sql>
 	<!-- board와 comment의 컬럼명이 동일해서 comment의 deleteStaus 말고 board의 값을 가지고 왔었던 
 		것! 꼭 컬럼명이 동일할 경우 별칭으로 나누기 -->
@@ -99,8 +103,7 @@
 		SELECT
 		A.BOARD_NUM AS A_BOARD_NUM,
 		A.BOARD_TITLE,
-		A.USER_ID AS
-		A_USER_ID,
+		A.USER_ID AS A_USER_ID,
 		A.BOARD_CONTENTS,
 		A.BOARD_DATE,
 		A.BOARD_HIT,
@@ -113,15 +116,12 @@
 		C.COMMENT_P,
 		C.COMMENT_DATE,
 		C.IS_REPLY,
-		C.DELETE_STATUS
+		C.DELETE_STATUS AS CDS
 		FROM BOARD A
-		LEFT OUTER JOIN
-		(SELECT * FROM COMMENT WHERE
-		BOARD_NUM = #{boardNum} AND IS_REPLY = 0) C
-		ON A.BOARD_NUM =
-		C.BOARD_NUM
+		LEFT OUTER JOIN COMMENT C
+		ON A.BOARD_NUM = C.BOARD_NUM AND C.IS_REPLY = 0
 		WHERE A.BOARD_NUM = #{boardNum}
-		ORDER BY C.COMMENT_DATE DESC
+		ORDER BY C.COMMENT_DATE DESC, C.COMMENT_NUM DESC
 	</select>
 
 	<resultMap type="BoardVO" id="getBoardDetail">
@@ -132,9 +132,9 @@
 		<result column="BOARD_DATE" property="boardDate" />
 		<result column="BOARD_HIT" property="boardHit" />
 		<result column="UPDATE_DATE" property="updateDate" />
-		<result column="ADS" property="deleteStatus"/>
+		<result column="ADS" property="deleteStatus" />
 		<collection property="comments" javaType="java.util.List"
-			ofType="CommentVO" notNullColumn="COMMENT_NUM">
+			ofType="CommentVO">
 			<id column="COMMENT_NUM" property="commentNum" />
 			<result column="C_BOARD_NUM" property="boardNum" />
 			<result column="C_USER_ID" property="userId" />
@@ -142,9 +142,20 @@
 			<result column="COMMENT_P" property="commentP" />
 			<result column="COMMENT_DATE" property="commentDate" />
 			<result column="IS_REPLY" property="isReply" />
-			<result column="DELETE_STATUS" property="deleteStatus" />
+			<result column="CDS" property="deleteStatus" />
 		</collection>
 	</resultMap>
+	
+	<select id="getBoardDetail" parameterType="BoardVO" resultType="BoardVO">
+		SELECT BOARD_NUM, BOARD_TITLE, USER_ID, BOARD_CONTENTS, BOARD_DATE, DELETE_STATUS
+		FROM BOARD
+		WHERE BOARD_NUM = #{boardNum}
+	</select>
+	<select id="getCommentList" parameterType="BoardVO" resultType="CommentVO">
+		SELECT COMMENT_NUM, BOARD_NUM, USER_ID, DELETE_STATUS, COMMENT_DATE, COMMENT_CONTENTS, COMMENT_P, IS_REPLY
+		FROM COMMENT
+		WHERE BOARD_NUM = #{boardNum}
+	</select>
 
 	<select id="detailComment" parameterType="CommentVO"
 		resultType="CommentVO">

@@ -296,8 +296,12 @@ function accept() {
             })
             ul.appendChild(li)
         }
-        applyList.appendChild(ul)
+        applyList.appendChild(ul);
 
+        //휴가 알림 읽음 처리
+        fetch("/notification/checkVacation", {
+            method: "POST"
+        })
     })
 
     fetch("/events/vacation/acceptList")
