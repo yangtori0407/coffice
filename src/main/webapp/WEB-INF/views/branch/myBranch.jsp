@@ -27,7 +27,7 @@
 					<div style="width:500px; height:250px; border:3px solid #aaa; margin:20px auto;">
 						<canvas id="chart"></canvas>
 					</div>
-				<div style="width:500px; margin:20px auto; text-align:center">
+				<div style="width:600px; margin:20px auto; text-align:center">
 					<div style="display: inline-block; padding: 10px 20px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
 						<c:forEach items="${list}" var="l" varStatus="s">
 							<c:if test="${s.first}">
