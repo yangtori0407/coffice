@@ -198,8 +198,10 @@ function createAlert(msg, num) {
         kindDiv.innerText = `[${msg.notiContents}]`
     }else if (msg.notiKind == "VACATION") {
         kindDiv.innerText = `[휴가 신청]`
-    }else if (msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE") {
+    }else if (msg.notiKind == "APPROVAL") {
         kindDiv.innerText = `[결재 요청]`
+    }else if (msg.notiKind == "REFERENCE") {
+        kindDiv.innerText = `[결재 참조]`
     }else if (msg.notiKind == "DONE") {
         kindDiv.innerText = `[결재 완료]`
     }else if (msg.notiKind == "REJECT") {
@@ -364,8 +366,10 @@ function createToast(msg) {
         roomName.textContent = `[${msg.notiContents}]`
     }else if (msg.notiKind == "VACATION") {
         roomName.textContent = `[휴가]`
-    }else if (msg.notiKind == "APPROVAL" || msg.notiKind == "REFERENCE") {
+    }else if (msg.notiKind == "APPROVAL") {
         roomName.textContent = `[결재 요청]`
+    }else if (msg.notiKind == "REFERENCE") {
+        roomName.textContent = `[결재 참조]`
     }else if (msg.notiKind == "DONE") {
         roomName.textContent = `[결재 완료]`
     }else if (msg.notiKind == "REJECT") {
