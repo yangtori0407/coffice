@@ -27,6 +27,7 @@ alertsDropdown.addEventListener("click", () => {
         .then(r => r.json())
         .then(r => {
             //totalArea.innerText = r.total;
+            console.log(r);
             notificationArea.innerHTML = "";
             for (j of r.list) {
                 //console.log("알림 for");
