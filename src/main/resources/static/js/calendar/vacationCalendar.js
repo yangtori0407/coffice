@@ -182,18 +182,29 @@ function apply() {
 
 const send = document.getElementById("send")
 send.addEventListener("click", ()=>{
-    let vType = document.getElementById("vType")
-    let sDate = document.getElementById("sDate")
-    let sTime = document.getElementById("sTime")
-    let eDate = document.getElementById("eDate")
-    let eTime = document.getElementById("eTime")
-    let accept = document.getElementById("accept")
+    let vType = document.getElementById("vType").value
+    let sDate = document.getElementById("sDate").value
+    let sTime = document.getElementById("sTime").value
+    let eDate = document.getElementById("eDate").value
+    let eTime = document.getElementById("eTime").value
+    let accept = document.getElementById("accept").value
     
+    if (!vType || !sDate || !eDate || !sTime || !eTime || !accept) {
+        alert("모든 필드를 입력해주세요.");
+        return;
+    }
+
+    // 2. 시작일 < 종료일 확인
+    if (new Date(sDate) > new Date(eDate)) {
+        alert("종료일은 시작일보다 이후여야 합니다.");
+        return;
+    }
+
     let params = new FormData
-    params.append("type", vType.value)
-    params.append("startTime", sDate.value+sTime.value)
-    params.append("endTime", eDate.value+eTime.value)
-    params.append("approvalAuthority", accept.value)
+    params.append("type", vType)
+    params.append("startTime", sDate+sTime)
+    params.append("endTime", eDate+eTime)
+    params.append("approvalAuthority", accept)
     
     fetch("/events/vacation/apply", {
         method: "post",
@@ -202,6 +213,8 @@ send.addEventListener("click", ()=>{
     .then(r=>r.text)
     .then(r=>{
         // console.log(r)
+        // calendar.destroy()
+        // calendar.render()
         location.reload()
     })
 })
@@ -511,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function () {
     eTime.value = '';
     sDate.value = '';
     eDate.value = '';
-    vType.value = '연차'; // 기본값이 있다면 이걸로
+    vType.value = ''; // 기본값이 있다면 이걸로
   }
 
   vType.addEventListener('change', function () {
