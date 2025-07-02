@@ -205,6 +205,8 @@ public class UserController {
 			return "redirect:/user/resetPw?userId="+userId;
 		}
 		
+		try {
+		
 		int result = userService.updatePassword(userId, password);
 	    
 		if(result>0) {
@@ -214,6 +216,12 @@ public class UserController {
 			redirectAttributes.addFlashAttribute("fail", "비밀번호 변경 실패");
 			return "redirect:/user/resetPw?userId=" + userId;
 		}
+		
+	} catch(IllegalArgumentException e) {
+        // 비밀번호 유효성 검사 실패
+        redirectAttributes.addFlashAttribute("valid", e.getMessage());
+        return "redirect:/user/resetPw?userId=" + userId;
+    }
 	}
 	
 	@GetMapping("mypage")

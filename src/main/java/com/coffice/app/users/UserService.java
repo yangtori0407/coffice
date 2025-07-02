@@ -140,6 +140,11 @@ public class UserService implements UserDetailsService{
 	}
 	
 	public int updatePassword(String userId, String newPassword) throws Exception {
+		
+		if (!newPassword.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+	        throw new IllegalArgumentException("비밀번호는 영문자와 숫자를 포함한 8자리 이상이어야 합니다.");
+	    }
+		
 		String encodedPassword = passwordEncoder.encode(newPassword);
 		
 		UserVO userVO = new UserVO();
@@ -156,11 +161,8 @@ public class UserService implements UserDetailsService{
 			return false;
 		}
 		
-		 //System.out.println("🔑 입력 비밀번호 (평문): " + inputPassword);
-		 //System.out.println("🧾 DB 비밀번호 (암호화): " + userVO.getPassword());
-		
 		 boolean matches = passwordEncoder.matches(inputPassword, userVO.getPassword());
-		 //System.out.println("✅ 비밀번호 일치 여부: " + matches);
+		 
 		 
 		 return matches;
 	}

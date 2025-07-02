@@ -29,6 +29,12 @@
 	  </script>
   </c:if>
   
+  <c:if test="${not empty valid}">
+	  <script>
+	    alert("${valid}");
+	  </script>
+  </c:if>
+  
 
   
 </head>
