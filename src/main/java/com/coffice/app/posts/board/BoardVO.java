@@ -1,7 +1,7 @@
 package com.coffice.app.posts.board;
 
 import java.sql.Date;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class BoardVO{
 	private Long boardHit;
 	private String boardContents;
 	private Date boardDate;
-	private Integer deleteStatus;
+	private int deleteStatus;
 	
 	private List<CommentVO> comments;
 	private Long commentCount;

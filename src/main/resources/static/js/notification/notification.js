@@ -129,7 +129,7 @@ function createAlert(msg, num) {
     } else if(msg.notiKind == "MESSAGE"){
         a.href = `/message/receive/detail?messageNum=${msg.relateId}`
     }else if(msg.notiKind == "VACATION"){
-        a.href = "/events/vacation";
+        a.href = "/user/vacationHistory";
     }else if(msg.notiKind == "APPROVAL"){
         a.href = "/document/list/onwaiting";
     }else if(msg.notiKind == "REFERENCE"){
@@ -422,10 +422,8 @@ function createToast(msg) {
             location.href = `/board/detail?boardNum=${msg.relateId}`;
         } else if(msg.notiKind == "MESSAGE"){
             location.href = `/message/receive/detail?messageNum=${msg.relateId}`;
-        }else if(msg.notiKind == "MESSAGE"){
-            location.href = `/message/receive/detail?messageNum=${msg.relateId}`;
-        }else if(msg.notiKind == "MESSAGE"){
-            location.href = "/events/vacation";
+        }else if(msg.notiKind == "VACATION"){
+            location.href = "/user/vacationHistory";
         }else if(msg.notiKind == "APPROVAL"){
             location.href = "/document/list/onwaiting";
         }else if(msg.notiKind == "REFERENCE"){
