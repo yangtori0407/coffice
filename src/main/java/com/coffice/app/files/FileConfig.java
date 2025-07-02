@@ -19,12 +19,12 @@ public class FileConfig implements WebMvcConfigurer{
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		//url 경로로 온 요청을 file:\\ + path 경로로 연결해준다.
 		//file 뜻 => 로컬디스크에 있는 폴더야~!
-		registry.addResourceHandler(url).addResourceLocations("file:/" + path);
+		registry.addResourceHandler(url).addResourceLocations("file:" + path);
 		
 		registry
 			.addResourceHandler("/coffice/upload/profile/**")
 			
-			.addResourceLocations("file:/" + path + "profile/");
+			.addResourceLocations("file:" + path + "profile/");
 			;
 		
 		registry.addResourceHandler("/signs/**").addResourceLocations("file:" + path + "signs/");
