@@ -2,54 +2,75 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
-  <mapper namespace="com.coffice.app.notification.NotificationDAO">
-  	<insert id="add" parameterType="NotificationVO" useGeneratedKeys="true" keyProperty="notiNum">
-  		INSERT INTO NOTIFICATION(NOTI_NUM, NOTI_KIND, NOTI_CONTENTS,NOTI_DATE,RELATE_ENTITY, RELATE_ID)
-  		VALUES(null, #{notiKind}, #{notiContents}, now(), #{relateEntity}, #{relateId})
-  	</insert>
-  	
-  	<insert id="addNotiCheck" parameterType="NotificationVO">
-  		INSERT INTO NOTIFICATION_CHECK(NOTICHECK_NUM, NOTI_NUM, USER_ID, NOTICHECK_STATUS)
-  		VALUES(null, #{notiNum}, #{userId}, 0)
-  	</insert>
-  	
-  	<select id="getUserList" parameterType="java.lang.String" resultType="UserVO">
-  		SELECT USER_ID FROM USERS WHERE USER_ID != #{userId}
-  	</select>
-  	
-  	<select id="getNotification" parameterType="java.lang.String" resultType="NotificationVO">
-  		SELECT N.NOTI_NUM, N.NOTI_KIND, N.NOTI_CONTENTS, N.NOTI_DATE, N.RELATE_ENTITY, N.RELATE_ID, NC.NOTICHECK_STATUS, NC.NOTICHECK_NUM 
-  		FROM NOTIFICATION_CHECK NC
-  		JOIN NOTIFICATION N
-  		ON NC.NOTI_NUM = N.NOTI_NUM
-  		WHERE NC.USER_ID = #{userId}
-  		ORDER BY N.NOTI_DATE DESC
-  		LIMIT 5
-  	</select>
-  	
-  	<select id="moreNotification" parameterType="java.util.HashMap" resultType="NotificationVO">
-  		SELECT N.NOTI_NUM, N.NOTI_KIND, N.NOTI_CONTENTS, N.NOTI_DATE, N.RELATE_ENTITY, N.RELATE_ID, NC.NOTICHECK_STATUS, NC.NOTICHECK_NUM 
-  		FROM NOTIFICATION_CHECK NC
-  		JOIN NOTIFICATION N
-  		ON NC.NOTI_NUM = N.NOTI_NUM
-  		WHERE NC.USER_ID = #{userId} AND #{notiCheckNum} > NOTICHECK_NUM
-  		ORDER BY N.NOTI_DATE DESC
-  		LIMIT 7
-  	</select>
-  	
-  	<select id="getNonReadNotification" parameterType="java.lang.String">
-  		SELECT COUNT(NOTICHECK_NUM) 
-  		FROM NOTIFICATION_CHECK
-  		WHERE USER_ID = #{userId} AND NOTICHECK_STATUS = 0
-  	</select>
-  	<select id="getNoticeNotificationDetail" parameterType="NotificationVO" resultType="NotificationVO">
-  		SELECT NOTI_NUM FROM NOTIFICATION WHERE NOTI_KIND = #{notiKind} AND RELATE_ID = #{relateId} 
-  	</select>
-  	<select id="getBoardNotificationDetail" parameterType="NotificationVO" resultType="NotificationVO">
-  		SELECT NOTI_NUM FROM NOTIFICATION WHERE NOTI_KIND = #{notiKind} AND RELATE_ID = #{relateId} 
-  	</select>
-  	<update id="updateNotiStatus" parameterType="java.util.HashMap">
-  		UPDATE NOTIFICATION_CHECK SET NOTICHECK_STATUS = 1 WHERE NOTI_NUM = #{notiNum} AND USER_ID = #{userId}
-  	</update>
-  </mapper>
+
+<mapper namespace="com.coffice.app.notification.NotificationDAO">
+	<insert id="add" parameterType="NotificationVO"
+		useGeneratedKeys="true" keyProperty="notiNum">
+		INSERT INTO NOTIFICATION(NOTI_NUM, NOTI_KIND,
+		NOTI_CONTENTS,NOTI_DATE,RELATE_ENTITY, RELATE_ID)
+		VALUES(null, #{notiKind}, #{notiContents}, now(), #{relateEntity}, #{relateId})
+	</insert>
+
+	<insert id="addNotiCheck" parameterType="NotificationVO">
+		INSERT INTO NOTIFICATION_CHECK(NOTICHECK_NUM, NOTI_NUM, USER_ID,
+		NOTICHECK_STATUS)
+		VALUES(null, #{notiNum}, #{userId}, 0)
+	</insert>
+
+	<select id="getUserList" parameterType="java.lang.String"
+		resultType="UserVO">
+		SELECT USER_ID FROM USERS WHERE USER_ID != #{userId}
+	</select>
+
+	<select id="getNotification" parameterType="java.lang.String"
+		resultType="NotificationVO">
+		SELECT N.NOTI_NUM, N.NOTI_KIND, N.NOTI_CONTENTS, N.NOTI_DATE,
+		N.RELATE_ENTITY, N.RELATE_ID, NC.NOTICHECK_STATUS, NC.NOTICHECK_NUM
+		FROM NOTIFICATION_CHECK NC
+		JOIN NOTIFICATION N
+		ON NC.NOTI_NUM = N.NOTI_NUM
+		WHERE NC.USER_ID = #{userId}
+		ORDER BY N.NOTI_DATE DESC
+		LIMIT 5
+	</select>
+
+	<select id="moreNotification" parameterType="java.util.HashMap"
+		resultType="NotificationVO">
+		SELECT N.NOTI_NUM, N.NOTI_KIND, N.NOTI_CONTENTS, N.NOTI_DATE,
+		N.RELATE_ENTITY, N.RELATE_ID, NC.NOTICHECK_STATUS, NC.NOTICHECK_NUM
+		FROM NOTIFICATION_CHECK NC
+		JOIN NOTIFICATION N
+		ON NC.NOTI_NUM = N.NOTI_NUM
+		WHERE NC.USER_ID = #{userId} AND #{notiCheckNum} > NOTICHECK_NUM
+		ORDER BY N.NOTI_DATE DESC
+		LIMIT 7
+	</select>
+
+	<select id="getNonReadNotification"
+		parameterType="java.lang.String">
+		SELECT COUNT(NOTICHECK_NUM)
+		FROM NOTIFICATION_CHECK
+		WHERE USER_ID = #{userId} AND NOTICHECK_STATUS = 0
+	</select>
+	<select id="getNoticeNotificationDetail"
+		parameterType="NotificationVO" resultType="NotificationVO">
+		SELECT NOTI_NUM FROM NOTIFICATION WHERE NOTI_KIND = #{notiKind} AND
+		RELATE_ID = #{relateId}
+	</select>
+	<select id="getBoardNotificationDetail"
+		parameterType="NotificationVO" resultType="NotificationVO">
+		SELECT NOTI_NUM FROM NOTIFICATION WHERE NOTI_KIND = #{notiKind} AND
+		RELATE_ID = #{relateId}
+	</select>
+	<select id="chekVacation" parameterType="java.util.HashMap">
+		UPDATE NOTIFICATION N
+		JOIN NOTIFICATION_CHECK NC ON N.NOTI_NUM = NC.NOTI_NUM
+		SET NC.NOTICHECK_STATUS = 1
+		WHERE N.NOTI_KIND = #{notiKind}
+		AND NC.USER_ID = #{userId}
+	</select>
+	<update id="updateNotiStatus" parameterType="java.util.HashMap">
+		UPDATE NOTIFICATION_CHECK SET NOTICHECK_STATUS = 1 WHERE NOTI_NUM =
+		#{notiNum} AND USER_ID = #{userId}
+	</update>
+</mapper>

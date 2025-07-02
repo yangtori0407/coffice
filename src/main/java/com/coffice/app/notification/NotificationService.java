@@ -277,4 +277,13 @@ public class NotificationService {
 		
 	}
 
+	public void checkVacation(String name) throws Exception{
+		Map<String, Object> info = new HashMap<>();
+		info.put("notiKind", "VACATION");
+		info.put("userId", name);
+		
+		int result = notificationDAO.chekVacation(info);
+		
+	}
+
 }

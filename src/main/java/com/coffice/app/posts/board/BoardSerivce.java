@@ -6,13 +6,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coffice.app.files.FileManager;
 import com.coffice.app.notification.NotificationService;
 import com.coffice.app.page.Pager;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class BoardSerivce {
 	
 	@Autowired
@@ -34,9 +38,18 @@ public class BoardSerivce {
 		
 		return list;
 	}
-
+	
+	@Transactional
 	public BoardVO getDetail(BoardVO boardVO) throws Exception{
-		return boardDAO.getDetail(boardVO);
+		boardVO = boardDAO.getBoardDetail(boardVO);
+		log.info("boardVO : {}", boardVO);
+		if(boardVO != null) {
+			
+			List<CommentVO> list = boardDAO.getCommentList(boardVO);
+			boardVO.setComments(list);
+			return boardVO;
+		}
+		return null;
 	}
 
 	public String quillUpload(MultipartFile file) throws Exception{

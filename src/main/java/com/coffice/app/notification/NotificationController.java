@@ -64,4 +64,9 @@ public class NotificationController {
 		return list;
 	}
 	
+	@PostMapping("checkVacation")
+	public void CheckVacation(Authentication authentication) throws Exception{
+		notificationService.checkVacation(authentication.getName());
+	}
+	
 }
