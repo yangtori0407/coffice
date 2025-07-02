@@ -81,7 +81,7 @@
 									<thead class="thead-light">
 										<tr>
 											<th>신청번호</th>
-											<th>승인일자</th>
+											<th>처리일자</th>
 											<th>시작일</th>
 											<th>종료일</th>
 											<th>휴가 종류</th>
@@ -92,7 +92,16 @@
 										<c:forEach items="${approvalList}" var="app">
 											<tr>
 												<td>${app.vacationId}</td>
-												<td>${fn:replace(app.editTime, 'T', ' ')}</td>
+												<td>
+													<c:choose>
+														<c:when test="${app.status eq '대기'}">
+															
+														</c:when>
+														<c:otherwise>
+															${fn:replace(app.editTime, 'T', ' ')}
+														</c:otherwise>
+													</c:choose>
+												</td>
 												<td>${fn:replace(app.startTime, 'T', ' ')}</td>
 												<td>${fn:replace(app.endTime, 'T', ' ')}</td>
 												<td>${app.type}</td>
