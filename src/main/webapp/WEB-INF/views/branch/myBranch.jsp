@@ -114,10 +114,12 @@
 						</div>
 					</div>
 						<div style="width: 96%; margin: 20px auto; text-align: right;">
-							<a class="btn btn-success" href="./api/excel/download/sale">매출다운</a>						
+							<sec:authorize access="hasAnyAuthority('6')">				
+							<a class="btn btn-success" href="./api/excel/download/sale">매출다운</a>
 							<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#order">
 								주문
-							</a>	
+							</a>
+							</sec:authorize>
 						</div>
 			</div>
 			</div>
