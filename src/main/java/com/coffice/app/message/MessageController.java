@@ -83,9 +83,10 @@ public class MessageController {
 	@GetMapping("receive/detail")
 	@Transactional
 	public String receiveDetail(MessageVO messageVO, Model model, Authentication authentication) throws Exception{
-		//log.info("도착");
+		log.info("receiveDetail 시작");
 		messageVO = messageService.detail(messageVO);
 		messageService.readReceiveNotification(messageVO, authentication.getName());
+		messageService.read(messageVO.getMessageNum(), authentication.getName());
 		model.addAttribute("detail", messageVO);
 		model.addAttribute("message", "receive");
 		model.addAttribute("kind", "이메일 > 받은 이메일");

@@ -255,6 +255,9 @@ public class DocumentService {
 		result.put("kind", kind);
 		result.put("docuKind", docuKind);
 		
+		//결재 알림 읽음 처리
+		notificationService.checkDocumentNotification(kind);
+		
 		return result;
 	}
 	
