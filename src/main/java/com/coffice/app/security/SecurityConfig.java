@@ -57,6 +57,7 @@ public class SecurityConfig {
 					.requestMatchers("/ingredients/list","/ingredients/detail","/branch/add", "/branch/masterAdd").hasAuthority("3")
 					.requestMatchers("/branch/myBranch").hasAnyAuthority("6","3")
 					.requestMatchers("/user/mypage","/user/update","/user/logout").authenticated()
+					.requestMatchers("/events/**").authenticated()
 					.requestMatchers("/document/**").authenticated()
 					.anyRequest().permitAll()
 					;

@@ -125,8 +125,18 @@ public class VacationService {
 		return vacationDAO.getList(userVO);
 	}
 	
-	public int updateApply(VacationVO vacationVO) throws Exception {
+	public int updateApply(VacationVO vacationVO, Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setEditor(userVO.getUserId());
+		vacationVO.setUserId(userVO.getUserId());
 		return vacationDAO.updateApply(vacationVO);
+	}
+	
+	public int cancel(VacationVO vacationVO, Authentication authentication) throws Exception {
+		UserVO userVO = (UserVO)authentication.getPrincipal();
+		vacationVO.setEditor(userVO.getUserId());
+		vacationVO.setUserId(userVO.getUserId());
+		return vacationDAO.cancel(vacationVO);
 	}
 
 }

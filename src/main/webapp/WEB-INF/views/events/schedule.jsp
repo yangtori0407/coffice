@@ -176,8 +176,8 @@
 							</form>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary" id="send">Save</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+							<button type="button" class="btn btn-primary" id="send">등록</button>
 						</div>
 					</div>
 				</div>
@@ -322,8 +322,8 @@
 							</form>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-primary" id="change">change</button>
-							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="saveChange">Save Changes</button>
+							<button type="button" class="btn btn-primary" id="change">수정</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="saveChange">저장</button>
 						</div>
 					</div>
 				</div>

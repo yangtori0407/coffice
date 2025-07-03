@@ -13,6 +13,7 @@ var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
     themeSystem: 'bootstrap4',
     locale: 'ko',
+    events: '/events/all?kind=vacation',
     customButtons: {
         addButton: {
             text: '휴가 신청',
@@ -114,46 +115,46 @@ undo.addEventListener("click", ()=>{
     accept()
 })
 
-fetch("/events/getHolidays")
-.then(r=>r.json())
-.then(r=>{
-    for(a of r) {
-        let event = {
-            title: a.dateName,
-            start: a.locdate,
-            allDay: true,
-            color: '#ee0000',
-            editable: false,
-            extendedProps: {
-                preventClick: true
-            }
-        }
-        calendar.addEvent(event);
-    }
-})
+// fetch("/events/getHolidays")
+// .then(r=>r.json())
+// .then(r=>{
+//     for(a of r) {
+//         let event = {
+//             title: a.dateName,
+//             start: a.locdate,
+//             allDay: true,
+//             color: '#ee0000',
+//             editable: false,
+//             extendedProps: {
+//                 preventClick: true
+//             }
+//         }
+//         calendar.addEvent(event);
+//     }
+// })
 
-fetch("/events/vacation/getList")
-.then(r=>r.json())
-.then(r=>{
-    console.log(r)
-    for(a of r) {
-        let clr;
-        if(uid == a.userId) {
-            clr = pcolor
-        }else {
-            clr = gcolor
-        }
-        let event = {
-            id: a.vacationId,
-            title: a.aposition + " " + a.aname,
-            start: a.startTime,
-            end: a.endTime,
-            color: clr,
-            editable: false
-        }
-        calendar.addEvent(event);
-    }
-})
+// fetch("/events/vacation/getList")
+// .then(r=>r.json())
+// .then(r=>{
+//     console.log(r)
+//     for(a of r) {
+//         let clr;
+//         if(uid == a.userId) {
+//             clr = pcolor
+//         }else {
+//             clr = gcolor
+//         }
+//         let event = {
+//             id: a.vacationId,
+//             title: a.aposition + " " + a.aname,
+//             start: a.startTime,
+//             end: a.endTime,
+//             color: clr,
+//             editable: false
+//         }
+//         calendar.addEvent(event);
+//     }
+// })
 
 
 function apply() {
@@ -215,7 +216,8 @@ send.addEventListener("click", ()=>{
         // console.log(r)
         // calendar.destroy()
         // calendar.render()
-        location.reload()
+        // location.reload()
+        $("#exampleModal").modal("hide")
     })
 })
 
@@ -439,22 +441,23 @@ updateVacation.addEventListener("click", ()=>{
             }
         })
 
-        change.addEventListener("click", ()=>{
-            let resultAccept = document.getElementById("resultAccept")
-            params.append("type", rvType.value)
-            params.append("startTime", rsDate.value+rsTime.value)
-            params.append("endTime", reDate.value+reTime.value)
-            params.append("approvalAuthority", resultAccept.value)
-            fetch("vacation/update", {
-                method: "post",
-                body: params
-            })
-            .then(r=>r.text())
-            .then(r=>{
-                // console.log(r)
-                location.reload()
-            })
-        })
+        // change.addEventListener("click", ()=>{
+        //     let resultAccept = document.getElementById("resultAccept")
+        //     params.append("type", rvType.value)
+        //     params.append("startTime", rsDate.value+rsTime.value)
+        //     params.append("endTime", reDate.value+reTime.value)
+        //     params.append("approvalAuthority", resultAccept.value)
+        //     fetch("vacation/update", {
+        //         method: "post",
+        //         body: params
+        //     })
+        //     .then(r=>r.text())
+        //     .then(r=>{
+        //         // console.log(r)
+        //         // location.reload()
+        //         calendar.refetchEvents()
+        //     })
+        // })
 
         $("#detailModal").modal("show")
     }else if(updateVacation.innerText == "승인") {
@@ -467,10 +470,68 @@ updateVacation.addEventListener("click", ()=>{
             .then(r=>{
                 console.log(r)
                 accept()
+                calendar.refetchEvents()
             })
         }else {
             console.log("no")
         }
+    }
+})
+
+change.addEventListener("click", () => {
+    const rsDate = document.getElementById("rsDate")
+    const rsTime = document.getElementById("rsTime")
+    const reDate = document.getElementById("reDate")
+    const reTime = document.getElementById("reTime")
+    const rvType = document.getElementById("rvType")
+    const resultAccept = document.getElementById("resultAccept")
+    const vid = document.getElementById("vid")
+
+    const params = new FormData();
+    params.append("vacationId", vid.value);
+    params.append("type", rvType.value);
+    params.append("startTime", rsDate.value + rsTime.value);
+    params.append("endTime", reDate.value + reTime.value);
+    params.append("approvalAuthority", resultAccept.value);
+
+    fetch("vacation/update", {
+        method: "post",
+        body: params
+    })
+    .then(r => r.text())
+    .then(() => {
+        calendar.refetchEvents();
+        $("#detailModal").modal("hide");
+    });
+});
+
+const deleteSchedule = document.getElementById("deleteSchedule")
+deleteSchedule.addEventListener("click", ()=>{
+    if(confirm('신청을 취소하시겠습니까?')) {
+        const rsDate = document.getElementById("rsDate")
+        const rsTime = document.getElementById("rsTime")
+        const reDate = document.getElementById("reDate")
+        const reTime = document.getElementById("reTime")
+        const rvType = document.getElementById("rvType")
+        const resultAccept = document.getElementById("resultAccept")
+        const vid = document.getElementById("vid")
+    
+        const params = new FormData();
+        params.append("vacationId", vid.value);
+        params.append("type", rvType.value);
+        params.append("startTime", rsDate.value + rsTime.value);
+        params.append("endTime", reDate.value + reTime.value);
+        params.append("approvalAuthority", resultAccept.value);
+    
+        fetch("vacation/cancel", {
+            method: "post",
+            body: params
+        })
+        .then(r => r.text())
+        .then(() => {
+            calendar.refetchEvents();
+            $("#detailModal").modal("hide");
+        });
     }
 })
 
@@ -486,9 +547,11 @@ reject.addEventListener("click", ()=>{
         .then(r=>r.text())
         .then(r=>{
             accept()
+            calendar.refetchEvents()
         })
     }
 })
+
 
 let goes = document.getElementsByName("goMypage")
 for(a of goes) {

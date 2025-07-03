@@ -1,11 +1,13 @@
 package com.coffice.app.events;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coffice.app.events.holidays.HolidayService;
@@ -42,6 +45,9 @@ public class EventController {
     
     @Autowired
     private NotificationService notificationService;
+    
+    @Autowired
+    private EventUtility eventUtility;
 	
 	@GetMapping("schedule")
 	public String schedule(Model model) throws Exception {
@@ -176,11 +182,44 @@ public class EventController {
 	
 	@PostMapping("vacation/update")
 	public String updateApply(VacationVO vacationVO, Authentication authentication, Model model) throws Exception {
-		UserVO userVO = (UserVO)authentication.getPrincipal();
-		vacationVO.setEditor(userVO.getUserId());
-		int result = vacationService.updateApply(vacationVO);
+		
+		int result = vacationService.updateApply(vacationVO, authentication);
 		model.addAttribute("result", result);
 		return "commons/ajaxResult";
+	}
+	
+	@PostMapping("vacation/cancel")
+	public String cancel(VacationVO vacationVO, Authentication authentication, Model model) throws Exception {
+		
+		int result = vacationService.cancel(vacationVO, authentication);
+		model.addAttribute("result", result);
+		return "commons/ajaxResult";
+	}
+	
+	@GetMapping("all")
+	@ResponseBody
+	public List<CalendarEventDTO> getAllEvents(@RequestParam String kind, @AuthenticationPrincipal UserVO user) throws Exception {
+	    List<CalendarEventDTO> result = new ArrayList<>();
+
+	    // 공휴일
+	    List<HolidayVO> holidays = holidayService.getHolidays();
+	    holidays.forEach(h -> result.add(eventUtility.fromHoliday(h)));
+	    
+	    if("schedule".equals(kind)) {
+	    	// 일반 일정
+	    	List<ScheduleVO> schedules = scheduleService.getAll(user);
+	    	schedules.forEach(s -> result.add(eventUtility.fromSchedule(s, user.getUserId(), "#0288d1", "#bdbdbd")));
+	    	
+	    	// 반복 일정
+	    	List<ScheduleVO> repeatSchedules = scheduleService.getRepeatSchedules(user);
+	    	repeatSchedules.forEach(r -> result.add(eventUtility.fromSchedule(r, user.getUserId(), "#0288d1", "#bdbdbd")));	    	
+	    }else if("vacation".equals(kind)) {
+	    	// 휴가
+	    	List<VacationVO> vacations = vacationService.getList(user);
+	    	vacations.forEach(v -> result.add(eventUtility.fromVacation(v, user.getUserId(), "#43a047", "#bdbdbd")));	    	
+	    }
+
+	    return result;
 	}
 
 }
