@@ -59,19 +59,21 @@ public class NoticeService {
 	public int add(NoticeVO noticeVO, MultipartFile[] attaches) throws Exception {
 		int result = noticeDAO.add(noticeVO);
 		
-		for (MultipartFile f : attaches) {
-			if (f.isEmpty()) {
-				continue;
+		if(attaches != null ) {
+			for (MultipartFile f : attaches) {
+				if (f.isEmpty()) {
+					continue;
+				}
+				
+				String fileName = fileManager.fileSave(path.concat("notice/"), f);
+				NoticeFilesVO filesVO = new NoticeFilesVO();
+				filesVO.setNoticeNum(noticeVO.getNoticeNum());
+				filesVO.setSaveName(fileName);
+				filesVO.setOriginName(f.getOriginalFilename());
+				
+				noticeDAO.addFiles(filesVO);
+				
 			}
-
-			String fileName = fileManager.fileSave(path.concat("notice/"), f);
-			NoticeFilesVO filesVO = new NoticeFilesVO();
-			filesVO.setNoticeNum(noticeVO.getNoticeNum());
-			filesVO.setSaveName(fileName);
-			filesVO.setOriginName(f.getOriginalFilename());
-
-			noticeDAO.addFiles(filesVO);
-
 		}
 		
 		noticeVO= noticeDAO.getDetail(noticeVO);
