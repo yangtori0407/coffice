@@ -79,11 +79,11 @@
 												aria-describedby="dataTable_info" style="width: 100%;">
 												<thead>
 													<tr role="row">
-														<th class="sorting sorting_asc" tabindex="0"
+														<!-- <th class="sorting sorting_asc" tabindex="0"
 															aria-controls="dataTable" rowspan="1" colspan="1"
 															aria-sort="ascending"
 															aria-label="Name: activate to sort column descending"
-															style="width: 100.788px;">글번호</th>
+															style="width: 100.788px;">글번호</th> -->
 														<th class="sorting" tabindex="0" aria-controls="dataTable"
 															rowspan="1" colspan="1"
 															aria-label="Position: activate to sort column ascending"
@@ -106,7 +106,7 @@
 													<c:forEach items="${list }" var="l">
 
 														<tr>
-															<td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeNum }</a></td>
+															<%-- <td><a href="./detail?noticeNum=${l.noticeNum }">${l.noticeNum }</a></td> --%>
 															<td style="font-weight: bold"><a
 																href="./detail?noticeNum=${l.noticeNum }">${l.noticeTitle }</a></td>
 															<td>관리자</td>
