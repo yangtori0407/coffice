@@ -136,7 +136,7 @@
   		
   		WHERE D.STATUS = '임시저장'
 		  AND D.WRITER_ID = #{writerId}
-		ORDER BY D.DOCUMENT_ID DESC
+		ORDER BY D.WRITER_TIME DESC
 		LIMIT 1
   	</select>
   	
@@ -156,7 +156,7 @@
   		WHERE A.USER_ID = #{writerId}
   		  AND A.STEP_ORDER &lt; D.CURRENT_STEP
   		
-  		ORDER BY D.DOCUMENT_ID DESC
+  		ORDER BY D.WRITER_TIME DESC
 		LIMIT 1   	
   	</select>
   	
@@ -172,7 +172,7 @@
 		  AND D.STATUS != '임시저장'
 		  AND D.WRITER_TIME >= CURDATE()
 		  
-		ORDER BY D.DOCUMENT_ID DESC
+		ORDER BY D.WRITER_TIME DESC
   	</select>
 
 	<!-- 결재자가 자신이 결재 차례인 문서를 볼 수 있는 리스트 -->
@@ -188,7 +188,7 @@
 	      AND A.STEP_ORDER = D.CURRENT_STEP
 	      AND D.STATUS ='진행중'
 	      
-	    ORDER BY D.DOCUMENT_ID DESC
+	    ORDER BY D.WRITER_TIME DESC
   	</select>
 
 	<!-- 작성자가 자신이 올린 문서를 볼 수 있는 리스트 -->
@@ -204,7 +204,7 @@
 		  AND D.WRITER_ID = #{userId}
 		  <include refid="search"></include>
 		  
-		ORDER BY DOCUMENT_ID DESC
+		ORDER BY WRITER_TIME DESC
 		LIMIT #{startNum}, #{page}
   	</select>
   	
@@ -224,7 +224,7 @@
 	      AND D.STATUS ='진행중'
 	      <include refid="search"></include>
 	      
-	    ORDER BY DOCUMENT_ID DESC
+	    ORDER BY WRITER_TIME DESC
 		LIMIT #{startNum}, #{page}
   	</select>
   	
@@ -243,7 +243,7 @@
   		  AND A.STEP_ORDER &lt; D.CURRENT_STEP <!-- 문서의 step이 결재자의 step보다 크다. 즉 결재자의 step을 거쳤다는 뜻 -->
   		  <include refid="search"></include>
   		
-  		ORDER BY DOCUMENT_ID DESC
+  		ORDER BY WRITER_TIME DESC
 		LIMIT #{startNum}, #{page}
   	</select>
   	
@@ -262,7 +262,7 @@
 		  AND D.STATUS != '임시저장'
 		  <include refid="search"></include>
 		  
-		ORDER BY DOCUMENT_ID DESC
+		ORDER BY WRITER_TIME DESC
 		LIMIT #{startNum}, #{page}
   	</select>
   	
@@ -279,7 +279,7 @@
 		  AND D.WRITER_ID = #{userId}
 		  <include refid="search"></include>
 		  
-		ORDER BY DOCUMENT_ID DESC
+		ORDER BY WRITER_TIME DESC
 		LIMIT #{startNum}, #{page}
 	</select>
   	  	
