@@ -30,7 +30,7 @@
                 </div>
                 
                 <div class="modal-footer">                	
-                	<button id="id_completeReject" class="btn btn-secondary" type="button">작성 완료</button>
+                	<button id="id_completeReject" class="btn btn-primary" type="button">작성 완료</button>
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>                    
                 </div>
             </div>

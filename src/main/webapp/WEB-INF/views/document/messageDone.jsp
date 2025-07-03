@@ -36,8 +36,20 @@
 	<c:import url="/WEB-INF/views/templates/footModal.jsp"></c:import>
 	
 	<script>
-		alert("${alertMessage}");
-		location.href="./list/ontemporary";
+		if(${alertMessage} == 0){
+			alert("문서가 회수되었습니다");
+			location.href="./list/ontemporary";
+			
+		} else if(${alertMessage} == 1){
+			alert("결재가 완료되었습니다");
+			location.href="./list/handled";		
+			
+		} else if(${alertMessage} == 2){
+			alert("반려가 완료되었습니다");
+			location.href="./list/handled";
+		}
+		
+		
 	</script>
 	
 </body>

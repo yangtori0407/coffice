@@ -271,7 +271,7 @@ public class DocumentController {
 		
 		int result = documentService.updateOnlyStatus(documentVO);
 		
-		model.addAttribute("alertMessage", "문서가 회수되었습니다");
+		model.addAttribute("alertMessage", 0);
 		
 		return "document/messageDone";
 	}
@@ -347,21 +347,23 @@ public class DocumentController {
 
 	//
 	@PostMapping("proceed")
-	public String updateApprovalProceed(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
+	public String updateApprovalProceed(ApprovalLineVO approvalLineVO, HttpSession session, Model model) throws Exception {
 
 		//System.out.println("user "+approvalLineVO.getUserId());
 		//System.out.println("docu "+approvalLineVO.getDocumentId());
 		//System.out.println("sign "+approvalLineVO.getSignId());
 		
 		int result = documentService.updateApprovalProceed(approvalLineVO, session);
-
-		return "redirect:./list/handled";
+		
+		model.addAttribute("alertMessage", 1);
+		
+		return "document/messageDone";
 	}
 	
 	
 	//
 	@PostMapping("reject")
-	public String updateApprovalReject(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
+	public String updateApprovalReject(ApprovalLineVO approvalLineVO, HttpSession session, Model model) throws Exception {
 
 		//System.out.println("user "+approvalLineVO.getUserId());
 		//System.out.println("docu "+approvalLineVO.getDocumentId());
@@ -369,7 +371,9 @@ public class DocumentController {
 		
 		int result = documentService.updateApprovalReject(approvalLineVO, session);
 
-		return "redirect:./list/handled";
+		model.addAttribute("alertMessage", 2);
+		
+		return "document/messageDone";
 	}
 	
 	
