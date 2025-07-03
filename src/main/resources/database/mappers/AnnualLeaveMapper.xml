@@ -7,11 +7,11 @@
   
 	<select id="getAnnualLeaves" parameterType="AnnualLeaveVO" resultType="java.util.Map">
 			SELECT
-				SUM(USED_LEAVE)							AS USED,
-				SUM(GRANT_LEAVE)						AS `GRANT`,
-				SUM(GRANT_LEAVE) - SUM(USED_LEAVE)		AS REMAIN
+			    IFNULL(SUM(USED_LEAVE), 0)                          AS USED,
+			    IFNULL(SUM(GRANT_LEAVE), 0)                         AS `GRANT`,
+			    IFNULL(SUM(GRANT_LEAVE), 0) - IFNULL(SUM(USED_LEAVE), 0) AS REMAIN
 			FROM
-				ANNUAL_LEAVE
+			    ANNUAL_LEAVE
 			WHERE
 				USER_ID = #{userId}
 				AND
