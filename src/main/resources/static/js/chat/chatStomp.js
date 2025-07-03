@@ -67,6 +67,7 @@ class Message {
     system = false; //나가는 메세지인지 아닌지
     fileNum = "";
     invite = false; //초대문구
+    name = "";
 }
 
 stompClient.connect({}, function (frame) {
@@ -238,13 +239,14 @@ fileUpload.addEventListener("change", (e) => {
         .then(r => r.json())
         .then(r => {
             let m = new Message();
+            console.log(r);
             m.chatContents = r.chatContentsVO.chatContents;
             m.chatRoomNum = r.chatContentsVO.chatRoomNum;
             m.flag = true;
             m.sendDate = r.chatContentsVO.sendDate;
             m.fileNum = r.chatFilesVO.fileNum;
             m.sender = r.chatContentsVO.sender;
-
+            m.name = r.chatContentsVO.name;
             //console.log(m);
             stompClient.send("/pub/sendMessage", {}, JSON.stringify(m))
         })
