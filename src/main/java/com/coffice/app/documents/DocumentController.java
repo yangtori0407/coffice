@@ -137,7 +137,7 @@ public class DocumentController {
 			}
 			
 		} else if(docuVO.getWriterId().equals(sessionUser.getUserId())) {
-			kindMessage = "결재 > 기안 문서";
+			kindMessage = "결재 > 내가 올린 문서";
 			docuKind = "online";
 			
 		} else {
@@ -267,12 +267,13 @@ public class DocumentController {
 	
 	//
 	@PostMapping("updateonlystatus")
-	public String updateOnlyStatus(DocumentVO documentVO) throws Exception {
+	public String updateOnlyStatus(DocumentVO documentVO, Model model) throws Exception {
 		
 		int result = documentService.updateOnlyStatus(documentVO);
 		
+		model.addAttribute("alertMessage", "문서가 회수되었습니다");
 		
-		return "redirect:./list/ontemporary";
+		return "document/messageDone";
 	}
 	
 	
