@@ -322,8 +322,8 @@
 							</form>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-primary" id="change">수정</button>
-							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="saveChange">저장</button>
+							<button type="button" class="btn btn-secondary" id="change">수정</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" id="saveChange">저장</button>
 						</div>
 					</div>
 				</div>

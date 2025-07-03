@@ -153,14 +153,10 @@ repeatCheck.addEventListener("change", (e)=>{
 saveChange.addEventListener("click", ()=>{
     let checked = document.querySelector('input[name="detailResultOptions"]:checked').value;
     let params = new FormData
-    params.append("scheduleId", scheduleId)
-    params.append("scheduleType", checked)
-    params.append("detail", detailResult.value.trim())
-    params.append("startTime", rsDate.value+rsTime.value)
-    params.append("endTime", reDate.value+reTime.value)
     
     if(groupId != "" && groupId != "null" && !repeatCheck.checked) {
         console.log(groupId)
+        // scheduleId = null
         params.append("exception", true)
         params.append("exceptions[0].repeatId", groupId)
         params.append("exceptions[0].exceptionDate", startStr)
@@ -177,6 +173,12 @@ saveChange.addEventListener("click", ()=>{
             params.append("repeatCount", rCount.value)
         }
     }
+
+    // params.append("scheduleId", scheduleId)
+    params.append("scheduleType", checked)
+    params.append("detail", detailResult.value.trim())
+    params.append("startTime", rsDate.value+rsTime.value)
+    params.append("endTime", reDate.value+reTime.value)
     
     fetch("schedule/update", {
         method: "post",
@@ -388,6 +390,6 @@ $('#detailModal').on('hidden.bs.modal', function () {
         startStr = null
         change.setAttribute("style", "display: block;")
         deleteSchedule.setAttribute("style", "display: block;")
-        saveChange.innerText = 'Save Changes'
+        saveChange.innerText = '저장'
     }
 })
