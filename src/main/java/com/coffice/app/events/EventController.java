@@ -56,19 +56,19 @@ public class EventController {
 		return "events/schedule";
 	}
 	
-	@GetMapping("getSchedules")
-	@ResponseBody
-	public List<ScheduleVO> getAll(Authentication authentication) throws Exception {
-		UserVO userVO = (UserVO)authentication.getPrincipal();
-		return scheduleService.getAll(userVO);
-	}
-	
-	@GetMapping("getRepeatSchedules")
-	@ResponseBody
-	public List<ScheduleVO> getRepeatSchedules(Authentication authentication) throws Exception {
-		UserVO userVO = (UserVO)authentication.getPrincipal();
-		return scheduleService.getRepeatSchedules(userVO);
-	}
+//	@GetMapping("getSchedules")
+//	@ResponseBody
+//	public List<ScheduleVO> getAll(Authentication authentication) throws Exception {
+//		UserVO userVO = (UserVO)authentication.getPrincipal();
+//		return scheduleService.getAll(userVO);
+//	}
+//	
+//	@GetMapping("getRepeatSchedules")
+//	@ResponseBody
+//	public List<ScheduleVO> getRepeatSchedules(Authentication authentication) throws Exception {
+//		UserVO userVO = (UserVO)authentication.getPrincipal();
+//		return scheduleService.getRepeatSchedules(userVO);
+//	}
 	
 	@GetMapping("getSchedule")
 	@ResponseBody
@@ -113,11 +113,11 @@ public class EventController {
 		return "events/schedule";
 	}
 	
-	@GetMapping("getHolidays")
-	@ResponseBody
-	public List<HolidayVO> getHolidays() throws Exception {
-		return holidayService.getHolidays();
-	}
+//	@GetMapping("getHolidays")
+//	@ResponseBody
+//	public List<HolidayVO> getHolidays() throws Exception {
+//		return holidayService.getHolidays();
+//	}
 	
 	@GetMapping("getDepsUsers")
 	@ResponseBody

@@ -11,6 +11,7 @@ const pcolor = "#378006"
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
+    height: 850,
     themeSystem: 'bootstrap4',
     locale: 'ko',
     events: '/events/all?kind=vacation',

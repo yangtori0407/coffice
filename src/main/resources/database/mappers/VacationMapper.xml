@@ -13,6 +13,7 @@
 							 where USER_ID = #{userId}
   							)
   			and USER_ID != #{userId}
+  			ORDER BY FIELD(POSITION, '부장', '차장', '과장', '대리', '주임', '사원')
   	</select>
   	
   	<insert id="applyForLeave">
