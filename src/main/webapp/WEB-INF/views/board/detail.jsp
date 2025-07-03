@@ -43,7 +43,8 @@ input {
 					<div class="d-flex flex-column">
 
 						<div class="card mb-4 py-2 border-left-info">
-							<div class="card-body" id="board" data-board-num="${detail.boardNum }">${detail.boardTitle }</div>
+							<div class="card-body" id="board"
+								data-board-num="${detail.boardNum }">${detail.boardTitle }</div>
 						</div>
 						<c:if test="${detail.userId eq login.userId }">
 							<div class="mb-2 ml-auto">
@@ -84,74 +85,76 @@ input {
 							<div id="comArea">
 								<c:forEach items="${detail.comments }" var="com"
 									varStatus="status">
-									<c:choose>
+									<c:if test="${com.isReply eq 0 }">
+										<c:choose>
 
-										<c:when test="${com.deleteStatus eq '1'}">
-											<div class="card mb-2 py-1 border-left-warning">
-												<div class="row w-100 m-0">
-													<div class="col-10 card-body">삭제된 댓글입니다.</div>
-													<div
-														class="col-2 d-flex align-items-start justify-content-end mt-1">
-														<div class="d-flex flex-column mr-4">
-															<button class="btn btn-primary reply"
-																data-comment-num="${com.commentNum}" type="button"
-																data-toggle="collapse"
-																data-target="#collapse${com.commentNum }"
-																aria-expanded="false" aria-controls="collapseExample">
-																답글</button>
+											<c:when test="${com.deleteStatus eq '1'}">
+												<div class="card mb-2 py-1 border-left-warning">
+													<div class="row w-100 m-0">
+														<div class="col-10 card-body">삭제된 댓글입니다.</div>
+														<div
+															class="col-2 d-flex align-items-start justify-content-end mt-1">
+															<div class="d-flex flex-column mr-4">
+																<button class="btn btn-primary reply"
+																	data-comment-num="${com.commentNum}" type="button"
+																	data-toggle="collapse"
+																	data-target="#collapse${com.commentNum }"
+																	aria-expanded="false" aria-controls="collapseExample">
+																	답글</button>
 
-														</div>
-													</div>
-												</div>
-											</div>
-
-
-											<div class="collapse" id="collapse${com.commentNum }"></div>
-										</c:when>
-										<c:otherwise>
-
-											<div class="card mb-2 py-1 border-left-warning">
-												<div class="row w-100 m-0">
-													<div class="col-10 card-body">
-														<div style="font-size: 13px; margin-bottom: 10px;">
-															${com.formatted}</div>
-														<div>${com.commentContents}</div>
-													</div>
-													<div
-														class="col-2 d-flex align-items-start justify-content-end mt-1">
-														<div class="d-flex flex-column mr-4">
-															<button class="btn btn-primary reply"
-																data-comment-num="${com.commentNum}" type="button"
-																data-toggle="collapse"
-																data-target="#collapse${com.commentNum }"
-																aria-expanded="false" aria-controls="collapseExample">
-																답글</button>
-
-														</div>
-														<c:if test="${com.userId eq login.userId }">
-															<div class="dropdown">
-																<button
-																	class="btn dropdown-toggle p-0 border-0 bg-transparent"
-																	type="button" data-toggle="dropdown"
-																	aria-expanded="false">
-																	<ion-icon name="ellipsis-vertical-outline"></ion-icon>
-																</button>
-																<div class="dropdown-menu dropdown-menu-right">
-																	<button class="dropdown-item commentUpBtn"
-																		data-com-num="${com.commentNum }">수정</button>
-																	<button class="dropdown-item commentDelBtn"
-																		data-com-num="${com.commentNum }">삭제</button>
-																</div>
 															</div>
-														</c:if>
+														</div>
 													</div>
 												</div>
-											</div>
 
 
-											<div class="collapse" id="collapse${com.commentNum }"></div>
-										</c:otherwise>
-									</c:choose>
+												<div class="collapse" id="collapse${com.commentNum }"></div>
+											</c:when>
+											<c:otherwise>
+
+												<div class="card mb-2 py-1 border-left-warning">
+													<div class="row w-100 m-0">
+														<div class="col-10 card-body">
+															<div style="font-size: 13px; margin-bottom: 10px;">
+																${com.formatted}</div>
+															<div>${com.commentContents}</div>
+														</div>
+														<div
+															class="col-2 d-flex align-items-start justify-content-end mt-1">
+															<div class="d-flex flex-column mr-4">
+																<button class="btn btn-primary reply"
+																	data-comment-num="${com.commentNum}" type="button"
+																	data-toggle="collapse"
+																	data-target="#collapse${com.commentNum }"
+																	aria-expanded="false" aria-controls="collapseExample">
+																	답글</button>
+
+															</div>
+															<c:if test="${com.userId eq login.userId }">
+																<div class="dropdown">
+																	<button
+																		class="btn dropdown-toggle p-0 border-0 bg-transparent"
+																		type="button" data-toggle="dropdown"
+																		aria-expanded="false">
+																		<ion-icon name="ellipsis-vertical-outline"></ion-icon>
+																	</button>
+																	<div class="dropdown-menu dropdown-menu-right">
+																		<button class="dropdown-item commentUpBtn"
+																			data-com-num="${com.commentNum }">수정</button>
+																		<button class="dropdown-item commentDelBtn"
+																			data-com-num="${com.commentNum }">삭제</button>
+																	</div>
+																</div>
+															</c:if>
+														</div>
+													</div>
+												</div>
+
+
+												<div class="collapse" id="collapse${com.commentNum }"></div>
+											</c:otherwise>
+										</c:choose>
+									</c:if>
 
 
 
