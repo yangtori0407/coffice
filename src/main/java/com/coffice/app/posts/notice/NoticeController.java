@@ -81,7 +81,7 @@ public class NoticeController {
 	}
 	
 	@PostMapping("add")
-	public String add(NoticeVO noticeVO, @RequestParam("attaches")MultipartFile[] attaches, Authentication authentication, Model model) throws Exception{
+	public String add(NoticeVO noticeVO, @RequestParam(value="attaches", required = false)MultipartFile[] attaches, Authentication authentication, Model model) throws Exception{
 		UserVO userVO = (UserVO)authentication.getPrincipal();
 		noticeVO.setUserId(userVO.getUserId());
 		int result = noticeService.add(noticeVO, attaches);
