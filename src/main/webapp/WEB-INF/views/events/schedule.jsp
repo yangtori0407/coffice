@@ -63,7 +63,7 @@
 									<hr>
 									
 									<div class="form-group">
-										<label for="details">Details</label>
+										<label for="details">일정 내용</label>
 										<textarea class="form-control" id="details" rows="3"></textarea>
 									</div>
 								</c:if>
@@ -212,7 +212,7 @@
 									<hr>
 									
 									<div class="form-group">
-										<label for="details">Details</label>
+										<label for="details">일정 내용</label>
 										<textarea class="form-control" id="detailResult" rows="3" disabled></textarea>
 									</div>
 								</c:if>
