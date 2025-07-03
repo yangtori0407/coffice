@@ -38,6 +38,7 @@ let deleteSchedule = document.getElementById("deleteSchedule")
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
+    height: 850,
     themeSystem: 'bootstrap4',
     locale: 'ko',
     events: '/events/all?kind=schedule',
