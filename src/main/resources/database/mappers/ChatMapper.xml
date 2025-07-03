@@ -212,7 +212,7 @@
 	
 	<insert id="invite" parameterType="java.util.HashMap">
 		INSERT INTO CHAT_PERSON(CHATROOM_NUM, USER_ID, JOINED_AT, LAST_READ_AT, ALARM_STATUS, EXIT_STATUS)
-		VALUES(#{chatRoomNum}, #{userId}, NOW(), NOW(), 0, 0)
+		VALUES(#{chatRoomNum}, #{userId}, NOW(), NOW(), 1, 0)
 	</insert>
 
 	<update id="updateLastReadAt" parameterType="java.util.HashMap">
