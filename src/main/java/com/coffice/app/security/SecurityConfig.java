@@ -52,6 +52,10 @@ public class SecurityConfig {
 			.authorizeHttpRequests(auth ->{
 					auth
 					.requestMatchers("/").authenticated()
+					.requestMatchers("/notice/**").authenticated()
+					.requestMatchers("/board/**").authenticated()
+					.requestMatchers("/message/**").authenticated()
+					.requestMatchers("/chat/**").authenticated()
 					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
 					.requestMatchers("/employee/list","employee/detail", "/user/register").hasRole("ADMIN")
 					.requestMatchers("/ingredients/list","/ingredients/detail","/branch/add", "/branch/masterAdd").hasAuthority("3")
