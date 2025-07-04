@@ -27,7 +27,7 @@
 	<select id="getList" parameterType="Pager" resultType="NoticeVO">
 		SELECT * FROM NOTICE
 		<include refid="search"></include>
-		ORDER BY NOTICE_NUM DESC
+		ORDER BY NOTICE_DATE DESC
 		LIMIT #{startNum}, #{page}
 	</select>
 
@@ -35,7 +35,7 @@
 		SELECT NOTICE_NUM, NOTICE_TITLE, NOTICE_DATE
 		FROM NOTICE
 		ORDER BY NOTICE_DATE DESC
-		LIMIT 6
+		LIMIT 4
 	</select>
 
 	<sql id="search">

@@ -153,6 +153,10 @@ public class ChatService {
 		int result = chatDAO.addFileContents(chatContentsVO);
 		
 		chatContentsVO = chatDAO.getChatContentsInfo(chatContentsVO.getChatNum());
+		String name = chatDAO.getUserInfo(chatContentsVO);
+		chatContentsVO.setName(name);
+		
+		log.info("chatContenstVO : {}", chatContentsVO);
 		
 		//파일 하드디스크 저장 후 DB에 파일 이름 저장
 		ChatFilesVO chatFilesVO = new ChatFilesVO();

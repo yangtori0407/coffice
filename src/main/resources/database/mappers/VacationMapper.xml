@@ -13,6 +13,7 @@
 							 where USER_ID = #{userId}
   							)
   			and USER_ID != #{userId}
+  			ORDER BY FIELD(POSITION, '부장', '차장', '과장', '대리', '주임', '사원')
   	</select>
   	
   	<insert id="applyForLeave">
@@ -81,7 +82,18 @@
   			where DELETE_STATUS = 0
   			and STATUS = 1
   			and VACATION_ID = #{vacationId}
+  			and USER_ID = #{userId}
   	</update>
+  	
+  	<update id="cancel" parameterType="VacationVO">
+  			update VACATION
+  			set STATUS = 4, EDIT_TIME = now(), EDITOR = #{editor}, DELETE_STATUS = 1
+  			where DELETE_STATUS = 0
+  			and STATUS = 1
+  			and VACATION_ID = #{vacationId}
+  			and USER_ID = #{userId}
+  	</update>
+  	
   	
   	<update id="reject" parameterType="VacationVO">
   			update VACATION
@@ -90,5 +102,6 @@
   			and VACATION_ID = #{vacationId}
   			and APPROVAL_AUTHORITY = #{approvalAuthority}
   	</update>
+  	
   	
   </mapper>

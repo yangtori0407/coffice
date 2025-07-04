@@ -36,7 +36,7 @@ public class HolidayService {
 		return holidayDAO.getHolidays();
 	}
 	
-	@Scheduled(cron = "0 0 0 * * *")
+	@Scheduled(cron = "0 5 0 * * *")
 	public int updateHoliday() throws Exception {
 		Calendar calendar = Calendar.getInstance();
 		int c = calendar.get(Calendar.YEAR)-1;

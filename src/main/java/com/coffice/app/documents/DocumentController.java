@@ -137,7 +137,7 @@ public class DocumentController {
 			}
 			
 		} else if(docuVO.getWriterId().equals(sessionUser.getUserId())) {
-			kindMessage = "결재 > 기안 문서";
+			kindMessage = "결재 > 내가 올린 문서";
 			docuKind = "online";
 			
 		} else {
@@ -267,12 +267,13 @@ public class DocumentController {
 	
 	//
 	@PostMapping("updateonlystatus")
-	public String updateOnlyStatus(DocumentVO documentVO) throws Exception {
+	public String updateOnlyStatus(DocumentVO documentVO, Model model) throws Exception {
 		
 		int result = documentService.updateOnlyStatus(documentVO);
 		
+		model.addAttribute("alertMessage", 0);
 		
-		return "redirect:./list/ontemporary";
+		return "document/messageDone";
 	}
 	
 	
@@ -346,21 +347,23 @@ public class DocumentController {
 
 	//
 	@PostMapping("proceed")
-	public String updateApprovalProceed(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
+	public String updateApprovalProceed(ApprovalLineVO approvalLineVO, HttpSession session, Model model) throws Exception {
 
 		//System.out.println("user "+approvalLineVO.getUserId());
 		//System.out.println("docu "+approvalLineVO.getDocumentId());
 		//System.out.println("sign "+approvalLineVO.getSignId());
 		
 		int result = documentService.updateApprovalProceed(approvalLineVO, session);
-
-		return "redirect:./list/handled";
+		
+		model.addAttribute("alertMessage", 1);
+		
+		return "document/messageDone";
 	}
 	
 	
 	//
 	@PostMapping("reject")
-	public String updateApprovalReject(ApprovalLineVO approvalLineVO, HttpSession session) throws Exception {
+	public String updateApprovalReject(ApprovalLineVO approvalLineVO, HttpSession session, Model model) throws Exception {
 
 		//System.out.println("user "+approvalLineVO.getUserId());
 		//System.out.println("docu "+approvalLineVO.getDocumentId());
@@ -368,7 +371,9 @@ public class DocumentController {
 		
 		int result = documentService.updateApprovalReject(approvalLineVO, session);
 
-		return "redirect:./list/handled";
+		model.addAttribute("alertMessage", 2);
+		
+		return "document/messageDone";
 	}
 	
 	

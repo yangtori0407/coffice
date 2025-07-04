@@ -7,11 +7,11 @@
   
 	<select id="getAnnualLeaves" parameterType="AnnualLeaveVO" resultType="java.util.Map">
 			SELECT
-				SUM(USED_LEAVE)							AS USED,
-				SUM(GRANT_LEAVE)						AS `GRANT`,
-				SUM(GRANT_LEAVE) - SUM(USED_LEAVE)		AS REMAIN
+			    IFNULL(SUM(USED_LEAVE), 0)                          AS USED,
+			    IFNULL(SUM(GRANT_LEAVE), 0)                         AS `GRANT`,
+			    IFNULL(SUM(GRANT_LEAVE), 0) - IFNULL(SUM(USED_LEAVE), 0) AS REMAIN
 			FROM
-				ANNUAL_LEAVE
+			    ANNUAL_LEAVE
 			WHERE
 				USER_ID = #{userId}
 				AND
@@ -38,72 +38,81 @@
 				)
 	</insert>
 	
+	
+	<!-- Step 1: 임시 테이블 생성 -->
+	<update id="createEmpQualifiedTemp" parameterType="java.util.Map">
+			CREATE TEMPORARY TABLE IF NOT EXISTS emp_qualified_temp AS
+			  WITH month_days AS (
+			      SELECT DATE_FORMAT(DATE_ADD(#{baseDate}, INTERVAL seq DAY), '%Y-%m-%d') AS work_date
+			      FROM (
+			          SELECT @row := @row + 1 AS seq
+			          FROM (
+			              SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+			              UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8
+			              UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12
+			              UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16
+			              UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20
+			              UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23 UNION ALL SELECT 24
+			              UNION ALL SELECT 25 UNION ALL SELECT 26 UNION ALL SELECT 27 UNION ALL SELECT 28
+			              UNION ALL SELECT 29 UNION ALL SELECT 30 UNION ALL SELECT 31
+			          ) t1, (SELECT @row := -1) r
+			      ) days
+			      WHERE MONTH(DATE_ADD(#{baseDate}, INTERVAL seq DAY)) = MONTH(#{baseDate})
+			  ),
+			  weekdays AS (
+			      SELECT work_date
+			      FROM month_days
+			      WHERE DAYOFWEEK(work_date) NOT IN (1, 7)
+			      AND work_date NOT IN (SELECT LOCDATE FROM HOLIDAY)
+			  ),
+			  emp_target AS (
+			      SELECT USER_ID
+			      FROM USERS
+			      WHERE DATEDIFF(LAST_DAY(#{baseDate}), HIRE_DATE) &lt; 365
+			      AND STATUS = 1
+			  ),
+			  emp_attendance AS (
+			      SELECT DISTINCT USER_ID, DATE(ATTENDANCE_DATE) AS present_date
+			      FROM ATTENDANCE
+			      WHERE STATUS = '정상'
+			  ),
+			  emp_vacation AS (
+			      SELECT USER_ID, DATE(START_TIME) AS v_start, DATE(END_TIME) AS v_end
+			      FROM VACATION
+			  ),
+			  emp_qualified AS (
+			      SELECT e.USER_ID
+			      FROM emp_target e
+			      WHERE NOT EXISTS (
+			          SELECT 1
+			          FROM weekdays w
+			          WHERE NOT EXISTS (
+			              SELECT 1
+			              FROM emp_attendance a
+			              WHERE a.USER_ID = e.USER_ID AND a.present_date = w.work_date
+			              UNION
+			              SELECT 1
+			              FROM emp_vacation v
+			              WHERE v.USER_ID = e.USER_ID AND w.work_date BETWEEN v.v_start AND v.v_end
+			          )
+			      )
+			  )
+			  SELECT USER_ID FROM emp_qualified;
+	</update>
+	
+	<!-- Step 2: INSERT 수행 -->
 	<insert id="insertMonthlyLeave" parameterType="java.util.Map">
-			-- 1단계: 월개근자 추출
-			WITH month_days AS (
-			    SELECT DATE_FORMAT(DATE_ADD(#{baseDate}, INTERVAL seq DAY), '%Y-%m-%d') AS work_date
-			    FROM (
-			        SELECT @row := @row + 1 AS seq
-			        FROM (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
-		                 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8
-		                 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12
-		                 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16
-		                 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20
-		                 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23 UNION ALL SELECT 24
-		                 UNION ALL SELECT 25 UNION ALL SELECT 26 UNION ALL SELECT 27 UNION ALL SELECT 28
-		                 UNION ALL SELECT 29 UNION ALL SELECT 30 UNION ALL SELECT 31) t1, (SELECT @row := -1) r
-			    ) days
-			    WHERE MONTH(DATE_ADD(#{baseDate}, INTERVAL seq DAY)) = MONTH(#{baseDate})
-			),
-			weekdays AS (
-			    SELECT work_date
-			    FROM month_days
-			    WHERE DAYOFWEEK(work_date) NOT IN (1, 7) -- 주말 제외
-			    AND work_date NOT IN (SELECT LOCDATE FROM HOLIDAY) -- 공휴일 제외
-			),
-			emp_target AS (
-			    SELECT USER_ID
-			    FROM USERS
-			    WHERE DATEDIFF(LAST_DAY(#{baseDate}, HIRE_DATE) &lt; 365 -- 1년 미만자
-			    AND STATUS = 1
-			),
-			emp_attendance AS (
-			    SELECT DISTINCT USER_ID, DATE(ATTENDANCE_DATE) AS present_date
-			    FROM ATTENDANCE
-			    WHERE STATUS = '정상'
-			),
-			emp_vacation AS (
-			    SELECT USER_ID, DATE(START_TIME) AS v_start, DATE(END_TIME) AS v_end
-			    FROM VACATION
-			),
-			emp_qualified AS (
-			    SELECT e.USER_ID
-			    FROM emp_target e
-			    WHERE NOT EXISTS (
-			        SELECT 1
-			        FROM weekdays w
-			        WHERE NOT EXISTS (
-			            SELECT 1
-			            FROM emp_attendance a
-			            WHERE a.USER_ID = e.USER_ID AND a.present_date = w.work_date
-			            UNION
-			            SELECT 1
-			            FROM emp_vacation v
-			            WHERE v.USER_ID = e.USER_ID AND w.work_date BETWEEN v.v_start AND v.v_end
-			        )
-			    )
-			)
-			
-			-- 2단계: 월차 1일 부여
-			INSERT INTO ANNUAL_LEAVE (LEAVE_YEAR, GRANT_LEAVE, GRANT_DATE, EXPIRATION_DATE, USER_ID, TYPE)
+			INSERT INTO ANNUAL_LEAVE (
+			    LEAVE_YEAR, GRANT_LEAVE, GRANT_DATE, EXPIRATION_DATE, USER_ID, TYPE
+			  )
 			SELECT 
-			    YEAR(DATE_ADD(#{baseDate}, INTERVAL 1 MONTH)) AS LEAVE_YEAR,
-			    1 AS GRANT_LEAVE,
-			    DATE_ADD(#{baseDate}, INTERVAL 1 MONTH) AS GRANT_DATE, -- 익월 1일
-			    CONCAT(YEAR(#{baseDate}), '-12-31') AS EXPIRATION_DATE,
+			    YEAR(DATE_ADD(#{baseDate}, INTERVAL 1 MONTH)),
+			    1,
+			    DATE_ADD(#{baseDate}, INTERVAL 1 MONTH),
+			    CONCAT(YEAR(#{baseDate}), '-12-31'),
 			    USER_ID,
-			    '월개근' AS TYPE
-			FROM emp_qualified;
+			    '월개근'
+			FROM emp_qualified_temp;
 	</insert>
 	
 	<insert id="insertYearlyLeave" parameterType="map">

@@ -11,8 +11,10 @@ const pcolor = "#378006"
 
 var calendarEl = document.getElementById("calendar")
 var calendar = new FullCalendar.Calendar(calendarEl, {
+    height: 850,
     themeSystem: 'bootstrap4',
     locale: 'ko',
+    events: '/events/all?kind=vacation',
     customButtons: {
         addButton: {
             text: '휴가 신청',
@@ -114,46 +116,46 @@ undo.addEventListener("click", ()=>{
     accept()
 })
 
-fetch("/events/getHolidays")
-.then(r=>r.json())
-.then(r=>{
-    for(a of r) {
-        let event = {
-            title: a.dateName,
-            start: a.locdate,
-            allDay: true,
-            color: '#ee0000',
-            editable: false,
-            extendedProps: {
-                preventClick: true
-            }
-        }
-        calendar.addEvent(event);
-    }
-})
+// fetch("/events/getHolidays")
+// .then(r=>r.json())
+// .then(r=>{
+//     for(a of r) {
+//         let event = {
+//             title: a.dateName,
+//             start: a.locdate,
+//             allDay: true,
+//             color: '#ee0000',
+//             editable: false,
+//             extendedProps: {
+//                 preventClick: true
+//             }
+//         }
+//         calendar.addEvent(event);
+//     }
+// })
 
-fetch("/events/vacation/getList")
-.then(r=>r.json())
-.then(r=>{
-    console.log(r)
-    for(a of r) {
-        let clr;
-        if(uid == a.userId) {
-            clr = pcolor
-        }else {
-            clr = gcolor
-        }
-        let event = {
-            id: a.vacationId,
-            title: a.aposition + " " + a.aname,
-            start: a.startTime,
-            end: a.endTime,
-            color: clr,
-            editable: false
-        }
-        calendar.addEvent(event);
-    }
-})
+// fetch("/events/vacation/getList")
+// .then(r=>r.json())
+// .then(r=>{
+//     console.log(r)
+//     for(a of r) {
+//         let clr;
+//         if(uid == a.userId) {
+//             clr = pcolor
+//         }else {
+//             clr = gcolor
+//         }
+//         let event = {
+//             id: a.vacationId,
+//             title: a.aposition + " " + a.aname,
+//             start: a.startTime,
+//             end: a.endTime,
+//             color: clr,
+//             editable: false
+//         }
+//         calendar.addEvent(event);
+//     }
+// })
 
 
 function apply() {
@@ -182,18 +184,29 @@ function apply() {
 
 const send = document.getElementById("send")
 send.addEventListener("click", ()=>{
-    let vType = document.getElementById("vType")
-    let sDate = document.getElementById("sDate")
-    let sTime = document.getElementById("sTime")
-    let eDate = document.getElementById("eDate")
-    let eTime = document.getElementById("eTime")
-    let accept = document.getElementById("accept")
+    let vType = document.getElementById("vType").value
+    let sDate = document.getElementById("sDate").value
+    let sTime = document.getElementById("sTime").value
+    let eDate = document.getElementById("eDate").value
+    let eTime = document.getElementById("eTime").value
+    let accept = document.getElementById("accept").value
     
+    if (!vType || !sDate || !eDate || !sTime || !eTime || !accept) {
+        alert("모든 필드를 입력해주세요.");
+        return;
+    }
+
+    // 2. 시작일 < 종료일 확인
+    if (new Date(sDate) > new Date(eDate)) {
+        alert("종료일은 시작일보다 이후여야 합니다.");
+        return;
+    }
+
     let params = new FormData
-    params.append("type", vType.value)
-    params.append("startTime", sDate.value+sTime.value)
-    params.append("endTime", eDate.value+eTime.value)
-    params.append("approvalAuthority", accept.value)
+    params.append("type", vType)
+    params.append("startTime", sDate+sTime)
+    params.append("endTime", eDate+eTime)
+    params.append("approvalAuthority", accept)
     
     fetch("/events/vacation/apply", {
         method: "post",
@@ -202,7 +215,10 @@ send.addEventListener("click", ()=>{
     .then(r=>r.text)
     .then(r=>{
         // console.log(r)
-        location.reload()
+        // calendar.destroy()
+        // calendar.render()
+        // location.reload()
+        $("#exampleModal").modal("hide")
     })
 })
 
@@ -426,22 +442,23 @@ updateVacation.addEventListener("click", ()=>{
             }
         })
 
-        change.addEventListener("click", ()=>{
-            let resultAccept = document.getElementById("resultAccept")
-            params.append("type", rvType.value)
-            params.append("startTime", rsDate.value+rsTime.value)
-            params.append("endTime", reDate.value+reTime.value)
-            params.append("approvalAuthority", resultAccept.value)
-            fetch("vacation/update", {
-                method: "post",
-                body: params
-            })
-            .then(r=>r.text())
-            .then(r=>{
-                // console.log(r)
-                location.reload()
-            })
-        })
+        // change.addEventListener("click", ()=>{
+        //     let resultAccept = document.getElementById("resultAccept")
+        //     params.append("type", rvType.value)
+        //     params.append("startTime", rsDate.value+rsTime.value)
+        //     params.append("endTime", reDate.value+reTime.value)
+        //     params.append("approvalAuthority", resultAccept.value)
+        //     fetch("vacation/update", {
+        //         method: "post",
+        //         body: params
+        //     })
+        //     .then(r=>r.text())
+        //     .then(r=>{
+        //         // console.log(r)
+        //         // location.reload()
+        //         calendar.refetchEvents()
+        //     })
+        // })
 
         $("#detailModal").modal("show")
     }else if(updateVacation.innerText == "승인") {
@@ -454,10 +471,68 @@ updateVacation.addEventListener("click", ()=>{
             .then(r=>{
                 console.log(r)
                 accept()
+                calendar.refetchEvents()
             })
         }else {
             console.log("no")
         }
+    }
+})
+
+change.addEventListener("click", () => {
+    const rsDate = document.getElementById("rsDate")
+    const rsTime = document.getElementById("rsTime")
+    const reDate = document.getElementById("reDate")
+    const reTime = document.getElementById("reTime")
+    const rvType = document.getElementById("rvType")
+    const resultAccept = document.getElementById("resultAccept")
+    const vid = document.getElementById("vid")
+
+    const params = new FormData();
+    params.append("vacationId", vid.value);
+    params.append("type", rvType.value);
+    params.append("startTime", rsDate.value + rsTime.value);
+    params.append("endTime", reDate.value + reTime.value);
+    params.append("approvalAuthority", resultAccept.value);
+
+    fetch("vacation/update", {
+        method: "post",
+        body: params
+    })
+    .then(r => r.text())
+    .then(() => {
+        calendar.refetchEvents();
+        $("#detailModal").modal("hide");
+    });
+});
+
+const deleteSchedule = document.getElementById("deleteSchedule")
+deleteSchedule.addEventListener("click", ()=>{
+    if(confirm('신청을 취소하시겠습니까?')) {
+        const rsDate = document.getElementById("rsDate")
+        const rsTime = document.getElementById("rsTime")
+        const reDate = document.getElementById("reDate")
+        const reTime = document.getElementById("reTime")
+        const rvType = document.getElementById("rvType")
+        const resultAccept = document.getElementById("resultAccept")
+        const vid = document.getElementById("vid")
+    
+        const params = new FormData();
+        params.append("vacationId", vid.value);
+        params.append("type", rvType.value);
+        params.append("startTime", rsDate.value + rsTime.value);
+        params.append("endTime", reDate.value + reTime.value);
+        params.append("approvalAuthority", resultAccept.value);
+    
+        fetch("vacation/cancel", {
+            method: "post",
+            body: params
+        })
+        .then(r => r.text())
+        .then(() => {
+            calendar.refetchEvents();
+            $("#detailModal").modal("hide");
+        });
     }
 })
 
@@ -473,9 +548,11 @@ reject.addEventListener("click", ()=>{
         .then(r=>r.text())
         .then(r=>{
             accept()
+            calendar.refetchEvents()
         })
     }
 })
+
 
 let goes = document.getElementsByName("goMypage")
 for(a of goes) {
@@ -511,7 +588,7 @@ document.addEventListener('DOMContentLoaded', function () {
     eTime.value = '';
     sDate.value = '';
     eDate.value = '';
-    vType.value = '연차'; // 기본값이 있다면 이걸로
+    vType.value = ''; // 기본값이 있다면 이걸로
   }
 
   vType.addEventListener('change', function () {

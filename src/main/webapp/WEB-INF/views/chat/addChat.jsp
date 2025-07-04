@@ -50,7 +50,7 @@
 										<button type="button"
 											class=" btn btn-danger mt-5 ml-auto btn btn-primary ml-auto mt-2"
 											data-toggle="modal" data-target="#exampleModal" id="diagram">
-											대화상태 추가하기</button>
+											대화상대 추가하기</button>
 
 										<div class="card border-left-primary shadow mt-3 pl-2"
 											style="width: 100%; height: 450px;">

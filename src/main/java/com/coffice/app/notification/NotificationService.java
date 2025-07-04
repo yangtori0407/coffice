@@ -135,13 +135,13 @@ public class NotificationService {
 		notificationDAO.add(notificationVO);
 		
 		for(String s : receivers) {
-			
+			log.info(s);
 			Map<String, Object> info = new HashMap<>();
 			info.put("userId", s);
 			info.put("notiNum", notificationVO.getNotiNum());
 			notificationDAO.addNotiCheck(info);
 			
-			template.convertAndSend("/sub/notification/user." + receivers, notificationVO);
+			template.convertAndSend("/sub/notification/user." + s, notificationVO);
 			info.clear();
 		}
 	}

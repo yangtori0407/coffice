@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.coffice.app.users.UserVO;
 
@@ -33,11 +34,13 @@ public class AnnualLeaveService {
 		return annualLeaveDAO.getList(userVO);
 	}
 	
+	@Transactional
 	@Scheduled(cron = "0 0 4 1 * *")
 	public void insertMonthlyLeave() throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		map.put("baseDate", LocalDate.now().withDayOfMonth(1));
-		annualLeaveDAO.insertMopnthlyLeave(map);
+		annualLeaveDAO.createEmpQualifiedTemp(map);
+		annualLeaveDAO.insertMonthlyLeave(map);
 	}
 	
 	@Scheduled(cron = "0 0 2 1 1 *")

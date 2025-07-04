@@ -118,6 +118,7 @@
   			FROM USERS
   			WHERE DEPT_ID = #{deptId}
   			AND STATUS = 1
+  			ORDER BY FIELD(POSITION, '부장', '차장', '과장', '대리', '주임', '사원')
   	</select>
 
   

@@ -60,8 +60,7 @@
 							</div>
 						</div>		
 					</div>
-					<div class="row">
-					<div class="col-sm-12">
+
 					<table class="table table-bordered dataTable" id="dataTable"
 							width="100%" cellspacing="0" role="grid"
 							aria-describedby="dataTable_info" style="width: 100%;">
@@ -94,27 +93,26 @@
 							</c:forEach>
 						</tbody>
 					</table>
-					</div>
-					</div>
+
 					<div class="row">
 						<div class="col-sm-12 col-md-5"></div>
 							<div class="col-sm-12 col-md-7">
 								<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
 									<ul class="pagination">
 										<li class="paginate_button page-item previous disabled" id="dataTable_previous">
-											<a href="./list?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+											<a href="./map?nowPage=${pager.start-1 }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
 												Previous
 											</a>
 										</li>
 										<c:forEach begin="${pager.start }" end="${pager.end }" var="i">
 										<li class="paginate_button page-item ${pager.nowPage == i ? 'active' : '' }">
-											<a href="./list?nowPage=${i }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">
+											<a href="./map?nowPage=${i }&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">
 											${i}
 											</a>
 										</li>
 										</c:forEach>
 										<li class="paginate_button page-item next ${pager.endCheck?'disabled':''}" id="dataTable_next">
-											<a href="./list?nowPage=${pager.end+1}&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">
+											<a href="./map?nowPage=${pager.end+1}&search=${pager.search}&kind=${pager.kind}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">
 											Next
 											</a>
 										</li>

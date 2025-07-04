@@ -85,7 +85,7 @@
 			
 			<div class="card shadow mb-4 mother-card" style="min-width: 1300px;" >
 			
-				<div class="mother-content  d-flex justify-content-center align-items-start" style="min-width: 1300px; height: 1150px;">
+				<div class="mother-content  d-flex justify-content-center align-items-start" style="min-width: 1300px; min-height: 1150px;">
 				
 				  	
 				  
