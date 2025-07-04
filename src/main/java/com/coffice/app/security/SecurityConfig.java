@@ -59,6 +59,7 @@ public class SecurityConfig {
 					.requestMatchers("/user/mypage","/user/update","/user/logout").authenticated()
 					.requestMatchers("/events/**").authenticated()
 					.requestMatchers("/document/**").authenticated()
+					.requestMatchers("/branch/**").authenticated()
 					.anyRequest().permitAll()
 					;
 			})
