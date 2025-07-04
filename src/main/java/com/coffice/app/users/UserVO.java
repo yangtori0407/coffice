@@ -33,8 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserVO implements UserDetails{
 	
 	private String userId;
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
-            message = "비밀번호는 8자리 이상이며, 영문자와 숫자를 포함해야 합니다.")
 	@NotBlank(message = "필수사항입니다",groups = RegisterGroup.class)
 	private String password;
 	//db 저장 x

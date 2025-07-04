@@ -287,7 +287,7 @@ public class UserController {
 	public String update(@Valid @ModelAttribute("userVO") UserVO userVO, BindingResult bindingResult,
 						@RequestParam("file") MultipartFile file, 
 						HttpSession session, RedirectAttributes redirectAttributes, Model model) throws Exception {
-		
+		System.out.println("[DEBUG] update() 메서드 진입");
 	    if (userVO.getPassword() != null && !userVO.getPassword().isBlank() &&
 	        !userVO.getPassword().equals(userVO.getPasswordCheck())) {
 	    	bindingResult.rejectValue("passwordCheck", "error.passwordCheck", "비밀번호 확인이 일치하지 않습니다.");

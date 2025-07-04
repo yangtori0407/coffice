@@ -171,22 +171,25 @@ public class UserService implements UserDetailsService{
 		UserVO originalUser = userDAO.findById(userVO.getUserId());
 		
 		if(!file.isEmpty()) {
-			String fileName = fileManager.fileSave(path, file);
+			String fileName = fileManager.fileSave(path.concat("profile/") , file);
 			userVO.setSaveName(fileName);
 			userVO.setOriginName(file.getOriginalFilename());
 		} else {
 			userVO.setSaveName(originalUser.getSaveName());
 			userVO.setOriginName(originalUser.getOriginName());
 		}
+		System.out.println("입력된 비밀번호 원본 : [" + userVO.getPassword() + "]");
 		
-		if(userVO.getPassword() != null && !userVO.getPassword().isBlank()) {
-			if (!userVO.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
-	            throw new IllegalArgumentException("비밀번호는 8자리 이상이며, 영문자와 숫자를 포함해야 합니다.");
-	        }
-			userVO.setPassword(passwordEncoder.encode(userVO.getPassword()));
-		}else {
-			userVO.setPassword(originalUser.getPassword()); //변경 안했음 유지
-		}
+			if(userVO.getPassword() != null && !userVO.getPassword().trim().isBlank()) {
+				if (!userVO.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+		            throw new IllegalArgumentException("비밀번호는 8자리 이상이며, 영문자와 숫자를 포함해야 합니다.");
+		        }
+				userVO.setPassword(passwordEncoder.encode(userVO.getPassword()));
+			}else {
+				userVO.setPassword(originalUser.getPassword()); //변경 안했음 유지
+			}
+			System.out.println("비번 : "+ userVO.getPassword());
+		
 		
 		return userDAO.update(userVO);
 	}
