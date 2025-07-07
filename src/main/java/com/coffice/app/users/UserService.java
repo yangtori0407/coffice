@@ -178,7 +178,8 @@ public class UserService implements UserDetailsService{
 			userVO.setSaveName(originalUser.getSaveName());
 			userVO.setOriginName(originalUser.getOriginName());
 		}
-		System.out.println("입력된 비밀번호 원본 : [" + userVO.getPassword() + "]");
+		
+		//System.out.println("입력된 비밀번호 원본 : [" + userVO.getPassword() + "]");
 		
 			if(userVO.getPassword() != null && !userVO.getPassword().trim().isBlank()) {
 				if (!userVO.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {

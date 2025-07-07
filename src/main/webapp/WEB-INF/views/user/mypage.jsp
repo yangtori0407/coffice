@@ -164,7 +164,7 @@
 					    <!-- 오른쪽 아래 박스 -->
 					    <div class="card mb-3" style="flex: 1;">
 					      <div class="card-header py-3">
-					        <h6 class="m-0 font-weight-bold text-primary">나의 이번 주 근태현황</h6>
+					        <h6 class="m-0 font-weight-bold text-primary">근태 현황</h6>
 					      </div>
 				
 					      <div class="card-body" style="display: flex; min-height: 250px; padding: 20px;">
