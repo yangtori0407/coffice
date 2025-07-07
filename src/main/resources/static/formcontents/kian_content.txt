@@ -1,0 +1,50 @@
+<div class="col">
+	      	 	<button id="add-row">행 추가</button>
+	      	 	<button id="remove-row">행 삭제</button>
+	      	 </div>
+	      		      	
+ 	      	<div class="col d-flex justify-content-center align-items-center">
+	      	
+		      	<table border="1" cellspacing="0" cellpadding="5" style="border-collapse: collapse; width: 100%; text-align: center;">
+				  <thead>
+				    <tr style="background-color: #d9edf7;">
+				      <th colspan="7" style="padding: 10px; font-weight: bold;">상 세 내 용</th>
+				    </tr>			
+				  </thead>
+				  <tbody id="tbody1">
+					    <tr class="trs" style="height: 50px;">
+					    	<td class="tds" style="width: 20%;">내  용</td>
+					    	<td class="tds" style="width: 80%;"></td>
+					    </tr>
+					    <tr class="trs" style="height: 50px;">
+					    	<td class="tds" style="width: 20%;">대  상</td>
+					    	<td class="tds" style="width: 80%;"></td>					    	 
+					    </tr>
+					    <tr class="trs" style="height: 50px;">
+					    	<td class="tds" style="width: 20%;">절  차</td>
+					    	<td class="tds" style="width: 80%;"></td>					    	 
+					    </tr>
+					    <tr class="trs" style="height: 50px;">
+					    	<td class="tds" style="width: 20%;">일  정</td>
+					    	<td class="tds" style="width: 80%;"></td>					    	 
+					    </tr>
+					    <tr class="trs" style="height: 50px;">
+					    	<td class="tds" style="width: 20%;">예  산</td>
+					    	<td class="tds" style="width: 80%;"></td>					    	 
+					    </tr>
+					    <tr class="trs" style="height: 50px;">
+					    	<td class="tds" style="width: 20%;">특이사항</td>
+					    	<td class="tds" style="width: 80%;"></td>
+					    </tr>
+
+				  </tbody>
+				</table>
+			
+			
+		    </div>
+	      
+		    <div class="col">
+		      	<div class="m-0 p-0 text-center" style="border: 1px solid #000; border-top: none; height: 130px;">
+		    		<div>위 내용과 같이 기안하오니 검토후 재가하여 주시기 바랍니다</div>
+		    	</div>	
+			</div>

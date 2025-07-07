@@ -1,0 +1,66 @@
+
+.circle-img {
+    width: 100px;         /* 크기 조절 */
+    height: 100px;        /* 정사각형이어야 완전히 동그랗게 나옴 */
+    object-fit: cover;    /* 비율 깨짐 방지 + 꽉 채움 */
+    border-radius: 50%;   /* 동그랗게 만들기 */
+    display: block;
+    margin: -40px auto 15px auto;       /* 가운데 정렬 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);  /* 그림자 효과 */
+}
+
+.employee {
+	margin-bottom : -20px ; 
+}
+
+.employee-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.employee-info {
+    font-size: 15px;
+    opacity: 0.9;
+}
+
+.work-info {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  margin-top : 10px;
+}
+
+.item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+
+
+
+.checkInBtn {
+  width: 120px;     
+  padding: 10px 20px;  
+  margin-bottom: 20px;
+}
+
+.checkOutBtn {
+	width: 120px;     
+  padding: 10px 20px;  
+  margin-bottom: 20px;
+}
+
+.now {
+	margin-bottom : 20px;
+	text-align : center;
+	font-size : 17px;
+} 
+
+

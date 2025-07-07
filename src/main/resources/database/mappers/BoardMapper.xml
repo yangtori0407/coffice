@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coffice.app.posts.board.BoardDAO">
+	<insert id="add" parameterType="BoardVO">
+		INSERT INTO BOARD VALUES(NULL,
+		#{boardTitle}, #{userId}, 0,
+		#{boardContents}, now(), 0, null)
+	</insert>
+
+	<insert id="addComment" parameterType="CommentVO"
+		useGeneratedKeys="true" keyProperty="commentNum">
+		INSERT INTO COMMENT(COMMENT_NUM,
+		BOARD_NUM, USER_ID, DELETE_STATUS, COMMENT_DATE, COMMENT_CONTENTS,
+		COMMENT_P, IS_REPLY)
+		VALUES(NULL, #{boardNum}, #{userId},0,NOW(),
+		#{commentContents}, 0, 0);
+	</insert>
+
+	<insert id="addReply" parameterType="CommentVO"
+		useGeneratedKeys="true" keyProperty="commentNum">
+		INSERT INTO COMMENT(COMMENT_NUM,
+		BOARD_NUM, USER_ID, DELETE_STATUS, COMMENT_DATE, COMMENT_CONTENTS,
+		COMMENT_P, IS_REPLY)
+		VALUES(NULL,#{boardNum}, #{userId},0,NOW(),
+		#{commentContents},#{commentP}, 1);
+	</insert>
+
+	<select id="getList" parameterType="Pager" resultType="BoardVO">
+		SELECT
+		B.BOARD_NUM,
+		B.BOARD_TITLE,
+		B.BOARD_HIT,
+		B.BOARD_DATE,
+		COUNT(C.COMMENT_NUM) AS COMMENT_COUNT
+		FROM (
+		SELECT * FROM BOARD
+		<include refid="search" />
+		ORDER BY BOARD_NUM DESC
+		LIMIT #{startNum}, #{page}
+		) B
+		LEFT OUTER JOIN
+		COMMENT C
+		ON B.BOARD_NUM = C.BOARD_NUM AND C.DELETE_STATUS = 0
+		GROUP BY
+		B.BOARD_NUM
+		ORDER BY BOARD_NUM DESC
+	</select>
+
+	<resultMap type="BoardVO" id="getComment">
+		<id column="BOARD_NUM" property="boardNum" />
+		<result column="BOARD_TITLE" property="boardTitle" />
+		<result column="USER_ID" property="userId" />
+		<result column="BOARD_HIT" property="boardHit" />
+		<result column="BOARD_CONTENTS" property="boardContents" />
+		<result column="BOARD_DATE" property="boardDate" />
+		<collection property="comments" javaType="java.util.List"
+			ofType="CommentVO" notNullColumn="COMMENT_NUM">
+			<id column="COMMENT_NUM" property="commentNum" />
+			<result column="BOARD_NUM" property="boardNum" />
+			<result column="USER_ID" property="userId" />
+			<result column="CDS" property="deleteStatus" />
+			<result column="COMMENT_DATE" property="commentDate" />
+			<result column="COMMENT_CONTENTS" property="commentContents" />
+			<result column="COMMENT_P" property="commentP" />
+			<result column="IS_REPLY" property="isReply" />
+		</collection>
+
+	</resultMap>
+
+	<select id="getTotalCount" parameterType="Pager"
+		resultType="Long">
+		SELECT COUNT(*) FROM BOARD B
+		<include refid="search"></include>
+	</select>
+
+	<sql id="search">
+		WHERE
+		<choose>
+			<when test="kind == 'k1'">
+				(BOARD_TITLE LIKE CONCAT('%', #{search}, '%') OR
+				BOARD_CONTENTS LIKE CONCAT('%', #{search}, '%'))
+				AND DELETE_STATUS =
+				0
+			</when>
+			<when test="kind == 'k2'">
+				BOARD_CONTENTS LIKE CONCAT('%', #{search}, '%') AND
+				DELETE_STATUS = 0
+			</when>
+			<otherwise>
+				BOARD_TITLE LIKE CONCAT('%', #{search}, '%') AND
+				DELETE_STATUS = 0
+			</otherwise>
+		</choose>
+
+	</sql>
+	<!-- board와 comment의 컬럼명이 동일해서 comment의 deleteStaus 말고 board의 값을 가지고 왔었던 
+		것! 꼭 컬럼명이 동일할 경우 별칭으로 나누기 -->
+	<select id="getDetail" parameterType="BoardVO"
+		resultMap="getBoardDetail">
+		SELECT
+		A.BOARD_NUM AS A_BOARD_NUM,
+		A.BOARD_TITLE,
+		A.USER_ID AS A_USER_ID,
+		A.BOARD_CONTENTS,
+		A.BOARD_DATE,
+		A.BOARD_HIT,
+		A.UPDATE_DATE,
+		A.DELETE_STATUS AS ADS,
+		C.COMMENT_NUM,
+		C.BOARD_NUM AS C_BOARD_NUM,
+		C.USER_ID AS C_USER_ID,
+		C.COMMENT_CONTENTS,
+		C.COMMENT_P,
+		C.COMMENT_DATE,
+		C.IS_REPLY,
+		C.DELETE_STATUS AS CDS
+		FROM BOARD A
+		LEFT OUTER JOIN COMMENT C
+		ON A.BOARD_NUM = C.BOARD_NUM AND C.IS_REPLY = 0
+		WHERE A.BOARD_NUM = #{boardNum}
+		ORDER BY C.COMMENT_DATE DESC, C.COMMENT_NUM DESC
+	</select>
+
+	<resultMap type="BoardVO" id="getBoardDetail">
+		<id column="A_BOARD_NUM" property="boardNum" />
+		<result column="BOARD_TITLE" property="boardTitle" />
+		<result column="A_USER_ID" property="userId" />
+		<result column="BOARD_CONTENTS" property="boardContents" />
+		<result column="BOARD_DATE" property="boardDate" />
+		<result column="BOARD_HIT" property="boardHit" />
+		<result column="UPDATE_DATE" property="updateDate" />
+		<result column="ADS" property="deleteStatus" />
+		<collection property="comments" javaType="java.util.List"
+			ofType="CommentVO">
+			<id column="COMMENT_NUM" property="commentNum" />
+			<result column="C_BOARD_NUM" property="boardNum" />
+			<result column="C_USER_ID" property="userId" />
+			<result column="COMMENT_CONTENTS" property="commentContents" />
+			<result column="COMMENT_P" property="commentP" />
+			<result column="COMMENT_DATE" property="commentDate" />
+			<result column="IS_REPLY" property="isReply" />
+			<result column="CDS" property="deleteStatus" />
+		</collection>
+	</resultMap>
+	
+	<select id="getBoardDetail" parameterType="BoardVO" resultType="BoardVO">
+		SELECT BOARD_NUM, BOARD_TITLE, USER_ID, BOARD_CONTENTS, BOARD_DATE, DELETE_STATUS
+		FROM BOARD
+		WHERE BOARD_NUM = #{boardNum}
+	</select>
+	<select id="getCommentList" parameterType="BoardVO" resultType="CommentVO">
+		SELECT COMMENT_NUM, BOARD_NUM, USER_ID, DELETE_STATUS, COMMENT_DATE, COMMENT_CONTENTS, COMMENT_P, IS_REPLY
+		FROM COMMENT
+		WHERE BOARD_NUM = #{boardNum}
+		ORDER BY COMMENT_DATE DESC
+	</select>
+
+	<select id="detailComment" parameterType="CommentVO"
+		resultType="CommentVO">
+		SELECT * FROM COMMENT WHERE COMMENT_NUM = #{commentNum}
+	</select>
+
+	<select id="replyDetail" parameterType="CommentVO"
+		resultType="CommentVO">
+		SELECT * FROM COMMENT WHERE COMMENT_NUM = #{commentNum} and
+		DELETE_STATUS =
+		0
+	</select>
+	<select id="getBoardInfoByBoardNum" parameterType="Long"
+		resultType="BoardVO">
+		SELECT USER_ID, BOARD_TITLE FROM BOARD WHERE BOARD_NUM =
+		#{boardNum}
+	</select>
+	<select id="replyList" parameterType="CommentVO"
+		resultType="CommentVO">
+		SELECT * FROM COMMENT WHERE COMMENT_P = #{commentNum} AND
+		IS_REPLY = 1 AND DELETE_STATUS = 0
+		ORDER BY COMMENT_DATE DESC
+	</select>
+	<select id="getParentComment" parameterType="Long"
+		resultType="CommentVO">
+		SELECT COMMENT_NUM, BOARD_NUM, USER_ID, DELETE_STATUS,
+		COMMENT_DATE, COMMENT_CONTENTS
+		FROM COMMENT
+		WHERE COMMENT_NUM =
+		#{commentP}
+	</select>
+
+	<update id="delete" parameterType="BoardVO">
+		UPDATE BOARD SET DELETE_STATUS
+		= 1 WHERE BOARD_NUM = #{boardNum}
+	</update>
+
+	<update id="update" parameterType="BoardVO">
+		UPDATE BOARD SET BOARD_TITLE =
+		#{boardTitle}, BOARD_CONTENTS = #{boardContents} WHERE BOARD_NUM =
+		#{boardNum}
+	</update>
+
+	<update id="commentDelete">
+		UPDATE COMMENT SET DELETE_STATUS = 1 WHERE
+		COMMENT_NUM = #{commentNum}
+	</update>
+
+	<update id="commentUpdate">
+		UPDATE COMMENT SET COMMENT_CONTENTS =
+		#{commentContents} WHERE COMMENT_NUM = #{commentNum}
+	</update>
+</mapper>

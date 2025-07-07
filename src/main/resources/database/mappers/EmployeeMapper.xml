@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.employee.EmployeeDAO">
+  
+  	<insert id="insertEmployees" parameterType="com.coffice.app.employee.EmployeeVO">
+	    INSERT INTO USERS (
+	        USER_ID, NAME, POSITION, EMAIL, PHONE, HIRE_DATE, SAVE_NAME, ORIGIN_NAME, DEPT_ID, STATUS
+	    )
+	    VALUES (
+	        #{userId}, #{name}, #{position}, #{email}, #{phone}, #{hireDate},
+	        #{saveName}, #{originName},
+	        (SELECT DEPT_ID FROM DEPARTMENT WHERE DEPT_NAME = #{deptName}),1
+	    )
+	</insert>
+	
+	<select id="getTotalCount" parameterType="Pager" resultType="Long">
+		  SELECT COUNT(*)
+		  FROM USERS U
+		  JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
+		  <include refid="search"/>
+	</select>
+	
+	<sql id="search">
+
+			<where>
+			<choose>
+				<when test="kind == 'k1' and search != null and search != ''">
+					D.DEPT_NAME LIKE CONCAT('%', #{search}, '%') AND U.STATUS = 1
+				</when>
+				<when test="kind == 'k2' and search != null and search != ''">
+					U.POSITION LIKE CONCAT('%', #{search}, '%') AND U.STATUS = 1
+				</when>
+				<when test="kind == 'k3'">
+			        U.STATUS = 0
+			     </when>
+				<otherwise>
+					U.STATUS = 1
+				</otherwise>
+			</choose>
+			</where>
+	</sql>
+  	
+  
+  	<select id="getAllEmployees" parameterType="Pager" resultType="EmployeeVO">
+	  	SELECT
+	  		U.USER_ID,
+	        U.NAME,
+	        D.DEPT_NAME,
+	        U.POSITION,
+	        U.EMAIL,
+	        U.PHONE,
+	        U.HIRE_DATE,
+	        U.SAVE_NAME,
+	        U.ORIGIN_NAME
+	    FROM USERS U
+	    JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
+	    <include refid="search"/>
+	    ORDER BY U.HIRE_DATE DESC , U.USER_ID ASC
+	    LIMIT #{startNum}, #{page}
+  	</select>
+  	
+  	<select id="getEmployeeById" parameterType="String" resultType="EmployeeVO">
+	  SELECT 
+	    U.USER_ID,
+	    U.NAME,
+	    U.POSITION,
+	    U.EMAIL,
+	    U.PHONE,
+	    U.HIRE_DATE,
+	    U.BIRTH_DATE,
+	    U.HIRE_TYPE,
+	    U.STATUS,
+	    U.RESIGN_DATE,
+	    U.SAVE_NAME,
+	    U.ORIGIN_NAME,
+	    U.DEPT_ID,   
+	    D.DEPT_NAME
+	  FROM USERS U
+	  JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
+	  WHERE U.USER_ID = #{userId}
+	</select>
+	
+	<update id="updateEmployee" parameterType="EmployeeVO">
+	    UPDATE USERS
+	    SET
+	        NAME = #{name},
+	        POSITION = #{position},
+	        EMAIL = #{email},
+	        PHONE = #{phone},
+	        HIRE_DATE = #{hireDate},
+	        BIRTH_DATE = #{birthDate},
+	        RESIGN_DATE= #{resignDate},
+	        HIRE_TYPE = #{hireType},
+	        SAVE_NAME = #{saveName},
+	        ORIGIN_NAME = #{originName},
+	        DEPT_ID = #{deptId},
+	        STATUS = #{status}
+	    WHERE
+	        USER_ID = #{userId}
+	</update>
+	
+	
+	
+
+
+
+
+
+  	
+  </mapper>

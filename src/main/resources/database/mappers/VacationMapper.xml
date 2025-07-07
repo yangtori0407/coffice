@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.events.vacation.VacationDAO">
+  	
+  	<select id="getDepsUsers" parameterType="UserVO" resultType="UserVO">
+  			select USER_ID, NAME, POSITION, DEPT_ID
+  			from USERS
+  			where DEPT_ID = (select DEPT_ID
+							 from USERS
+							 where USER_ID = #{userId}
+  							)
+  			and USER_ID != #{userId}
+  			ORDER BY FIELD(POSITION, '부장', '차장', '과장', '대리', '주임', '사원')
+  	</select>
+  	
+  	<insert id="applyForLeave">
+  			insert into VACATION (START_TIME, END_TIME, USER_ID, INSERT_TIME, EDITOR, EDIT_TIME, TYPE, APPROVAL_AUTHORITY)
+  			values (#{startTime}, #{endTime}, #{userId}, now(), #{editor}, now(), #{type}, #{approvalAuthority})
+  	</insert>
+  	
+  	<select id="getApplyList" parameterType="UserVO" resultType="VacationVO">
+  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.INSERT_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
+			from VACATION v
+			join USERS u
+			on v.USER_ID = u.USER_ID
+			join USERS u2 
+			on v.APPROVAL_AUTHORITY = u2.USER_ID
+			where v.DELETE_STATUS = 0
+			and v.USER_ID = #{userId}
+			ORDER by v.INSERT_TIME DESC
+  	</select>
+  	
+  	<select id="getAcceptList" parameterType="UserVO" resultType="VacationVO">
+  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.EDIT_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
+			from VACATION v
+			join USERS u
+			on v.USER_ID = u.USER_ID
+			join USERS u2 
+			on v.APPROVAL_AUTHORITY = u2.USER_ID
+			where v.DELETE_STATUS = 0
+			and v.APPROVAL_AUTHORITY = #{userId}
+			ORDER by v.INSERT_TIME DESC
+  	</select>
+  	
+  	<select id="getOne" parameterType="VacationVO" resultType="VacationVO">
+  			select VACATION_ID, START_TIME, END_TIME, STATUS, USER_ID, TYPE, APPROVAL_AUTHORITY, INSERT_TIME, EDIT_TIME
+			from VACATION
+			where DELETE_STATUS = 0
+			and VACATION_ID = #{vacationId}
+  	</select>
+  	
+  	<update id="approve" parameterType="VacationVO">
+  			update VACATION
+  			set STATUS = 2, EDITOR = #{approvalAuthority}, EDIT_TIME = now(), DAYS_USED = #{daysUsed}
+  			where DELETE_STATUS = 0
+  			and VACATION_ID = #{vacationId}
+  			and APPROVAL_AUTHORITY = #{approvalAuthority}
+  	</update>
+  	
+  	<select id="getList" resultType="VacationVO" parameterType="UserVO">
+  			select v.VACATION_ID, v.START_TIME, v.END_TIME, v.STATUS, v.USER_ID, u.`POSITION` aposition, u.NAME aname, v.TYPE, v.APPROVAL_AUTHORITY, u2.`POSITION` bposition, u2.NAME bname
+			from VACATION v
+			join USERS u
+			on v.USER_ID = u.USER_ID
+			join USERS u2 
+			on v.APPROVAL_AUTHORITY = u2.USER_ID
+			where u.DEPT_ID = (
+							   select DEPT_ID
+							   from USERS
+							   where USER_ID = #{userId}
+							  )
+			and v.STATUS = 2
+			and v.DELETE_STATUS = 0
+  	</select>
+  	
+  	<update id="updateApply" parameterType="VacationVO">
+  			update VACATION
+  			set START_TIME = #{startTime}, END_TIME = #{endTime}, TYPE = #{type}, APPROVAL_AUTHORITY = #{approvalAuthority}, EDIT_TIME = now(), EDITOR = #{editor}
+  			where DELETE_STATUS = 0
+  			and STATUS = 1
+  			and VACATION_ID = #{vacationId}
+  			and USER_ID = #{userId}
+  	</update>
+  	
+  	<update id="cancel" parameterType="VacationVO">
+  			update VACATION
+  			set STATUS = 4, EDIT_TIME = now(), EDITOR = #{editor}, DELETE_STATUS = 1
+  			where DELETE_STATUS = 0
+  			and STATUS = 1
+  			and VACATION_ID = #{vacationId}
+  			and USER_ID = #{userId}
+  	</update>
+  	
+  	
+  	<update id="reject" parameterType="VacationVO">
+  			update VACATION
+  			set STATUS = 3, EDITOR = #{approvalAuthority}, EDIT_TIME = now(), DAYS_USED = #{daysUsed}
+  			where DELETE_STATUS = 0
+  			and VACATION_ID = #{vacationId}
+  			and APPROVAL_AUTHORITY = #{approvalAuthority}
+  	</update>
+  	
+  	
+  </mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.attendance.AttendanceDAO">
+  
+  	<insert id="checkIn" parameterType="AttendanceVO">
+  		INSERT INTO ATTENDANCE 
+  		(ATTENDANCE_DATE, START_TIME, STATUS, USER_ID)
+   		VALUES (#{attendanceDate}, #{startTime}, '근무중', #{userId})
+  	</insert>
+  	
+  	<update id="checkOut" parameterType="AttendanceVO">
+  		UPDATE ATTENDANCE SET END_TIME = #{endTime}, STATUS= #{status}, DURATION_TIME = #{durationTime}
+  		WHERE USER_ID = #{userId} AND ATTENDANCE_DATE = #{attendanceDate}
+  	</update>
+  	
+  	<select id="todayStatus"  resultType="AttendanceVO">
+  		SELECT ATTENDANCE_ID, ATTENDANCE_DATE, START_TIME, END_TIME, STATUS, DURATION_TIME, USER_ID
+  		FROM ATTENDANCE
+  		WHERE USER_ID = #{userId}
+  		AND DATE(`ATTENDANCE_DATE`) = #{attendanceDate}
+  	</select>
+  
+  	<select id="getWeeklyWorkDuration" parameterType="String" resultType="Long">
+	  SELECT
+	    COALESCE(SUM(duration_time), 0)
+	  FROM ATTENDANCE
+	  WHERE USER_ID = #{userId}
+	    AND ATTENDANCE_DATE BETWEEN
+	      DATE_SUB(CURDATE(), INTERVAL (WEEKDAY(CURDATE())) DAY)
+	      AND DATE_ADD(CURDATE(), INTERVAL (6 - WEEKDAY(CURDATE())) DAY)
+	    AND DURATION_TIME IS NOT NULL
+	</select>
+  	
+  	<select id="getAttendanceForMonth" parameterType="map" resultType="int">
+	  SELECT COUNT(DISTINCT DATE(START_TIME))
+	  FROM ATTENDANCE
+	  WHERE USER_ID = #{userId}
+	    AND START_TIME BETWEEN #{startDate} AND #{endDate}
+	</select>
+  
+  	<select id="getAbsentUserIds" resultType="String">
+		SELECT U.USER_ID
+		FROM USERS U
+		WHERE U.STATUS = 1
+		AND U.USER_ID NOT IN (
+			SELECT A.USER_ID
+			FROM ATTENDANCE A
+			WHERE DATE(A.START_TIME) = CURDATE()- INTERVAL 1 DAY
+		)
+	</select>
+	
+	<select id="existsAttendance" resultType="boolean">
+	    SELECT COUNT(*) > 0
+	    FROM ATTENDANCE
+	    WHERE USER_ID = #{userId}
+	      AND ATTENDANCE_DATE = #{attendanceDate}
+	</select>
+	
+  
+  	<insert id="insertAbsence" parameterType="AttendanceVO">
+		INSERT INTO ATTENDANCE (USER_ID, STATUS, ATTENDANCE_DATE)
+    	VALUES (#{userId}, '결근', CURDATE() - INTERVAL 1 DAY)
+	</insert>
+	
+	<select id="getTodayUnfinishedAttendances" resultType="AttendanceVO">
+	    SELECT *
+	    FROM ATTENDANCE
+	    WHERE START_TIME IS NOT NULL
+	      AND END_TIME IS NULL
+	      AND DATE(START_TIME) = CURDATE()- INTERVAL 1 DAY
+	</select>
+	
+	<update id="updateStatus" parameterType="AttendanceVO">
+	    UPDATE ATTENDANCE
+	    SET STATUS = #{status}, END_TIME = '00:00:00'
+	    WHERE USER_ID = #{userId}
+	      AND DATE(START_TIME) = CURDATE() - INTERVAL 1 DAY
+	      AND END_TIME IS NULL
+	</update>
+	
+	<select id="getAttendanceByUser" parameterType="string" resultType="AttendanceVO">
+	  SELECT 
+	    USER_ID,
+	    ATTENDANCE_DATE,
+	    START_TIME,
+	    END_TIME,
+	    STATUS,
+	    REASON
+	  FROM ATTENDANCE
+	  WHERE USER_ID = #{userId}
+	  ORDER BY ATTENDANCE_DATE DESC
+	</select>
+	
+	<update id="updateAttendance" parameterType="AttendanceVO">
+  		UPDATE ATTENDANCE 
+  		SET START_TIME = #{startTime}, END_TIME = #{endTime}, STATUS= #{status}, REASON= #{reason}, DURATION_TIME = #{durationTime}
+  		WHERE USER_ID = #{userId} AND ATTENDANCE_DATE = #{attendanceDate}
+  	</update>
+	
+	<select id="getMonthlyStatusCount" resultType="AttendanceStatusCountVO">
+	    SELECT STATUS, COUNT(*) AS count
+	    FROM ATTENDANCE
+	    WHERE USER_ID = #{userId}
+	      AND YEAR(ATTENDANCE_DATE) = #{year}
+	      AND MONTH(ATTENDANCE_DATE) = #{month}
+	    GROUP BY STATUS
+	</select>
+
+	
+  
+  
+  	
+  </mapper>

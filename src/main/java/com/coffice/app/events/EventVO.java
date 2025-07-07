@@ -1,17 +1,27 @@
 package com.coffice.app.events;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
 @Data
 public class EventVO {
 	
-	private Date startTime;
-	private Date endTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul", pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-ddHH:mm")
+	private LocalDateTime startTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul", pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-ddHH:mm")
+	private LocalDateTime endTime;
 	private String userId;
-	private Date insertTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul", pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime insertTime;
 	private String editor;
-	private Date editTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul", pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime editTime;
+	private boolean deleteStatus;
 
 }

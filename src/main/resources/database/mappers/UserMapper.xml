@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.users.UserDAO">
+  
+  	<insert id="register" parameterType="UserVO">
+  		INSERT INTO USERS
+  		(USER_ID, PASSWORD, NAME, POSITION, HIRE_DATE, HIRE_TYPE, BIRTH_DATE, PHONE, EMAIL, STATUS, RESIGN_DATE, SAVE_NAME, ORIGIN_NAME, DEPT_ID)
+  		VALUES
+  		(#{userId},#{password},#{name},#{position},#{hireDate},#{hireType},#{birthDate},#{phone},#{email},#{status},#{resignDate},#{saveName},#{originName},#{deptId})
+  	</insert>
+  	
+  	<select id="detail" parameterType="UserVO" resultMap="detailResult">
+  		  SELECT 
+		    U.USER_ID,
+		    U.PASSWORD,
+		    U.NAME,
+		    U.POSITION,
+		    U.HIRE_DATE,
+		    U.HIRE_TYPE,
+		    U.BIRTH_DATE,
+		    U.PHONE,
+		    U.EMAIL,
+		    U.STATUS,
+		    U.RESIGN_DATE,
+		    U.SAVE_NAME,
+		    U.ORIGIN_NAME,
+		    U.DEPT_ID, 
+		    D.DEPT_NAME,
+		    
+		    R.ROLE_ID,
+        	R.ROLE_NAME
+		   FROM USERS U
+		    JOIN DEPARTMENT D ON U.DEPT_ID = D.DEPT_ID
+		    LEFT JOIN EMPLOYEE_ROLE ER ON U.USER_ID = ER.USER_ID
+		    LEFT JOIN ROLE R ON ER.ROLE_ID = R.ROLE_ID
+		    WHERE U.USER_ID = #{userId}
+	</select>
+  	
+  	<resultMap id="detailResult" type="UserVO">
+	    <result column="USER_ID" property="userId"/>
+	    <result column="PASSWORD" property="password"/>
+	    <result column="NAME" property="name"/>
+	    <result column="POSITION" property="position"/>
+	    <result column="HIRE_DATE" property="hireDate"/>
+	    <result column="HIRE_TYPE" property="hireType"/>
+	    <result column="BIRTH_DATE" property="birthDate"/>
+	    <result column="PHONE" property="phone"/>
+	    <result column="EMAIL" property="email"/>
+	    <result column="STATUS" property="status"/>
+	    <result column="RESIGN_DATE" property="resignDate"/>
+	    <result column="SAVE_NAME" property="saveName"/>
+	    <result column="ORIGIN_NAME" property="originName"/>
+	    <result column="DEPT_ID" property="deptId"/>
+	    <result column="DEPT_NAME" property="deptName"/>
+	    
+	    <collection property="roles" ofType="RoleVO">
+	        <result column="ROLE_ID" property="roleId"/>
+	        <result column="ROLE_NAME" property="roleName"/>
+	    </collection>
+  	</resultMap>
+  	
+
+  	<select id="findByEmail" parameterType="UserVO" resultType="UserVO">
+  	 	SELECT * FROM USERS WHERE EMAIL = #{email} AND USER_ID = #{userId}
+  	</select>
+  	
+  	<update id="updatePassword" parameterType="UserVO">
+  		UPDATE USERS SET PASSWORD = #{password} WHERE USER_ID= #{userId}
+  	</update>
+  	
+  	<select id="checkPassword" parameterType="String" resultType="String">
+  		SELECT PASSWORD FROM USERS WHERE USER_ID= #{userId}
+  	</select>
+  	
+  	<select id="existUserId" parameterType="String" resultType="boolean">
+		SELECT COUNT(*) > 0 FROM USERS WHERE USER_ID = #{userId}	
+  	</select>
+  	
+  	<select id="findById" parameterType="String" resultType="UserVO">
+  		  SELECT 
+		    u.USER_ID,
+		    u.PASSWORD,
+		    u.NAME,
+		    u.EMAIL,
+		    u.PHONE,
+		    u.POSITION,     
+		    u.DEPT_ID,
+		    d.DEPT_NAME,
+		    u.SAVE_NAME,
+		    u.ORIGIN_NAME
+		  FROM USERS u
+		  JOIN DEPARTMENT d ON u.DEPT_ID = d.DEPT_ID
+		  WHERE u.USER_ID = #{userId}
+  	</select>
+  	
+  	<update id="update" parameterType="UserVO">
+  		UPDATE USERS SET
+  		PASSWORD = #{password}, PHONE = #{phone}, EMAIL = #{email}, 
+  		SAVE_NAME = #{saveName}, ORIGIN_NAME = #{originName}
+  		WHERE USER_ID = #{userId}
+  	</update>
+  	
+  	
+  
+
+  	
+  	<!-- 조직도 -->
+  	<select id="getDeps" resultType="DepartmentVO">
+  			SELECT DEPT_ID, DEPT_NAME
+  			FROM DEPARTMENT
+  	</select>
+  	
+  	<select id="getUsers" parameterType="UserVO" resultType="UserVO">
+  			SELECT USER_ID, NAME, POSITION
+  			FROM USERS
+  			WHERE DEPT_ID = #{deptId}
+  			AND STATUS = 1
+  			ORDER BY FIELD(POSITION, '부장', '차장', '과장', '대리', '주임', '사원')
+  	</select>
+
+  
+  </mapper>

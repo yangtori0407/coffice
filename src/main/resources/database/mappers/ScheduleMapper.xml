@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.events.schedule.ScheduleDAO">
+  
+  	<insert id="addSchedule" parameterType="ScheduleVO">
+  			insert into SCHEDULE (REPEAT_ID, DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE, EDITOR, EDIT_TIME, USER_ID, INSERT_TIME)
+  			values (#{repeatId}, #{detail}, #{startTime}, #{endTime}, #{scheduleType}, #{editor}, now(), #{userId}, now())
+  	</insert>
+  	
+  	<insert id="addRepeatSchedule">
+  			insert into SCHEDULE_REPEAT (DETAIL, START_TIME, END_TIME, REPEAT_COUNT, REPEAT_END, REPEAT_TYPE, SCHEDULE_TYPE, EDITOR, EDIT_TIME, USER_ID, INSERT_TIME)
+  			values (#{detail}, #{startTime}, #{endTime}, #{repeatCount}, #{repeatEnd}, #{repeatType}, #{scheduleType}, #{editor}, now(), #{userId}, now())
+  	</insert>
+  	
+  	<select id="getAll" resultType="ScheduleVO" parameterType="UserVO">
+  			select
+  				SCHEDULE_ID,
+  				DETAIL,
+  				START_TIME,
+  				END_TIME,
+  				SCHEDULE_TYPE,
+  				USER_ID
+  			from
+  				SCHEDULE
+  			where
+  				(
+  					(
+  						USER_ID in (
+							select USER_ID
+				  			from USERS
+				  			where DEPT_ID = (
+				  				   select DEPT_ID
+				  				   from USERS
+				  				   where USER_ID = #{userId}
+			  					   )
+			 				)
+				  		and SCHEDULE_TYPE in ('public', 'group')
+				 	 )
+					 or (
+					 	 SCHEDULE_TYPE = 'private'
+					 	 and USER_ID = #{userId}
+					 	)
+			 	)
+			 	and DELETE_STATUS = 0
+  	</select>
+  	
+  	<select id="getSchedule" resultType="ScheduleVO" parameterType="ScheduleVO">
+  			select DETAIL, START_TIME, END_TIME, SCHEDULE_TYPE
+  			from SCHEDULE
+  			where SCHEDULE_ID = #{scheduleId}
+  			and DELETE_STATUS = 0
+  	</select>
+  	
+  	<select id="getRepeatSchedules" resultMap="ScheduleResultMap" parameterType="UserVO">
+			SELECT 
+			    sr.REPEAT_ID,
+			    DETAIL,
+			    START_TIME,
+			    END_TIME,
+			    REPEAT_COUNT,
+			    REPEAT_END,
+			    REPEAT_TYPE,
+			    SCHEDULE_TYPE,
+			    USER_ID,
+			    sre.REPEAT_ID,
+			    sre.EXCEPTION_DATE,
+			    sr.DELETE_STATUS 
+			FROM 
+			    SCHEDULE_REPEAT sr
+			LEFT OUTER JOIN 
+			    SCHEDULE_REPEAT_EXCEPTION sre 
+			ON 
+			    sr.REPEAT_ID = sre.REPEAT_ID
+			WHERE 
+			    (
+			        (
+			            USER_ID IN (
+			                SELECT USER_ID
+			                FROM USERS
+			                WHERE DEPT_ID = (
+			                    SELECT DEPT_ID
+			                    FROM USERS
+			                    WHERE USER_ID = #{userId}
+			                )
+			            )
+			            AND SCHEDULE_TYPE IN ('public', 'group')
+			        )
+			        OR (
+			            SCHEDULE_TYPE = 'private'
+			            AND USER_ID = #{userId}
+			        )
+			    )
+			    AND DELETE_STATUS = 0
+  	</select>
+  	
+  	<resultMap type="ScheduleVO" id="ScheduleResultMap">
+  		<id property="repeatId" column="REPEAT_ID"/>
+  		<result property="detail" column="DETAIL"/>
+	    <result property="startTime" column="START_TIME"/>
+	    <result property="endTime" column="END_TIME"/>
+	    <result property="repeatCount" column="REPEAT_COUNT"/>
+	    <result property="repeatEnd" column="REPEAT_END"/>
+	    <result property="repeatType" column="REPEAT_TYPE"/>
+	    <result property="scheduleType" column="SCHEDULE_TYPE"/>
+	    <result property="editor" column="EDITOR"/>
+	    <result property="editTime" column="EDIT_TIME"/>
+	    <result property="userId" column="USER_ID"/>
+	    <result property="insertTime" column="INSERT_TIME"/>
+	    <result property="deleteStatus" column="DELETE_STATUS"/>
+	
+	    <!-- 반복 예외 리스트 매핑 -->
+	    <collection property="exceptions" javaType="java.util.List" ofType="ScheduleRepeatExceptionVO">
+	        <id property="exceptionId" column="EXCEPTION_ID"/>
+	        <result property="repeatId" column="REPEAT_ID"/>
+	        <result property="exceptionDate" column="EXCEPTION_DATE"/>
+	        <result property="exceptionType" column="EXCEPTION_TYPE"/>
+	    </collection>
+  	</resultMap>
+  	
+  	<update id="updateSchedule" parameterType="ScheduleVO">
+  			update SCHEDULE
+  			set DETAIL = #{detail}, START_TIME = #{startTime}, END_TIME = #{endTime}, SCHEDULE_TYPE = #{scheduleType}, EDITOR = #{editor}, EDIT_TIME = now()
+  			where SCHEDULE_ID = #{scheduleId}
+  			and DELETE_STATUS = 0
+  	</update>
+  	
+  	<insert id="addException" parameterType="ScheduleVO">
+		  INSERT INTO SCHEDULE_REPEAT_EXCEPTION (REPEAT_ID, EXCEPTION_DATE, EXCEPTION_TYPE)
+		  VALUES
+		  <foreach collection="exceptions" item="ex" separator=",">
+		    (#{ex.repeatId}, #{ex.exceptionDate}, #{ex.exceptionType})
+		  </foreach>
+	</insert>
+	
+	<update id="updateRepeatSchedule" parameterType="ScheduleVO">
+			update SCHEDULE_REPEAT
+			set DETAIL = #{detail}, START_TIME = #{startTime}, END_TIME = #{endTime}, REPEAT_COUNT = #{repeatCount}, REPEAT_END = #{repeatEnd}, REPEAT_TYPE = #{repeatType}, SCHEDULE_TYPE = #{scheduleType}, EDITOR = #{editor}, EDIT_TIME = now()
+			where REPEAT_ID = #{repeatId}
+  			and DELETE_STATUS = 0
+	</update>
+	
+	<update id="deleteSchedule">
+			update SCHEDULE
+			set DELETE_STATUS = 1, EDITOR = #{editor}, EDIT_TIME = now()
+			where SCHEDULE_ID = #{scheduleId}
+	</update>
+	
+	<update id="deleteRepeatSchedule">
+			update SCHEDULE_REPEAT
+			set DELETE_STATUS = 1, EDITOR = #{editor}, EDIT_TIME = now()
+			where REPEAT_ID = #{repeatId}
+	</update>
+	
+	<update id="dragDrop" parameterType="ScheduleVO">
+			update SCHEDULE
+  			set START_TIME = #{startTime}, END_TIME = #{endTime}, EDITOR = #{editor}, EDIT_TIME = now()
+  			where SCHEDULE_ID = #{scheduleId}
+  			and DELETE_STATUS = 0
+	</update>
+  </mapper>

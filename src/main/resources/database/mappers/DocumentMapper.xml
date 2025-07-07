@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!-- windows -> preferences -> XML(Wild Web Developer) 
+  	   -> Download exter... check 후 저장 
+   -->
+  
+  
+  
+  <mapper namespace="com.coffice.app.documents.DocumentDAO">
+  
+  
+  	<select id="formDetail" parameterType="FormVO" resultType="FormVO">
+  		
+		SELECT * FROM FORMS WHERE FORM_ID=#{formId}
+		    
+		 
+  	</select>
+  
+  	<select id="getUsers" resultType="UserVO">
+  		SELECT * FROM USERS
+	  </select>
+	  
+	  <select id="getFormsIdName" resultType="FormVO">
+	  	SELECT FORM_ID, NAME FROM FORMS
+	  </select>
+  
+  <!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
+  
+  	<sql id="search">		
+		<choose>
+			<when test="kind == 'k1'">
+				AND (D.TITLE LIKE CONCAT('%', #{search}, '%') OR D.CONTENT LIKE CONCAT('%', #{search}, '%'))
+			</when>
+			<when test="kind == 'k2'">
+				AND D.CONTENT LIKE CONCAT('%', #{search}, '%')
+			</when>
+			<otherwise>
+				AND D.TITLE LIKE CONCAT('%', #{search}, '%')
+			</otherwise>
+		</choose>
+	</sql>
+
+  
+  	<select id="getTotalCountOnline" resultType="Long" parameterType="map">
+  		SELECT 
+  		
+  		COUNT (D.DOCUMENT_ID)
+  		
+  		FROM DOCUMENTS D		
+				  
+		WHERE D.STATUS != '임시저장'
+		  AND D.WRITER_ID = #{userId}
+  		<include refid="search"></include>
+  		
+  	</select>
+  	
+  	<select id="getTotalCountWaiting" resultType="Long" parameterType="map">
+  		SELECT
+  		
+  		COUNT (D.DOCUMENT_ID)
+  		
+  		FROM DOCUMENTS D
+	    
+	    JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+			    
+	    WHERE A.USER_ID = #{userId}
+	      AND A.STEP_ORDER = D.CURRENT_STEP
+	      AND D.STATUS ='진행중'
+  		<include refid="search"></include>
+  	</select>
+  
+  	<select id="getTotalCountHandled" resultType="Long" parameterType="map">
+  		SELECT
+  		
+  		COUNT (D.DOCUMENT_ID)
+  		
+  		FROM DOCUMENTS D
+  		
+  		JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+	  		
+  		WHERE A.USER_ID = #{userId}
+  		  AND A.STEP_ORDER &lt; D.CURRENT_STEP
+  		<include refid="search"></include>
+  	</select>
+  	
+  	<select id="getTotalCountReference" resultType="Long" parameterType="map">
+  		SELECT
+  		
+  		COUNT (D.DOCUMENT_ID)
+  		
+  		FROM DOCUMENTS D
+		
+		JOIN REFERENCE_LINES R 
+		  ON D.DOCUMENT_ID = R.DOCUMENT_ID		
+				  
+		WHERE R.USER_ID = #{userId}
+		  AND D.STATUS != '임시저장'
+  		<include refid="search"></include>
+  	</select>
+  	
+  	<select id="getTotalCountTemporary" resultType="Long" parameterType="map">
+  		SELECT
+  		
+  		COUNT (D.DOCUMENT_ID)
+	    
+	    FROM DOCUMENTS D
+			  
+		WHERE D.STATUS = '임시저장'
+		  AND D.WRITER_ID = #{userId}
+  		<include refid="search"></include>
+  	</select>
+  	
+  	
+  	<!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
+  	<sql id="selectDocument_Form">  		 
+		    D.*,
+		    F.NAME AS FORM_NAME		  -- 양식 이름
+  	</sql>
+  	
+  	<!-- 홈 화면용 조회 리스트 -->
+  	<select id="getLastTemp" resultType="DocumentVO" parameterType="DocumentVO">
+  		SELECT
+  		 
+  		D.*,
+		F.NAME AS FORM_NAME
+		
+  		FROM DOCUMENTS D
+  		
+  		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+  		
+  		WHERE D.STATUS = '임시저장'
+		  AND D.WRITER_ID = #{writerId}
+		ORDER BY D.WRITER_TIME DESC
+		LIMIT 1
+  	</select>
+  	
+  	<select id="getlastHandled" resultType="DocumentVO" parameterType="DocumentVO">
+  		SELECT
+  		 
+  		D.*,
+		F.NAME AS FORM_NAME
+		
+  		FROM DOCUMENTS D
+  		
+  		JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+  		
+  		WHERE A.USER_ID = #{writerId}
+  		  AND A.STEP_ORDER &lt; D.CURRENT_STEP
+  		
+  		ORDER BY D.WRITER_TIME DESC
+		LIMIT 1   	
+  	</select>
+  	
+  	<select id="getTodayReference" resultType="DocumentVO" parameterType="DocumentVO">
+  		SELECT * FROM DOCUMENTS D
+		
+		JOIN REFERENCE_LINES R 
+		  ON D.DOCUMENT_ID = R.DOCUMENT_ID		
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE R.USER_ID = #{writerId}
+		  AND D.STATUS != '임시저장'
+		  AND D.WRITER_TIME >= CURDATE()
+		  
+		ORDER BY D.WRITER_TIME DESC
+  	</select>
+
+	<!-- 결재자가 자신이 결재 차례인 문서를 볼 수 있는 리스트 -->
+  	<select id="getTodayWaiting" resultType="DocumentVO" parameterType="DocumentVO">
+  		SELECT * FROM DOCUMENTS D
+	    
+	    JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+	    
+	    WHERE A.USER_ID = #{writerId}
+	      AND A.STEP_ORDER = D.CURRENT_STEP
+	      AND D.STATUS ='진행중'
+	      
+	    ORDER BY D.WRITER_TIME DESC
+  	</select>
+
+	<!-- 작성자가 자신이 올린 문서를 볼 수 있는 리스트 -->
+  	<select id="getListLine" resultType="DocumentVO" parameterType="map">
+  		SELECT
+  		<include refid="selectDocument_Form" />
+  		FROM DOCUMENTS D		
+		
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE D.STATUS != '임시저장'
+		  AND D.WRITER_ID = #{userId}
+		  <include refid="search"></include>
+		  
+		ORDER BY WRITER_TIME DESC
+		LIMIT #{startNum}, #{page}
+  	</select>
+  	
+  	<!-- 결재자가 자신이 결재 차례인 문서를 볼 수 있는 리스트 -->
+  	<select id="getListWaiting" resultType="DocumentVO" parameterType="map">
+  		SELECT
+  		<include refid="selectDocument_Form" />
+  		FROM DOCUMENTS D
+	    
+	    JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+	    
+	    WHERE A.USER_ID = #{userId}
+	      AND A.STEP_ORDER = D.CURRENT_STEP
+	      AND D.STATUS ='진행중'
+	      <include refid="search"></include>
+	      
+	    ORDER BY WRITER_TIME DESC
+		LIMIT #{startNum}, #{page}
+  	</select>
+  	
+  	<!-- 결재자가 자신이 처리한 문서를 볼 수 있는 리스트 (결재 차례가 아닐지라도) -->
+  	<select id="getListHandled" resultType="DocumentVO" parameterType="map">
+  		SELECT
+  		<include refid="selectDocument_Form" />
+  		FROM DOCUMENTS D
+  		
+  		JOIN APPROVAL_LINES A
+	      ON D.DOCUMENT_ID = A.DOCUMENT_ID	    
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+  		
+  		WHERE A.USER_ID = #{userId}
+  		  AND A.STEP_ORDER &lt; D.CURRENT_STEP <!-- 문서의 step이 결재자의 step보다 크다. 즉 결재자의 step을 거쳤다는 뜻 -->
+  		  <include refid="search"></include>
+  		
+  		ORDER BY WRITER_TIME DESC
+		LIMIT #{startNum}, #{page}
+  	</select>
+  	
+  	<!-- 자신이 참조자인 문서를 볼 수 있는 리스트 -->
+  	<select id="getListReference" resultType="DocumentVO" parameterType="map">
+  		SELECT
+  		<include refid="selectDocument_Form" />
+  		FROM DOCUMENTS D
+		
+		JOIN REFERENCE_LINES R 
+		  ON D.DOCUMENT_ID = R.DOCUMENT_ID		
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE R.USER_ID = #{userId}
+		  AND D.STATUS != '임시저장'
+		  <include refid="search"></include>
+		  
+		ORDER BY WRITER_TIME DESC
+		LIMIT #{startNum}, #{page}
+  	</select>
+  	
+  	<!-- 자신이 작성자이고 문서가 임시 상태인 문서를 볼 수 있는 리스트 -->
+  	<select id="getListTemporary" resultType="DocumentVO" parameterType="map">
+	    SELECT
+	    <include refid="selectDocument_Form" />
+	    FROM DOCUMENTS D
+				
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE D.STATUS = '임시저장'
+		  AND D.WRITER_ID = #{userId}
+		  <include refid="search"></include>
+		  
+		ORDER BY WRITER_TIME DESC
+		LIMIT #{startNum}, #{page}
+	</select>
+  	  	
+  	  	
+  	<update id="updateDocumentProceed" parameterType="DocumentVO">
+  		UPDATE 
+  		DOCUMENTS
+  		 
+  		SET 
+  		STATUS = #{status},
+  		CURRENT_STEP = #{currentStep},
+  		 
+  		MODIFIER_ID = #{modifierId},
+  		MODIFIER_NAME = #{modifierName},
+  		MODIFIER_POSITION = #{modifierPosition},
+  		MODIFIER_DEPT = #{modifierDept},
+  		MODIFIER_TIME = #{modifierTime}
+  		  		
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</update>
+  	
+  	<update id="updateApprovalProceed" parameterType="ApprovalLineVO">
+  		UPDATE 
+  		APPROVAL_LINES
+  		 
+  		SET 
+  		SIGN_ID = #{signId},
+  		STATUS = #{status},
+  		HANDLING_TIME = #{handlingTime}
+  		  		
+  		WHERE DOCUMENT_ID = #{documentId} AND USER_ID = #{userId}
+  	</update>
+  	
+  	<update id="updateApprovalReject" parameterType="ApprovalLineVO">
+  		UPDATE 
+  		APPROVAL_LINES
+  		 
+  		SET 
+  		REJECT_REASON = #{rejectReason},
+  		STATUS = #{status},
+  		HANDLING_TIME = #{handlingTime}
+  		  		
+  		WHERE DOCUMENT_ID = #{documentId} AND USER_ID = #{userId}
+  	</update>
+  	
+  	<insert id="addSign" parameterType="SignVO">
+  		INSERT INTO SIGNS (USER_ID, ORIGIN_NAME, SAVE_NAME)
+  		VALUES
+  		(#{userId}, #{originName}, #{saveName})
+  	</insert>
+  	
+  	<select id="getSignList" parameterType="UserVO" resultType="SignVO">
+  		SELECT *
+  		
+  		FROM SIGNS
+  		
+  		WHERE USER_ID = #{userId}
+  	</select>
+  	
+  	
+  	<select id="getSignDetail" parameterType="SignVO" resultType="SignVO">
+  		SELECT
+  		*
+  		FROM SIGNS
+  		
+  		WHERE FILE_NUM = #{fileNum}
+  	</select>
+  	
+  	<select id="getApprovalDetail" parameterType="ApprovalLineVO" resultType="ApprovalLineVO">
+  		SELECT  		 
+  		*  		  		
+  		FROM APPROVAL_LINES
+  		  		
+  		WHERE DOCUMENT_ID = #{documentId} AND USER_ID = #{userId}
+  	</select>
+  	
+  	
+  	<select id="getUserDetail" parameterType="UserVO" resultType="UserVO">
+  		SELECT
+  		 
+  		U.*,  		
+  		D.DEPT_NAME AS DEPT_NAME
+  		
+  		FROM USERS U
+  		
+  		JOIN DEPARTMENT D
+  			ON U.DEPT_ID = D.DEPT_ID 
+  		
+  		WHERE USER_ID = #{userId}
+  	</select>
+  	
+  	
+  	<select id="getDetail" parameterType="DocumentVO" resultType="DocumentVO">
+  		SELECT
+  		<include refid="selectDocument_Form" />
+  		FROM DOCUMENTS D
+		
+		JOIN FORMS F 
+		  ON D.FORM_ID = F.FORM_ID
+		  
+		WHERE D.DOCUMENT_ID = #{documentId}
+  	</select>
+  	
+  	<select id="getChildrenFiles" parameterType="DocumentVO" resultType="AttachmentVO">
+  		SELECT * FROM ATTACHMENTS
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</select>
+  	
+  	<select id="getChildrenApprovers" parameterType="DocumentVO" resultType="ApprovalLineVO">
+  		SELECT A.*
+  		 
+  		FROM APPROVAL_LINES A
+  		
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</select>
+  	
+  	<select id="getChildrenReferrers" parameterType="DocumentVO" resultType="ReferenceLineVO">
+  		SELECT R.*
+  		
+  		FROM REFERENCE_LINES R
+  		  		
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</select>
+  	
+  	
+  	
+  	
+  	<insert id="add" parameterType="DocumentVO" useGeneratedKeys="true" keyProperty="documentId">
+  		INSERT INTO DOCUMENTS 
+  		
+  		(TITLE, CONTENT, CURRENT_STEP, STATUS, FORM_ID, 
+  		
+  		WRITER_ID, WRITER_NAME, WRITER_POSITION, WRITER_DEPT, WRITER_TIME, 
+  		
+  		MODIFIER_ID, MODIFIER_NAME, MODIFIER_POSITION, MODIFIER_DEPT, MODIFIER_TIME)
+  		
+  		VALUES
+  		
+  		(#{title}, #{content}, #{currentStep}, #{status}, #{formId}, 
+  		
+  		#{writerId}, #{writerName}, #{writerPosition}, #{writerDept}, #{writerTime}, 
+  		
+  		#{modifierId}, #{modifierName}, #{modifierPosition}, #{modifierDept}, #{modifierTime})
+  	</insert>
+  	
+  	<insert id="addApprovalLine" parameterType="ApprovalLineVO">
+  		INSERT INTO APPROVAL_LINES
+  		(DOCUMENT_ID, USER_ID, USER_NAME, USER_POSITION, STEP_ORDER, STATUS, HANDLING_TIME, SIGN_ID, REJECT_REASON)
+  		VALUES
+  		(#{documentId}, #{userId}, #{userName}, #{userPosition}, #{stepOrder}, #{status}, #{handlingTime}, #{signId}, #{rejectReason})
+  	</insert>
+  	
+  	<insert id="addReferenceLine" parameterType="ReferenceLineVO">
+  		INSERT INTO REFERENCE_LINES
+  		(DOCUMENT_ID, USER_ID, USER_NAME, USER_POSITION)
+  		VALUES
+  		(#{documentId}, #{userId}, #{userName}, #{userPosition})
+  	</insert>
+  	
+  	<insert id="addFile" parameterType="AttachmentVO">
+  		INSERT INTO ATTACHMENTS
+  		(DOCUMENT_ID, ORIGIN_NAME, SAVE_NAME)
+  		VALUES
+  		(#{documentId}, #{originName}, #{saveName})
+  	</insert>
+  	
+  	<!-- 구분선 -->
+  	
+  	<!-- 참조선, 결재선, 첨부파일은 DB에서 ON DELETE CASCADE로 묶어 삭제 처리한다 -->
+  	<delete id="deleteTemp" parameterType="DocumentVO">
+  		DELETE FROM DOCUMENTS
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</delete>
+  	
+  	<!-- 업데이트 대상 컬럼 : 제목, 내용, 작성자 이름, 작성자 직급, 작성자 부서, 작성 시간 -->
+  	<update id="updateTemp" parameterType="DocumentVO">  		
+		UPDATE DOCUMENTS 
+		
+		SET 
+		TITLE = #{title}, 
+		CONTENT = #{content},
+		STATUS = #{status},
+		WRITER_NAME = #{writerName}, 
+		WRITER_POSITION = #{writerPosition}, 
+		WRITER_DEPT = #{writerDept}, 
+		WRITER_TIME = #{writerTime}
+		
+		WHERE DOCUMENT_ID = #{documentId}
+  	</update>
+  	
+  	<update id="updateOnlyStatus" parameterType="DocumentVO">
+  		UPDATE DOCUMENTS
+  		
+  		SET
+  		STATUS = #{status}
+  		
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</update>
+  	
+  	<delete id="deleteApprovalLine" parameterType="DocumentVO">
+  		DELETE FROM APPROVAL_LINES
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</delete>
+  	
+  	<delete id="deleteReferenceLine" parameterType="DocumentVO">
+  		DELETE FROM REFERENCE_LINES
+  		WHERE DOCUMENT_ID = #{documentId}
+  	</delete>
+  	
+  	<delete id="deleteAttachment" parameterType="AttachmentVO">
+  		DELETE FROM ATTACHMENTS
+  		WHERE FILE_NUM = #{fileNum}
+  	</delete>
+  	
+  	<!-- 구분선 -->
+  	
+  	<select id="getFileDetail" parameterType="AttachmentVO" resultType="AttachmentVO">
+  		SELECT * FROM ATTACHMENTS WHERE FILE_NUM=#{fileNum}
+  	</select>
+  	
+  	
+  	
+  	
+  	
+  	
+  </mapper>

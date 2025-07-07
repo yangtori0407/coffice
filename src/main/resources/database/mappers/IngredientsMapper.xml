@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.ingredients.IngredientsDAO">
+  	  	<sql id="search">
+  		WHERE
+  		<choose>
+  			<when test="kind == 'k1'">
+  				INGREDIENTS_NAME
+  			</when>
+  			<when test="kind == 'k2'">
+  				INGREDIENTS_STOCK
+  			</when>
+  			<otherwise>
+  				INGREDIENTS_DATE
+  			</otherwise>
+  		</choose>
+  		LIKE CONCAT('%',#{search},'%')
+  	</sql>
+  	
+  	<sql id="search2">
+  		AND
+  		<choose>
+  			<when test="pager.kind == 'k1'">
+  				RECEIVE
+  			</when>
+  			<when test="pager.kind == 'k2'">
+  				NAME
+  			</when>
+  			<otherwise>
+  				REGISTRATION_DATE
+  			</otherwise>
+  		</choose>
+  		LIKE CONCAT('%',#{pager.search},'%')
+  	</sql>
+  	
+  	<select id="totlaList" resultType="IngredientsVO">
+  		SELECT * FROM INGREDIENTS
+  	</select>
+  	
+  	<select id="getList" resultType="IngredientsVO" parameterType="Pager">
+  		SELECT * FROM INGREDIENTS
+  		<include refid="search"></include>
+  		ORDER BY INGREDIENTS_ID ASC
+  		LIMIT #{startNum}, #{page}
+  	</select>
+  	
+  	 <select id="getTotalCount" resultType="Long" parameterType="Pager">
+  		SELECT COUNT(*) FROM INGREDIENTS
+  		<include refid="search"></include>
+  	</select>
+  	
+  	<select id="getDetail" resultType="IngredientsVO" parameterType="IngredientsVO">
+  		SELECT * FROM INGREDIENTS
+  		WHERE INGREDIENTS_ID = #{ingredientsID}
+  	</select>
+  	
+  	<select id="getHistory" resultMap="getIngredients" parameterType="map">
+  		SELECT * FROM INGREDIENTS
+  		JOIN HISTORY
+		USING (INGREDIENTS_ID)
+		JOIN USERS
+		USING (USER_ID)
+  		WHERE INGREDIENTS_ID = #{ingredientsVO.ingredientsID}
+  		<include refid="search2"></include>
+  		ORDER BY HISTORY.HISTORY_ID DESC
+  		LIMIT #{pager.startNum}, #{pager.page}
+  	</select>
+  	
+  	<select id="getHistoryTotalCount" resultType="Long" parameterType="map">
+  		SELECT count(HISTORY.HISTORY_ID) FROM INGREDIENTS
+  		JOIN HISTORY
+		USING (INGREDIENTS_ID)
+		JOIN USERS
+		USING (USER_ID)
+  		WHERE INGREDIENTS_ID = #{ingredientsVO.ingredientsID}
+  		<include refid="search2"></include>
+  	</select>
+  	
+  	<select id="nameCheck" resultType="IngredientsVO" parameterType="IngredientsVO">
+	    SELECT * FROM INGREDIENTS
+	    WHERE INGREDIENTS_NAME = #{ingredientsName}
+	</select>
+  	
+  	<insert id="add" parameterType="IngredientsVO">
+  		INSERT INTO INGREDIENTS
+		VALUES (null, #{ingredientsName}, 0, #{ingredientsPrice}, now(), null, #{saveName}, #{originName})
+  	</insert>
+  	
+  	<insert id="addHistory" parameterType="History" useGeneratedKeys="true" keyProperty="historyId">
+  		INSERT INTO HISTORY
+		VALUES (null, #{receive}, #{number}, #{ingredientsID},#{userId}, now())
+  	</insert>
+  	
+  	<update id="plusStock" parameterType="History">
+  		UPDATE INGREDIENTS 
+  		SET INGREDIENTS_STOCK= 
+  			IF((SELECT RECEIVE FROM HISTORY WHERE HISTORY_ID=#{historyId}) = 1, INGREDIENTS_STOCK +#{number},INGREDIENTS_STOCK-#{number}) 
+  		WHERE INGREDIENTS_ID=#{ingredientsID}
+  		AND (
+  			(SELECT RECEIVE FROM HISTORY WHERE HISTORY_ID=#{historyId}) = 1
+  			OR
+  			(SELECT RECEIVE FROM HISTORY WHERE HISTORY_ID = #{historyId}) = 0 AND INGREDIENTS_STOCK >= #{number}
+  		)
+  	</update>
+  	
+  	<resultMap type="IngredientsVO" id="getIngredients">
+  		<id column="INGREDIENTS_ID" property="ingredientsID"/>
+  		<result column="INGREDIENTS_NAME" property="ingredientsName"/>
+  		<result column="INGREDIENTS_STOCK" property="ingredientsStock"/>
+  		<result column="INGREDIENTS_PRICE" property="ingredientsPrice"/>
+  		<result column="INGREDIENTS_DATE" property="ingredientsDate"/>
+  		
+  		<collection property="history" javaType="List" ofType="History">
+  			<id column="HISTORY_ID" property="historyId"/>
+  			<result column="RECEIVE" property="receive"/>
+  			<result column="NUMBER" property="number"/>
+  			<result column="USER_ID" property="userId"/>
+  			<result column="REGISTRATION_DATE" property="registrationDate"/>
+  			
+  		<association property="userVO" javaType="UserVO">
+			<result column="PASSWORD" property="password"/>
+			<result column="NAME" property="name"/>
+			<result column="POSITION" property="position"/>
+			<result column="HIRE_DATE" property="hireDate"/>
+			<result column="HIRE_TYPE" property="hireType"/>
+			<result column="BIRTH_DATE" property="birthDate"/>
+			<result column="PHONE" property="phone"/>
+			<result column="EMAIL" property="email"/>
+			<result column="STATUS" property="status"/>
+			<result column="RESIGN_DATE" property="resignDate"/>
+			<result column="SAVE_NAME" property="saveName"/>
+			<result column="ORIGIN_NAME" property="originName"/>
+			<result column="DEPT_ID" property="deptId"/>
+	  	</association>
+  		</collection>
+  	</resultMap>
+  </mapper>

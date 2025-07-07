@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.coffice.app.sales.SalesDAO">
+  	<select id="menuList" resultType="MenuVO">
+  		SELECT * FROM MENU
+  	</select>
+  	
+  	<insert id="profit" parameterType="SalesVO">
+  		INSERT INTO SALES
+		VALUES (null, 
+				1, 
+				(SELECT (MENU_PRICE * #{salesQuantity}) SALES_PROFIT 
+				FROM SALES AS TMEP_SALE
+				RIGHT OUTER JOIN MENU
+				USING(MENU_ID)
+				WHERE MENU_ID = #{menuId} LIMIT 1),
+				now(),
+				#{salesQuantity},
+				(SELECT BRANCH_ID FROM BRANCH
+				JOIN USERS
+				USING(USER_ID)
+				WHERE USER_ID = #{userId}),
+				#{menuId},
+				null)
+  	</insert>
+  	<insert id="expenditure" parameterType="SalesVO">
+  		INSERT INTO SALES
+		VALUES (null, 
+				0, 
+				(SELECT (INGREDIENTS_PRICE * #{salesQuantity}) SALES_PROFIT 
+				FROM SALES AS TMEP_SALE
+				RIGHT OUTER JOIN INGREDIENTS
+				USING(INGREDIENTS_ID)
+				WHERE INGREDIENTS_ID = #{ingredientsId} LIMIT 1),
+				now(),
+				#{salesQuantity},
+				(SELECT BRANCH_ID FROM BRANCH
+				JOIN USERS
+				USING(USER_ID)
+				WHERE USER_ID = #{userId}),
+				null,
+				#{ingredientsId})
+  	</insert>
+  	<insert id="addMenu" parameterType="MenuVO">
+  		INSERT INTO MENU
+  		VALUES (null,#{menuName},#{menuPrice},#{saveName},#{originName})
+  	</insert>
+  	<select id="nameCheck" resultType="MenuVO" parameterType="MenuVO">
+	    SELECT * FROM MENU
+	    WHERE MENU_NAME = #{menuName}
+	</select>
+  </mapper>
