@@ -111,8 +111,8 @@
 								</div>
 								<div style="display: flex; justify-content: space-around; margin-top: 10px; font-weight: bold;">
 									<div><a href="#">${annualLeaves.USED}</a>일</div>
-									<div><a href="#">${annualLeaves.GRANT}</a>일</div>
 									<div><a href="#">${annualLeaves.REMAIN}</a>일</div>
+									<div><a href="#">${annualLeaves.GRANT}</a>일</div>
 								</div>
 							</div>
 							<div class="card-footer d-flex justify-content-around text-center" style="padding: 12px 0;">
